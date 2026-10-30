@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LearnWithMe — Informatica, English & Hindi Courses</title>
+<style>
+  :root{
+    --bg:#ffffff;--alt:#f7f9fa;--text:#1c1d1f;--muted:#6a6f73;--line:#d1d7dc;
+    --accent:#5b21b6;--accent-d:#4c1d95;--accent-soft:#f1e9ff;--card:#fff;--dark:#1c1d1f;--ok:#1e6b3a;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{--bg:#14151a;--alt:#1b1d24;--text:#f0f1f4;--muted:#9aa0a8;--line:#33363f;--accent:#a78bfa;--accent-d:#c4b5fd;--accent-soft:#251c3d;--card:#1b1d24;--dark:#0c0d10;--ok:#6ee7a0}
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Devanagari",sans-serif;line-height:1.5}
+  button{font:inherit;cursor:pointer}
+  a{color:inherit}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 16px}
+
+  /* header */
+  header{position:sticky;top:0;z-index:30;background:var(--bg);border-bottom:1px solid var(--line);box-shadow:0 2px 6px rgba(0,0,0,.05)}
+  .top{display:flex;align-items:center;gap:12px;height:64px}
+  .logo{font-weight:800;font-size:1.3rem;text-decoration:none;color:var(--accent);white-space:nowrap}
+  .search{flex:1;display:flex;align-items:center;border:1px solid var(--text);border-radius:999px;padding:0 14px;height:44px;background:var(--alt)}
+  .search input{flex:1;border:0;background:transparent;outline:none;font-size:.95rem;color:var(--text);min-width:0}
+  .iconbtn{background:none;border:0;color:var(--text);font-size:1.3rem;position:relative;padding:6px 8px}
+  .badge{position:absolute;top:-2px;right:-2px;background:var(--accent);color:#fff;font-size:.68rem;font-weight:700;border-radius:99px;min-width:18px;height:18px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .seg button{border:0;background:transparent;color:var(--muted);padding:6px 10px;font-size:.82rem;font-weight:700}
+  .seg button.on{background:var(--text);color:var(--bg)}
+  @media(max-width:560px){.logo{font-size:1.05rem}.seg button{padding:6px 8px}}
+
+  /* category bar */
+  .cats{background:var(--alt);border-bottom:1px solid var(--line)}
+  .cats .wrap{display:flex;gap:4px;overflow-x:auto;padding:8px 16px;scrollbar-width:none}
+  .cats button{border:0;background:transparent;color:var(--muted);padding:6px 14px;border-radius:99px;white-space:nowrap;font-size:.9rem}
+  .cats button:hover{color:var(--text)}
+  .cats button.on{background:var(--text);color:var(--bg);font-weight:700}
+
+  /* hero */
+  .hero{background:linear-gradient(120deg,#2e1065,#5b21b6 60%,#7c3aed);color:#fff}
+  .hero .wrap{padding:44px 16px;display:grid;gap:18px;grid-template-columns:1fr}
+  .hero h1{font-size:clamp(1.7rem,5vw,2.6rem);margin:0;line-height:1.15;max-width:620px}
+  .hero p{margin:0;font-size:1.05rem;max-width:560px;color:#e9ddff}
+  .hero .pills{display:flex;gap:8px;flex-wrap:wrap}
+  .hero .pills span{background:rgba(255,255,255,.15);padding:4px 12px;border-radius:99px;font-size:.85rem}
+
+  /* trust strip */
+  .strip{background:var(--alt);border-bottom:1px solid var(--line)}
+  .strip .wrap{display:flex;gap:24px;flex-wrap:wrap;justify-content:center;padding:14px 16px;color:var(--muted);font-size:.9rem}
+  .strip b{color:var(--text)}
+
+  /* toolbar */
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:26px 0 14px}
+  .toolbar h2{margin:0;font-size:1.5rem;flex:1 1 100%}
+  select{border:1px solid var(--text);background:var(--bg);color:var(--text);border-radius:6px;padding:9px 10px;font-size:.9rem}
+
+  /* grid */
+  .grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));padding-bottom:40px}
+  .course{cursor:pointer;background:var(--card);display:flex;flex-direction:column}
+  .thumb{aspect-ratio:16/9;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative;overflow:hidden}
+  .thumb small{position:absolute;left:8px;bottom:8px;background:rgba(0,0,0,.65);color:#fff;font-size:.7rem;padding:2px 8px;border-radius:4px;font-weight:600}
+  .course:hover .thumb{filter:brightness(.92)}
+  .course h3{font-size:1rem;line-height:1.3;margin:8px 0 2px;font-weight:700}
+  .course .by{font-size:.78rem;color:var(--muted)}
+  .course .meta{font-size:.78rem;color:var(--muted);margin:4px 0}
+  .tags{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0}
+  .tag{font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:4px;background:var(--accent-soft);color:var(--accent)}
+  .tag.new{background:#fff3c4;color:#6b4f00}
+  .price{font-weight:800;font-size:1.05rem;margin-top:auto;padding-top:6px}
+  .price s{color:var(--muted);font-weight:400;font-size:.85rem;margin-left:6px}
+  .empty{padding:40px;text-align:center;color:var(--muted);grid-column:1/-1}
+
+  /* how */
+  .how{background:var(--alt);padding:40px 0;border-top:1px solid var(--line)}
+  .how h2{margin:0 0 16px}
+  .how .cols{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+  .how .box{background:var(--card);border:1px solid var(--line);padding:16px;border-radius:8px}
+  .how .box b{display:block;margin:4px 0}
+  .how .box p{margin:0;color:var(--muted);font-size:.92rem}
+
+  footer{background:var(--dark);color:#c9ccd3;padding:28px 0;font-size:.88rem}
+  footer .wrap{display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between}
+  footer a{color:#fff}
+
+  /* modal / drawer */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:50;display:none;align-items:flex-start;justify-content:center;overflow-y:auto}
+  .overlay.open{display:flex}
+  .modal{background:var(--bg);width:100%;max-width:920px;margin:0;min-height:100%;position:relative}
+  @media(min-width:760px){.modal{margin:32px 16px;min-height:0;border-radius:8px;overflow:hidden}}
+  .close{position:absolute;top:10px;right:10px;z-index:3;background:rgba(0,0,0,.6);color:#fff;border:0;border-radius:50%;width:34px;height:34px;font-size:1.1rem}
+  .m-head{background:var(--dark);color:#fff;padding:28px 20px}
+  .m-head h2{margin:0 0 8px;font-size:1.5rem;line-height:1.2}
+  .m-head p{margin:0 0 10px;color:#d5d8df}
+  .m-head .tags .tag{background:rgba(255,255,255,.15);color:#fff}
+  .m-body{display:grid;gap:20px;padding:20px}
+  @media(min-width:760px){.m-body{grid-template-columns:1fr 300px}}
+  .m-body h3{margin:20px 0 8px}
+  .m-body h3:first-child{margin-top:0}
+  .learn{display:grid;gap:6px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));border:1px solid var(--line);padding:14px;border-radius:6px;list-style:none;margin:0}
+  .learn li::before{content:"✓ ";color:var(--ok);font-weight:700}
+  .learn li{font-size:.92rem}
+  .buybox{border:1px solid var(--line);border-radius:8px;padding:16px;align-self:start;position:sticky;top:12px;background:var(--card)}
+  .buybox .big{font-size:1.8rem;font-weight:800}
+  .buybox .btn{width:100%;margin-top:10px}
+  .btn{display:block;text-align:center;text-decoration:none;border:0;border-radius:6px;padding:12px 16px;font-weight:700;background:var(--accent);color:#fff}
+  .btn:hover{background:var(--accent-d)}
+  .btn.ghost{background:transparent;color:var(--text);border:1px solid var(--text)}
+  .btn.wa{background:#1fa855}
+  .buybox ul{padding-left:18px;margin:12px 0 0;font-size:.88rem;color:var(--muted)}
+  details{border:1px solid var(--line);margin-bottom:-1px}
+  summary{padding:10px 14px;cursor:pointer;font-weight:700;background:var(--alt);font-size:.95rem}
+  details ul{margin:0;padding:10px 14px 10px 32px;font-size:.9rem;color:var(--muted)}
+
+  .drawer{background:var(--bg);width:100%;max-width:420px;margin-left:auto;min-height:100%;padding:20px;position:relative}
+  .drawer h2{margin:0 0 14px}
+  .ci{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+  .ci .th{width:64px;height:40px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex:none}
+  .ci .t{flex:1;font-size:.9rem;font-weight:700}
+  .ci .rm{background:none;border:0;color:var(--accent);font-size:.82rem}
+  .total{display:flex;justify-content:space-between;font-size:1.2rem;font-weight:800;margin:16px 0}
+  .tiny{font-size:.78rem;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap top">
+    <a class="logo" href="#" id="logoLink">LearnWithMe</a>
+    <div class="search"><span>🔍</span><input id="q" type="search" placeholder="Search for anything" aria-label="Search courses"></div>
+    <div class="seg" id="curSeg"></div>
+    <button class="iconbtn" id="cartBtn" aria-label="Cart">🛒<span class="badge" id="cartCount" style="display:none">0</span></button>
+  </div>
+  <div class="cats"><div class="wrap" id="cats"></div></div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>Learn skills that move your career — and your confidence.</h1>
+    <p>Practical courses in Informatica, Spoken English and Hindi, taught by a tutor with 15 years of real Informatica experience.</p>
+    <div class="pills"><span>Informatica &amp; ETL</span><span>Spoken English</span><span>Hindi for all</span><span>1-to-1 doubt sessions</span></div>
+  </div>
+</section>
+<div class="strip"><div class="wrap">
+  <span><b>15+ years</b> of Informatica experience</span>
+  <span><b>Live</b> 1-to-1 and small-group help</span>
+  <span><b>Free</b> 15-minute intro call</span>
+</div></div>
+
+<main class="wrap">
+  <div class="toolbar">
+    <h2 id="listTitle">All courses</h2>
+    <select id="level" aria-label="Level">
+      <option value="">All levels</option><option>Beginner</option><option>Intermediate</option><option>All levels</option>
+    </select>
+    <select id="sort" aria-label="Sort">
+      <option value="featured">Featured</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option>
+    </select>
+    <span class="tiny" id="resultCount"></span>
+  </div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<section class="how">
+  <div class="wrap">
+    <h2>How learning works here</h2>
+    <div class="cols">
+      <div class="box">1️⃣<b>Pick a course</b><p>Browse, open a course to see the full outline and who it's for.</p></div>
+      <div class="box">2️⃣<b>Add to cart &amp; send</b><p>Checkout sends your order to me on WhatsApp. I'll confirm the start date and payment details.</p></div>
+      <div class="box">3️⃣<b>Learn live</b><p>Classes run online on Google Meet or Zoom with notes, practice and doubt support.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div><b style="color:#fff">LearnWithMe</b><br>Online courses by <span id="fName"></span></div>
+    <div>Questions? <a id="fWa" href="#" target="_blank" rel="noopener">WhatsApp</a> · <a id="fMail" href="#">Email</a></div>
+  </div>
+</footer>
+
+<!-- course modal -->
+<div class="overlay" id="courseOv"><div class="modal" id="courseModal"></div></div>
+<!-- cart drawer -->
+<div class="overlay" id="cartOv"><div class="drawer" id="cartDrawer"></div></div>
+
+<script>
+/* =============== EDIT THESE =============== */
+const SITE = {
+  tutor: "Your Name",
+  whatsapp: "910000000000",     // country code + number, no + or spaces
+  email: "you@example.com",
+  currencies: { INR:{symbol:"₹",label:"₹ INR",locale:"en-IN"}, GBP:{symbol:"£",label:"£ GBP",locale:"en-GB"} }
+};
+
+/* SAMPLE courses. Prices, hours and outlines are placeholders: change them to your real ones.
+   price = current price, was = optional crossed-out price (use only if it's a real earlier price). */
+const COURSES = [
+  { id:"inf-pc", cat:"Informatica", title:"Informatica PowerCenter: Zero to Job-Ready", sub:"Build real ETL mappings, workflows and sessions, the way they're done on live projects.",
+    emoji:"🧩", grad:["#4c1d95","#7c3aed"], level:"Beginner", hours:24, lessons:40, lang:"English / Hindi",
+    price:{INR:6999,GBP:79}, tag:"New",
+    learn:["Understand ETL and data warehousing concepts","Build mappings with common transformations","Create and schedule workflows and sessions","Debug failed jobs and read session logs","Tune performance with real tips","Handle slowly changing dimensions (SCD)"],
+    req:["Basic SQL helps but isn't required","A laptop with a stable internet connection"],
+    who:"Freshers, support engineers, testers and career switchers who want to work as Informatica developers.",
+    outline:[["Module 1: ETL & data warehousing basics",["What ETL is and why it matters","Warehouse, dimensions and facts","Informatica architecture overview"]],
+             ["Module 2: Mappings & transformations",["Source and Target definitions","Filter, Expression, Router, Joiner","Lookup, Aggregator, Sorter, Rank","Sequence Generator and Update Strategy"]],
+             ["Module 3: Workflows & sessions",["Sessions, tasks and links","Parameters and variables","Scheduling and recovery"]],
+             ["Module 4: Real project scenarios",["SCD Type 1 and 2","Incremental loads","Error handling and reprocessing"]]] },
+  { id:"inf-iics", cat:"Informatica", title:"Informatica Cloud (IICS) Essentials", sub:"Cloud Data Integration from first mapping to scheduled taskflows.",
+    emoji:"☁️", grad:["#0c4a6e","#0ea5e9"], level:"Intermediate", hours:16, lessons:28, lang:"English",
+    price:{INR:5999,GBP:69}, tag:"New",
+    learn:["Navigate the IICS console confidently","Build mappings and mapping tasks","Create taskflows and schedules","Connect common sources and targets","Move from PowerCenter thinking to IICS"],
+    req:["Some ETL or SQL knowledge","Access to an IICS trial or work environment"],
+    who:"PowerCenter developers moving to cloud, and data engineers adding IICS to their skills.",
+    outline:[["Module 1: IICS fundamentals",["Organisation, runtime environments","Connections and assets"]],
+             ["Module 2: Cloud Data Integration",["Mappings and mapping tasks","Parameters and expressions"]],
+             ["Module 3: Orchestration",["Taskflows","Schedules and monitoring"]]] },
+  { id:"inf-int", cat:"Informatica", title:"Informatica Interview Prep: Real Scenarios", sub:"Practice the questions interviewers actually ask, with mock interviews.",
+    emoji:"🎯", grad:["#7c2d12","#ea580c"], level:"Intermediate", hours:12, lessons:20, lang:"English / Hindi",
+    price:{INR:4499,GBP:55}, tag:"Popular topic",
+    learn:["Answer concept questions clearly and briefly","Solve scenario-based mapping problems","Explain your project experience convincingly","Avoid common mistakes in technical rounds"],
+    req:["Basic Informatica knowledge"],
+    who:"Developers with 1–10 years' experience preparing for job changes.",
+    outline:[["Module 1: Concepts",["Transformations compared","Caches and performance"]],
+             ["Module 2: Scenarios",["Flat file and duplicate handling","SCD and incremental scenarios","Real-time style problems"]],
+             ["Module 3: Mock interviews",["Live mock interview","Feedback and improvement plan"]]] },
+  { id:"data-etl", cat:"Data & Analytics", title:"ETL & Data Warehousing Fundamentals", sub:"The concepts behind every data pipeline, explained simply.",
+    emoji:"🗄️", grad:["#064e3b","#10b981"], level:"Beginner", hours:10, lessons:18, lang:"English",
+    price:{INR:3499,GBP:45}, tag:"New",
+    learn:["Explain ETL, ELT and data warehouses","Design simple star schemas","Understand data quality and testing","Read and write basic SQL for analysis"],
+    req:["None. Curiosity is enough"],
+    who:"Beginners, business analysts and anyone entering data and analytics.",
+    outline:[["Module 1: The big picture",["Databases vs warehouses","ETL vs ELT"]],
+             ["Module 2: Modelling",["Facts and dimensions","Star and snowflake schemas"]],
+             ["Module 3: SQL for data work",["Joins and aggregation","Practice questions"]]] },
+  { id:"eng-beg", cat:"Spoken English", title:"Spoken English for Beginners", sub:"Start speaking from your first class. Simple, practical, no pressure.",
+    emoji:"🗣️", grad:["#9f1239","#fb7185"], level:"Beginner", hours:20, lessons:30, lang:"English / Hindi",
+    price:{INR:3999,GBP:49}, tag:"New",
+    learn:["Hold everyday conversations with confidence","Build useful vocabulary and sentence patterns","Improve pronunciation and listening","Stop translating in your head"],
+    req:["Can read basic sentences","Willingness to speak in every class"],
+    who:"Students, homemakers, job seekers and anyone nervous about speaking English.",
+    outline:[["Module 1: First conversations",["Introductions and small talk","Asking and answering questions"]],
+             ["Module 2: Daily life",["Shopping, travel, food","Phone calls"]],
+             ["Module 3: Fluency practice",["Describing, explaining, opinions","Speaking drills"]]] },
+  { id:"eng-work", cat:"Spoken English", title:"Workplace English for IT Professionals", sub:"Meetings, stand-ups, emails and interviews: speak and write clearly at work.",
+    emoji:"💼", grad:["#1e3a8a","#3b82f6"], level:"Intermediate", hours:14, lessons:22, lang:"English",
+    price:{INR:4999,GBP:59}, tag:"New",
+    learn:["Speak up in meetings and stand-ups","Write clear, polite emails","Give updates and handle disagreements","Perform better in interviews and client calls"],
+    req:["Can hold a basic conversation in English"],
+    who:"Developers, testers, analysts and managers who want more professional English.",
+    outline:[["Module 1: Meetings",["Stand-ups and status updates","Asking for clarification"]],
+             ["Module 2: Written communication",["Emails that get replies","Chat etiquette"]],
+             ["Module 3: Interviews & client calls",["Introducing yourself","Handling tough questions"]]] },
+  { id:"hin-zero", cat:"Hindi", title:"Hindi from Zero: Speak with Confidence", sub:"Learn to speak everyday Hindi for family, travel and work.",
+    emoji:"📖", grad:["#92400e","#f59e0b"], level:"Beginner", hours:20, lessons:30, lang:"English / Hindi",
+    price:{INR:3999,GBP:49}, tag:"New",
+    learn:["Greet, ask and answer in everyday Hindi","Build a core vocabulary of common words","Understand basic grammar without memorising rules","Speak with natural pronunciation"],
+    req:["None. Great for complete beginners and diaspora families"],
+    who:"Adults, expats, newcomers to India and families who want to reconnect with Hindi.",
+    outline:[["Module 1: Getting started",["Greetings and introductions","Numbers, days, family"]],
+             ["Module 2: Everyday Hindi",["Food, shopping, travel","Simple sentences and questions"]],
+             ["Module 3: Conversation practice",["Role-plays","Listening and speaking drills"]]] },
+  { id:"hin-read", cat:"Hindi", title:"Read & Write Hindi: Devanagari Made Easy", sub:"Learn the script step by step and start reading real Hindi.",
+    emoji:"✍️", grad:["#831843","#ec4899"], level:"Beginner", hours:12, lessons:20, lang:"English / Hindi",
+    price:{INR:2999,GBP:39}, tag:"New",
+    learn:["Read and write all vowels and consonants","Understand matras and joined letters","Read short texts and signs","Write simple sentences"],
+    req:["None. Children and adults welcome"],
+    who:"Kids, adults and learners who already speak some Hindi but can't read it.",
+    outline:[["Module 1: Vowels and consonants",["Swar and vyanjan","Writing practice"]],
+             ["Module 2: Matras",["Vowel signs","Reading simple words"]],
+             ["Module 3: Reading practice",["Short passages","Writing sentences"]]] },
+  { id:"doubt", cat:"Doubt Clearing", title:"1-to-1 Doubt Clearing Session", sub:"Stuck on something? Get a focused 30-minute live session, same day when slots are free.",
+    emoji:"⚡", grad:["#134e4a","#14b8a6"], level:"All levels", hours:0.5, lessons:1, lang:"English / Hindi",
+    price:{INR:400,GBP:12}, tag:"Live session",
+    learn:["Get your specific question answered live","Screen-share to fix your actual work","Leave with clear next steps"],
+    req:["Send your question beforehand if you can"],
+    who:"Anyone learning Informatica, data, Spoken English or Hindi who needs quick help.",
+    outline:[["How it works",["Book a slot","Share your question","Join on Meet or Zoom"]]] }
+];
+/* ========================================== */
+
+const $ = s => document.querySelector(s);
+let cur = Object.keys(SITE.currencies)[0], cat = "All", cart = [];
+try { const c = localStorage.getItem("lwm-cur"); if (c && SITE.currencies[c]) cur = c; } catch(e){}
+try { cart = JSON.parse(localStorage.getItem("lwm-cart")||"[]").filter(id=>COURSES.some(c=>c.id===id)); } catch(e){ cart = []; }
+
+const money = n => SITE.currencies[cur].symbol + n.toLocaleString(SITE.currencies[cur].locale);
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const byId = id => COURSES.find(c=>c.id===id);
+function saveCart(){ try{ localStorage.setItem("lwm-cart", JSON.stringify(cart)); }catch(e){} }
+function waLink(text){ return "https://wa.me/"+SITE.whatsapp+"?text="+encodeURIComponent(text); }
+function fmtHours(h){ return h<1 ? "30 min" : h+" hrs"; }
+
+function renderCurrency(){
+  $("#curSeg").innerHTML = Object.entries(SITE.currencies).map(([k,v])=>`<button data-c="${k}" class="${k===cur?"on":""}">${v.label}</button>`).join("");
+}
+function renderCats(){
+  const cats = ["All", ...new Set(COURSES.map(c=>c.cat))];
+  $("#cats").innerHTML = cats.map(c=>`<button data-cat="${esc(c)}" class="${c===cat?"on":""}">${esc(c)}</button>`).join("");
+}
+function renderGrid(){
+  const q = $("#q").value.trim().toLowerCase(), lvl = $("#level").value, sort = $("#sort").value;
+  let list = COURSES.filter(c =>
+    (cat==="All" || c.cat===cat) && (!lvl || c.level===lvl) &&
+    (!q || (c.title+" "+c.sub+" "+c.cat+" "+c.learn.join(" ")).toLowerCase().includes(q)));
+  if (sort==="low") list.sort((a,b)=>a.price[cur]-b.price[cur]);
+  if (sort==="high") list.sort((a,b)=>b.price[cur]-a.price[cur]);
+  $("#listTitle").textContent = cat==="All" ? "All courses" : cat+" courses";
+  $("#resultCount").textContent = list.length + (list.length===1?" course":" courses");
+  $("#grid").innerHTML = list.length ? list.map(c=>`
+    <div class="course" data-open="${c.id}">
+      <div class="thumb" style="background:linear-gradient(135deg,${c.grad[0]},${c.grad[1]})">${c.emoji}<small>${esc(c.cat)}</small></div>
+      <h3>${esc(c.title)}</h3>
+      <div class="by">${esc(SITE.tutor)}</div>
+      <div class="meta">${fmtHours(c.hours)} · ${c.lessons} ${c.lessons===1?"lesson":"lessons"} · ${esc(c.level)}</div>
+      <div class="tags">${c.tag?`<span class="tag ${c.tag==="New"?"new":""}">${esc(c.tag)}</span>`:""}</div>
+      <div class="price">${money(c.price[cur])}${c.was?`<s>${money(c.was[cur])}</s>`:""}</div>
+    </div>`).join("") : `<div class="empty">No courses match your search. Try a different word or category.</div>`;
+}
+function renderCartBadge(){
+  const b = $("#cartCount"); b.textContent = cart.length; b.style.display = cart.length ? "flex" : "none";
+}
+
+function openCourse(id){
+  const c = byId(id), inCart = cart.includes(id);
+  $("#courseModal").innerHTML = `
+    <button class="close" data-close="courseOv" aria-label="Close">✕</button>
+    <div class="m-head">
+      <h2>${esc(c.title)}</h2>
+      <p>${esc(c.sub)}</p>
+      <div class="tags">${c.tag?`<span class="tag">${esc(c.tag)}</span>`:""}<span class="tag">${esc(c.level)}</span><span class="tag">${esc(c.lang)}</span></div>
+      <p style="margin:10px 0 0;font-size:.9rem">Taught by ${esc(SITE.tutor)} · ${fmtHours(c.hours)} · ${c.lessons} ${c.lessons===1?"lesson":"lessons"}</p>
+    </div>
+    <div class="m-body">
+      <div>
+        <h3>What you'll learn</h3>
+        <ul class="learn">${c.learn.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
+        <h3>Course outline</h3>
+        ${c.outline.map(([t,items],i)=>`<details ${i===0?"open":""}><summary>${esc(t)}</summary><ul>${items.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></details>`).join("")}
+        <h3>Requirements</h3>
+        <ul>${c.req.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
+        <h3>Who this is for</h3>
+        <p>${esc(c.who)}</p>
+        <h3>Your instructor</h3>
+        <p><b>${esc(SITE.tutor)}</b>: 15+ years of Informatica experience, also teaches Spoken English and Hindi. <span class="tiny">(Add your own bio and photo.)</span></p>
+      </div>
+      <div class="buybox">
+        <div class="big">${money(c.price[cur])}${c.was?` <s class="tiny">${money(c.was[cur])}</s>`:""}</div>
+        <button class="btn" data-add="${c.id}">${inCart?"Go to cart":"Add to cart"}</button>
+        <a class="btn wa" style="margin-top:8px" target="_blank" rel="noopener" href="${waLink("Hi, I'd like to enrol in: "+c.title)}">Enrol on WhatsApp</a>
+        <a class="btn ghost" style="margin-top:8px" target="_blank" rel="noopener" href="${waLink("Hi, I'd like a free 15-minute intro call about: "+c.title)}">Free 15-min intro call</a>
+        <ul><li>Live online classes</li><li>Notes and practice after each class</li><li>Doubt support</li><li>Free intro call before you pay</li></ul>
+      </div>
+    </div>`;
+  $("#courseOv").classList.add("open"); document.body.style.overflow="hidden";
+  $("#courseOv").scrollTop = 0;
+}
+function openCart(){
+  const items = cart.map(byId), total = items.reduce((s,c)=>s+c.price[cur],0);
+  const msg = "Hi, I'd like to enrol in:\n" + items.map(c=>"• "+c.title+" ("+money(c.price[cur])+")").join("\n") + "\nTotal: "+money(total);
+  $("#cartDrawer").innerHTML = `
+    <button class="close" data-close="cartOv" aria-label="Close" style="position:absolute">✕</button>
+    <h2>Your cart</h2>
+    ${items.length ? items.map(c=>`
+      <div class="ci"><div class="th" style="background:linear-gradient(135deg,${c.grad[0]},${c.grad[1]})">${c.emoji}</div>
+      <div class="t">${esc(c.title)}<br><span class="tiny">${money(c.price[cur])}</span></div>
+      <button class="rm" data-rm="${c.id}">Remove</button></div>`).join("") +
+      `<div class="total"><span>Total</span><span>${money(total)}</span></div>
+       <a class="btn wa" target="_blank" rel="noopener" href="${waLink(msg)}">Send order on WhatsApp</a>
+       <p class="tiny">Checkout opens WhatsApp with your order. I'll confirm start dates and payment details with you. Nothing is charged on this site.</p>`
+      : `<p class="muted" style="color:var(--muted)">Your cart is empty. Browse the courses and add one.</p>`}`;
+  $("#cartOv").classList.add("open"); document.body.style.overflow="hidden";
+}
+function closeOv(id){ $("#"+id).classList.remove("open"); if(!document.querySelector(".overlay.open")) document.body.style.overflow=""; }
+
+document.addEventListener("click", e=>{
+  const t = e.target;
+  const open = t.closest("[data-open]"); if (open){ openCourse(open.dataset.open); return; }
+  if (t.dataset.close){ closeOv(t.dataset.close); return; }
+  if (t.classList.contains("overlay")){ closeOv(t.id); return; }
+  if (t.dataset.cat){ cat = t.dataset.cat; renderCats(); renderGrid(); return; }
+  if (t.dataset.c){ cur = t.dataset.c; try{localStorage.setItem("lwm-cur",cur);}catch(x){} renderCurrency(); renderGrid(); renderCartBadge(); return; }
+  if (t.dataset.add){
+    if (!cart.includes(t.dataset.add)){ cart.push(t.dataset.add); saveCart(); renderCartBadge(); }
+    closeOv("courseOv"); openCart(); return;
+  }
+  if (t.dataset.rm){ cart = cart.filter(x=>x!==t.dataset.rm); saveCart(); renderCartBadge(); openCart(); return; }
+});
+$("#cartBtn").onclick = openCart;
+$("#q").addEventListener("input", renderGrid);
+$("#level").addEventListener("change", renderGrid);
+$("#sort").addEventListener("change", renderGrid);
+$("#logoLink").onclick = e=>{ e.preventDefault(); cat="All"; $("#q").value=""; renderCats(); renderGrid(); window.scrollTo({top:0,behavior:"smooth"}); };
+document.addEventListener("keydown", e=>{ if(e.key==="Escape"){ closeOv("courseOv"); closeOv("cartOv"); } });
+document.addEventListener("click", e=>{ if(e.target.id==="cartBtn"||e.target.closest("#cartBtn")){} });
+
+$("#fName").textContent = SITE.tutor;
+$("#fWa").href = "https://wa.me/"+SITE.whatsapp;
+$("#fMail").href = "mailto:"+SITE.email;
+renderCurrency(); renderCats(); renderGrid(); renderCartBadge();
+</script>
+</body>
+</html>

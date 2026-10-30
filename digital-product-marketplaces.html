@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2540D9">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Sell Digital">
+<link rel="icon" href="data:image/png;base64,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" type="image/png">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<title>Digital Product Marketplaces</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+
+/* Layout: phone-style app column. Sticky top bar with search and filters, tappable list rows, bottom tab bar, detail sheets that slide up. */
+:root {
+  --bg: #EEF1F6;
+  --surface: #FFFFFF;
+  --ink: #141A23;
+  --muted: #5B6575;
+  --line: #DCE1EA;
+  --accent: #2540D9;
+  --accent-ink: #FFFFFF;
+  --tint: #E4E9FA;
+  --av-s: 70%; --av-l: 91%; --av-tl: 30%; --rl: 42%; --hd-bg: #2540D9; --hd-ink: #FFFFFF;
+  --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1218; --surface: #171C25; --ink: #E8ECF2; --muted: #9BA5B3;
+    --line: #272E3A; --accent: #93A5FF; --accent-ink: #0E1218; --tint: #232B47;
+    --av-s: 35%; --av-l: 24%; --av-tl: 82%; --rl: 70%; --hd-bg: #1C2552; --hd-ink: #E8ECF2;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1218; --surface: #171C25; --ink: #E8ECF2; --muted: #9BA5B3;
+  --line: #272E3A; --accent: #93A5FF; --accent-ink: #0E1218; --tint: #232B47;
+  --av-s: 35%; --av-l: 24%; --av-tl: 82%; --rl: 70%; --hd-bg: #1C2552; --hd-ink: #E8ECF2;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: 16px; line-height: 1.45;
+  padding-block: 0 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  z-index: 30; background: var(--hd-bg);
+}
+body.lock { overflow: hidden; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+.shell { max-width: 640px; margin: 0 auto; }
+
+/* Top bar */
+.top {
+  position: sticky; top: calc(env(safe-area-inset-top, 0px) + var(--top-off, 0px)); z-index: 20;
+  margin-left: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); margin-right: calc(-1 * max(16px, env(safe-area-inset-right, 0px)));
+}
+.bar { background: var(--hd-bg); color: var(--hd-ink); padding-block: 10px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.bar-in { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; gap: 8px; }
+.home { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; text-align: left; color: inherit; }
+.logo { flex: none; width: 36px; height: 36px; border-radius: 10px; }
+.bt { margin: 0; font-family: var(--f-display); font-weight: 800; font-size: 1.1rem; letter-spacing: -.01em; line-height: 1.1; }
+.hb { position: relative; flex: none; width: 42px; height: 42px; border-radius: 13px; display: grid; place-items: center; background: rgba(255, 255, 255, .16); color: var(--hd-ink); }
+.hb svg { width: 22px; height: 22px; }
+.hb.on { background: #fff; color: var(--hd-bg); }
+.mdot, .scount { position: absolute; top: 6px; right: 6px; }
+.mdot { width: 9px; height: 9px; border-radius: 50%; background: #FFC857; }
+.scount { min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: #FFC857; color: #1a1a1a; font: 700 10px/16px var(--f-mono); text-align: center; }
+.sbox { background: var(--surface); border-bottom: 1px solid var(--line); padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px)); }
+.sbox-in { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; gap: 8px; }
+.sbox input { flex: 1; min-width: 0; font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 0 14px; height: 44px; }
+.sx { flex: none; width: 44px; height: 44px; border-radius: 12px; color: var(--muted); display: grid; place-items: center; font-size: 16px; }
+.brand h1 { font-family: var(--f-display); font-weight: 800; font-size: 1.2rem; letter-spacing: -.01em; line-height: 1.1; margin: 0; }
+.search input {
+  width: 100%; font: inherit; color: var(--ink); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; min-height: 46px;
+}
+.search input::placeholder { color: var(--muted); }
+/* App icons: real site icon on top, drawn glyph underneath as fallback */
+.ico {
+  position: relative; flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 13px; overflow: hidden;
+  background: hsl(var(--h) var(--av-s) var(--av-l)); color: hsl(var(--h) 55% var(--av-tl));
+}
+.ico .gl { width: 74%; height: 74%; }
+.ico img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 3%; background: transparent; opacity: 0; transition: opacity .15s; }
+.ico.ok img { opacity: 1; }
+.ico.ok { background: transparent; }
+.hint { font-size: 12.5px; color: var(--muted); margin: 0 2px 8px; }
+.vt { display: inline-flex; gap: 4px; }
+.vt button { font-family: var(--f-body); font-size: 12.5px; padding: 5px 11px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+.vt button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.count { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.apps { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 16px 6px; padding-top: 8px; }
+.app-wrap { position: relative; }
+.app { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; display: grid; justify-items: center; gap: 7px; text-decoration: none; text-align: center; padding: 4px 2px; }
+.view .apps .ico { width: 56px; height: 56px; border-radius: 14px; }
+.an { font-size: 12px; font-weight: 500; line-height: 1.2; max-width: 100%; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow-wrap: anywhere; }
+.ib { position: absolute; top: -2px; right: 4px; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--surface); border: 1px solid var(--line); color: var(--muted); }
+.ib svg { width: 14px; height: 14px; }
+
+/* Fixed left rail: stays in view while the list scrolls */
+.split { display: flex; gap: 10px; align-items: flex-start; }
+.list { flex: 1; min-width: 0; }
+.rail {
+  flex: none; width: 70px; display: grid; gap: 4px; padding: 6px 4px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
+  position: sticky; top: calc(env(safe-area-inset-top, 0px) + var(--top-off, 0px) + var(--bar-h, 112px) + 6px);
+  max-height: calc(100vh - var(--bar-h, 112px) - 24px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  overflow-y: auto; scrollbar-width: none;
+}
+.rail::-webkit-scrollbar { display: none; }
+.rb { width: 100%; display: grid; justify-items: center; gap: 3px; padding: 9px 2px; min-height: 58px; border-radius: 12px; font-size: 11.5px; font-weight: 500; line-height: 1.15; text-align: center; }
+.rb .n { display: none; font-family: var(--f-mono); font-size: 10px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ri { color: hsl(var(--h, 220) 72% var(--rl, 42%)); }
+.ri svg { display: block; width: 26px; height: 26px; }
+.rb[aria-pressed="true"] { background: hsl(var(--h, 220) var(--av-s) var(--av-l)); font-weight: 600; }
+.rb[aria-pressed="true"] .n { color: var(--ink); }
+.split .ico { width: 38px; height: 38px; border-radius: 11px; }
+.split .row-main { padding-left: 10px; gap: 10px; }
+.split .avl { margin-left: 10px; }
+.rb .l { display: none; }
+.split .save { width: 42px; }
+
+/* Content */
+.view { padding-top: 14px; }
+.view-head { margin: 10px 2px 12px; }
+.view-head h2 { font-family: var(--f-display); font-weight: 700; font-size: 1.5rem; line-height: 1.1; margin: 0 0 4px; }
+.view-head p { margin: 0; color: var(--muted); font-size: 14.5px; }
+.count { font-family: var(--f-mono); font-size: 12px; color: var(--muted); margin: 6px 2px 8px; font-variant-numeric: tabular-nums; }
+.info {
+  background: var(--tint); border-radius: 14px; padding: 14px 16px; font-size: 14.5px; margin-bottom: 12px;
+}
+.info { text-align: left; }
+.info a { color: var(--accent); font-weight: 600; }
+.group { list-style: none; margin: 0; padding: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+.row { display: flex; align-items: stretch; border-top: 1px solid var(--line); }
+.row:first-child { border-top: 0; }
+.row-main { flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; padding: 12px 4px 12px 12px; min-height: 68px; }
+.avl { flex: none; align-self: center; margin-left: 14px; display: block; text-decoration: none; }
+.avl:hover .av, .avl:focus-visible .av { box-shadow: 0 0 0 2px var(--accent); }
+.av {
+  flex: none; width: 44px; height: 44px; border-radius: 13px; display: grid; place-items: center;
+  font-family: var(--f-display); font-weight: 700; font-size: 1.15rem;
+  background: hsl(var(--h) var(--av-s) var(--av-l)); color: hsl(var(--h) 55% var(--av-tl));
+}
+.txt { flex: 1; min-width: 0; display: grid; gap: 1px; }
+.nm { font-weight: 600; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sub { font-size: 13.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kind { font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+.save { flex: none; width: 52px; display: grid; place-items: center; color: var(--muted); }
+.save[aria-pressed="true"] { color: var(--accent); }
+.save svg { width: 22px; height: 22px; }
+.save[aria-pressed="true"] path { fill: currentColor; }
+
+.tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.tile {
+  display: block; padding: 0; overflow: hidden; text-align: left;
+  background: hsl(var(--h) var(--av-s) var(--av-l));
+  border: 1px solid hsl(var(--h) var(--av-s) calc(var(--av-l) - 7%)); border-radius: 16px; min-height: 170px;
+}
+.art { display: block; width: 100%; height: 92px; color: hsl(var(--h) 55% var(--av-tl)); }
+.tb { display: grid; gap: 3px; padding: 6px 14px 14px; }
+.banner { margin-top: 14px; border-radius: 16px; background: hsl(var(--h) var(--av-s) var(--av-l)); }
+.banner .art { height: 120px; }
+.tile .tt { font-family: var(--f-display); font-weight: 700; font-size: 1.05rem; line-height: 1.15; }
+.tile .ex { font-size: 13px; color: var(--muted); }
+.tile .tm { margin-top: 4px; font-family: var(--f-mono); font-size: 11.5px; color: var(--muted); align-self: end; }
+
+.empty { text-align: center; color: var(--muted); padding: 36px 16px; font-size: 15px; }
+.empty strong { display: block; color: var(--ink); font-family: var(--f-display); font-size: 1.15rem; margin-bottom: 4px; }
+
+.todo { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.todo button { width: 100%; display: flex; gap: 14px; align-items: flex-start; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; min-height: 64px; }
+.box { flex: none; width: 24px; height: 24px; border-radius: 8px; border: 2px solid var(--line); display: grid; place-items: center; margin-top: 1px; color: transparent; font-size: 14px; font-weight: 700; }
+.todo button[aria-pressed="true"] .box { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.todo button[aria-pressed="true"] .tx { color: var(--muted); }
+.tx { font-size: 15px; }
+.tx strong { font-weight: 600; display: block; }
+.foot { margin: 16px 2px 0; font-size: 13px; color: var(--muted); }
+
+
+/* Sheet */
+.scrim { position: fixed; inset: 0; z-index: 40; background: rgba(8, 12, 20, .5); opacity: 0; visibility: hidden; transition: opacity .2s, visibility 0s .2s; }
+.scrim.open { opacity: 1; visibility: visible; transition: opacity .2s; }
+.sheet {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; margin: 0 auto; max-width: 640px;
+  max-height: 88%; overflow-y: auto; background: var(--surface); color: var(--ink);
+  border-radius: 22px 22px 0 0; border: 1px solid var(--line); border-bottom: 0;
+  padding: 10px max(20px, env(safe-area-inset-left, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) max(20px, env(safe-area-inset-left, 0px));
+  transform: translateY(104%); visibility: hidden; transition: transform .25s ease, visibility 0s .25s;
+}
+.sheet.open { transform: none; visibility: visible; transition: transform .25s ease; }
+@media (prefers-reduced-motion: reduce) { .sheet, .scrim, .drawer { transition: none !important; } }
+.grab { width: 40px; height: 4px; border-radius: 4px; background: var(--line); margin: 0 auto 12px; }
+.sh-top { display: flex; align-items: center; gap: 14px; }
+.sh-top .ico { width: 56px; height: 56px; border-radius: 16px; }
+.sh-top h3 { font-family: var(--f-display); font-weight: 700; font-size: 1.4rem; line-height: 1.1; margin: 0; overflow-wrap: anywhere; }
+.sh-top > div { flex: 1; min-width: 0; }
+.x { flex: none; width: 40px; height: 40px; border-radius: 50%; background: var(--bg); display: grid; place-items: center; font-size: 18px; }
+.sec { margin-top: 18px; }
+.lab { font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 4px; }
+.sec p { margin: 0; font-size: 15.5px; overflow-wrap: anywhere; }
+.pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill-l, .pills a, .pills button {
+  font-size: 14px; padding: 8px 13px; border-radius: 999px; border: 1px solid var(--line);
+  background: var(--bg); text-decoration: none; min-height: 38px; display: inline-flex; align-items: center;
+}
+.pills button:hover, .pills a:hover { border-color: var(--accent); }
+.acts { display: grid; gap: 10px; margin-top: 22px; }
+.btn { display: flex; justify-content: center; align-items: center; text-align: center; min-height: 50px; border-radius: 14px; font-weight: 600; text-decoration: none; border: 1px solid var(--line); background: var(--bg); }
+.btn.main { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.btn[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); }
+.host { font-family: var(--f-mono); font-size: 12px; color: var(--muted); text-align: center; margin-top: -2px; }
+
+/* Laptop and desktop: same page, laid out as a website */
+@media (min-width: 900px) {
+  body { padding-block: 0 56px; }
+  .shell { max-width: 1100px; }
+  .bar { padding-block: 14px; }
+  .logo { width: 40px; height: 40px; }
+  .bt { font-size: 1.4rem; }
+  .split { gap: 20px; }
+  .rail { width: 210px; padding: 8px; max-height: calc(100vh - var(--bar-h, 90px) - var(--top-off) - 24px); }
+  .rb { display: flex; justify-content: flex-start; align-items: center; gap: 10px; text-align: left; font-size: 14.5px; padding: 10px 12px; min-height: 44px; }
+  .rb .s { display: none; }
+  .rb .l { display: inline; flex: 1; }
+  .rb .n { display: inline; font-size: 12px; }
+  .group { background: none; border: 0; border-radius: 0; overflow: visible; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .row, .row:first-child { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
+  .tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .todo { max-width: 720px; }
+  .apps { grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); }
+  .sheet {
+    top: 50%; bottom: auto; left: 50%; right: auto; margin: 0; width: 560px; max-width: calc(100vw - 32px); max-height: 84vh;
+    border-radius: 22px; border-bottom: 1px solid var(--line); opacity: 0;
+    transform: translate(-50%, -46%); transition: transform .2s ease, opacity .2s ease, visibility 0s .2s;
+  }
+  .sheet.open { transform: translate(-50%, -50%); opacity: 1; transition: transform .2s ease, opacity .2s ease; }
+  .grab { display: none; }
+}
+</style></head><body>
+
+<div class="top" id="bar">
+  <header class="bar">
+    <div class="bar-in">
+      <button class="home" id="home" type="button" aria-label="Home"><svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="12" fill="#fff"/><rect x="9" y="9" width="13" height="13" rx="4" fill="#2540D9"/><rect x="26" y="9" width="13" height="13" rx="4" fill="#2540D9" opacity=".55"/><rect x="9" y="26" width="13" height="13" rx="4" fill="#2540D9" opacity=".55"/><rect x="26" y="26" width="13" height="13" rx="4" fill="#2540D9"/></svg><h1 class="bt">Digital Product Marketplaces</h1></button>
+      <button class="hb" id="sv" type="button" aria-label="Saved" aria-pressed="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M6.5 3.5h11v17l-5.5-4-5.5 4z"/></svg>
+        <span class="scount" id="scount" hidden></span>
+      </button>
+      <button class="hb" id="mg" type="button" aria-label="Search" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg>
+        <span class="mdot" id="mdot" hidden></span>
+      </button>
+    </div>
+  </header>
+  <div class="sbox" id="sbox" hidden>
+    <div class="sbox-in">
+      <input id="q" type="search" placeholder="Search planner, font, course, app" autocomplete="off" aria-label="Search places">
+      <button class="sx" id="sx" type="button" aria-label="Close search">&#10005;</button>
+    </div>
+  </div>
+</div>
+
+<div class="shell" id="app">
+  <main class="view" id="view"></main>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Details"></div>
+<script>
+/* name, url, kind (m marketplace, s your store, p distributor), categories, what you can sell, good to know */
+var D = [
+["Amazon KDP","https://kdp.amazon.com","m","books","Ebooks, paperbacks, hardcovers, journals, planners and puzzle books.","Free to list, with the largest reader audience online. This is Amazon's route for digital books."],
+["Audible ACX","https://www.acx.com","m","books audio","Audiobooks that you narrate or hire a narrator for.","Only open in some countries, so check eligibility first."],
+["Draft2Digital","https://www.draft2digital.com","p","books","Ebooks and print books.","Upload once and it sends your book to several other stores."],
+["Kobo Writing Life","https://www.kobo.com/writinglife","m","books","Ebooks and audiobooks.","Strong readership in Canada and several other countries."],
+["Apple Books","https://authors.apple.com","m","books","Ebooks and audiobooks.","Free to publish, with reach among iPhone and iPad readers."],
+["Google Play Books","https://play.google.com/books/publish","m","books","Ebooks and audiobooks.","Free partner program that reaches readers through Android and the Play Store."],
+["IngramSpark","https://www.ingramspark.com","p","books","Print books for bookstores and libraries.","Choose it when you want physical shelf distribution, not only online sales."],
+["Pratilipi","https://www.pratilipi.com","m","books in","Stories, novels and serials in Hindi and other Indian languages.","Readers come to the platform, so it suits building an audience before charging."],
+
+["Substack","https://substack.com","s","community books","Paid newsletters, tutorials and serialised guides.","Subscriptions are built in. Most of your first readers come from you."],
+["beehiiv","https://www.beehiiv.com","s","community","Paid newsletters and premium archives.","Growth and referral tools made for newsletter writers."],
+["Patreon","https://www.patreon.com","s","community","Memberships with exclusive files, posts, lessons and early access.","Works best once you already have followers."],
+["Ko-fi","https://ko-fi.com","s","community store","Digital downloads, memberships and tips on one page.","A quick first shop with a free tier."],
+
+["Etsy","https://www.etsy.com/sell","m","templates design","Printables, planners, wall art, invitations, spreadsheets, SVG cut files, fonts and presets.","Buyers already search here. Read Etsy's rules on digital items and on AI-made or non-original work before you list."],
+["Gumroad","https://gumroad.com","s","store templates books","Ebooks, templates, presets, courses, audio and software licences.","Simple setup with no monthly plan. Fees come out of each sale."],
+["Payhip","https://payhip.com","s","store","Digital downloads, courses, memberships and coaching.","Has a free plan and pays you through your own PayPal or Stripe account."],
+["Sellfy","https://sellfy.com","s","store","Digital downloads, subscriptions and print on demand.","Includes email tools and upsells."],
+["Lemon Squeezy","https://www.lemonsqueezy.com","s","store software","Software licences, subscriptions, ebooks and courses.","Acts as the seller of record, so it handles sales tax and VAT for you."],
+["Shopify","https://www.shopify.com","s","store","Any digital download through a digital downloads app, plus physical goods if you add them.","Full control of your brand. Monthly plan and app costs apply."],
+["SendOwl","https://www.sendowl.com","s","store","Downloads, licence keys, subscriptions and streaming video.","Adds secure delivery to a website you already have."],
+["Easy Digital Downloads","https://easydigitaldownloads.com","s","store software","Downloads, licences and subscriptions from your own WordPress site.","Free plugin with paid extensions. You host everything yourself."],
+["Whop","https://whop.com","s","store software community","Software access, paid communities, courses and files.","Combines a store, a community and licence keys."],
+["Stan Store","https://stan.store","s","store community","Courses, templates, ebooks, bookings and memberships behind a link in bio.","Made for creators who sell from Instagram and TikTok."],
+["Superpeer","https://superpeer.com","s","store courses community","Courses, paid sessions, webinars and memberships.","Suits teachers and coaches who sell content and time together."],
+["Beacons","https://beacons.ai","s","store","Digital products, email list and bookings from one link page.","Quick to set up for creators with a social audience."],
+["Instamojo","https://www.instamojo.com","s","store in","Digital downloads, paid links and a simple online store.","Takes rupee payments, including UPI."],
+["Topmate","https://topmate.io","s","store in","Paid one-to-one calls, webinars and digital products.","Popular with Indian mentors and professionals."],
+["Razorpay Payment Pages","https://razorpay.com/payment-pages/","s","store in","A single file, course or event behind a payment link.","A fast way to take UPI and card payments for one product."],
+
+["Udemy","https://www.udemy.com/teaching/","m","courses","Video courses on any practical skill.","Large built-in audience. Udemy controls promotions, so your price per sale varies."],
+["Skillshare","https://www.skillshare.com","m","courses","Short, project-based classes, mostly creative and business skills.","Suits a series of short classes."],
+["Teachable","https://teachable.com","s","courses store","Courses, coaching and downloads on your own branded school.","You bring the students. Paid plans apply."],
+["Thinkific","https://www.thinkific.com","s","courses store","Courses, communities and memberships.","Has a free plan to start. You bring the students."],
+["Kajabi","https://kajabi.com","s","courses store","Courses, memberships, email and landing pages in one system.","A premium all-in-one for creators who already sell."],
+["Podia","https://www.podia.com","s","courses store","Courses, downloads, memberships and webinars.","Simple dashboard with email included."],
+["Graphy","https://graphy.com","s","courses in","Courses, live classes and test series with your own branded app.","Built for Indian educators with local payment options."],
+["Teachers Pay Teachers","https://www.teacherspayteachers.com","m","templates courses","Worksheets, lesson plans, quizzes and classroom materials.","Buyers are teachers, so it suits language and subject worksheets."],
+
+["Creative Market","https://creativemarket.com","m","design templates","Fonts, graphics, mockups, presets, website themes and templates.","Curated. Your shop is reviewed before you can sell."],
+["Envato Market","https://envato.com","m","design software templates","Website themes, plugins, templates, graphics, stock video and music across its sub-sites.","Authors apply, and items must pass a quality review."],
+["Canva Creators","https://www.canva.com/creators/","m","design templates","Canva templates, graphics and design elements.","Your designs are used by people inside Canva."],
+["Figma Community","https://www.figma.com/community","m","design templates","Free and paid Figma templates, UI kits and plugins.","Also works as a portfolio that leads to paid sales."],
+["UI8","https://ui8.net","m","design","UI kits, icon sets, illustrations and mockups.","Curated for designers, with higher price points."],
+["Notion Templates","https://www.notion.com/templates","m","templates","Notion templates for work, study and life.","Check the current creator rules, and sell on your own store as well."],
+["Freepik","https://www.freepik.com","m","design stock","Vectors, PSD files, icons and illustrations.","Contributors go through an approval process."],
+
+["Adobe Stock","https://contributor.stock.adobe.com","m","stock","Photos, vectors, video, illustrations and 3D.","Every upload is reviewed, so quality and keywords matter."],
+["Shutterstock","https://submit.shutterstock.com","m","stock","Photos, vectors, video and music.","Huge buyer base. Expect many competing uploads."],
+["iStock by Getty Images","https://contributor.gettyimages.com","m","stock","Photos, illustrations and video.","Contributor tools are on Getty's site."],
+["Pond5","https://www.pond5.com","m","stock audio","Video clips, music, sound effects and 3D models.","A wide mix of media types in one shop."],
+["Alamy","https://www.alamy.com","m","stock","Photos, including editorial and documentary images.","A good fit for travel, news and documentary photographers."],
+
+["Bandcamp","https://bandcamp.com","m","audio","Albums, tracks, beats and sample packs.","Fans buy straight from you."],
+["BeatStars","https://www.beatstars.com","m","audio","Beat licences for rappers and singers.","Built around leasing and exclusive licences."],
+["AudioJungle","https://audiojungle.net","m","audio","Royalty-free music and sound effects.","Part of Envato, with an author application."],
+["DistroKid","https://distrokid.com","p","audio","Songs for streaming services such as Spotify and Apple Music.","A distributor, not a shop. Paid yearly plan."],
+
+["itch.io","https://itch.io","m","games","Games, game assets, tools, zines and digital art.","Open to anyone. You set the price, including pay what you want."],
+["Fab","https://www.fab.com","m","games","3D models, textures, effects, audio and tools for game engines.","Epic Games marketplace that covers Unreal Engine, Unity and more."],
+["Unity Asset Store","https://assetstore.unity.com","m","games software","Models, tools, scripts and sound for Unity projects.","Publishers need a Unity account."],
+["Steam","https://partner.steamgames.com","m","games","PC games.","Needs a Steamworks account and a one-time fee per game."],
+["CGTrader","https://www.cgtrader.com","m","games","3D models for design, games, AR and 3D printing.","You set prices and choose licence types."],
+["TurboSquid","https://www.turbosquid.com","m","games","Professional 3D models.","Aimed at film, games and visualisation buyers."],
+["Cults3D","https://cults3d.com","m","games","3D printable files such as gadgets, home decor and miniatures.","Makers browse and buy files directly."],
+["MyMiniFactory","https://www.myminifactory.com","m","games","Tabletop miniatures and 3D print files.","Active community of printers and painters."],
+
+["Chrome Web Store","https://chromewebstore.google.com","m","software","Browser extensions.","Charge through your own licence system, since Chrome no longer handles payments."],
+["Google Play Console","https://play.google.com/console","m","software","Android apps and in-app purchases.","One-time developer registration fee."],
+["App Store Connect","https://developer.apple.com/app-store-connect/","m","software","iPhone, iPad and Mac apps.","Requires a paid Apple Developer membership."],
+["Amazon Appstore","https://developer.amazon.com/apps-and-games","m","software","Android apps and games for Fire devices.","A smaller store with less competition."],
+["Shopify App Store","https://apps.shopify.com","m","software","Apps for Shopify merchants.","Needs a Shopify Partner account and app review."],
+["WordPress Plugins","https://wordpress.org/plugins/","m","software","Free plugins, with premium upgrades sold on your own site.","Pair it with Lemon Squeezy or Freemius for licences."]
+];
+
+var CHIPS = [
+["all","All","All"],["books","Books","Books"],["courses","Courses","Courses"],["templates","Templates","Templates"],["design","Design assets","Design"],
+["stock","Stock media","Stock"],["audio","Music","Music"],["games","3D & games","3D"],["software","Apps","Apps"],["store","Own store","Store"],
+["community","Newsletters","Email"],["in","India","India"]
+];
+var KIND = { m: "Marketplace", s: "Your store", p: "Distributor" };
+
+var KITS = [
+{ t:"Printables", ex:"Planners, trackers, wall art", lvl:"Easy start", b:"Planners, habit trackers, checklists, wall art and invitations.",
+  tools:[["Canva","https://www.canva.com"],["Figma","https://www.figma.com"],["Google Slides","https://slides.google.com"]],
+  first:"A seven-page weekly planner in A4 and US Letter.", fmt:"PDF, plus an editable template link.",
+  sell:["Etsy","Gumroad","Payhip","Creative Market"] },
+{ t:"Templates", ex:"Notion, Google Sheets, Canva", lvl:"Easy start", b:"Trackers, dashboards and budgets people copy and use.",
+  tools:[["Notion","https://www.notion.so"],["Google Sheets","https://sheets.google.com"]],
+  first:"A freelancer income and invoice tracker.", fmt:"Notion duplicate link, Sheets copy link or .xlsx file.",
+  sell:["Gumroad","Etsy","Notion Templates","Stan Store"] },
+{ t:"Ebooks", ex:"Guides, workbooks, how-tos", lvl:"Easy start", b:"A how-to, workbook or short guide on a subject you know well.",
+  tools:[["Google Docs","https://docs.google.com"],["Reedsy Studio","https://reedsy.com/studio"],["Canva","https://www.canva.com"]],
+  first:"A 30 to 50 page practical guide with a clean cover.", fmt:"EPUB for stores, PDF for direct sale.",
+  sell:["Amazon KDP","Draft2Digital","Gumroad","Pratilipi"] },
+{ t:"Courses", ex:"Video lessons on a skill", lvl:"Some skill", b:"Step-by-step lessons on a skill people pay to learn.",
+  tools:[["OBS Studio","https://obsproject.com"],["DaVinci Resolve","https://www.blackmagicdesign.com/products/davinciresolve"],["Descript","https://www.descript.com"],["Canva","https://www.canva.com"]],
+  first:"A ten-lesson mini course with lessons of 5 to 10 minutes.", fmt:"1080p MP4 videos and PDF workbooks.",
+  sell:["Udemy","Skillshare","Teachable","Thinkific","Graphy"] },
+{ t:"Worksheets", ex:"Lesson plans, practice sheets", lvl:"Easy start", b:"Classroom and self-study material for teachers and parents.",
+  tools:[["Canva","https://www.canva.com"],["Google Docs","https://docs.google.com"]],
+  first:"A pack of 20 worksheets with answer keys.", fmt:"Print-ready PDF.",
+  sell:["Teachers Pay Teachers","Etsy","Gumroad"] },
+{ t:"Fonts & graphics", ex:"Icons, illustrations, vectors", lvl:"Some skill", b:"Assets that designers drop into their own projects.",
+  tools:[["Inkscape","https://inkscape.org"],["Figma","https://www.figma.com"],["FontForge","https://fontforge.org"],["Calligraphr","https://www.calligraphr.com"]],
+  first:"A set of 50 consistent icons.", fmt:"SVG and PNG, with a licence text file.",
+  sell:["Creative Market","Envato Market","Freepik","UI8","Etsy"] },
+{ t:"UI kits", ex:"Figma screens and parts", lvl:"Some skill", b:"Screens and components for designers and founders.",
+  tools:[["Figma","https://www.figma.com"],["Canva","https://www.canva.com"]],
+  first:"A ten-screen landing page kit built with auto layout.", fmt:"Figma file or Community link.",
+  sell:["UI8","Figma Community","Gumroad","Creative Market"] },
+{ t:"Presets", ex:"Photo filters, mockups", lvl:"Some skill", b:"Photo looks and product mockups for creators and shops.",
+  tools:[["Lightroom","https://www.adobe.com/products/photoshop-lightroom.html"],["Photopea","https://www.photopea.com"],["GIMP","https://www.gimp.org"]],
+  first:"Five warm travel presets for phone and desktop.", fmt:"DNG for mobile, XMP for desktop, PSD for mockups.",
+  sell:["Etsy","Creative Market","Gumroad"] },
+{ t:"Photos & video", ex:"Stock pictures and clips", lvl:"Easy start", b:"Clean, well-lit images and clips that businesses license.",
+  tools:[["Your phone camera",""],["DaVinci Resolve","https://www.blackmagicdesign.com/products/davinciresolve"],["Lightroom","https://www.adobe.com/products/photoshop-lightroom.html"]],
+  first:"100 sharp photos of one theme, such as home offices.", fmt:"JPEG, with model or property releases where people or private places show.",
+  sell:["Adobe Stock","Shutterstock","Alamy","Pond5"] },
+{ t:"Music & sounds", ex:"Beats, loops, sound effects", lvl:"Some skill", b:"Loops, tracks and sounds for video makers and artists.",
+  tools:[["BandLab","https://www.bandlab.com"],["Audacity","https://www.audacityteam.org"],["LMMS","https://lmms.io"]],
+  first:"A pack of ten 60-second lo-fi loops.", fmt:"WAV files with a licence text file.",
+  sell:["BeatStars","Bandcamp","AudioJungle","Pond5"] },
+{ t:"3D & games", ex:"Models, textures, game art", lvl:"Technical", b:"Models, textures and tools for games and 3D printing.",
+  tools:[["Blender","https://www.blender.org"],["Krita","https://krita.org"],["Godot","https://godotengine.org"]],
+  first:"A low-poly furniture pack of 20 models.", fmt:"FBX and glTF files, textures and a preview render.",
+  sell:["Fab","Unity Asset Store","CGTrader","itch.io","Cults3D"] },
+{ t:"Apps & plugins", ex:"Extensions and small tools", lvl:"Technical", b:"Small tools that fix one annoying task well.",
+  tools:[["VS Code","https://code.visualstudio.com"],["GitHub","https://github.com"],["Chrome extension docs","https://developer.chrome.com/docs/extensions"]],
+  first:"A single-purpose browser extension or WordPress plugin.", fmt:"Packaged build, plus a licence key flow for paid versions.",
+  sell:["Chrome Web Store","WordPress Plugins","Shopify App Store","Google Play Console","Lemon Squeezy"] },
+{ t:"Newsletter", ex:"Paid email and memberships", lvl:"Easy start", b:"A regular, useful email or members area people pay for.",
+  tools:[["beehiiv","https://www.beehiiv.com"],["Substack","https://substack.com"],["Ko-fi","https://ko-fi.com"]],
+  first:"A weekly practical email with a paid archive of past guides.", fmt:"Email, plus downloadable bonus files.",
+  sell:["Substack","beehiiv","Patreon","Ko-fi"] }
+];
+
+var ORDER = ["Templates", "Printables", "Ebooks", "Newsletter", "Photos & video", "Courses", "Worksheets", "Presets", "Fonts & graphics", "Music & sounds", "UI kits", "3D & games", "Apps & plugins"];
+KITS.sort(function (a, b) { return ORDER.indexOf(a.t) - ORDER.indexOf(b.t); });
+
+var ART = {};
+ART["Templates"] = '<rect x="32" y="8" width="96" height="74" rx="8" fill="none" stroke="currentColor" stroke-width="3"/><rect x="42" y="18" width="76" height="12" rx="3" fill="currentColor" opacity=".35"/><rect x="42" y="38" width="34" height="34" rx="3" fill="currentColor" opacity=".7"/><rect x="82" y="38" width="36" height="14" rx="3" fill="currentColor" opacity=".35"/><rect x="82" y="58" width="36" height="14" rx="3" fill="currentColor" opacity=".35"/>';
+ART["Printables"] = '<rect x="46" y="4" width="68" height="82" rx="6" fill="none" stroke="currentColor" stroke-width="3"/><rect x="54" y="15" width="10" height="10" rx="2" fill="currentColor"/><rect x="70" y="18" width="36" height="5" rx="2.5" fill="currentColor" opacity=".4"/><rect x="54" y="34" width="10" height="10" rx="2" fill="currentColor" opacity=".55"/><rect x="70" y="37" width="30" height="5" rx="2.5" fill="currentColor" opacity=".4"/><rect x="54" y="53" width="10" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="70" y="56" width="34" height="5" rx="2.5" fill="currentColor" opacity=".4"/><rect x="54" y="72" width="10" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>';
+ART["Ebooks"] = '<rect x="46" y="12" width="68" height="72" rx="4" fill="currentColor" opacity=".25"/><rect x="40" y="6" width="68" height="72" rx="5" fill="none" stroke="currentColor" stroke-width="3"/><rect x="40" y="6" width="9" height="72" rx="4" fill="currentColor" opacity=".6"/><rect x="56" y="18" width="38" height="7" rx="3" fill="currentColor"/><rect x="56" y="32" width="42" height="4" rx="2" fill="currentColor" opacity=".45"/><rect x="56" y="42" width="38" height="4" rx="2" fill="currentColor" opacity=".45"/><rect x="56" y="52" width="26" height="4" rx="2" fill="currentColor" opacity=".45"/>';
+ART["Newsletter"] = '<rect x="30" y="16" width="100" height="62" rx="9" fill="none" stroke="currentColor" stroke-width="3"/><polyline points="34,22 80,54 126,22" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="126" cy="18" r="10" fill="currentColor" opacity=".8"/>';
+ART["Photos & video"] = '<rect x="30" y="8" width="100" height="72" rx="8" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="108" cy="28" r="8" fill="currentColor" opacity=".7"/><polygon points="36,74 62,42 80,62 94,48 124,74" fill="currentColor" opacity=".55"/>';
+ART["Courses"] = '<rect x="28" y="8" width="104" height="62" rx="8" fill="none" stroke="currentColor" stroke-width="3"/><polygon points="72,24 72,54 98,39" fill="currentColor"/><rect x="28" y="78" width="104" height="5" rx="2.5" fill="currentColor" opacity=".25"/><rect x="28" y="78" width="46" height="5" rx="2.5" fill="currentColor"/>';
+ART["Worksheets"] = '<rect x="44" y="4" width="72" height="82" rx="6" fill="none" stroke="currentColor" stroke-width="3"/><rect x="54" y="16" width="40" height="5" rx="2.5" fill="currentColor" opacity=".45"/><rect x="54" y="30" width="52" height="4" rx="2" fill="currentColor" opacity=".3"/><rect x="54" y="40" width="52" height="4" rx="2" fill="currentColor" opacity=".3"/><rect x="54" y="50" width="38" height="4" rx="2" fill="currentColor" opacity=".3"/><polyline points="84,66 91,73 104,58" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>';
+ART["Presets"] = '<rect x="30" y="20" width="100" height="5" rx="2.5" fill="currentColor" opacity=".35"/><circle cx="64" cy="22.5" r="9" fill="currentColor"/><rect x="30" y="43" width="100" height="5" rx="2.5" fill="currentColor" opacity=".35"/><circle cx="106" cy="45.5" r="9" fill="currentColor" opacity=".75"/><rect x="30" y="66" width="100" height="5" rx="2.5" fill="currentColor" opacity=".35"/><circle cx="82" cy="68.5" r="9" fill="currentColor" opacity=".55"/>';
+ART["Fonts & graphics"] = '<text x="80" y="64" text-anchor="middle" font-size="58" font-weight="700" font-family="Bricolage Grotesque, sans-serif" fill="currentColor">Aa</text><rect x="34" y="72" width="92" height="3" rx="1.5" fill="currentColor" opacity=".35"/>';
+ART["Music & sounds"] = '<rect x="30" y="35" width="7" height="20" rx="3.5" fill="currentColor" opacity=".9"/><rect x="40" y="24" width="7" height="42" rx="3.5" fill="currentColor" opacity=".55"/><rect x="50" y="14" width="7" height="62" rx="3.5" fill="currentColor" opacity=".55"/><rect x="60" y="27" width="7" height="36" rx="3.5" fill="currentColor" opacity=".9"/><rect x="70" y="10" width="7" height="70" rx="3.5" fill="currentColor" opacity=".55"/><rect x="80" y="21" width="7" height="48" rx="3.5" fill="currentColor" opacity=".55"/><rect x="90" y="32" width="7" height="26" rx="3.5" fill="currentColor" opacity=".9"/><rect x="100" y="17" width="7" height="56" rx="3.5" fill="currentColor" opacity=".55"/><rect x="110" y="28" width="7" height="34" rx="3.5" fill="currentColor" opacity=".55"/><rect x="120" y="37" width="7" height="16" rx="3.5" fill="currentColor" opacity=".9"/>';
+ART["UI kits"] = '<rect x="28" y="10" width="64" height="22" rx="11" fill="currentColor"/><rect x="100" y="12" width="34" height="18" rx="9" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="125" cy="21" r="6" fill="currentColor"/><rect x="28" y="42" width="64" height="40" rx="8" fill="none" stroke="currentColor" stroke-width="3"/><rect x="36" y="51" width="30" height="5" rx="2.5" fill="currentColor" opacity=".5"/><rect x="36" y="62" width="46" height="4" rx="2" fill="currentColor" opacity=".3"/><circle cx="116" cy="62" r="18" fill="currentColor" opacity=".35"/>';
+ART["3D & games"] = '<polygon points="80,6 122,28 80,50 38,28" fill="currentColor" opacity=".35"/><polygon points="38,28 80,50 80,84 38,62" fill="currentColor" opacity=".7"/><polygon points="122,28 80,50 80,84 122,62" fill="currentColor"/>';
+ART["Apps & plugins"] = '<rect x="54" y="4" width="52" height="82" rx="10" fill="none" stroke="currentColor" stroke-width="3"/><rect x="62" y="16" width="16" height="16" rx="4" fill="currentColor"/><rect x="82" y="16" width="16" height="16" rx="4" fill="currentColor" opacity=".5"/><rect x="62" y="38" width="16" height="16" rx="4" fill="currentColor" opacity=".5"/><rect x="82" y="38" width="16" height="16" rx="4" fill="currentColor" opacity=".8"/><rect x="66" y="68" width="28" height="5" rx="2.5" fill="currentColor" opacity=".35"/>';
+var HUE = {"Templates": 225, "Printables": 165, "Ebooks": 28, "Newsletter": 352, "Photos & video": 195, "Courses": 330, "Worksheets": 100, "Presets": 265, "Fonts & graphics": 10, "Music & sounds": 300, "UI kits": 210, "3D & games": 140, "Apps & plugins": 45};
+function artSvg(t) { return '<svg class="art" viewBox="0 0 160 90" aria-hidden="true">' + ART[t] + "</svg>"; }
+
+var TIPS = [
+["Own what you sell.","Check that every font, image, sound and AI tool you used allows commercial resale."],
+["Start with two places, not ten.","One marketplace where buyers search, plus one store you control."],
+["Set up payouts and tax details first.","Fees, payout rules and tax forms differ by country and change often, so read each seller page."],
+["Test the download.","Buy your own product and open it on a phone and a laptop."],
+["Check demand before you build.","Search the marketplace for your idea and see how many similar products sell."]
+];
+
+var TABS = [
+["explore","Where to sell",'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg>'],
+["saved","Saved",'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6.5 3.5h11v17l-5.5-4-5.5 4z"/></svg>'],
+];
+var BOOKMARK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6.5 3.5h11v17l-5.5-4-5.5 4z"/></svg>';
+
+
+/* Icons */
+var GLYPH_FOR = { books:"Ebooks", courses:"Courses", templates:"Templates", design:"Fonts & graphics", stock:"Photos & video", audio:"Music & sounds", games:"3D & games", software:"Apps & plugins", store:"UI kits", community:"Newsletter", "in":"UI kits" };
+var DOM = { "Adobe Stock":"stock.adobe.com", "Shutterstock":"shutterstock.com", "iStock by Getty Images":"istockphoto.com", "Apple Books":"apple.com",
+  "Google Play Books":"play.google.com", "Google Play Console":"play.google.com", "WordPress Plugins":"wordpress.org", "Steam":"store.steampowered.com",
+  "Audible ACX":"acx.com", "Kobo Writing Life":"kobo.com", "Udemy":"udemy.com", "Etsy":"etsy.com", "Canva Creators":"canva.com", "Figma Community":"figma.com",
+  "Notion Templates":"notion.com", "Razorpay Payment Pages":"razorpay.com", "Envato Market":"envato.com" };
+function favSrc(d, n) {
+  if (n === 0) return "https://www.google.com/s2/favicons?domain=" + d + "&sz=128";
+  if (n === 1) return "https://icons.duckduckgo.com/ip3/" + d + ".ico";
+  return "https://" + d + "/favicon.ico";
+}
+function ico(i) {
+  var d = D[i], dom = DOM[d[0]] || host(d[1]).split("/")[0];
+  var g = ART[GLYPH_FOR[d[3].split(" ")[0]]];
+  return '<span class="ico" style="--h:' + hue(d[0]) + '"><svg class="gl" viewBox="24 0 112 90" aria-hidden="true">' + g + '</svg>' +
+    '<img alt="" loading="lazy" referrerpolicy="no-referrer" data-d="' + dom + '" data-n="0" src="' + favSrc(dom, 0) + '"></span>';
+}
+document.addEventListener("error", function (e) {
+  var t = e.target;
+  if (!t || t.tagName !== "IMG" || !t.getAttribute("data-d")) return;
+  var n = +t.getAttribute("data-n") + 1;
+  if (n < 3) { t.setAttribute("data-n", n); t.src = favSrc(t.getAttribute("data-d"), n); } else { t.parentNode.removeChild(t); }
+}, true);
+document.addEventListener("load", function (e) {
+  var t = e.target;
+  if (t && t.tagName === "IMG" && t.getAttribute("data-d") && t.naturalWidth > 1) t.parentNode.classList.add("ok");
+}, true);
+var CATHUE = { books: 28, courses: 335, templates: 225, design: 12, stock: 195, audio: 295, games: 140, software: 265, store: 165, community: 352, "in": 35 };
+var CATICON = {
+  all: '<rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/>',
+  books: '<path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M8 17h10"/>',
+  courses: '<rect x="3.5" y="5" width="17" height="12" rx="2.5"/><path d="M10.5 9v4.5l3.8-2.2z"/><path d="M7 20.5h10"/>',
+  templates: '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M4 10h16M10 10v10"/>',
+  design: '<circle cx="8.5" cy="8.5" r="4"/><rect x="12" y="12" width="8" height="8" rx="2"/><path d="M4 20l5-5"/>',
+  stock: '<rect x="3.5" y="5" width="17" height="14" rx="2.5"/><circle cx="9" cy="10" r="1.6"/><path d="M4 17l5-4.5 3.5 3 3-2.5 4.5 4"/>',
+  audio: '<path d="M4 10v4M8 6v12M12 9v6M16 4v16M20 11v2"/>',
+  games: '<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/>',
+  software: '<rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 18h2"/>',
+  store: '<path d="M4 9l1.5-5h13L20 9"/><path d="M4 9a2.7 2.7 0 0 0 5.3 0 2.7 2.7 0 0 0 5.4 0A2.7 2.7 0 0 0 20 9"/><path d="M5.5 12v8h13v-8"/>',
+  community: '<rect x="3.5" y="5.5" width="17" height="13" rx="2.5"/><path d="M4 7l8 6 8-6"/>',
+  "in": '<path d="M12 21s6-5.2 6-10a6 6 0 0 0-12 0c0 4.8 6 10 6 10z"/><circle cx="12" cy="11" r="2.2"/>'
+};
+
+var state = { tab: "explore", cat: "all", q: "", view: "grid" };
+var saved = [], done = [];
+function load(k) { try { var v = JSON.parse(localStorage.getItem(k) || "[]"); return Array.isArray(v) ? v : []; } catch (e) { return []; } }
+function store(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+saved = load("dpm-saved"); done = load("dpm-done");
+
+var $ = function (id) { return document.getElementById(id); };
+function host(u) { return u.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, ""); }
+function hue(s) { var h = 0; for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 360; return h; }
+function idx(name) { for (var i = 0; i < D.length; i++) if (D[i][0] === name) return i; return -1; }
+function av(name) { return '<span class="av" style="--h:' + hue(name) + '">' + name.charAt(0).toUpperCase() + "</span>"; }
+function isSaved(name) { return saved.indexOf(name) > -1; }
+
+function appTile(i) {
+  var d = D[i];
+  return '<a class="app" data-i="' + i + '" href="' + d[1] + '" target="_blank" rel="noopener" aria-label="Open ' + d[0] + ' website">' + ico(i) + '<span class="an">' + d[0] + '</span></a>';
+}
+function row(i) {
+  var d = D[i];
+  return '<li class="row"><a class="avl" href="' + d[1] + '" target="_blank" rel="noopener" aria-label="Open ' + d[0] + ' website">' + ico(i) + '</a>' +
+    '<button class="row-main" data-place="' + i + '"><span class="txt"><span class="nm">' + d[0] + '</span><span class="sub">' + d[4] + '</span><span class="kind">' + KIND[d[2]] + "</span></span></button>" +
+    '<button class="save" data-save="' + i + '" aria-pressed="' + isSaved(d[0]) + '" aria-label="Save ' + d[0] + '">' + BOOKMARK + "</button></li>";
+}
+
+function catCount(key) {
+  return D.filter(function (d) { return key === "all" || d[3].split(" ").indexOf(key) > -1; }).length;
+}
+function railHtml() {
+  return '<nav class="rail" aria-label="Product types">' + CHIPS.filter(function (c) { return c[0] !== "all"; }).map(function (c) {
+    return '<button type="button" class="rb" data-cat="' + c[0] + '" style="--h:' + CATHUE[c[0]] + '" aria-pressed="' + (state.cat === c[0]) + '"><span class="ri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + CATICON[c[0]] + '</svg></span><span class="s">' + c[2] + '</span><span class="l">' + c[1] + '</span><span class="n">' + catCount(c[0]) + "</span></button>";
+  }).join("") + "</nav>";
+}
+function fitBar() { document.documentElement.style.setProperty("--bar-h", $("bar").offsetHeight + "px"); }
+function catName() {
+  for (var i = 0; i < CHIPS.length; i++) if (CHIPS[i][0] === state.cat) return CHIPS[i][1];
+  return "";
+}
+
+function renderTabs() {
+  var b = $("sv"), c = $("scount");
+  b.classList.toggle("on", state.tab === "saved"); b.setAttribute("aria-pressed", String(state.tab === "saved"));
+  c.hidden = !saved.length; c.textContent = saved.length;
+}
+
+function filtered() {
+  var q = state.q.trim().toLowerCase();
+  var out = [];
+  D.forEach(function (d, i) {
+    var inCat = state.cat === "all" || d[3].split(" ").indexOf(state.cat) > -1;
+    var inQ = !q || (d[0] + " " + d[4] + " " + d[5]).toLowerCase().indexOf(q) > -1;
+    if (inCat && inQ) out.push(i);
+  });
+  return out;
+}
+
+function renderExplore() {
+  var list = filtered();
+  var html = "";
+  if (list.length) html += '<div class="apps">' + list.map(appTile).join("") + "</div>";
+  else html += '<div class="empty"><strong>Nothing found</strong>Try another word or pick All.</div>';
+  $("view").innerHTML = '<div class="split">' + railHtml() + '<div class="list">' + html + "</div></div>";
+  fitBar();
+}
+
+function renderKits() {
+  $("view").innerHTML = '<div class="view-head"><h2>What do you want to sell?</h2><p>Pick a product. You will see where to sell it and how to make your first one.</p></div>' +
+    '<div class="tiles">' + KITS.map(function (k, i) {
+      return '<button class="tile" data-kit="' + i + '" style="--h:' + HUE[k.t] + '">' + artSvg(k.t) +
+        '<span class="tb"><span class="tt">' + k.t + '</span><span class="ex">' + k.ex + '</span><span class="tm">' + k.lvl + " · " + k.sell.length + " places</span></span></button>";
+    }).join("") + "</div>";
+}
+
+function renderSaved() {
+  var html = '<div class="view-head"><h2>Saved places</h2><p>Press and hold an icon, then tap Save for later.</p></div>';
+  var items = saved.map(idx).filter(function (i) { return i > -1; });
+  if (items.length) html += '<div class="apps">' + items.map(appTile).join("") + "</div>";
+  else html += '<div class="empty"><strong>Nothing saved yet</strong>Press and hold an icon in Where to sell, then tap Save for later.</div>';
+  $("view").innerHTML = html;
+}
+
+function renderTips() {
+  var n = TIPS.filter(function (t) { return done.indexOf(t[0]) > -1; }).length;
+  $("view").innerHTML = '<div class="view-head"><h2>Before you list anything</h2><p>' + n + " of " + TIPS.length + " done</p></div>" +
+    '<ul class="todo">' + TIPS.map(function (t, i) {
+      return '<li><button data-tip="' + i + '" aria-pressed="' + (done.indexOf(t[0]) > -1) + '"><span class="box">✓</span><span class="tx"><strong>' + t[0] + "</strong>" + t[1] + "</span></button></li>";
+    }).join("") + '</ul><p class="foot">Links go to each service\'s own site. Features, fees and country availability change, so confirm current terms on the seller page.</p>';
+}
+
+function render() {
+  var ex = state.tab === "explore";
+  if (!ex) { $("sbox").hidden = true; $("mg").setAttribute("aria-expanded", "false"); } $("mg").hidden = !ex; fitBar();
+  renderTabs();
+  if (state.tab === "explore") renderExplore();
+  else if (state.tab === "kits") renderKits();
+  else if (state.tab === "saved") renderSaved();
+  else renderTips();
+}
+
+/* Sheets */
+var openSheet = false;
+function show(html) {
+  var s = $("sheet");
+  s.innerHTML = html;
+  s.scrollTop = 0;
+  s.classList.add("open"); $("scrim").classList.add("open");
+  s.setAttribute("aria-hidden", "false");
+  document.body.classList.add("lock");
+  openSheet = true;
+  var c = s.querySelector(".x"); if (c) c.focus();
+}
+function closeSheet() {
+  $("sheet").classList.remove("open"); $("scrim").classList.remove("open");
+  $("sheet").setAttribute("aria-hidden", "true");
+  document.body.classList.remove("lock");
+  openSheet = false;
+}
+function placeSheet(i) {
+  var d = D[i];
+  var kits = [];
+  KITS.forEach(function (k, ki) { if (k.sell.indexOf(d[0]) > -1) kits.push('<button data-kit="' + ki + '">' + k.t + "</button>"); });
+  show('<div class="grab"></div><div class="sh-top">' + ico(i) + '<div><h3>' + d[0] + '</h3><span class="kind">' + KIND[d[2]] + '</span></div><button class="x" data-close aria-label="Close">✕</button></div>' +
+    '<div class="sec"><span class="lab">What you can sell</span><p>' + d[4] + "</p></div>" +
+    '<div class="sec"><span class="lab">Good to know</span><p>' + d[5] + "</p></div>" +
+    (kits.length ? '<div class="sec"><span class="lab">What sells here</span><div class="pills">' + kits.join("") + "</div></div>" : "") +
+    '<div class="acts"><a class="btn main" href="' + d[1] + '" target="_blank" rel="noopener">Open ' + d[0] + ' ↗</a>' +
+    '<div class="host">' + host(d[1]) + "</div>" +
+    '<button class="btn" data-save="' + i + '" aria-pressed="' + isSaved(d[0]) + '">' + (isSaved(d[0]) ? "Saved" : "Save for later") + "</button></div>");
+}
+function kitSheet(ki) {
+  var k = KITS[ki];
+  var tools = k.tools.map(function (t) {
+    return t[1] ? '<a href="' + t[1] + '" target="_blank" rel="noopener">' + t[0] + "</a>" : '<span class="pill-l">' + t[0] + "</span>";
+  }).join("");
+  var sells = k.sell.map(function (n) { return '<button data-place="' + idx(n) + '">' + n + "</button>"; }).join("");
+  show('<div class="grab"></div><div class="sh-top"><div><h3>' + k.t + '</h3><span class="kind">' + k.lvl + '</span></div><button class="x" data-close aria-label="Close">\u2715</button></div>' +
+    '<div class="banner" style="--h:' + HUE[k.t] + '">' + artSvg(k.t) + "</div>" +
+    '<div class="sec"><p>' + k.b + "</p></div>" +
+    '<div class="sec"><span class="lab">Where to sell it</span><div class="pills">' + sells + "</div></div>" +
+    '<div class="sec"><span class="lab">First product to try</span><p>' + k.first + "</p></div>" +
+    '<div class="sec"><span class="lab">Make it with</span><div class="pills">' + tools + "</div></div>" +
+    '<div class="sec"><span class="lab">Deliver as</span><p>' + k.fmt + "</p></div>");
+}
+
+function toggleSave(i) {
+  var n = D[i][0], p = saved.indexOf(n);
+  if (p > -1) saved.splice(p, 1); else saved.push(n);
+  store("dpm-saved", saved);
+}
+
+document.addEventListener("click", function (e) {
+  var el = e.target.closest("[data-place],[data-kit],[data-save],[data-tab],[data-cat],[data-tip],[data-close],[data-menu],[data-view]");
+  if (!el) { if (e.target.id === "scrim") closeSheet(); return; }
+  if (el.hasAttribute("data-close")) return closeSheet();
+  if (el.hasAttribute("data-view")) { state.view = el.getAttribute("data-view"); renderExplore(); return; }
+  if (el.hasAttribute("data-tab")) { closeSheet(); state.tab = el.getAttribute("data-tab"); render(); window.scrollTo(0, 0); return; }
+  if (el.hasAttribute("data-cat")) {
+    var r = document.querySelector(".rail"), st = r ? r.scrollTop : 0;
+    var cc = el.getAttribute("data-cat"); state.cat = state.cat === cc ? "all" : cc; renderExplore();
+    r = document.querySelector(".rail"); if (r) r.scrollTop = st;
+    window.scrollTo(0, 0); return;
+  }
+  if (el.hasAttribute("data-tip")) {
+    var t = TIPS[+el.getAttribute("data-tip")][0], p = done.indexOf(t);
+    if (p > -1) done.splice(p, 1); else done.push(t);
+    store("dpm-done", done); renderTips(); return;
+  }
+  if (el.hasAttribute("data-save")) {
+    var i = +el.getAttribute("data-save");
+    toggleSave(i);
+    if (openSheet) placeSheet(i);
+    render();
+    return;
+  }
+  if (el.hasAttribute("data-place")) { var pi = +el.getAttribute("data-place"); if (pi > -1) placeSheet(pi); return; }
+  if (el.hasAttribute("data-kit")) { kitSheet(+el.getAttribute("data-kit")); return; }
+});
+document.addEventListener("contextmenu", function (e) {
+  var a = e.target.closest ? e.target.closest(".app") : null;
+  if (!a) return;
+  e.preventDefault();
+  placeSheet(+a.getAttribute("data-i"));
+});
+document.addEventListener("keydown", function (e) {
+  if (e.key !== "Escape") return;
+  if (openSheet) closeSheet(); else if (!$("sbox").hidden) closeSearch(true);
+});
+$("q").addEventListener("input", function (e) { state.q = e.target.value; renderExplore(); });
+function updateMdot() { $("mdot").hidden = !($("sbox").hidden && state.q.trim()); }
+function openSearch() { $("sbox").hidden = false; $("mg").setAttribute("aria-expanded", "true"); updateMdot(); fitBar(); $("q").focus(); }
+function closeSearch(clear) {
+  if (clear) { $("q").value = ""; state.q = ""; if (state.tab === "explore") renderExplore(); }
+  $("sbox").hidden = true; $("mg").setAttribute("aria-expanded", "false"); updateMdot(); fitBar();
+}
+$("mg").addEventListener("click", openSearch);
+$("sx").addEventListener("click", function () { closeSearch(true); });
+$("q").addEventListener("blur", function () { if (!state.q.trim()) closeSearch(false); });
+window.addEventListener("resize", fitBar);
+$("sv").addEventListener("click", function () { closeSheet(); state.tab = state.tab === "saved" ? "explore" : "saved"; render(); window.scrollTo(0, 0); });
+$("home").addEventListener("click", function () { closeSheet(); state.tab = "explore"; render(); window.scrollTo(0, 0); });
+
+render();
+</script></body></html>

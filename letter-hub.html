@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Letter Hub – Ready-made letters, edit in Word</title>
+<style>
+:root{--navy:#1b2559;--navy2:#141c44;--gold:#e0a93b;--bg:#f2f4fb;--card:#fff;--ink:#1f2433;--mut:#6b7280;--pri:#2338b7;--line:#e1e5f2;--hl:#fff3bf}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:var(--navy);color:#fff;padding:14px 18px;display:flex;align-items:center;gap:14px}
+.logo{width:50px;height:50px;border-radius:50%;border:2px solid var(--gold);display:grid;place-items:center;font-size:26px;flex:none;background:#fff1}
+header h1{margin:0;font-family:Georgia,"Times New Roman",serif;font-size:27px;letter-spacing:.2px}
+header p{margin:2px 0 0;opacity:.85;font-size:14px}
+.layout{display:flex;min-height:calc(100vh - 80px)}
+.rail{width:84px;flex:none;background:#fff;border-right:1px solid var(--line);padding:8px 4px;display:flex;flex-direction:column;gap:4px;position:sticky;top:0;align-self:flex-start;max-height:100vh;overflow:auto}
+.rail button{border:0;background:none;border-radius:14px;padding:10px 2px;cursor:pointer;color:var(--ink);font-size:12.5px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:4px}
+.rail button span{font-size:30px;line-height:1}
+.rail button.on{background:var(--navy);color:#fff}
+.rail button:hover:not(.on){background:#eef1fb}
+main{flex:1;min-width:0;padding:18px 14px 30px}
+h2.lead{font-size:21px;font-weight:500;margin:4px 2px 12px;line-height:1.35}
+h2.lead b{color:var(--pri);text-decoration:underline}
+.leadrow{display:flex;align-items:center;gap:6px}
+.leadrow h2.lead{flex:1;min-width:0}
+.searchwrap{display:none}
+.searchwrap.open{display:flex;margin-bottom:10px}
+#sbtn{width:32px;height:32px;border-radius:50%;border:0;background:transparent;font-size:17px;cursor:pointer;flex:none;opacity:.6;padding:0}
+#sbtn:hover{opacity:1;background:#0001}
+#search{display:none;flex:1;min-width:0;padding:11px 14px;border:1px solid var(--line);border-radius:12px;font-size:15px;background:#fff}
+.searchwrap.open #search{display:block}
+#homeBtn{position:fixed;right:14px;bottom:78px;width:50px;height:50px;border-radius:50%;border:0;background:var(--navy);color:#fff;font-size:24px;box-shadow:0 3px 12px #0005;cursor:pointer;z-index:30;display:none}
+#homeBtn.show{display:block}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.card{background:#fff;border:2px solid var(--line);border-radius:18px;padding:12px 14px 14px;text-align:left;cursor:pointer;font:inherit;color:inherit;display:block;min-height:128px}
+.card:hover{border-color:var(--pri);box-shadow:0 4px 14px #2338b722}
+.card .ic{font-size:34px;line-height:1.1;display:block;margin-bottom:6px}
+.card b{display:block;color:var(--pri);font-size:16.5px;line-height:1.25;margin-bottom:3px}
+.card small{color:var(--mut);font-size:13.5px;line-height:1.3;display:block}
+.empty{color:var(--mut);padding:20px 4px}
+/* editor */
+#editView{display:none}
+.back{border:0;background:none;color:var(--pri);font-weight:700;font-size:15px;cursor:pointer;padding:4px 2px;margin-bottom:6px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:12px}
+.panel h3{margin:0 0 8px;font-size:15px;color:var(--navy)}
+.panel h3 span{font-weight:400;color:var(--mut);font-size:12.5px}
+#fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+#fields label{font-size:12px;color:var(--mut);display:block}
+#fields input{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px;font-size:15px;margin-top:2px}
+.bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.bar button,.bar select{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 10px;cursor:pointer;font-size:14px}
+.bar .sep{width:1px;height:24px;background:var(--line);margin:0 3px}
+.act{background:var(--navy)!important;color:#fff;border-color:var(--navy)!important;font-weight:700}
+.act2{background:var(--gold)!important;border-color:var(--gold)!important;color:#241a00;font-weight:700}
+.hint{font-size:12.5px;color:var(--mut);margin:8px 2px 0}
+.wrap{overflow:hidden}
+#paper{background:#fff;max-width:820px;width:100%;margin:0 auto;padding:36px 40px;box-shadow:0 2px 14px #0003;border-radius:6px;font-family:"Times New Roman",Georgia,serif;font-size:17px;line-height:1.6;outline:none;color:#000}
+#paper.editing{outline:3px solid var(--gold)}
+.fi{color:#0b2a8a;background:var(--hl);border-bottom:2px solid var(--gold);border-radius:4px 4px 0 0;padding:0 4px;outline:none;min-width:2ch;-webkit-user-select:text;user-select:text}
+.fi:focus{background:#ffe680;border-bottom-color:var(--pri)}
+.fi:empty::before{content:attr(data-ph);color:#8a6d00;opacity:.85}
+.toprow{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:99px;overflow:hidden;background:#fff}
+.seg button{border:0;background:none;padding:4px 10px;font-size:12px;font-weight:600;color:var(--mut);cursor:pointer}
+.seg button.on{background:var(--navy);color:#fff}
+.titlerow{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:-4px 0 8px}
+.titlerow h3{margin:0;font-size:16px;color:var(--navy);line-height:1.25}
+.tbtns{display:flex;gap:6px;flex:none}
+.editbtn{flex:none;background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer}
+#paper p{margin:0 0 .75em}
+#paper .addr,#paper .addr p{margin:0}
+@media (max-width:600px){
+ #paper{padding:20px 16px;font-size:16px}
+ .rail{width:72px}.rail button span{font-size:26px}.rail button{font-size:11.5px}
+ h2.lead{font-size:3.2vw;white-space:nowrap;margin:4px 0 10px}
+ header p{font-size:3.3vw;white-space:nowrap}
+ header h1{font-size:6vw}
+ .card{padding:10px 9px 12px;min-height:112px;border-radius:15px}.card .ic{font-size:28px}.card b{font-size:14px;overflow-wrap:anywhere}.card small{font-size:11.5px}}
+.actionbar{position:sticky;bottom:0;display:flex;gap:6px;padding:8px 4px calc(8px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 25%);margin-top:6px;z-index:5}
+.actionbar button{flex:1;min-width:0;border:1px solid var(--navy);background:#fff;color:var(--navy);border-radius:10px;padding:6px 2px;font-size:11.5px;font-weight:700;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px}
+.actionbar button i{font-style:normal;font-size:18px;line-height:1.1}
+.actionbar button:active{background:var(--navy);color:#fff}
+#pvModal{position:fixed;inset:0;background:#0007;z-index:50;display:none;align-items:flex-end;justify-content:center}
+#pvModal.open{display:flex}
+.pvSheet{background:#fff;width:100%;max-width:760px;max-height:88vh;border-radius:18px 18px 0 0;display:flex;flex-direction:column}
+.pvHead{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);color:var(--navy)}
+.pvHead button{border:0;background:none;font-size:20px;cursor:pointer}
+#pvBody{overflow:auto;padding:16px 18px;font-family:"Times New Roman",Georgia,serif;font-size:16px;line-height:1.55;background:#fffef9}
+#pvBody p{margin:0 0 .7em}
+.pf{background:var(--hl);border-bottom:2px solid var(--gold);padding:0 3px;border-radius:3px}
+.pvFoot{display:flex;gap:8px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--line)}
+.pvFoot button{flex:1;padding:11px;border-radius:10px;border:1px solid var(--line);background:#fff;font-size:15px;cursor:pointer}
+.pvFoot .use{background:var(--navy);color:#fff;border-color:var(--navy);font-weight:700}
+@media print{
+ #pvModal{display:none!important}
+ #homeBtn{display:none!important}
+ .actionbar{display:none!important}
+ @page{size:A4;margin:0}
+ header,.rail,.panel,.back,#gridView{display:none!important}
+ body,main{background:#fff;padding:0;margin:0}
+ #editView{display:block!important}
+ .wrap{overflow:visible;height:auto!important}
+ #paper{box-shadow:none;margin:0;max-width:none;min-height:0;padding:20mm 22mm;font-size:12pt!important;line-height:1.5}
+ .fi{background:none!important;border:0!important;padding:0!important}
+ .fi:empty::before{color:#000}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">✉️</div>
+  <div><h1>Letter Hub</h1><p>Pick a letter, fill in, open in Word.</p></div>
+</header>
+<div class="layout">
+  <nav class="rail" id="rail"></nav>
+  <main>
+    <section id="gridView">
+      <div class="leadrow"><h2 class="lead">Select a pre-filled letter to use and customise.</h2><button id="sbtn" onpointerdown="event.preventDefault()" onclick="toggleSearch()" aria-label="Search">🔍</button></div>
+      <div class="searchwrap" id="sw"><input id="search" placeholder="Search letters (leave, loan, rent…)" oninput="renderGrid()" onblur="if(!this.value)$('#sw').classList.remove('open')"></div>
+      
+      <div class="grid" id="grid"></div>
+    </section>
+
+    <section id="editView">
+      <div class="toprow"><button class="back" onclick="showGrid()">← All letters</button><span class="seg" title="Letter format"><button data-f="email" onclick="setFmt('email')">✉️ Email</button><button data-f="letter" onclick="setFmt('letter')">📄 Letter</button></span></div>
+      <div class="titlerow"><h3 id="letterTitle"></h3><span class="tbtns"><button class="editbtn" onclick="showPreview()">👁 Preview</button><button class="editbtn" onclick="toggleEdit(this)">✏️ Edit all text</button></span></div>
+      <div class="wrap" id="wrap"><div id="paper" spellcheck="true"></div></div>
+      <div class="actionbar"><button onclick="copyText()"><i>📋</i>Copy</button><button onclick="shareLetter()"><i>📤</i>Share</button><button onclick="sendWA()"><i>💬</i>WhatsApp</button><button onclick="sendMail()"><i>✉️</i>Email</button><button onclick="sendTeams()"><i>👥</i>Teams</button></div>
+    </section>
+  </main>
+<div id="pvModal" onclick="if(event.target===this)closePreview()"><div class="pvSheet"><div class="pvHead"><b id="pvTitle"></b><button onclick="closePreview()" aria-label="Close">✕</button></div><div id="pvBody"></div><div class="pvFoot"><button onclick="closePreview()">← Keep editing</button><button onclick="closePreview();window.print()">🖨 PDF</button><button class="use" onclick="closePreview();downloadDocx()">📄 Word</button></div></div></div>
+<button id="homeBtn" onclick="goHome()" aria-label="Home">🏠</button>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const paper=$('#paper');
+const today=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+let values={};
+try{values=JSON.parse(localStorage.getItem('lh_vals')||'{}')}catch(e){}
+values['Date']=today;
+
+/* ---------- letter builders ---------- */
+const S=`<div class="addr"><p>{{Your Name}}<br>{{Your Address}}<br>{{Your Phone}} | {{Your Email}}</p></div><p>Date: {{Date}}</p>`;
+const SS=`${S}`;
+function L(to,subject,paras,close='Yours sincerely'){
+  const body=paras.map(p=>p.startsWith('<')?p:`<p>${p}</p>`).join('');
+  const ec=/^Yours /.test(close)?'Regards':close;
+  const em=`⟦E⟧<p>To: {{Recipient Email}}</p><p><b>Subject: ${subject}</b></p><p>Dear {{Recipient Name}},</p>${body}<p>${ec},<br>{{Your Name}}<br>{{Your Phone}}</p>⟦/E⟧`;
+  const lt=`⟦L⟧<p>${to.startsWith('To ')?to:'To,<br>'+to+'<br>Email: {{Recipient Email}}'}</p><p><b>Subject: ${subject}</b></p><p>Dear {{Recipient Name}},</p>${body}<p>${close},<br><br>{{Your Name}}<br>{{Your Address}}<br>{{Your Phone}} | {{Your Email}}<br>Date: {{Date}}</p>⟦/L⟧`;
+  return em+lt;
+}
+const BOSS=`{{Manager Name}}<br>{{Designation}}<br>{{Company Name}}<br>{{Company Address}}`;
+const BANK=`The Manager<br>{{Bank Name}}<br>{{Branch Name & Address}}`;
+const LORD=`{{Landlord Name}}<br>{{Property Address}}`;
+const SCH=`The Principal<br>{{School Name}}<br>{{School Address}}`;
+const GEN=`{{Recipient Name}}<br>{{Recipient Organisation}}<br>{{Recipient Address}}`;
+const CO=`The Customer Care Manager<br>{{Company Name}}<br>{{Company Address}}`;
+
+const T=[
+/* WORK */
+{c:'Work',t:'Leave Request (Office)',b:L(BOSS,'Application for leave from {{From Date}} to {{To Date}}',[
+ 'I am writing to request leave from <b>{{From Date}}</b> to <b>{{To Date}}</b> ({{Number of Days}} days) due to {{Reason}}.',
+ 'I will complete my pending tasks before leaving and have briefed {{Colleague Name}} to handle urgent matters in my absence. I will also be reachable by phone for any emergency.',
+ 'I kindly request you to approve my leave. Thank you for your understanding.'])},
+{c:'Work',t:'Sick Leave Application',b:L(BOSS,'Sick leave application',[
+ 'I am unwell and have been advised rest by my doctor. I am therefore unable to attend work from <b>{{From Date}}</b> to <b>{{To Date}}</b>.',
+ 'I have attached the medical certificate for your reference. I will resume duties on {{Return Date}} and will catch up on any pending work.',
+ 'Kindly grant me sick leave for the above period.'])},
+{c:'Work',t:'Resignation Letter',b:L(BOSS,'Resignation from the post of {{Your Designation}}',[
+ 'Please accept this letter as formal notice of my resignation from the position of <b>{{Your Designation}}</b> at {{Company Name}}. My last working day will be <b>{{Last Working Day}}</b>, in line with my notice period.',
+ 'I am grateful for the opportunities and support I received during my time here. I will ensure a smooth handover of my responsibilities and assist in training my replacement.',
+ 'Kindly accept my resignation and process my final settlement and relieving documents.'])},
+{c:'Work',t:'Notice Period Waiver Request',b:L(BOSS,'Request for early release from notice period',[
+ 'Further to my resignation dated {{Resignation Date}}, I request you to kindly relieve me on <b>{{Requested Last Day}}</b> instead of completing the full notice period, due to {{Reason}}.',
+ 'I will complete all handover activities and remain available for knowledge transfer. I am also willing to forgo the notice-pay shortfall if required.',
+ 'I would be grateful for your consideration.'])},
+{c:'Work',t:'Salary Increment Request',b:L(BOSS,'Request for salary review',[
+ 'I have been working with {{Company Name}} as {{Your Designation}} for {{Years}} years. During this time I have taken on added responsibilities, including {{Key Achievements}}.',
+ 'Considering my contribution and current market standards, I request you to kindly review my compensation. I would appreciate an opportunity to discuss this at your convenience.',
+ 'Thank you for your time and consideration.'])},
+{c:'Work',t:'Promotion Request',b:L(BOSS,'Request for promotion',[
+ 'I am writing to express my interest in being considered for the position of <b>{{Desired Position}}</b>. Over the past {{Years}} years I have consistently met targets and led {{Key Achievements}}.',
+ 'I believe I am ready for greater responsibility and would welcome the chance to discuss my career growth with you.',
+ 'Thank you for considering my request.'])},
+{c:'Work',t:'Work From Home Request',b:L(BOSS,'Request to work from home',[
+ 'I request permission to work from home from <b>{{From Date}}</b> to <b>{{To Date}}</b> because {{Reason}}.',
+ 'I will remain available on phone, email and chat during working hours, attend all meetings online and ensure my deliverables are met on time.',
+ 'Kindly approve my request.'])},
+{c:'Work',t:'Experience / Relieving Letter Request',b:L('The HR Manager<br>{{Company Name}}<br>{{Company Address}}','Request for experience and relieving letter',[
+ 'I worked at {{Company Name}} as <b>{{Your Designation}}</b> from {{Joining Date}} to {{Last Working Day}} (Employee ID: {{Employee ID}}).',
+ 'I kindly request you to issue my experience certificate and relieving letter at the earliest as I need them for my new employment.',
+ 'Thank you for your cooperation.'])},
+{c:'Work',t:'Reference / Recommendation Request',b:L('{{Recipient Name}}<br>{{Recipient Organisation}}','Request for a letter of recommendation',[
+ 'I hope you are well. I am applying for {{Position / Course}} at {{Organisation Applied To}} and would be honoured if you could write a recommendation letter for me.',
+ 'Having worked/studied under your guidance for {{Duration}}, I believe you can speak about my skills and work ethic. I can share my CV and key points to help you. The deadline is {{Deadline}}.',
+ 'Thank you very much for your time and support.'])},
+{c:'Work',t:'Job Application Cover Letter',b:L('{{Hiring Manager}}<br>{{Company Name}}<br>{{Company Address}}','Application for the post of {{Job Title}}',[
+ 'I am writing to apply for the position of <b>{{Job Title}}</b> advertised on {{Where You Saw The Ad}}. With {{Years}} years of experience in {{Your Field}}, I am confident I can contribute to your team.',
+ 'In my previous role at {{Previous Company}}, I {{Key Achievement}}. I am skilled in {{Key Skills}} and eager to bring this experience to {{Company Name}}.',
+ 'I have enclosed my resume and would welcome an interview. Thank you for your time.'],'Yours faithfully')},
+{c:'Work',t:'Job Offer Acceptance',b:L(BOSS,'Acceptance of job offer',[
+ 'Thank you for offering me the position of <b>{{Job Title}}</b> at {{Company Name}}. I am pleased to accept the offer on the terms mentioned in your letter dated {{Offer Date}}.',
+ 'I will join on <b>{{Joining Date}}</b>. Please let me know if any documents are required before then.',
+ 'I look forward to contributing to the team.'])},
+{c:'Work',t:'Job Offer Decline',b:L(BOSS,'Declining the job offer',[
+ 'Thank you for offering me the position of {{Job Title}} at {{Company Name}}. After careful thought, I have decided to decline the offer as {{Reason}}.',
+ 'I truly appreciate the time you and your team spent with me and hope our paths cross again.'])},
+{c:'Work',t:'Transfer Request',b:L(BOSS,'Request for transfer to {{New Location}}',[
+ 'I request to be transferred from {{Current Location}} to <b>{{New Location}}</b> because {{Reason}}.',
+ 'I am willing to relocate at the earliest and will ensure a smooth handover. I would be grateful for your kind consideration.'])},
+{c:'Work',t:'Warning / Explanation Reply',b:L(BOSS,'Reply to your notice dated {{Notice Date}}',[
+ 'This is in response to your notice regarding {{Issue}}. I wish to state that {{Your Explanation}}.',
+ 'I sincerely regret any inconvenience caused and assure you that I will take steps to avoid a recurrence. I request you to kindly consider my explanation.'])},
+{c:'Work',t:'Late Arrival / Permission Request',b:L(BOSS,'Permission to come late / leave early on {{Date of Request}}',[
+ 'I request permission to {{come late / leave early}} on <b>{{Date of Request}}</b> at around {{Time}} due to {{Reason}}.',
+ 'I will make up the time and complete all tasks for the day. Thank you.'])},
+{c:'Work',t:'Maternity / Paternity Leave',b:L(BOSS,'Application for maternity / paternity leave',[
+ 'I wish to inform you that my expected date of delivery / childbirth is <b>{{Expected Date}}</b>. I request leave from <b>{{From Date}}</b> to <b>{{To Date}}</b> as per company policy.',
+ 'I will hand over my work to {{Colleague Name}} before leaving. Please let me know if any medical documents are needed.'])},
+
+/* MONEY */
+{c:'Money & Bank',t:'Loan Request (Bank)',b:L(BANK,'Application for a {{Loan Type}} loan of {{Loan Amount}}',[
+ 'I am writing to apply for a <b>{{Loan Type}} loan of {{Loan Amount}}</b> for {{Purpose}}, repayable over {{Tenure}} years.',
+ 'I am employed as {{Your Designation}} at {{Company Name}} with a monthly income of {{Monthly Income}}. I maintain account no. {{Account Number}} with your branch. I have enclosed my ID, address proof, income proof and bank statements.',
+ 'I request you to kindly process my application and let me know of any further requirements.'],'Yours faithfully')},
+{c:'Money & Bank',t:'Loan Request (Employer / Salary Advance)',b:L(BOSS,'Request for salary advance / loan of {{Loan Amount}}',[
+ 'I request an advance / loan of <b>{{Loan Amount}}</b> due to {{Reason}}. I propose to repay it in {{Number of Instalments}} monthly instalments deducted from my salary starting {{Start Month}}.',
+ 'I have been with the company for {{Years}} years and have no outstanding dues. I would be grateful for your kind consideration.'])},
+{c:'Money & Bank',t:'Personal Loan Request (Friend / Family)',b:L('{{Recipient Name}}','Request for a loan of {{Loan Amount}}',[
+ 'I hope you are doing well. I am facing a financial difficulty due to {{Reason}} and would be very grateful if you could lend me <b>{{Loan Amount}}</b>.',
+ 'I promise to repay the full amount by <b>{{Repayment Date}}</b>{{Repayment Details}}. I truly value our relationship and would not ask if it were not important.',
+ 'Thank you for considering this.'])},
+{c:'Money & Bank',t:'Loan Repayment Extension',b:L(BANK,'Request for extension / restructuring of loan account {{Loan Account Number}}',[
+ 'I have a {{Loan Type}} loan with your bank (A/c {{Loan Account Number}}). Due to {{Reason}}, I am unable to pay the instalment due on {{Due Date}}.',
+ 'I request you to kindly grant an extension of {{Extension Period}} / restructure the repayment schedule. I assure you of regular payments thereafter.'],'Yours faithfully')},
+{c:'Money & Bank',t:'Close Bank Account',b:L(BANK,'Request to close account no. {{Account Number}}',[
+ 'I request you to close my {{Account Type}} account no. <b>{{Account Number}}</b> held at your branch, with effect from {{Closure Date}}.',
+ 'Please transfer the remaining balance to my account no. {{Transfer Account}} at {{Transfer Bank}} and issue a closure confirmation. I am returning my cheque book and debit card.'],'Yours faithfully')},
+{c:'Money & Bank',t:'Lost ATM / Debit Card – Block & Reissue',b:L(BANK,'Lost debit card – request to block and reissue',[
+ 'I have lost my debit/ATM card linked to account no. <b>{{Account Number}}</b> on {{Date Lost}}. Please block the card immediately to prevent misuse.',
+ 'Kindly issue a replacement card to my registered address. I have also filed a complaint with {{Police Station / Reference}}.'],'Yours faithfully')},
+{c:'Money & Bank',t:'Bank Statement / Certificate Request',b:L(BANK,'Request for statement of account',[
+ 'I request a statement of my account no. <b>{{Account Number}}</b> for the period <b>{{From Date}}</b> to <b>{{To Date}}</b>, required for {{Purpose}}.',
+ 'Please issue it duly stamped and signed. Thank you.'],'Yours faithfully')},
+{c:'Money & Bank',t:'Change Address / Mobile in Bank',b:L(BANK,'Request to update contact details in account {{Account Number}}',[
+ 'Please update my records for account no. <b>{{Account Number}}</b> as follows: new address – {{New Address}}; mobile – {{New Mobile}}; email – {{New Email}}.',
+ 'I have enclosed self-attested proof of the new details.'],'Yours faithfully')},
+{c:'Money & Bank',t:'Payment Reminder (Overdue)',b:L(GEN,'Reminder: payment of {{Amount}} overdue',[
+ 'This is a friendly reminder that invoice/amount <b>{{Amount}}</b> (Ref: {{Invoice Number}}) dated {{Invoice Date}} was due on {{Due Date}} and remains unpaid.',
+ 'Kindly arrange payment within {{Days}} days. If already paid, please ignore this and share the payment details so we can reconcile.'])},
+{c:'Money & Bank',t:'Refund Request',b:L(CO,'Request for refund of {{Amount}} – Order/Ref {{Order Number}}',[
+ 'I purchased {{Product / Service}} on {{Purchase Date}} for {{Amount}} (Order {{Order Number}}). Unfortunately {{Reason For Refund}}.',
+ 'I request a full refund to my original payment method within {{Days}} days. Copies of the receipt are attached.'],'Yours faithfully')},
+{c:'Money & Bank',t:'Insurance Claim',b:L('The Claims Department<br>{{Insurance Company}}<br>{{Company Address}}','Claim under policy no. {{Policy Number}}',[
+ 'I am the policy holder of policy no. <b>{{Policy Number}}</b>. On {{Incident Date}}, {{Incident Description}}.',
+ 'I request you to process my claim of {{Claim Amount}}. I have enclosed the required documents (claim form, bills, report). Please advise if anything else is needed.'],'Yours faithfully')},
+
+/* BUSINESS */
+{c:'Business',t:'Promotional / Sales Letter',b:L('{{Recipient Name}}<br>{{Recipient Address}}','Special offer from {{Company Name}}',[
+ 'We are delighted to introduce <b>{{Product / Service}}</b> – designed to help you {{Key Benefit}}.',
+ 'Highlights: {{Feature 1}}, {{Feature 2}} and {{Feature 3}}. For a limited time, enjoy <b>{{Offer}}</b> – valid until {{Offer End Date}}.',
+ 'To get started, contact us on {{Your Phone}} or visit {{Website}}. We look forward to serving you.'],'Warm regards')},
+{c:'Business',t:'Business Introduction Letter',b:L('{{Recipient Name}}<br>{{Recipient Organisation}}','Introducing {{Company Name}}',[
+ 'I am writing to introduce <b>{{Company Name}}</b>, a {{Business Type}} company providing {{Products / Services}} since {{Year}}.',
+ 'We would be pleased to explore how we can support your business. I would welcome a meeting or call at your convenience; I can share our brochure and references.'],'Best regards')},
+{c:'Business',t:'Quotation Request',b:L('{{Supplier Name}}<br>{{Supplier Address}}','Request for quotation – {{Item / Service}}',[
+ 'We are interested in purchasing <b>{{Item / Service}}</b> (quantity: {{Quantity}}). Please send your best quotation including price, taxes, delivery time and payment terms.',
+ 'Kindly reply by {{Deadline}}. We look forward to a long-term relationship.'],'Yours faithfully')},
+{c:'Business',t:'Complaint Letter (Product / Service)',b:L(CO,'Complaint regarding {{Product / Service}}',[
+ 'I am writing to complain about {{Product / Service}} purchased/used on {{Date}} (Ref: {{Order Number}}). The problem is: {{Complaint Details}}.',
+ 'This has caused me {{Impact}}. I request that you {{Desired Resolution}} within {{Days}} days; otherwise I will escalate to the consumer authorities.'],'Yours faithfully')},
+{c:'Business',t:'Thank You Letter (Business)',b:L('{{Recipient Name}}<br>{{Recipient Organisation}}','Thank you',[
+ 'Thank you for {{Reason For Thanks}}. We truly appreciate your support and the trust you place in us.',
+ 'We look forward to continuing our association.'],'With gratitude')},
+{c:'Business',t:'Event / Meeting Invitation',b:L('{{Recipient Name}}','Invitation to {{Event Name}}',[
+ 'You are warmly invited to <b>{{Event Name}}</b> on <b>{{Event Date}}</b> at <b>{{Time}}</b>, at {{Venue}}.',
+ 'Your presence would mean a great deal to us. Kindly confirm your attendance by {{RSVP Date}} on {{Your Phone}}.'],'With warm regards')},
+{c:'Business',t:'Cancel Subscription / Service',b:L(CO,'Request to cancel {{Service Name}}',[
+ 'Please cancel my {{Service Name}} subscription/account (ID: {{Account ID}}) effective {{Cancellation Date}}.',
+ 'Kindly stop all future charges and confirm the cancellation in writing/email.'],'Yours faithfully')},
+{c:'Business',t:'Authorization Letter',b:L('To Whom It May Concern','Authorization to act on my behalf',[
+ 'I, <b>{{Your Name}}</b>, hereby authorise <b>{{Authorised Person}}</b> (ID: {{Authorised Person ID}}) to {{Purpose, e.g. collect documents / sign / represent me}} on my behalf on {{Date}}.',
+ 'His/her signature is attested below. Kindly extend full cooperation.'],'Yours faithfully')},
+{c:'Business',t:'No Objection Certificate (NOC)',b:L('To Whom It May Concern','No Objection Certificate',[
+ 'This is to certify that we have no objection to <b>{{Person Name}}</b>, {{Relationship / Designation}}, {{Purpose, e.g. pursuing higher studies / applying for a visa}}.',
+ 'This certificate is issued upon the request of the individual for the stated purpose only.'],'Yours faithfully')},
+
+/* SCHOOL */
+{c:'School',t:'School Leave Application',b:L(SCH,'Leave application for {{Student Name}}',[
+ 'I request leave for my child/ward <b>{{Student Name}}</b>, Class {{Class & Section}}, from <b>{{From Date}}</b> to <b>{{To Date}}</b> due to {{Reason}}.',
+ 'Kindly grant leave for the above period. Thank you.'],'Yours obediently')},
+{c:'School',t:'School Transfer Certificate Request',b:L(SCH,'Request for Transfer Certificate of {{Student Name}}',[
+ 'I request you to issue the Transfer Certificate for my child <b>{{Student Name}}</b>, Class {{Class & Section}}, Admission No. {{Admission Number}}, as we are relocating to {{New City}}.',
+ 'Kindly clear all dues, if any, and issue the certificate at the earliest.'],'Yours obediently')},
+{c:'School',t:'Fee Concession / Waiver Request',b:L(SCH,'Request for fee concession for {{Student Name}}',[
+ 'I am the parent of <b>{{Student Name}}</b>, Class {{Class & Section}}. Due to {{Financial Reason}}, I am finding it difficult to pay the full fees.',
+ 'I humbly request a concession / instalment facility. I will submit supporting documents as needed.'],'Yours obediently')},
+{c:'School',t:'Bonafide Certificate Request',b:L(SCH,'Request for bonafide certificate',[
+ 'I am a student of Class/Course {{Class / Course}} (Roll No. {{Roll Number}}). I need a bonafide certificate for {{Purpose, e.g. bank account / scholarship / passport}}.',
+ 'Kindly issue it at the earliest.'],'Yours obediently')},
+{c:'School',t:'Complaint to School / Teacher',b:L(SCH,'Concern regarding {{Issue}}',[
+ 'I am writing regarding <b>{{Issue}}</b> involving my child {{Student Name}}, Class {{Class & Section}}, which occurred on {{Date}}.',
+ 'I request you to look into the matter and take appropriate action. I am available to meet at your convenience.'],'Yours sincerely')},
+
+/* HOUSING */
+{c:'Housing',t:'Notice to Vacate Rented House',b:L(LORD,'Notice of vacating the premises',[
+ 'This is to inform you that I will be vacating the rented property at <b>{{Property Address}}</b> on <b>{{Vacating Date}}</b>, as per the {{Notice Period}} notice period in our agreement.',
+ 'Kindly arrange an inspection and refund my security deposit of {{Deposit Amount}} on the day of vacating. I thank you for your cooperation.'])},
+{c:'Housing',t:'Security Deposit Refund Request',b:L(LORD,'Refund of security deposit of {{Deposit Amount}}',[
+ 'I vacated the property at {{Property Address}} on {{Vacated Date}}, handing over possession in good condition.',
+ 'Kindly refund my security deposit of <b>{{Deposit Amount}}</b> within {{Days}} days to account no. {{Account Number}}.'])},
+{c:'Housing',t:'Repair / Maintenance Request to Landlord',b:L(LORD,'Repair request – {{Issue}}',[
+ 'I wish to bring to your attention that <b>{{Issue}}</b> at the property needs urgent repair. It was first noticed on {{Date Noticed}}.',
+ 'Kindly arrange the repair at the earliest. I am available for access on {{Available Days}}.'])},
+{c:'Housing',t:'Rent Reduction / Increase Reply',b:L(LORD,'Regarding rent for {{Property Address}}',[
+ 'With reference to your request/notice about revising the rent, I would like to propose a rent of <b>{{Proposed Rent}}</b> per month from {{Effective Date}} because {{Reason}}.',
+ 'I have been a responsible tenant for {{Years}} years and hope we can reach a mutually agreeable arrangement.'])},
+{c:'Housing',t:'Neighbour / Society Complaint',b:L('The Secretary<br>{{Society / Association Name}}<br>{{Society Address}}','Complaint regarding {{Issue}}',[
+ 'I am a resident of <b>{{Flat / House Number}}</b>. I wish to complain about {{Issue, e.g. noise / parking / water leakage}}, which has been happening since {{Since When}}.',
+ 'Kindly take necessary action and inform me of the outcome.'],'Yours faithfully')},
+{c:'Housing',t:'Landlord NOC for Tenant',b:L('To Whom It May Concern','No objection certificate for tenant',[
+ 'I, <b>{{Landlord Name}}</b>, owner of {{Property Address}}, confirm that <b>{{Tenant Name}}</b> is residing as my tenant since {{Since Date}} and I have no objection to him/her using this address for {{Purpose, e.g. passport / gas connection / bank KYC}}.'],'Yours faithfully')},
+
+/* PERSONAL */
+{c:'Personal',t:'Apology Letter',b:L('{{Recipient Name}}','My sincere apologies',[
+ 'I am writing to apologise for {{What Happened}}. I understand it caused {{Impact}} and I take full responsibility.',
+ 'I will make sure it does not happen again and would like to make amends by {{Action}}. I value our relationship and hope you can forgive me.'],'Sincerely')},
+{c:'Personal',t:'Thank You Letter (Personal)',b:L('{{Recipient Name}}','Thank you',[
+ 'I wanted to take a moment to sincerely thank you for {{Reason}}. It meant a great deal to me and made a real difference.',
+ 'I am truly grateful to have you in my life.'],'With love and gratitude')},
+{c:'Personal',t:'Personal Invitation (Wedding / Party)',b:L('{{Recipient Name}}','Invitation – {{Event Name}}',[
+ 'With great joy we invite you and your family to <b>{{Event Name}}</b> on <b>{{Event Date}}</b> at <b>{{Time}}</b>, venue: {{Venue}}.',
+ 'Your blessings and presence will make the occasion memorable. Please confirm by {{RSVP Date}}.'],'With warm regards')},
+{c:'Personal',t:'Visa Invitation Letter',b:L('The Visa Officer<br>{{Embassy / Consulate}}','Invitation letter for {{Guest Name}}',[
+ 'I, <b>{{Your Name}}</b>, invite my {{Relationship}}, <b>{{Guest Name}}</b> (Passport No. {{Passport Number}}), to visit me in {{Country / City}} from {{From Date}} to {{To Date}}.',
+ 'During the stay, he/she will stay at {{Your Address}} and I will bear all accommodation and living expenses. He/she will return to {{Home Country}} after the visit.'],'Yours faithfully')},
+{c:'Personal',t:'Consent Letter for Child Travel',b:L('To Whom It May Concern','Consent for minor to travel',[
+ 'I, <b>{{Your Name}}</b> (Passport/ID: {{Your ID Number}}), parent of <b>{{Child Name}}</b> (DOB: {{Child DOB}}, Passport: {{Child Passport}}), give my consent for my child to travel to {{Destination}} from {{From Date}} to {{To Date}} accompanied by <b>{{Accompanying Adult}}</b>.',
+ 'I can be contacted on {{Your Phone}} for any clarification.'],'Yours faithfully')},
+{c:'Personal',t:'Character Certificate Request',b:L('{{Recipient Name}}<br>{{Recipient Organisation}}','Request for character certificate',[
+ 'I have known / been associated with {{Organisation}} for {{Duration}}. I request you to issue a character certificate for the purpose of {{Purpose}}.'],'Yours sincerely')},
+{c:'Personal',t:'Condolence Letter',b:L('{{Recipient Name}}','With deepest sympathy',[
+ 'I was deeply saddened to hear about the passing of {{Deceased Name}}. Please accept my heartfelt condolences.',
+ '{{Personal Memory / Message}}. Please know that you are in my thoughts and prayers, and I am here if you need anything.'],'With sympathy')},
+{c:'Personal',t:'Complaint to Authority (Police / Municipal)',b:L('The Officer-in-Charge<br>{{Authority Name}}<br>{{Authority Address}}','Complaint regarding {{Issue}}',[
+ 'I wish to report <b>{{Issue}}</b> that occurred on {{Date}} at {{Place}}. Details: {{Details}}.',
+ 'I request you to register my complaint and take suitable action. I am ready to provide any further information.'],'Yours faithfully')},
+{c:'Personal',t:'Resignation from Club / Membership',b:L('The Secretary<br>{{Organisation Name}}','Resignation of membership (No. {{Membership Number}})',[
+ 'I wish to resign from my membership of {{Organisation Name}} with effect from {{Effective Date}} due to {{Reason}}.',
+ 'Kindly settle my account and confirm the cancellation. Thank you for the pleasant association.'],'Yours sincerely')},
+/* NEW: constants are defined inline */
+{c:'Daily Life',t:'Electricity Bill / Meter Complaint',b:L('The Customer Service Manager<br>{{Utility Company}}<br>{{Utility Address}}','Complaint regarding electricity bill / meter – Consumer No. {{Consumer Number}}',[
+ 'I am a consumer of {{Utility Company}} (Consumer No. <b>{{Consumer Number}}</b>) at {{Your Address}}. My bill for {{Billing Month}} shows <b>{{Billed Amount}}</b>, which is much higher than my normal usage because {{Problem, e.g. faulty meter / wrong reading}}.',
+ 'I request you to inspect the meter, correct the bill and hold any late fee or disconnection until the matter is resolved.'],'Yours faithfully')},
+{c:'Daily Life',t:'Water Supply Complaint',b:L('The Executive Engineer<br>{{Water Authority}}<br>{{Authority Address}}','Complaint about water supply problem',[
+ 'I am a resident of <b>{{Your Address}}</b>. For the past {{Number of Days}} days we have faced {{Problem, e.g. no water / low pressure / dirty water}}.',
+ 'Kindly look into this urgently and restore normal supply. I am happy to provide any further details.'],'Yours faithfully')},
+{c:'Daily Life',t:'Internet / Broadband Complaint',b:L('The Customer Care Manager<br>{{Internet Provider}}<br>{{Provider Address}}','Complaint – connection ID {{Connection ID}}',[
+ 'My broadband connection (ID <b>{{Connection ID}}</b>) has had {{Problem, e.g. frequent disconnection / very slow speed}} since {{Since When}}. I have raised complaint(s) no. {{Complaint Numbers}} but the issue is not resolved.',
+ 'Please fix this within {{Days}} days or credit me for the days of poor service.'],'Yours faithfully')},
+{c:'Daily Life',t:'Cancel Gym / Membership',b:L('The Manager<br>{{Gym / Club Name}}<br>{{Address}}','Request to cancel membership no. {{Membership Number}}',[
+ 'I wish to cancel my membership (No. <b>{{Membership Number}}</b>) with effect from {{Cancellation Date}} due to {{Reason}}.',
+ 'Please stop all future payments, refund any unused period as per policy and confirm the cancellation in writing.'])},
+{c:'Daily Life',t:'Change of Address Notification',b:L('{{Organisation Name}}<br>{{Organisation Address}}','Change of address – {{Account / Reference Number}}',[
+ 'Please note that I have moved. My <b>new address</b> from {{Effective Date}} is: {{New Address}}.',
+ 'My old address was {{Old Address}}. Kindly update your records (ref. {{Account / Reference Number}}) and send all future correspondence to the new address.'])},
+{c:'Daily Life',t:'Lost Parcel / Delivery Complaint',b:L('The Customer Care Manager<br>{{Courier / Seller Name}}<br>{{Address}}','Parcel not delivered – Tracking {{Tracking Number}}',[
+ 'I placed an order / sent a parcel (Tracking / Order No. <b>{{Tracking Number}}</b>) on {{Order Date}}. It was due on {{Due Date}} but {{Problem, e.g. has not arrived / was marked delivered but not received}}.',
+ 'Please trace it urgently and deliver it, or refund / replace the item within {{Days}} days.'],'Yours faithfully')},
+{c:'Daily Life',t:'Warranty Claim / Product Replacement',b:L(CO,'Warranty claim for {{Product Name}}',[
+ 'I bought <b>{{Product Name}}</b> (Model {{Model Number}}, Serial No. {{Serial Number}}) on {{Purchase Date}} from {{Seller}}. It is under warranty but {{Fault Description}}.',
+ 'I request free repair or replacement as per the warranty terms. Invoice and photos are attached.'],'Yours faithfully')},
+{c:'Daily Life',t:'Polite Noise / Parking Request to Neighbour',b:L('{{Neighbour Name}}<br>{{Neighbour Address}}','A small request',[
+ 'I hope you are well. I wanted to kindly mention that {{Issue, e.g. loud music late at night / a car parked in my space}} has been affecting us recently.',
+ 'I am sure it is unintentional. It would really help if {{Request}}. Thank you for understanding, and I am happy to talk it over anytime.'],'Kind regards')},
+{c:'Daily Life',t:'Lost Item / Lost Document Report',b:L('The Lost & Found Office<br>{{Organisation / Station}}<br>{{Address}}','Report of lost {{Item}}',[
+ 'I lost my <b>{{Item}}</b> on {{Date Lost}} around {{Time}} at/near {{Place}}. Description: {{Description}}.',
+ 'If found, please contact me on {{Your Phone}}. I will bring proof of ownership. Thank you.'],'Yours faithfully')},
+{c:'Daily Life',t:'Request for Extra Time / Deadline Extension',b:L('{{Recipient Name}}<br>{{Recipient Organisation}}','Request for extension of deadline for {{Task / Submission}}',[
+ 'I am writing to request an extension for <b>{{Task / Submission}}</b>, currently due on {{Original Deadline}}, because {{Reason}}.',
+ 'I request a new deadline of <b>{{New Deadline}}</b>. I will submit it without fail by then. Thank you for your understanding.'])},
+{c:'Daily Life',t:'Request for Donation / Sponsorship',b:L('{{Recipient Name}}<br>{{Recipient Organisation}}','Request for support for {{Event / Cause}}',[
+ 'We are organising <b>{{Event / Cause}}</b> on {{Event Date}} at {{Venue}} for {{Purpose}}.',
+ 'We humbly request your support of <b>{{Amount / Type of Support}}</b>. Your contribution will help {{How It Helps}}, and we will gladly acknowledge it.'],'With gratitude')},
+
+{c:'Government',t:'Passport / ID Lost – Duplicate Request',b:L('The Passport / ID Officer<br>{{Issuing Office}}<br>{{Office Address}}','Request for duplicate {{Document Name}}',[
+ 'I lost my <b>{{Document Name}}</b> (No. {{Document Number}}) on {{Date Lost}} at {{Place}}. A police report (No. {{Police Report No.}}) has been filed.',
+ 'I request you to issue a duplicate. I have enclosed the report, photographs, ID proof and the required fee.'],'Yours faithfully')},
+{c:'Government',t:'Birth / Death / Marriage Certificate Request',b:L('The Registrar<br>{{Registrar Office}}<br>{{Office Address}}','Request for {{Certificate Type}} certificate',[
+ 'I request a certified copy of the <b>{{Certificate Type}} certificate</b> of {{Person Name}}, date of event {{Event Date}}, place {{Event Place}}, registration no. {{Registration Number}} (if known).',
+ 'It is required for {{Purpose}}. I have enclosed my ID proof and fee.'],'Yours faithfully')},
+{c:'Government',t:'Name Change Request (Documents)',b:L('The Concerned Officer<br>{{Organisation Name}}<br>{{Organisation Address}}','Request to change name in records',[
+ 'My name in your records is <b>{{Old Name}}</b>. It has been legally changed / corrected to <b>{{New Name}}</b> (proof enclosed: {{Proof Document}}).',
+ 'Kindly update my name in {{Record / Account Number}} and issue updated documents.'],'Yours faithfully')},
+{c:'Government',t:'RTI Application (Right to Information)',b:L('The Public Information Officer<br>{{Department Name}}<br>{{Department Address}}','Application under the Right to Information Act, 2005',[
+ 'I, <b>{{Your Name}}</b>, request the following information: {{Information Required}} for the period {{Period}}.',
+ 'I am enclosing the application fee of {{Fee}} (by {{Payment Mode}}). If the information is held by another authority, kindly transfer this application as per law.'],'Yours faithfully')},
+{c:'Government',t:'Civic Complaint (Road / Garbage / Streetlight)',b:L('The Municipal Commissioner<br>{{Municipal Office}}<br>{{Office Address}}','Complaint regarding {{Issue}}',[
+ 'I wish to bring to your notice that <b>{{Issue, e.g. pothole / uncollected garbage / broken streetlight}}</b> at {{Location}} has been a problem since {{Since When}}.',
+ 'It is causing {{Impact}} to residents. Kindly take action within {{Days}} days and inform me.'],'Yours faithfully')},
+{c:'Government',t:'Reply to Tax Notice',b:L('The Assessing Officer<br>{{Tax Office}}<br>{{Office Address}}','Reply to notice dated {{Notice Date}} – Ref {{Notice Reference}}',[
+ 'I acknowledge your notice (Ref. <b>{{Notice Reference}}</b>) for the assessment year {{Assessment Year}}, PAN / Tax ID {{Tax ID}}.',
+ 'My response: {{Your Explanation}}. Supporting documents are enclosed. I request you to accept this reply and close the matter.'],'Yours faithfully')},
+{c:'Government',t:'Appeal Against a Fine / Penalty',b:L('The Appeals Officer<br>{{Authority Name}}<br>{{Authority Address}}','Appeal against fine – Notice No. {{Notice Number}}',[
+ 'I received a fine of <b>{{Fine Amount}}</b> dated {{Fine Date}} (Notice No. {{Notice Number}}) for {{Alleged Violation}}.',
+ 'I request reconsideration because {{Grounds For Appeal}}. Evidence is enclosed. I request that the fine be cancelled or reduced.'],'Yours faithfully')},
+{c:'Government',t:'Request for Income / Residence Certificate',b:L('The Tehsildar / Revenue Officer<br>{{Office Name}}<br>{{Office Address}}','Application for {{Certificate Type}} certificate',[
+ 'I, <b>{{Your Name}}</b>, son/daughter/spouse of {{Relative Name}}, resident of {{Your Address}}, request a <b>{{Certificate Type}} certificate</b> for {{Purpose}}.',
+ 'I have attached the required documents and request early issue.'],'Yours faithfully')},
+{c:'Government',t:'Lost Mobile / Documents – Police Report Request',b:L('The Station House Officer<br>{{Police Station}}<br>{{Station Address}}','Report of lost {{Item}}',[
+ 'On {{Date Lost}} at about {{Time}}, I lost my <b>{{Item}}</b> (details: {{IMEI / Document Number}}) at {{Place}}.',
+ 'Kindly register my complaint and issue an acknowledgement / report copy, needed for insurance and replacement.'],'Yours faithfully')},
+
+{c:'Health',t:'Medical Reimbursement Claim',b:L(BOSS,'Medical reimbursement claim of {{Claim Amount}}',[
+ 'I request reimbursement of <b>{{Claim Amount}}</b> for medical treatment of {{Patient Name}} ({{Relationship}}) at {{Hospital Name}} from {{From Date}} to {{To Date}}.',
+ 'Original bills, prescriptions and the discharge summary are attached. Kindly process the claim.'])},
+{c:'Health',t:'Request for Medical Records',b:L('The Medical Records Department<br>{{Hospital Name}}<br>{{Hospital Address}}','Request for copy of medical records',[
+ 'I was treated at your hospital as {{In-patient / Out-patient}} from {{From Date}} to {{To Date}} (Patient ID: {{Patient ID}}).',
+ 'Please provide copies of my {{Records Needed, e.g. discharge summary / test reports / bills}}. I enclose my ID and the fee.'],'Yours faithfully')},
+{c:'Health',t:'Hospital Bill Dispute',b:L('The Medical Superintendent<br>{{Hospital Name}}<br>{{Hospital Address}}','Query regarding bill no. {{Bill Number}}',[
+ 'The bill no. <b>{{Bill Number}}</b> dated {{Bill Date}} for <b>{{Bill Amount}}</b> includes charges I do not understand / dispute: {{Disputed Items}}.',
+ 'Please give an itemised bill and review these charges. I will pay the correct amount promptly once it is clarified.'],'Yours faithfully')},
+{c:'Health',t:'Medical Leave Extension',b:L(BOSS,'Request to extend medical leave',[
+ 'I am on medical leave from {{From Date}} to {{To Date}}. My doctor has advised further rest until <b>{{New Return Date}}</b>.',
+ 'The updated medical certificate is attached. Kindly extend my leave accordingly.'])},
+{c:'Health',t:'Appointment / Referral Request',b:L('The Doctor / Clinic<br>{{Clinic Name}}<br>{{Clinic Address}}','Request for appointment',[
+ 'I would like to book an appointment for {{Patient Name}} for {{Reason For Visit}}. Preferred dates: {{Preferred Dates}}.',
+ 'Please confirm the time and any documents or tests needed beforehand.'])},
+
+{c:'Travel',t:'Flight Cancellation Refund / Compensation',b:L('The Customer Relations Manager<br>{{Airline}}<br>{{Airline Address}}','Refund / compensation – Booking {{Booking Reference}}',[
+ 'My flight <b>{{Flight Number}}</b> on {{Flight Date}} from {{From City}} to {{To City}} (Booking Ref. {{Booking Reference}}) was {{Cancelled / Delayed by Hours}}.',
+ 'I request a full refund of <b>{{Ticket Amount}}</b> and any compensation due under applicable rules. Please reply within {{Days}} days.'],'Yours faithfully')},
+{c:'Travel',t:'Lost Luggage Complaint',b:L('The Baggage Services Manager<br>{{Airline}}<br>{{Airport / Address}}','Lost / delayed baggage – Ref {{PIR Reference}}',[
+ 'I arrived on flight {{Flight Number}} on {{Flight Date}}, but my baggage (tag no. {{Baggage Tag}}) did not arrive. A report (PIR {{PIR Reference}}) was filed.',
+ 'Contents: {{Contents Summary}}. Please trace and deliver it to {{Delivery Address}}, or compensate me for the loss.'],'Yours faithfully')},
+{c:'Travel',t:'Hotel Booking Complaint / Cancellation',b:L('The General Manager<br>{{Hotel Name}}<br>{{Hotel Address}}','Booking {{Booking Reference}} – {{Complaint / Cancellation}}',[
+ 'I booked a stay (Ref. <b>{{Booking Reference}}</b>) from {{Check-in Date}} to {{Check-out Date}}. {{Issue Or Cancellation Reason}}.',
+ 'I request {{Refund / Compensation / Rebooking}}. Booking confirmation and proof are attached.'],'Yours faithfully')},
+{c:'Travel',t:'Train / Bus Ticket Refund',b:L('The Station Manager / Customer Care<br>{{Transport Company}}<br>{{Address}}','Refund request – Ticket / PNR {{Ticket Number}}',[
+ 'I booked ticket / PNR <b>{{Ticket Number}}</b> for travel on {{Travel Date}} from {{From}} to {{To}}, but {{Reason, e.g. train cancelled / double charged}}.',
+ 'Please refund <b>{{Amount}}</b> to my original payment account.'],'Yours faithfully')},
+{c:'Travel',t:'Visa Support Letter from Employer',b:L('The Visa Officer<br>{{Embassy / Consulate}}','Employment and travel letter for {{Employee Name}}',[
+ 'This is to certify that <b>{{Employee Name}}</b> (Passport No. {{Passport Number}}) has been employed with {{Company Name}} as {{Designation}} since {{Joining Date}} with a salary of {{Salary}}.',
+ 'He/she is travelling to {{Destination}} from {{From Date}} to {{To Date}} for {{Purpose}}, will return to resume duty on {{Return Date}}, and expenses will be {{Who Pays}}.'],'Yours faithfully')},
+
+{c:'Work',t:'Employment Verification Letter',b:L('To Whom It May Concern','Employment verification – {{Employee Name}}',[
+ 'This is to confirm that <b>{{Employee Name}}</b> (Employee ID {{Employee ID}}) is employed with {{Company Name}} as <b>{{Designation}}</b> since {{Joining Date}}.',
+ 'This letter is issued at the employee’s request for {{Purpose, e.g. bank loan / visa / rental}}.'],'Yours faithfully')},
+{c:'Work',t:'Salary Certificate Request',b:L('The HR Manager<br>{{Company Name}}<br>{{Company Address}}','Request for salary certificate',[
+ 'I am working as {{Your Designation}} (Employee ID {{Employee ID}}). Please issue a salary certificate stating my monthly gross and net salary, required for {{Purpose}}.',
+ 'Kindly provide it by {{Required By}}. Thank you.'])},
+{c:'Work',t:'Bereavement / Emergency Leave',b:L(BOSS,'Request for emergency leave',[
+ 'Due to {{Emergency, e.g. the passing of a family member}}, I need to be away from <b>{{From Date}}</b> to <b>{{To Date}}</b>.',
+ 'I apologise for the short notice and will hand over urgent work to {{Colleague Name}}. Thank you for your understanding.'])},
+{c:'Work',t:'Request for Part-Time / Flexible Hours',b:L(BOSS,'Request for flexible working arrangement',[
+ 'I would like to request {{Part-time / flexible hours}} from {{Start Date}}, working {{Proposed Schedule}}, because {{Reason}}.',
+ 'I have thought about how my work will be covered and am confident I can meet my targets. I would welcome a discussion.'])},
+{c:'Work',t:'Request for Training / Course Sponsorship',b:L(BOSS,'Request for sponsorship of {{Course Name}}',[
+ 'I would like to join <b>{{Course Name}}</b> by {{Provider}} (duration {{Duration}}, fee {{Course Fee}}). It will help me {{Benefit To Company}}.',
+ 'I request the company to sponsor / part-sponsor this course. I am willing to sign a service commitment.'])},
+{c:'Work',t:'Request for Equipment / Resources',b:L(BOSS,'Request for {{Item}}',[
+ 'To work more effectively, I request <b>{{Item}}</b> (approx. cost {{Estimated Cost}}) because {{Reason}}.',
+ 'I believe it will improve {{Benefit}}. Kindly approve my request.'])},
+{c:'Work',t:'Appreciation Letter to Employee',b:L('{{Employee Name}}<br>{{Designation}}','In appreciation of your work',[
+ 'On behalf of {{Company Name}}, I would like to sincerely thank you for {{Achievement}}.',
+ 'Your dedication and {{Quality}} have made a real difference to the team. Keep up the great work!'],'With appreciation')},
+{c:'Work',t:'Warning Letter to Employee',b:L('{{Employee Name}}<br>{{Designation}}','Warning regarding {{Issue}}',[
+ 'It has come to our notice that on {{Date}} you {{Issue Description}}, which is against company policy.',
+ 'This is a formal warning. Please ensure it does not recur; further violations may lead to disciplinary action. Reply within {{Days}} days if you wish to explain.'],'Yours faithfully')},
+{c:'Work',t:'Internship Application',b:L('The HR Manager<br>{{Company Name}}<br>{{Company Address}}','Application for internship in {{Department / Field}}',[
+ 'I am a {{Year / Course}} student at {{College Name}} and wish to apply for an internship in <b>{{Department / Field}}</b> for {{Duration}} starting {{Start Date}}.',
+ 'I have skills in {{Key Skills}} and am eager to learn. My resume is enclosed. Thank you for considering my application.'],'Yours faithfully')},
+{c:'Work',t:'Salary Negotiation (Counter Offer)',b:L(BOSS,'Regarding the offer for {{Job Title}}',[
+ 'Thank you for offering me the role of <b>{{Job Title}}</b>. I am excited about the opportunity.',
+ 'Based on my experience of {{Years}} years and market standards, I request a revised package of <b>{{Expected Salary}}</b>. I am confident I can add strong value and look forward to discussing it.'])},
+
+{c:'School',t:'Admission Request',b:L(SCH,'Request for admission of {{Student Name}} to Class {{Class}}',[
+ 'I request admission for my child/ward <b>{{Student Name}}</b> (DOB {{Date of Birth}}) in Class {{Class}} for the academic year {{Academic Year}}. Previous school: {{Previous School}}.',
+ 'All required documents are enclosed. Kindly consider the application.'],'Yours faithfully')},
+{c:'School',t:'Scholarship Application',b:L('The Scholarship Committee<br>{{Organisation Name}}<br>{{Address}}','Application for {{Scholarship Name}}',[
+ 'I am {{Your Name}}, studying {{Course}} at {{College Name}} with {{Marks / Grade}}. I wish to apply for the <b>{{Scholarship Name}}</b>.',
+ 'My family income is {{Family Income}}, and the scholarship will help me {{How It Helps}}. Supporting documents are attached.'],'Yours faithfully')},
+{c:'School',t:'Exam Re-evaluation / Re-check Request',b:L('The Controller of Examinations<br>{{University / Board}}<br>{{Address}}','Request for re-evaluation – Roll No. {{Roll Number}}',[
+ 'I appeared for {{Exam Name}} (Roll No. <b>{{Roll Number}}</b>) and received {{Marks Received}} in {{Subject}}, which is lower than expected.',
+ 'I request re-evaluation / re-checking of my answer script. The fee receipt is attached.'],'Yours faithfully')},
+{c:'School',t:'Hostel / Room Change Request',b:L('The Warden<br>{{Hostel Name}}<br>{{College Name}}','Request for room change',[
+ 'I am staying in room <b>{{Current Room}}</b>. I request a change to {{Requested Room / Block}} because {{Reason}}.',
+ 'Kindly consider my request. Thank you.'],'Yours obediently')},
+{c:'School',t:'Medical Leave / Exam Absence (Student)',b:L(SCH,'Absence from {{Exam / Classes}} due to illness',[
+ 'I could not attend {{Exam / Classes}} on {{Date}} due to illness. A medical certificate is attached.',
+ 'I request you to excuse my absence and allow me to take the exam / submit the work on another date.'],'Yours obediently')},
+
+{c:'Housing',t:'Rent Receipt',b:L('{{Tenant Name}}<br>{{Property Address}}','Rent receipt',[
+ 'Received with thanks from <b>{{Tenant Name}}</b> the sum of <b>{{Rent Amount}}</b> as rent for <b>{{Rent Month}}</b> for the property at {{Property Address}}.',
+ 'Payment mode: {{Payment Mode}}. Landlord PAN (if required for HRA): {{Landlord PAN}}.'],'Landlord')},
+{c:'Housing',t:'Rent Increase Notice (to Tenant)',b:L('{{Tenant Name}}<br>{{Property Address}}','Notice of rent revision',[
+ 'As per our agreement, the monthly rent for the property at {{Property Address}} will be revised from <b>{{Current Rent}}</b> to <b>{{New Rent}}</b> from <b>{{Effective Date}}</b>.',
+ 'Please contact me if you wish to discuss. Thank you for being a good tenant.'])},
+{c:'Housing',t:'Late Rent Reminder (to Tenant)',b:L('{{Tenant Name}}<br>{{Property Address}}','Reminder: rent due for {{Rent Month}}',[
+ 'This is a gentle reminder that the rent of <b>{{Rent Amount}}</b> for {{Rent Month}} was due on {{Due Date}} and is yet to be received.',
+ 'Kindly pay by {{Pay By Date}}. If already paid, please share the payment details.'])},
+{c:'Housing',t:'Notice to Tenant to Vacate',b:L('{{Tenant Name}}<br>{{Property Address}}','Notice to vacate the premises',[
+ 'This is to give you notice, as per our agreement, to vacate the property at {{Property Address}} on or before <b>{{Vacating Date}}</b> because {{Reason}}.',
+ 'Your security deposit of {{Deposit Amount}} will be returned after inspection and adjusting dues, if any.'])},
+{c:'Housing',t:'Request for Society Maintenance Waiver / Query',b:L('The Secretary<br>{{Society / Association Name}}<br>{{Society Address}}','Query regarding maintenance charges for {{Flat / House Number}}',[
+ 'I am the owner / tenant of {{Flat / House Number}}. I would like clarification / a review of the maintenance charge of {{Charge Amount}} for {{Period}} because {{Reason}}.',
+ 'Kindly share the breakup and consider my request.'],'Yours faithfully')},
+
+{c:'Personal',t:'Congratulations Letter',b:L('{{Recipient Name}}','Congratulations!',[
+ 'I was thrilled to hear about {{Achievement / Occasion}}. Heartiest congratulations!',
+ 'It is the result of your hard work and I am so happy for you. Wishing you continued success and happiness.'],'Warm wishes')},
+{c:'Personal',t:'Farewell / Good Luck Letter',b:L('{{Recipient Name}}','Wishing you all the best',[
+ 'As you move on to {{New Role / Place}}, I wanted to say how much I have enjoyed {{Shared Experience}} with you.',
+ 'You will be missed. Please keep in touch, and I wish you every success ahead.'],'Best wishes')},
+{c:'Personal',t:'Birthday / Anniversary Wishes',b:L('{{Recipient Name}}','Happy {{Occasion}}!',[
+ 'Wishing you a very happy <b>{{Occasion}}</b>! May this year bring you health, happiness and everything you wish for.',
+ '{{Personal Message}}. Have a wonderful day!'],'With love')},
+{c:'Personal',t:'Letter to Parents / Family',b:L('{{Recipient Name}}','Sending my love',[
+ 'I hope everyone at home is well. I am doing {{How You Are Doing}} here and {{News}}.',
+ 'I miss you all and will call on {{Call Day}}. Please take care of your health.'],'With love')},
+{c:'Personal',t:'Request to Reconsider a Decision',b:L('{{Recipient Name}}<br>{{Recipient Organisation}}','Request to reconsider decision on {{Matter}}',[
+ 'I received your decision dated {{Decision Date}} regarding <b>{{Matter}}</b>. I respectfully request that it be reconsidered because {{Reasons}}.',
+ 'I have enclosed additional information. I would be grateful for a chance to discuss it.'])},
+{c:'Personal',t:'Gift / Money Declaration (Family)',b:L('To Whom It May Concern','Gift declaration',[
+ 'I, <b>{{Your Name}}</b>, declare that I have given/received a gift of <b>{{Gift Amount / Item}}</b> from/to my {{Relationship}}, <b>{{Other Person Name}}</b>, on {{Date}}, out of love and affection, with no repayment expected.',
+ 'This declaration is made for {{Purpose, e.g. bank / tax record}}.'],'Yours faithfully')}
+];
+
+
+
+/* ---------- UI ---------- */
+const CATICON={'All':'📚','Work':'💼','Money & Bank':'💰','Business':'📣','School':'🎓','Housing':'🏠','Personal':'💌','Daily Life':'🧾','Government':'🏛️','Health':'🩺','Travel':'✈️'};
+const ICONS=[[/electric|water|internet|broadband/i,'💡'],[/passport|visa|id lost/i,'🛂'],[/flight|luggage|train|bus ticket/i,'✈️'],[/hotel/i,'🏨'],[/medical|hospital|appointment|health/i,'🩺'],[/rti|certificate request|income|birth|name change|tax|fine|civic|police|lost/i,'🏛️'],[/parcel|warranty|gym|address notif/i,'🧾'],[/congrat|farewell|birthday|family|parents/i,'🎉'],[/rent receipt|tenant/i,'🏠'],[/scholar|admission|exam|hostel/i,'🎓'],[/appreciation|warning|equipment|training|flexible|internship|negotiation|verification|salary certificate/i,'💼'],[/leave|sick|maternity/i,'🏖️'],[/resign|notice period|vacate/i,'🚪'],[/salary|increment|promotion/i,'📈'],[/loan|advance/i,'💰'],[/insurance/i,'🛡️'],[/bank|account|atm|debit|statement/i,'🏦'],[/refund|payment/i,'💳'],[/cover|job|offer|experience|recommend|reference/i,'💼'],[/promotional|sales|introduction|quotation/i,'📣'],[/complaint|warning/i,'⚠️'],[/thank|apolog|condol/i,'💌'],[/invit/i,'🎉'],[/visa|travel/i,'✈️'],[/school|fee|bonafide|transfer cert/i,'🎓'],[/rent|landlord|deposit|repair|society|neighbour|tenant/i,'🏠'],[/authori|noc|no objection|character/i,'📜'],[/subscription|cancel/i,'🔕'],[/work from home|late|transfer/i,'💻'],[/membership|club/i,'🪪']];
+const icon=t=>{for(const [r,e] of ICONS)if(r.test(t))return e;return '✉️'};
+const cats=['All',...new Set(T.map(x=>x.c))];
+let cat='All',current=0;
+
+function renderRail(){
+  $('#rail').innerHTML=cats.map(c=>`<button class="${c===cat?'on':''}" data-c="${c}"><span>${CATICON[c]||'✉️'}</span>${c==='Money & Bank'?'Money':c}</button>`).join('');
+  $('#rail').querySelectorAll('button').forEach(b=>b.onclick=()=>{cat=b.dataset.c;renderRail();showGrid()});
+}
+function showPreview(){
+  $('#pvTitle').textContent='👁 Preview – '+T[current].t;
+  let h=cleanClone().innerHTML.replace(/\[([^\]<>]{1,60})\]/g,'<span class="pf">[$1]</span>');
+  $('#pvBody').innerHTML=h;
+  $('#pvModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closePreview(){$('#pvModal').classList.remove('open');document.body.style.overflow=''}
+addEventListener('keydown',e=>{if(e.key==='Escape')closePreview()});
+function renderGrid(){
+  const q=$('#search').value.toLowerCase().trim();
+  const list=T.map((x,i)=>({x,i})).filter(({x})=>(cat==='All'||x.c===cat)&&(x.t+' '+x.c).toLowerCase().includes(q));
+  $('#grid').innerHTML=list.map(({x,i})=>`<div class="card" role="button" tabindex="0" onclick="openLetter(${i})"><span class="ic">${icon(x.t)}</span><b>${x.t}</b><small>${x.c} letter · pre-filled</small></div>`).join('')||'<p class="empty">No letters found. Try another word.</p>';
+}
+function toggleSearch(){
+  const sw=$('#sw'),on=!sw.classList.contains('open');
+  sw.classList.toggle('open',on);
+  if(on)$('#search').focus();else{$('#search').value='';renderGrid()}
+}
+function goHome(){cat='All';renderRail();showGrid()}
+addEventListener('scroll',()=>$('#homeBtn').classList.toggle('show',scrollY>250),{passive:true});
+function showGrid(){
+  $('#editView').style.display='none';$('#gridView').style.display='block';
+  renderGrid();window.scrollTo({top:0});
+}
+function esc(s){return s.replace(/"/g,'&quot;')}
+let fmt='email';
+try{fmt=localStorage.getItem('lh_fmt')||'email'}catch(e){}
+function tpl(i){
+  const keep=fmt==='email'?'E':'L',drop=fmt==='email'?'L':'E';
+  return T[i].b.replace(new RegExp('⟦'+drop+'⟧[\\s\\S]*?⟦/'+drop+'⟧','g'),'').replace(new RegExp('⟦/?'+keep+'⟧','g'),'');
+}
+function setFmt(f){
+  fmt=f;try{localStorage.setItem('lh_fmt',f)}catch(e){}
+  updSeg();
+  if($('#editView').style.display==='block'){const y=scrollY;openLetter(current);scrollTo(0,y)}
+}
+function updSeg(){document.querySelectorAll('.seg button').forEach(b=>b.classList.toggle('on',b.dataset.f===fmt))}
+function openLetter(i){
+  current=i;
+  paper.setAttribute('contenteditable','false');paper.classList.remove('editing');
+  const eb=document.querySelector('[onclick^="toggleEdit"]');if(eb)eb.textContent='✏️ Edit all text';
+  paper.innerHTML=tpl(i).replace(/\{\{(.+?)\}\}/g,(m,n)=>`<span class="fi" contenteditable="plaintext-only" data-f="${esc(n)}" data-ph="${esc(n)}">${(values[n]||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')}</span>`);
+  $('#letterTitle').textContent=icon(T[i].t)+' '+T[i].t;
+  $('#gridView').style.display='none';$('#editView').style.display='block';
+  window.scrollTo({top:0});
+}
+paper.addEventListener('input',e=>{
+  const el=e.target.closest&&e.target.closest('.fi');
+  if(!el)return;
+  const n=el.dataset.f,v=el.textContent.replace(/\s+/g,' ').trim();
+  values[n]=v;try{localStorage.setItem('lh_vals',JSON.stringify(values))}catch(x){}
+  paper.querySelectorAll('.fi').forEach(o=>{if(o!==el&&o.dataset.f===n)o.textContent=v});
+});
+paper.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.closest&&e.target.closest('.fi'))e.preventDefault()});
+function toggleEdit(btn){
+  const on=paper.getAttribute('contenteditable')!=='true';
+  paper.setAttribute('contenteditable',on?'true':'false');
+  paper.classList.toggle('editing',on);
+  btn.textContent=on?'✅ Done editing':'✏️ Edit all text';
+  if(on)paper.focus();
+}
+function cmd(c){paper.focus();document.execCommand(c,false,null)}
+function cleanClone(){
+  const c=paper.cloneNode(true);
+  c.querySelectorAll('.fi').forEach(e=>e.replaceWith(document.createTextNode(e.textContent.trim()||'['+e.dataset.ph+']')));
+  return c;
+}
+function letterText(){return collectParas(cleanClone()).map(p=>p.runs.map(r=>r.br?'\n':r.t).join('')).join('\n\n')}
+function letterSubject(){const m=letterText().match(/^Subject:\s*(.+)$/m);return m?m[1].trim():T[current].t}
+function fileName(){return T[current].t.replace(/[^\w]+/g,'_').replace(/^_|_$/g,'')+'.docx'}
+async function shareLetter(){
+  const text=letterText();
+  try{
+    const f=new File([buildDocx()],fileName(),{type:MIME});
+    if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:letterSubject(),text});return}
+    if(navigator.share){await navigator.share({title:letterSubject(),text});return}
+  }catch(e){if(e&&e.name==='AbortError')return}
+  copyText();
+}
+function sendWA(){window.open('https://wa.me/?text='+encodeURIComponent(letterText()),'_blank')}
+function sendMail(){
+  const to=(values['Recipient Email']||'').trim();
+  location.href='mailto:'+encodeURIComponent(to).replace('%40','@')+'?subject='+encodeURIComponent(letterSubject())+'&body='+encodeURIComponent(letterText());
+}
+function sendTeams(){
+  const t=letterText();
+  try{navigator.clipboard&&navigator.clipboard.writeText(t)}catch(e){}
+  window.open('https://teams.microsoft.com/share?msgText='+encodeURIComponent(t)+'&href='+encodeURIComponent('https://teams.microsoft.com'),'_blank');
+}
+function copyText(){
+  const t=collectParas(cleanClone()).map(p=>p.runs.map(r=>r.br?'\n':r.t).join('')).join('\n\n');
+  const done=()=>alert('Letter copied!');
+  (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(done).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();done();
+  });
+}
+addEventListener('resize',()=>{});
+/* ---------- real .docx writer (no libraries) ---------- */
+const MIME='application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+const CT=(()=>{const t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+function crc32(b){let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=CT[(c^b[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0}
+function zip(files){
+  const enc=new TextEncoder(),parts=[],central=[];let off=0;
+  files.forEach(([name,str])=>{
+    const nb=enc.encode(name),d=enc.encode(str),crc=crc32(d);
+    const lh=new DataView(new ArrayBuffer(30));
+    lh.setUint32(0,0x04034b50,true);lh.setUint16(4,20,true);lh.setUint16(6,0x0800,true);lh.setUint16(12,0x21,true);
+    lh.setUint32(14,crc,true);lh.setUint32(18,d.length,true);lh.setUint32(22,d.length,true);lh.setUint16(26,nb.length,true);
+    parts.push(new Uint8Array(lh.buffer),nb,d);
+    const ch=new DataView(new ArrayBuffer(46));
+    ch.setUint32(0,0x02014b50,true);ch.setUint16(4,20,true);ch.setUint16(6,20,true);ch.setUint16(8,0x0800,true);ch.setUint16(14,0x21,true);
+    ch.setUint32(16,crc,true);ch.setUint32(20,d.length,true);ch.setUint32(24,d.length,true);ch.setUint16(28,nb.length,true);ch.setUint32(42,off,true);
+    central.push(new Uint8Array(ch.buffer),nb);
+    off+=30+nb.length+d.length;
+  });
+  const csize=central.reduce((a,b)=>a+b.length,0);
+  const e=new DataView(new ArrayBuffer(22));
+  e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,csize,true);e.setUint32(16,off,true);
+  return new Blob([...parts,...central,new Uint8Array(e.buffer)],{type:MIME});
+}
+const xe=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const BLOCK=new Set(['P','DIV','LI','UL','OL','H1','H2','H3']);
+function collectParas(root){
+  const out=[];let cur=null;
+  const flush=()=>{if(cur&&cur.runs.length)out.push(cur);cur=null};
+  const ensure=al=>{if(!cur)cur={runs:[],align:al};return cur};
+  function walk(n,st,al){
+    n.childNodes.forEach(ch=>{
+      if(ch.nodeType===3){ if(ch.nodeValue)ensure(al).runs.push({t:ch.nodeValue,...st}) }
+      else if(ch.nodeType===1){
+        const tag=ch.tagName;
+        if(tag==='BR'){ensure(al).runs.push({br:1})}
+        else if(BLOCK.has(tag)){
+          flush();
+          const a=ch.style.textAlign||al;
+          if(tag==='LI'){
+            const par=ch.parentElement,idx=[...par.children].indexOf(ch)+1;
+            ensure(a).runs.push({t:par.tagName==='OL'?idx+'. ':'• ',...st});
+          }
+          walk(ch,tag.startsWith('H')?{...st,b:1}:st,a);
+          flush();
+        }else{
+          const ns={...st};
+          if(tag==='B'||tag==='STRONG')ns.b=1;
+          if(tag==='I'||tag==='EM')ns.i=1;
+          if(tag==='U')ns.u=1;
+          const fw=ch.style.fontWeight;if(fw==='bold'||+fw>=600)ns.b=1;
+          if(ch.style.fontStyle==='italic')ns.i=1;
+          if((ch.style.textDecoration||'').includes('underline'))ns.u=1;
+          walk(ch,ns,al);
+        }
+      }
+    });
+  }
+  walk(root,{},'left');flush();
+  return out;
+}
+function buildDocx(){
+  const c=cleanClone();
+  const fam=xe((paper.style.fontFamily||'Times New Roman').split(',')[0].replace(/["']/g,'').trim());
+  const sz=24;
+  const AL={center:'center',right:'right',justify:'both',left:'left',start:'left'};
+  const body=collectParas(c).map(p=>{
+    const runs=p.runs.map(r=>{
+      if(r.br)return '<w:r><w:br/></w:r>';
+      const rp=`<w:rFonts w:ascii="${fam}" w:hAnsi="${fam}" w:cs="${fam}"/>${r.b?'<w:b/>':''}${r.i?'<w:i/>':''}<w:sz w:val="${sz}"/><w:szCs w:val="${sz}"/>${r.u?'<w:u w:val="single"/>':''}`;
+      return `<w:r><w:rPr>${rp}</w:rPr><w:t xml:space="preserve">${xe(r.t)}</w:t></w:r>`;
+    }).join('');
+    return `<w:p><w:pPr><w:spacing w:after="200" w:line="360" w:lineRule="auto"/><w:jc w:val="${AL[p.align]||'left'}"/></w:pPr>${runs}</w:p>`;
+  }).join('');
+  const doc=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${body}<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1247" w:right="1247" w:bottom="1247" w:left="1247" w:header="708" w:footer="708" w:gutter="0"/></w:sectPr></w:body></w:document>`;
+  const types=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>`;
+  const rels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`;
+  return zip([['[Content_Types].xml',types],['_rels/.rels',rels],['word/document.xml',doc]]);
+}
+function downloadDocx(){
+  const blob=buildDocx();
+  const name=T[current].t.replace(/[^\w]+/g,'_').replace(/^_|_$/g,'')+'.docx';
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download=name;
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+}
+
+renderRail();renderGrid();updSeg();
+</script>
+</body>
+</html>

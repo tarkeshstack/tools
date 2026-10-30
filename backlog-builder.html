@@ -1,0 +1,2047 @@
+<title>Backlog Builder</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Schibsted+Grotesk:wght@600;700;800&display=swap">
+<style>
+/* Layout: an app shell. Sidebar composer, top bar with view tabs, full-height canvas, slide-in story drawer, bottom tab bar on phones. The canvas is a story map. Epics run left to right as columns; priority runs top to bottom as release lanes; each story is a sticky note tinted by who it is for. */
+:root{
+  --bg:#F3F5FA; --dot:#D3D9E9; --surface:#FFFFFF; --surface2:#E9EDF6; --ink:#12172B; --muted:#58627F; --line:#D3D9EA;
+  --accent:#2D3FB5; --accent-ink:#FFFFFF; --accent-soft:#DDE2FA; --danger:#B3261E;
+  --r1:#2D3FB5; --r2:#7482DA; --r3:#B4BDEC; --r4:#C9CEDB;
+  --lane1:#E3E7FB; --lane2:#EDEFFC; --lane3:#F5F6FD; --lane4:#F0F1F5;
+  --p0bg:#FFF1B0; --p0fg:#5A4600; --p1bg:#FFD7E3; --p1fg:#7A1F44; --p2bg:#D2EFD1; --p2fg:#1F5A2A; --p3bg:#D0E5FF; --p3fg:#1B4A86;
+  --p4bg:#E3D9FF; --p4fg:#4A2E96; --p5bg:#FFDFC5; --p5fg:#8A3A0B; --p6bg:#C9F0EC; --p6fg:#135A55; --p7bg:#E2E5EE; --p7fg:#3A4256;
+  --font-display:'Schibsted Grotesk','Segoe UI',system-ui,sans-serif;
+  --font-body:'Figtree','Segoe UI',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0C1020; --dot:#1B2342; --surface:#141A31; --surface2:#1C2443; --ink:#E7EBF8; --muted:#97A2C2; --line:#28325A;
+    --accent:#8FA2FF; --accent-ink:#0B1230; --accent-soft:#1E2A66; --danger:#FF8A80;
+    --r1:#8FA2FF; --r2:#5C6FD6; --r3:#3A478F; --r4:#3C4258;
+    --lane1:#1B2352; --lane2:#171F45; --lane3:#141A38; --lane4:#161B2C;
+    --p0bg:#4A4116; --p0fg:#F4E58A; --p1bg:#4F2437; --p1fg:#FFB8CE; --p2bg:#1E4326; --p2fg:#A9E5AC; --p3bg:#1D3B63; --p3fg:#A9CDFF;
+    --p4bg:#3A2F66; --p4fg:#CDBEFF; --p5bg:#55301A; --p5fg:#FFC9A0; --p6bg:#14433F; --p6fg:#9FE4DD; --p7bg:#2E3547; --p7fg:#BCC4D6;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0C1020; --dot:#1B2342; --surface:#141A31; --surface2:#1C2443; --ink:#E7EBF8; --muted:#97A2C2; --line:#28325A;
+  --accent:#8FA2FF; --accent-ink:#0B1230; --accent-soft:#1E2A66; --danger:#FF8A80;
+  --r1:#8FA2FF; --r2:#5C6FD6; --r3:#3A478F; --r4:#3C4258;
+  --lane1:#1B2352; --lane2:#171F45; --lane3:#141A38; --lane4:#161B2C;
+  --p0bg:#4A4116; --p0fg:#F4E58A; --p1bg:#4F2437; --p1fg:#FFB8CE; --p2bg:#1E4326; --p2fg:#A9E5AC; --p3bg:#1D3B63; --p3fg:#A9CDFF;
+  --p4bg:#3A2F66; --p4fg:#CDBEFF; --p5bg:#55301A; --p5fg:#FFC9A0; --p6bg:#14433F; --p6fg:#9FE4DD; --p7bg:#2E3547; --p7fg:#BCC4D6;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.5;cursor:default}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.p0{--pbg:var(--p0bg);--pfg:var(--p0fg)} .p1{--pbg:var(--p1bg);--pfg:var(--p1fg)} .p2{--pbg:var(--p2bg);--pfg:var(--p2fg)} .p3{--pbg:var(--p3bg);--pfg:var(--p3fg)}
+.p4{--pbg:var(--p4bg);--pfg:var(--p4fg)} .p5{--pbg:var(--p5bg);--pfg:var(--p5fg)} .p6{--pbg:var(--p6bg);--pfg:var(--p6fg)} .p7{--pbg:var(--p7bg);--pfg:var(--p7fg)}
+
+
+textarea,select,input[type=text],input[type=number]{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+textarea{resize:vertical;min-height:92px}
+.primary{background:var(--accent);color:var(--accent-ink);border:0;border-radius:8px;padding:10px 18px;font-weight:600}
+.primary:hover:not(:disabled){filter:brightness(1.1)}
+.primary.sm{padding:6px 14px;font-size:14px}
+.ghost{background:transparent;border:1px solid var(--line);border-radius:8px;padding:8px 14px;font-size:14px}
+.ghost:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+.hint{margin:0;font-size:13px;color:var(--muted)}
+#needMsg{margin:0;font-size:13px;color:var(--danger)}
+#needMsg.info{color:var(--muted)}
+
+.banner .lnk{font-weight:600}
+.flash{margin:0;font-size:14px;color:var(--muted)}
+.lnk{background:none;border:0;padding:0;font-size:13px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.lnk:hover:not(:disabled){color:var(--accent)}
+.lnk.danger:hover{color:var(--danger)}
+
+.pchips{display:flex;flex-wrap:wrap;gap:8px}
+.pchip{display:inline-flex;align-items:center;gap:7px;background:var(--pbg);color:var(--pfg);border:2px solid transparent;border-radius:999px;padding:3px 12px 3px 4px;font-size:13px;font-weight:500}
+.pchip[aria-pressed="true"]{border-color:var(--ink)}
+.pchip b{font-family:var(--font-mono);font-weight:500;font-size:12px}
+.av{width:22px;height:22px;border-radius:50%;background:var(--pfg);color:var(--pbg);display:grid;place-items:center;font:600 11px var(--font-mono);flex:none}
+.chart{display:flex;flex-direction:column;gap:7px}
+.chart h3{margin:0 0 2px;font-size:12px;font-family:var(--font-mono);font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.crow{display:grid;grid-template-columns:minmax(80px,32%) 1fr 32px;gap:10px;align-items:center;font-size:13px}
+.cl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cbt{background:var(--surface2);height:14px;border-radius:3px;overflow:hidden}
+.cb{display:flex;height:100%}
+.cb i{display:block;height:100%}
+.cv{font-family:var(--font-mono);font-size:12px;text-align:right;font-variant-numeric:tabular-nums}
+.s1{background:var(--r1)} .s2{background:var(--r2)} .s3{background:var(--r3)} .s4{background:var(--r4);background-image:repeating-linear-gradient(45deg,transparent 0 3px,rgba(255,255,255,.55) 3px 5px)}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;margin:6px 0 0;padding:0;list-style:none;font-size:12px;color:var(--muted)}
+.legend li{display:flex;align-items:center;gap:6px}
+.legend i{width:11px;height:11px;border-radius:2px;display:inline-block}
+
+.group{display:flex;gap:8px;flex-wrap:wrap}
+
+
+.mapwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.map{display:grid;min-width:max-content}
+.corner,.lane-label{position:sticky;left:0;z-index:2}
+.corner{background:var(--surface);padding:10px;font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;align-items:flex-end}
+.eh2{background:var(--ink);color:var(--bg);padding:10px 12px;display:flex;flex-direction:column;gap:2px;min-width:0;border-left:1px solid var(--bg)}
+.en{font-family:var(--font-display);font-weight:700;font-size:15px;line-height:1.2;overflow-wrap:anywhere}
+.em{font-family:var(--font-mono);font-size:11px;opacity:.75}
+.ea{display:flex;gap:10px;margin-top:4px;flex-wrap:wrap}
+.ea .lnk{color:var(--bg);opacity:.8;font-size:12px}
+.ea .lnk:hover:not(:disabled){color:var(--bg);opacity:1}
+.lane-label{padding:10px;display:flex;flex-direction:column;gap:2px;border-top:1px solid var(--line)}
+.lane-label b{font-family:var(--font-display);font-size:15px}
+.lane-label span{font-size:12px;color:var(--muted)}
+.lane-label i{font-style:normal;font-family:var(--font-mono);font-size:11px;color:var(--muted);margin-top:4px}
+.lane-label::before{content:"";height:4px;border-radius:2px;margin-bottom:6px;width:36px}
+.lane-label.l-M::before{background:var(--r1)} .lane-label.l-S::before{background:var(--r2)} .lane-label.l-C::before{background:var(--r3)} .lane-label.l-W::before{background:var(--r4)}
+.lane-label.l-M{background:var(--lane1)} .lane-label.l-S{background:var(--lane2)} .lane-label.l-C{background:var(--lane3)} .lane-label.l-W{background:var(--lane4)}
+.cell{padding:8px;display:flex;flex-direction:column;gap:7px;border-top:1px solid var(--line);border-left:1px solid var(--line);min-height:52px;min-width:0}
+.cell.l-M{background:var(--lane1)} .cell.l-S{background:var(--lane2)} .cell.l-C{background:var(--lane3)} .cell.l-W{background:var(--lane4)}
+
+.note{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:start;width:100%;text-align:left;border:0;border-radius:6px;padding:8px 9px;background:var(--pbg);color:var(--pfg);box-shadow:0 1px 0 rgba(0,0,0,.08),0 3px 8px rgba(20,30,80,.09);font-size:13px;line-height:1.3;font-weight:500}
+.note:hover{filter:brightness(.97)}
+.note.on{outline:2px solid var(--ink);outline-offset:1px}
+.note.dim{opacity:.25}
+.nt{overflow-wrap:anywhere}
+.np{font-family:var(--font-mono);font-size:11px;opacity:.85;background:rgba(0,0,0,.08);border-radius:3px;padding:0 5px;font-variant-numeric:tabular-nums}
+
+.group-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;margin:18px 0 10px;border-bottom:2px solid var(--ink);padding-bottom:5px}
+.group-h:first-child{margin-top:0}
+.group-h h3{font-family:var(--font-display);margin:0;font-size:19px}
+.group-h span{font-family:var(--font-mono);font-size:12px;color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.card.on{outline:2px solid var(--ink)}
+.card.dim{opacity:.3}
+.ch{display:flex;align-items:center;gap:8px;background:var(--pbg);color:var(--pfg);padding:8px 12px;font-weight:600;font-size:13px}
+.ch .id{margin-left:auto;font-family:var(--font-mono);font-weight:400;font-size:11px;opacity:.8}
+.cbody{padding:12px;display:flex;flex-direction:column;gap:10px;flex:1}
+.sentence{margin:0;overflow-wrap:anywhere}
+.sentence .k{font-family:var(--font-mono);font-size:12px;color:var(--muted)}
+.sentence b{font-weight:600}
+.meta-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill{font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;border-radius:4px;padding:2px 8px;font-family:var(--font-mono)}
+.pill.M{background:var(--r1);color:var(--accent-ink)} .pill.S{background:var(--r2);color:#fff} .pill.C{border:1px solid var(--r2);color:var(--ink)} .pill.W{border:1px dashed var(--muted);color:var(--muted)}
+.pts{font-family:var(--font-mono);font-size:12px;background:var(--surface2);border-radius:4px;padding:2px 8px;font-variant-numeric:tabular-nums}
+.openbtn{margin-top:auto;align-self:flex-start}
+
+.people{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:12px}
+.person{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.person.dim{opacity:.35}
+.ph{display:flex;align-items:center;gap:10px}
+.ph .av{width:38px;height:38px;font-size:16px}
+.ph h3{margin:0;font-family:var(--font-display);font-size:18px;line-height:1.1}
+.ph span{font-family:var(--font-mono);font-size:12px;color:var(--muted)}
+.journey{display:flex;flex-wrap:wrap;gap:4px 0;align-items:center;font-size:12px}
+.journey span{background:var(--pbg);color:var(--pfg);border-radius:4px;padding:2px 8px}
+.journey em{font-style:normal;color:var(--muted);padding:0 4px}
+.person ul{margin:0;padding-left:18px;color:var(--muted);font-size:14px}
+.person li+li{margin-top:3px}
+.jl{font-size:12px;font-family:var(--font-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+
+.sprints{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr));gap:12px}
+.sprint{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;min-width:0;display:flex;flex-direction:column;gap:10px}
+.sprint h3{font-family:var(--font-display);margin:0;font-size:18px;display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.sprint h3 span{font-family:var(--font-mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;font-weight:400}
+.meter{height:8px;background:var(--surface2);border-radius:4px;overflow:hidden;display:flex}
+.meter i{display:block;height:100%}
+.cap{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.cap input{width:84px}
+.note-t{margin:0 0 12px;color:var(--muted);font-size:14px}
+
+.pt{display:flex;align-items:center;gap:10px;background:var(--pbg);color:var(--pfg);padding:10px 14px;font-weight:600}
+.pt .id{font-family:var(--font-mono);font-size:12px;font-weight:400;opacity:.8}
+.pt .x{margin-left:auto;background:rgba(0,0,0,.1);border:0;border-radius:6px;width:30px;height:30px;color:inherit;font-size:18px;line-height:1}
+.pb{padding:14px;display:flex;flex-direction:column;gap:14px;padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px))}
+.pb .sentence{font-size:17px;line-height:1.4}
+.lbl{font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+.seg{display:flex;flex-wrap:wrap}
+.seg button{background:var(--bg);border:1px solid var(--line);padding:5px 11px;font-size:13px;font-weight:500;margin-right:-1px}
+.seg button:first-child{border-radius:6px 0 0 6px}
+.seg button:last-child{border-radius:0 6px 6px 0}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);position:relative}
+.ac{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.ac li{display:grid;grid-template-columns:18px 1fr;gap:8px;font-size:14px;align-items:start}
+.ac li::before{content:"";width:16px;height:16px;border:2px solid var(--accent);border-radius:4px;margin-top:2px}
+.pf{display:flex;gap:16px;align-items:center}
+form.edit{display:flex;flex-direction:column;gap:10px}
+form.edit label{font-size:12px;font-family:var(--font-mono);color:var(--muted);display:flex;flex-direction:column;gap:3px}
+
+#toast{font-size:13px;color:var(--accent);min-height:18px}
+.keybox{font-size:14px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 12px}
+.keybox summary{cursor:pointer;color:var(--accent);font-weight:500}
+.keybox .kb{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;align-items:center}
+.keybox input{flex:1 1 240px;width:auto}
+
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5}
+.app{height:100%;display:grid;grid-template-columns:340px minmax(0,1fr);grid-template-rows:minmax(0,1fr)}
+.side{background:var(--surface);border-right:1px solid var(--line);overflow:auto;display:flex;flex-direction:column;gap:22px;min-height:0;padding-block:18px 24px;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:18px}
+.brandrow{display:flex;align-items:center;gap:10px}
+.logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--r2));display:grid;place-items:center;flex:none}
+.logo svg{width:20px;height:20px;fill:var(--accent-ink);stroke:none}
+.brandname{font-family:var(--font-display);font-weight:800;font-size:18px;letter-spacing:-.01em}
+.engine{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 10px;white-space:nowrap}
+.engine::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--r4)}
+.engine.on::before{background:#1FA463}
+.composer{display:flex;flex-direction:column;gap:10px}
+.composer>label{font-family:var(--font-display);font-weight:700;font-size:20px;line-height:1.2}
+.composer textarea{min-height:150px;border-radius:14px;padding:12px 14px;font-size:16px;line-height:1.45}
+.cbtns{display:flex;gap:10px}
+.primary.big{flex:1;padding:13px 18px;font-size:16px;border-radius:12px;box-shadow:0 6px 16px rgba(45,63,181,.28)}
+.tpls h2{margin:0 0 8px;font-family:var(--font-mono);font-weight:500;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.tplist{display:flex;flex-direction:column;gap:6px}
+.tpl{display:flex;justify-content:space-between;align-items:center;gap:8px;text-align:left;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-weight:500}
+.tpl i{font-style:normal;color:var(--muted)}
+.tpl:hover{border-color:var(--accent);color:var(--accent)}
+
+.stage{display:flex;flex-direction:column;min-width:0;min-height:0;position:relative}
+.top2{display:flex;align-items:center;flex-wrap:wrap;gap:10px 16px;background:var(--surface);border-bottom:1px solid var(--line);padding-block:12px;padding-left:18px;padding-right:max(18px,env(safe-area-inset-right,0px))}
+.tt{flex:1 1 220px;min-width:0}
+.pt1{margin:0;font-family:var(--font-display);font-weight:800;font-size:clamp(18px,2.6vw,22px);line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sub{margin-top:3px}
+.fnchip{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--muted);font-family:var(--font-mono);background:var(--surface2);border-radius:999px;padding:2px 4px 2px 10px;max-width:100%}
+.fnchip.static{padding:3px 10px}
+.fnchip select{width:auto;max-width:min(280px,60vw);border:0;background:transparent;padding:2px 6px;font-size:12px;font-family:inherit;color:var(--ink);border-radius:999px}
+.vtabs{display:flex;background:var(--surface2);border-radius:12px;padding:3px;gap:2px}
+.vtabs button{border:0;background:transparent;border-radius:9px;padding:6px 14px;font-weight:500;color:var(--muted)}
+.vtabs button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(20,30,80,.18)}
+.body2{flex:1;display:flex;min-height:0}
+.canvas{flex:1;min-width:0;overflow:auto;padding-block:16px 32px;padding-left:18px;padding-right:max(18px,env(safe-area-inset-right,0px));background-color:var(--bg);background-image:radial-gradient(var(--dot) 1px,transparent 1px);background-size:20px 20px}
+.cvin{display:flex;flex-direction:column;gap:16px}
+.insights{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+.insights>*{max-width:100%}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;width:100%}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;min-width:0}
+.tile b{font-family:var(--font-display);font-weight:800;font-size:24px;line-height:1.1;font-variant-numeric:tabular-nums}
+.tile span{font-size:12px;color:var(--muted)}
+.tile.hl{background:var(--accent-soft);border-color:transparent}
+.tile.hl b{color:var(--accent)}
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;width:100%}
+.banner{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;background:var(--accent-soft);border-radius:12px;padding:10px 14px;font-size:14px}
+.banner .lnk{font-weight:600}
+.blank{margin:auto;max-width:36ch;text-align:center;padding:32px 20px;color:var(--muted)}
+.blank h2{font-family:var(--font-display);color:var(--ink);margin:0 0 6px}
+.mapwrap{border-radius:16px;box-shadow:0 4px 18px rgba(20,30,80,.07)}
+.card,.person,.sprint{border-radius:14px}
+.drawer{width:390px;flex:none;background:var(--surface);border-left:1px solid var(--line);overflow:auto;display:flex;flex-direction:column;box-shadow:-8px 0 24px rgba(20,30,80,.06)}
+.scrim{display:none}
+.tabbar{display:none;background:var(--surface);border-top:1px solid var(--line);padding:6px max(8px,env(safe-area-inset-right,0px)) 6px max(8px,env(safe-area-inset-left,0px));gap:2px}
+.tabbar button{border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;border-radius:12px;font-size:11px;font-weight:500;color:var(--muted)}
+.tabbar button[aria-pressed="true"]{color:var(--accent);background:var(--accent-soft)}
+.tabbar svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+[hidden]{display:none!important}
+.xp{position:fixed;inset:0;z-index:50;background:rgba(10,15,40,.45);display:grid;place-items:center;padding:16px}
+.sheet{background:var(--surface);border-radius:18px;width:min(720px,100%);max-height:100%;display:flex;flex-direction:column;gap:10px;padding:16px;box-shadow:0 20px 60px rgba(10,15,40,.35);overflow:auto}
+.sheet .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.sheet textarea{font-family:var(--font-mono);font-size:12px;min-height:240px}
+.sheet .seg{margin-right:auto}
+@media(max-width:899px){
+  .app{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto}
+  .side,.stage{grid-row:1;grid-column:1;border-right:0}
+  .side{padding-right:max(18px,env(safe-area-inset-right,0px))}
+  .app[data-screen="create"] .stage{display:none}
+  .app[data-screen="board"] .side{display:none}
+  .tabbar{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-row:2;grid-column:1}
+  .vtabs{display:none}
+  .top2{padding-left:max(18px,env(safe-area-inset-left,0px))}
+  .canvas{padding-left:max(16px,env(safe-area-inset-left,0px))}
+  .pchips{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;width:100%}
+  .pchip{flex:none}
+  .drawer{position:fixed;left:0;right:0;bottom:0;z-index:30;width:auto;max-height:80vh;border:0;border-radius:20px 20px 0 0;box-shadow:0 -12px 40px rgba(10,15,40,.3);padding-bottom:env(safe-area-inset-bottom,0px)}
+  .scrim{display:block;position:fixed;inset:0;background:rgba(10,15,40,.4);z-index:25}
+  .xp{place-items:end center;padding:0}
+  .sheet{border-radius:20px 20px 0 0;padding-bottom:max(16px,env(safe-area-inset-bottom,0px))}
+  .tiles .tile b{font-size:20px}
+}
+
+.facts{margin:0;font-size:13px;color:var(--muted)}
+.facts b{color:var(--ink);font-variant-numeric:tabular-nums}
+.glance{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px;box-shadow:0 1px 2px rgba(20,30,80,.06)}
+.glance h2{margin:0;font-family:var(--font-display);font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--accent)}
+.gl-head{margin:0;font-family:var(--font-display);font-size:20px;line-height:1.35;font-weight:600}
+.gl-head b{color:var(--accent);font-weight:800}
+.gtiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.gtile{display:flex;gap:10px;align-items:flex-start;background:var(--surface2);border-radius:14px;padding:12px;min-width:0}
+.gi{flex:none;width:32px;height:32px;border-radius:10px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:700}
+.gl{font-size:12px;color:var(--muted)}
+.gtile b{display:block;font-size:16px;line-height:1.25;overflow-wrap:anywhere}
+.gtile small{font-size:12px;color:var(--muted)}
+.gseg{display:inline-flex;background:var(--surface2);border-radius:12px;padding:3px;gap:2px;align-self:flex-start}
+.gseg button{border:0;background:transparent;border-radius:9px;padding:6px 14px;font-weight:500;color:var(--muted)}
+.gseg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(20,30,80,.18)}
+.gcols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.gcol h3{margin:0 0 6px;font-size:13px;font-weight:700}
+.gcol ul{margin:0;padding-left:18px;font-size:14px;line-height:1.55}
+.gcol em{color:var(--muted);font-style:normal;font-size:12px}
+.glance details{font-size:13px;color:var(--muted)}
+.glance summary{cursor:pointer;font-weight:600}
+.glance details p{margin:6px 0 0}
+@media (max-width:900px){.gtiles,.gcols{grid-template-columns:1fr}.gl-head{font-size:18px}}
+@media (prefers-reduced-motion:no-preference){.note{transition:transform .12s}.note:hover{transform:translateY(-1px)}}
+</style>
+
+</head>
+<body>
+<div class="app" id="app" data-screen="create">
+  <aside class="side" id="side">
+    <div class="brandrow">
+      <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="10" rx="1.5"/><rect x="17" y="4" width="4" height="13" rx="1.5"/></svg></span>
+      <span class="brandname">Backlog Builder</span>
+      <span class="engine" id="engine"></span>
+    </div>
+    <section class="composer" aria-label="Describe what to build">
+      <label for="need">What do you want to build, plan or achieve?</label>
+      <textarea id="need" rows="6">I need to build a course and certification webpage</textarea>
+      <p class="hint">One line is enough. Software ideas become user stories. Life goals, career moves and projects become step-by-step plans. Add details like "with 200 guests in December" to shape it. Press Ctrl+Enter to create.</p>
+      <div class="cbtns">
+        <button class="primary big" id="gen" type="button">Create the plan</button>
+        <button class="ghost" id="stop" type="button" hidden>Stop</button>
+      </div>
+      <p id="needMsg" role="status"></p>
+    </section>
+    <section class="tpls" aria-label="Example ideas">
+      <h2>Try an idea</h2>
+      <div class="tplist" id="examples"></div>
+    </section>
+    <details class="keybox" id="keybox">
+      <summary>Use Claude to write stories for any topic</summary>
+      <div class="kb"><label for="apikey" class="hint">Anthropic API key</label><input type="password" id="apikey" autocomplete="off" placeholder="sk-ant-..."><button type="button" class="ghost" id="savekey">Save key</button><button type="button" class="lnk" id="clearkey">Remove key</button></div>
+      <p class="hint" style="margin-top:6px">The key stays in this browser. Requests go straight to Anthropic and are billed to your API account.</p>
+    </details>
+  </aside>
+  <main class="stage" id="results" aria-label="Backlog"></main>
+  <nav class="tabbar" id="tabbar" aria-label="Sections">
+    <button type="button" data-act="tab" data-v="create"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg><span>Create</span></button>
+    <button type="button" data-act="tab" data-v="sprint"><svg viewBox="0 0 24 24"><path d="M4 18h16M4 12h10M4 6h13"/></svg><span>Sprints</span></button>
+    <button type="button" data-act="tab" data-v="map"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="10" rx="1.5"/><rect x="17" y="4" width="4" height="13" rx="1.5"/></svg><span>Map</span></button>
+    <button type="button" data-act="tab" data-v="cards"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="7" rx="2"/><rect x="4" y="13" width="16" height="7" rx="2"/></svg><span>Cards</span></button>
+    <button type="button" data-act="tab" data-v="people"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-4 3-6 7-6s7 2 7 6"/></svg><span>People</span></button>
+  </nav>
+</div>
+
+<div class="xp" id="exportPanel" hidden>
+  <div class="sheet" role="dialog" aria-label="Export">
+    <div class="row">
+      <strong id="exTitle">Export</strong>
+      <div class="seg" role="group" aria-label="Format"><button type="button" data-act="export" data-v="md" aria-pressed="true">Markdown</button><button type="button" data-act="export" data-v="csv" aria-pressed="false">CSV</button></div>
+      <button class="primary sm" id="exCopy" type="button">Copy</button>
+      <button class="ghost" id="exClose" type="button">Close</button>
+    </div>
+    <span id="toast" role="status"></span>
+    <label for="exText" class="hint">Paste into Jira, Notion, Excel or a document.</label>
+    <textarea id="exText" readonly></textarea>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+var PR={M:'Must',S:'Should',C:'Could',W:"Won't"};
+var $=function(s){return document.querySelector(s)};
+var esc=function(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
+var art=function(w){return /^(hr|[aeiou])/i.test(w)?'an':'a'};
+var cap1=function(s){return s.charAt(0).toUpperCase()+s.slice(1)};
+
+function genAC(persona,goal){
+  return ['Given I am '+art(persona)+' '+persona+', when I '+goal+', it works and I see a clear confirmation',
+          'Missing or wrong input shows a message that says how to fix it',
+          'Works on desktop and mobile screen sizes'];
+}
+function P(dsl){
+  return dsl.split('\n').map(function(l){return l.trim()}).filter(Boolean).map(function(l){
+    var a=l.split('|');
+    var ac=a[5]?a[5].split(';').map(function(x){return x.trim()}).filter(Boolean):genAC(a[0],a[1]);
+    return {persona:a[0],goal:a[1],benefit:a[2],pri:a[3],pts:+a[4],ac:ac};
+  });
+}
+
+var DOMAINS={
+course:{label:'Course and certification',
+ kw:['course','certificat','training','learning','lms','exam','tutor','academy','e-learning','elearning','lesson','curriculum','quiz','class'],
+ epics:[
+ ['Discover and enroll',`
+Visitor|browse the course catalog by category, level and price|I can quickly find a course that fits my goal|M|5|Only published courses are listed;Category, level and price filters can be combined;An empty result shows a message with suggested courses
+Visitor|open a course page with syllabus, instructor, duration, reviews and certificate details|I can decide whether the course is worth my time|M|3|Page shows modules, total hours and the instructor bio;Certificate criteria are visible before purchase;Enroll button stays visible on mobile
+Visitor|search courses by keyword|I can reach a topic without browsing every category|S|3|Results appear as I type after 3 characters;Results sort by relevance, rating or price
+Visitor|create an account or sign in with email or Google|my progress and certificates are saved to me|M|5|Email is verified before first enrollment;Password reset link expires after 30 minutes;Signing in with Google creates the account if none exists
+Learner|pay for a course online and get a receipt|I can start learning immediately|M|8|Card and UPI payments are supported;Successful payment enrolls me within 1 minute;A failed payment shows the reason and lets me retry;Receipt is emailed
+Visitor|watch a free preview lesson|I can judge the teaching style before paying|C|2|Preview lessons play without login;Preview ends with a prompt to enroll`],
+ ['Learning experience',`
+Learner|watch video lessons that resume where I stopped|I can learn in short sessions|M|5|Playback position is saved every 10 seconds;Speed control from 0.75x to 2x;Captions can be switched on
+Learner|see my progress for every module and lesson|I know how close I am to the certificate|M|3|A lesson is marked complete at 90 percent watched;Course page shows percent complete;Modules unlock in the order the instructor sets
+Learner|download slides and practice files|I can study offline|S|2|Files are listed under each lesson;Download needs an active enrollment
+Learner|ask a doubt under a lesson and get an answer|I do not get stuck|S|5|Questions are tagged to the lesson;Instructor is notified of new questions;Learner is emailed when answered
+Learner|take notes and bookmark moments in a video|I can revise key points later|C|3|Notes are saved with the video timestamp;Clicking a note jumps to that moment
+Learner|use the course comfortably on my phone|I can learn while travelling|M|3|Layout works from 360px width;Video adapts to connection speed`],
+ ['Assessments',`
+Learner|take a short quiz at the end of each module|I can check what I understood|M|5|Quiz has multiple choice and true or false questions;Result and correct answers show after submission;Questions are shuffled on every attempt
+Learner|take a timed final exam|I can earn the certificate|M|8|Exam unlocks only after all modules are complete;Timer is visible and the exam submits itself at zero;Attempts are limited to 3 in 30 days;Pass mark is set per course
+Learner|review my answers after the exam|I understand my mistakes|S|3|Wrong answers show the correct option and an explanation;Review stays available for 30 days
+Learner|retake a failed exam after a waiting period|I can try again without buying the course twice|S|2|Next attempt date is shown after a fail;Retake uses a different question set`],
+ ['Certification',`
+Learner|receive a certificate automatically when I pass|I get proof without waiting for an admin|M|5|Certificate is issued only when completion and pass mark are met;Certificate carries a unique ID, name, course and date;An email with the certificate link arrives within 5 minutes
+Learner|download my certificate as a PDF|I can attach it to job applications|M|3|PDF uses the approved template;Name matches the profile name at the time of issue
+Employer|verify a certificate by its ID or QR code|I can trust the credential|M|5|Public page shows name, course, date and status;Revoked certificates show as invalid;No other personal data is exposed
+Learner|share my certificate to LinkedIn|my network can see my achievement|C|2|One click opens LinkedIn with details prefilled;Shared link opens the verification page
+Admin|set an expiry and renewal rule for a certificate|credentials stay current|C|5|Expiry period is set per course;Learner gets reminders 30 and 7 days before expiry`],
+ ['Instructor studio',`
+Instructor|create a course with modules, lessons and a syllabus|I can publish my teaching|M|8|Lessons can be reordered by drag and drop;Course stays in draft until submitted;Autosave runs while editing
+Instructor|upload videos and documents|learners have material to study|M|5|Common video and PDF formats are accepted;Upload shows progress and resumes after a drop;Maximum file size is shown before upload
+Instructor|build quizzes and an exam from a question bank|assessments match my content|S|5|Questions can be tagged by module;Exam picks random questions for each attempt
+Instructor|see learner progress and pending doubts|I can help those who are falling behind|S|3|Dashboard lists learners by progress;Unanswered doubts show first`],
+ ['Admin and operations',`
+Admin|review and publish courses|only quality content goes live|M|3|Submitted courses appear in a review queue;Reviewer can approve or return with comments
+Admin|manage users and roles|each person sees only what they need|M|5|Roles are learner, instructor and admin;Role changes are logged
+Admin|set prices and create discount coupons|I can run offers|S|5|Coupons have a code, value, expiry and usage limit;Price changes do not affect past purchases
+Admin|see reports on enrolments, completion and revenue|I can judge what is working|S|5|Reports filter by date and course;Data exports to CSV
+Admin|edit the certificate template|certificates carry our brand|S|3|Logo, signature and wording are editable;Preview shows before saving`],
+ ['Communication',`
+Learner|receive emails for sign up, payment and certificate|I always know what happened|M|3|Emails are sent within 5 minutes;Each email has a support contact
+Learner|get a reminder when I have not studied for a week|I stay on track|C|3|Reminder can be switched off in settings;Reminder links to the next lesson`],
+ ['Quality and compliance',`
+Visitor|see pages load in under 3 seconds|I do not leave before the page opens|S|3|Catalog and course pages load in 3 seconds on a 4G connection;Images are compressed
+Learner|use the site with a keyboard and screen reader|the course is open to everyone|S|3|Meets WCAG 2.1 AA for contrast and focus;Videos have captions
+Learner|know my payment and personal data are protected|I can trust the site|M|5|Card data is handled by the payment provider;Privacy consent is recorded at sign up;Data is deleted on request`]
+ ]},
+shop:{label:'Online store',
+ kw:['shop','store','ecommerce','e-commerce','product','cart','checkout','catalog','marketplace','sell'],
+ epics:[
+ ['Browse and choose',`
+Shopper|browse products by category and filter by price, size or colour|I find what I want fast|M|5
+Shopper|view photos, description, price and stock for a product|I can buy with confidence|M|3
+Shopper|search for a product by name|I skip the browsing|S|3`],
+ ['Cart and checkout',`
+Shopper|add items to a cart and change quantities|I can review before paying|M|3
+Shopper|check out as a guest or with an account|buying is quick|M|8
+Shopper|pay with card, UPI or cash on delivery|I choose how to pay|M|8
+Shopper|apply a coupon code|I get my discount|S|3`],
+ ['Orders and delivery',`
+Shopper|track the status of my order|I know when it arrives|M|5
+Shopper|request a return or refund|I can fix a wrong purchase|S|5
+Seller|see new orders and mark them packed or shipped|orders go out on time|M|5`],
+ ['Catalog management',`
+Seller|add and edit products with images, price and stock|the shop stays current|M|5
+Seller|get an alert when stock is low|I can restock before selling out|C|3`],
+ ['Trust and insight',`
+Shopper|read and write product reviews|I learn from other buyers|S|5
+Admin|see sales by day, product and channel|I know what sells|S|5`]]},
+hr:{label:'Hiring and onboarding',
+ kw:['hr','recruit','hiring','onboarding','employee','candidate','job','leave','resume','interview'],
+ epics:[
+ ['Recruiting',`
+HR manager|post a job opening with role, skills and location|the right candidates apply|M|3
+Candidate|apply with a resume and a short form|my profile reaches the team|M|5
+HR manager|shortlist or reject candidates with notes|decisions are recorded|M|5`],
+ ['Interviews',`
+HR manager|schedule interviews and send invites|everyone arrives on time|S|5
+Interviewer|submit a scorecard after an interview|feedback stays consistent|S|3`],
+ ['Onboarding',`
+New hire|complete joining forms and upload documents online|my first day is smooth|M|5
+New hire|see a checklist for my first 30 days|I know what to do next|M|3
+HR manager|assign tasks to IT, finance and managers for each new hire|nothing is missed|S|5`],
+ ['Employee records',`
+HR manager|keep an employee profile for every person|records live in one place|M|5
+Employee|apply for leave and see my balance|I can plan time off|S|5
+Manager|approve or reject leave requests|my team stays covered|S|3`],
+ ['Reports',`
+HR manager|see headcount, hiring pipeline and time to hire|I can plan ahead|C|5`]]},
+support:{label:'Customer support',
+ kw:['helpdesk','help desk','support','ticket','complaint','service desk','issue tracker'],
+ epics:[
+ ['Raise tickets',`
+Customer|raise a ticket with a description and attachments|my issue is on record|M|3
+Customer|track the status of my tickets|I know progress without calling|M|3
+Customer|get a confirmation email with a ticket number|I can quote it later|M|2`],
+ ['Triage and assign',`
+Agent|see new tickets sorted by priority|urgent issues come first|M|3
+Support lead|assign tickets to agents automatically by category|work is shared fairly|S|5`],
+ ['Resolve',`
+Agent|reply to customers and add internal notes|the team shares context|M|5
+Agent|use saved replies for common questions|I answer faster|S|2
+Agent|close a ticket with a resolution reason|we learn what goes wrong|M|2`],
+ ['Service levels',`
+Support lead|set response and resolution targets|customers get a clear promise|S|5
+Support lead|get an alert before a ticket breaches its target|I can step in|S|5`],
+ ['Knowledge and feedback',`
+Customer|search help articles before raising a ticket|I may fix it myself|S|5
+Agent|turn a resolved ticket into a help article|the next customer benefits|C|3
+Customer|rate the support I received|quality can improve|C|2
+Support lead|see ticket volume, response time and satisfaction|I can manage the team|S|5`]]},
+booking:{label:'Appointment booking',
+ kw:['booking','appointment','reservation','schedule','clinic','salon','slot','book'],
+ epics:[
+ ['Services and availability',`
+Provider|list my services with duration and price|customers know what to book|M|3
+Provider|set working hours and days off|nobody books when I am away|M|5`],
+ ['Booking',`
+Customer|pick a service and an available time slot|I book without calling|M|8
+Customer|get a confirmation by email or SMS|I know it is confirmed|M|3
+Customer|reschedule or cancel a booking|plans can change|M|5`],
+ ['Reminders and attendance',`
+Customer|receive a reminder before my appointment|I do not forget|S|3
+Provider|mark an appointment as attended or no-show|I can see patterns|C|2`],
+ ['Payments',`
+Customer|pay a deposit online|my slot is held|S|5`],
+ ['Provider view',`
+Provider|see my day's appointments in a calendar|I can prepare|M|3
+Admin|see bookings by service and by provider|I can plan capacity|C|5`]]},
+invoice:{label:'Invoicing',
+ kw:['invoice','billing','accounting','finance','expense','quotation','receipt'],
+ epics:[
+ ['Customers and items',`
+Owner|add customers with billing details|invoices go to the right place|M|3
+Owner|save products or services with prices and tax|I do not retype them|M|3`],
+ ['Create invoices',`
+Owner|create an invoice from a customer and a list of items|billing takes minutes|M|5
+Owner|send the invoice by email as a PDF|the customer receives it at once|M|3
+Owner|set up recurring invoices|regular clients are billed automatically|C|5`],
+ ['Get paid',`
+Customer|pay an invoice through a link|I can settle it instantly|S|8
+Owner|record a payment received outside the system|balances stay correct|M|3
+Owner|send automatic reminders for overdue invoices|I chase less|S|3`],
+ ['Reports',`
+Owner|see who owes me money and how late they are|I know whom to call|M|3
+Owner|see monthly income and a tax summary|filing is easier|S|5
+Accountant|export invoices to CSV|I can reconcile the books|C|2`]]},
+events:{label:'Event registration',
+ kw:['event','conference','webinar','registration','summit','meetup','workshop','seminar'],
+ epics:[
+ ['Event page',`
+Organizer|create an event page with date, venue and agenda|people know what is on|M|5
+Attendee|see the schedule and speakers|I can decide to come|M|3`],
+ ['Registration',`
+Attendee|register with my details and choose a ticket type|my seat is reserved|M|5
+Attendee|pay for my ticket online|registration is complete in one go|S|8
+Attendee|receive a ticket with a QR code|entry is quick|M|3`],
+ ['On the day',`
+Staff|scan QR codes to check people in|queues stay short|M|5
+Organizer|see live attendance|I can manage the venue|S|3`],
+ ['Communication',`
+Organizer|email all registrants with updates|everyone has the latest information|S|3
+Attendee|get a reminder one day before the event|I do not miss it|S|2`],
+ ['After the event',`
+Attendee|give feedback on the event|the next one improves|C|3
+Organizer|see registrations, attendance and revenue|I can report results|S|5`]]}
+};
+
+var ADDONS=[
+ {kw:['pay','upi','checkout','payment'],skip:'pay',s:'Customer|pay online by card or UPI|I can finish without visiting a counter|M|8|Card and UPI are accepted;Failed payments can be retried;A receipt is emailed'},
+ {kw:['chat','chatbot','whatsapp'],skip:'chat',s:'User|chat with support from any page|I get answers while I browse|S|5|Chat button is on every page;Conversation history is kept for 30 days;Chat hands over to email when no agent is online'},
+ {kw:['notification','sms','alert','reminder'],skip:'remind',s:'User|get email or SMS notifications for important events|I never miss an update|S|3|Each notification type can be switched on or off;Messages are sent within 5 minutes'},
+ {kw:['dashboard','analytics','report'],skip:'report',s:'Admin|see a dashboard of key numbers|I can track how it is going|S|5|Numbers can be filtered by date;Data exports to CSV'},
+ {kw:['hindi','multilingual','language','translate','regional'],skip:'language',s:'User|switch the site language|I can use it in the language I know best|S|5|Language choice is remembered;Labels and emails are translated'},
+ {kw:['review','rating','feedback','testimonial'],skip:'review',s:'User|rate and review what I used|others can decide with confidence|S|3|Only verified users can review;Admin can hide abusive reviews'},
+ {kw:['coupon','discount','offer','promo'],skip:'coupon',s:'Admin|create discount codes|I can run promotions|S|5|Codes have a value, expiry and usage limit;Codes apply at checkout'},
+ {kw:['calendar'],skip:'calendar',s:'User|add dates to my calendar|I can plan around them|C|2'},
+ {kw:['upload','document'],skip:'upload',s:'User|upload documents and files|I can share what is needed|S|3|Allowed file types and size are shown;Upload shows progress'},
+ {kw:['recommend','ai','personalised','personalized'],skip:'recommend',s:'User|get personalised recommendations|I find relevant things faster|C|5|Suggestions update with my activity;I can turn personalisation off'},
+ {kw:['otp','sso','google','login','sign in'],skip:'sign in',s:'User|log in with a one-time code or my Google account|I do not have to remember a password|S|3|Code expires after 10 minutes;Account is created on first login'}
+];
+
+
+var genMode='work';
+function genAC(persona,goal){
+  if(genMode==='personal')return ['Done when: '+goal,'It stays within my money and time','The people it affects know about it'];
+  return ['Given I am '+art(persona)+' '+persona+', when I '+goal+', it works and I see a clear confirmation',
+          'Missing or wrong input shows a message that says how to fix it',
+          'Works on desktop and mobile screen sizes'];
+}
+
+/* ---------- extra business functions ---------- */
+DOMAINS.food={label:'Restaurant and food ordering',kw:['restaurant','food','menu','cafe','kitchen','dine','takeaway','canteen','meal','tiffin'],epics:[
+['Menu and ordering',`
+Customer|browse the menu with photos, prices and dietary tags|I can pick what I like|M|3
+Customer|customise an item and add it to my order|I get it my way|S|3
+Customer|place a pickup, delivery or dine-in order|I do not have to queue|M|8
+Customer|pay online or choose to pay on arrival|I pay the way I prefer|M|5`],
+['Kitchen and delivery',`
+Kitchen staff|see new orders in a live queue|nothing is missed|M|5
+Kitchen staff|mark an order as preparing or ready|the customer knows when to collect|M|2
+Delivery partner|see assigned deliveries with address and route|I deliver on time|S|5
+Customer|track my order status|I know when it arrives|S|3`],
+['Restaurant management',`
+Owner|edit menu items, prices and availability|the menu is always correct|M|3
+Owner|see daily sales and popular dishes|I can plan stock|S|5
+Owner|set offers and combos|I can attract more orders|C|3`],
+['Feedback',`
+Customer|rate my meal and leave a comment|the restaurant improves|C|2`]]};
+DOMAINS.inventory={label:'Inventory and stock',kw:['inventory','stock','warehouse','sku','reorder','godown'],epics:[
+['Items',`
+Manager|add items with SKU, category, unit and price|every item is tracked|M|3
+Manager|import items from a spreadsheet|I do not retype hundreds of rows|S|5
+Staff|scan a barcode to find an item|lookup is instant|C|3`],
+['Stock movements',`
+Staff|record stock received against a purchase order|counts stay correct|M|5
+Staff|record stock issued or sold|nothing leaves unrecorded|M|5
+Manager|transfer stock between locations|each site has what it needs|S|5
+Staff|record damaged or lost stock with a reason|losses are visible|S|3`],
+['Reordering',`
+Manager|set a minimum level per item|I know when to reorder|M|3
+Manager|get an alert when stock falls below the minimum|I do not run out|M|3
+Manager|create a purchase order for a supplier|reordering is quick|S|5`],
+['Reports',`
+Manager|see current stock value and slow movers|I can free up cash|S|5
+Manager|see the full movement history of an item|I can trace a mismatch|S|3`]]};
+DOMAINS.crm={label:'Sales and CRM',kw:['crm','lead','sales','pipeline','deal','prospect'],epics:[
+['Leads',`
+Sales rep|add a lead manually or import a list|no prospect is lost|M|3
+Sales rep|capture leads from a web form|new enquiries arrive automatically|S|5
+Sales rep|see the history of calls and emails for a lead|I know the context before I call|S|5`],
+['Pipeline',`
+Sales rep|move deals across stages on a board|I see where each deal stands|M|5
+Sales rep|set the value and expected close date of a deal|forecasts are realistic|M|3
+Sales rep|schedule follow-up tasks and get reminders|nothing goes cold|M|3`],
+['Team',`
+Sales manager|assign leads to reps|work is spread fairly|S|3
+Sales manager|see pipeline value and win rate by rep|I can coach the team|S|5`],
+['Contacts',`
+Sales rep|keep contacts and companies in one place|I find anyone fast|M|3
+Sales rep|log notes after a meeting|the team shares knowledge|S|2`]]};
+DOMAINS.property={label:'Property listings',kw:['property','real estate','realty','rental','listing','tenant','landlord','flat','apartment','broker'],epics:[
+['Search',`
+Buyer|search properties by city, price, size and type|I see only what fits|M|5
+Buyer|view photos, floor plan and location on a map|I can judge without visiting|M|5
+Buyer|save favourites and compare them|I can shortlist|S|3`],
+['Enquiries',`
+Buyer|send an enquiry or request a visit|the agent can contact me|M|3
+Agent|get notified of new enquiries|I reply quickly|M|3
+Agent|schedule site visits|visits do not clash|S|5`],
+['Listings',`
+Owner|post a property with details and photos|buyers can find it|M|5
+Owner|mark a property as sold or rented|buyers do not waste time|S|2
+Admin|approve listings before they go live|listings are genuine|S|3`],
+['Trust',`
+Buyer|see verified badges on owners and listings|I avoid scams|C|3`]]};
+
+DOMAINS.invoice.kw=['invoice','billing','quotation','receipt','gst'];
+DOMAINS.course.kw=DOMAINS.course.kw.filter(function(w){return w!=='class'&&w!=='tutor'});
+DOMAINS.booking.kw=['booking','appointment','reservation','clinic','salon','slot','bookings','appointments'];
+DOMAINS.shop.kw=DOMAINS.shop.kw.filter(function(w){return w!=='marketplace'&&w!=='sell'});
+DOMAINS.events.kw=DOMAINS.events.kw.filter(function(w){return w!=='registration'}).concat(['registration page']);
+var COMMON=`
+User|sign up and log in|my information is saved to me|M|5
+Admin|manage users and roles|each person sees only what they need|M|5
+User|use it comfortably on my phone|I can work from anywhere|S|3
+User|know my data is safe|I can trust it|M|5`;
+var COMMON_LITE=`
+Owner|log in to manage the site|only I can change it|M|3
+Visitor|open the site quickly on my phone|I do not leave before it loads|M|3`;
+var GOODS='table chair sofa bed furniture shoe shoes cloth clothes shirt dress saree jewel jewellery jewelry watch bag bags book books toy toys soap candle candles cake bakery sweet sweets snack snacks chocolate coffee tea spice spices grocery vegetable vegetables fruit fruits milk flower flowers plant plants phone phones mobile laptop laptops electronics gadget gadgets cosmetic cosmetics perfume tool tools paint tile tiles bike cycle tyre helmet medicine pharmacy stationery gift gifts handicraft handicrafts mattress curtain curtains lamp lamps'.split(' ');
+var ARCH=[
+ {id:'farm',label:'Farm management',test:/\b(farm|poultry|dairy|crop|livestock|agri|agriculture|fish|cattle|orchard|greenhouse|nursery|hatchery|goat|sheep)\w*\b/,epics:function(ent,one){return [
+['Daily records',`
+Farmer|record daily activity and output for the ${one}|I keep an accurate history|M|5
+Farmer|record feed, medicine and other costs|I know my true cost|M|5
+Worker|enter records from a phone in the field|data is captured on the spot|M|3`],
+['Health and schedules',`
+Farmer|set vaccination or treatment schedules and get reminders|nothing is missed|M|5
+Farmer|log illness, treatment and losses|I can spot patterns early|S|3
+Vet|see the health history and give advice|treatment is based on facts|C|3`],
+['Stock and sales',`
+Farmer|record sales with customer and payment status|I know who owes me|M|5
+Farmer|see stock of feed and supplies with low-stock alerts|I never run out|S|5`],
+['Reports',`
+Farmer|see cost, income and profit by batch or month|I know what pays|M|5
+Manager|record farm visit notes and photos|follow-ups are clear|S|5
+Manager|export reports to Excel or PDF|I can share them with partners|S|3`],
+['Team',`
+Manager|assign daily tasks to workers|work is shared clearly|S|3
+Worker|mark my tasks done|the manager sees progress|C|2`]]}},
+ {id:'finance',label:'Money and expense tracking',test:/\b(expense|budget|wallet|loan|savings|emi|accounting|payroll|tax|finance|bank|insurance|investment|money)\w*\b/,epics:function(ent,one){return [
+['Money in and out',`
+User|record income and expenses with category, date and note|I know where my money goes|M|3
+User|set up recurring bills and income|I do not enter them every month|S|3
+User|attach a receipt photo to an entry|I can prove a payment later|C|3`],
+['Budgets',`
+User|set a monthly budget per category|I can control spending|M|3
+User|get an alert when I reach 80 percent of a budget|I can slow down in time|S|3`],
+['Insight',`
+User|see charts of spending by category and month|I understand my habits|M|5
+User|compare this month with last month|I see if I am improving|S|3
+User|export statements to Excel or PDF|I can share them with an accountant|S|3`],
+['Accounts and reminders',`
+User|keep several accounts and wallets and move money between them|every balance is correct|S|5
+User|get reminders for bills that are due|I never pay late|M|3`]]}},
+ {id:'delivery',label:'Delivery and logistics',test:/\b(delivery|courier|logistics|fleet|shipment|dispatch|transport|ride|cab|taxi|parcel)\w*\b/,epics:function(ent,one){return [
+['Requests',`
+Customer|request a pickup or delivery with address and time slot|I can send things without calling|M|5
+Customer|get a price estimate before confirming|there are no surprises|S|3
+Customer|pay online or on delivery|I pay the way I prefer|M|5`],
+['Dispatch',`
+Dispatcher|see all requests on a board and assign a rider|jobs do not wait|M|5
+Dispatcher|reassign a job when a rider is unavailable|deliveries still happen|S|3`],
+['Rider app',`
+Rider|see my assigned jobs with address and route|I deliver on time|M|5
+Rider|mark pickup and delivery with a photo or OTP proof|disputes are avoided|M|5`],
+['Tracking',`
+Customer|track my parcel status live|I know when it arrives|M|5
+Customer|get SMS or email updates at each step|I do not have to keep checking|S|3`],
+['Reports',`
+Admin|see deliveries, delays and rider performance|I can improve the service|S|5`]]}},
+ {id:'community',label:'Community and social',test:/\b(community|forum|social|network|club|discussion|messenger|society|neighbou?r\w*|alumni)\b/,epics:function(ent,one){return [
+['Membership',`
+Member|create a profile and join groups that match my interests|I meet the right people|M|5
+Member|find people and groups by interest or place|I do not have to wait to be invited|S|3`],
+['Conversation',`
+Member|post, comment and react|I can take part|M|5
+Member|share photos and links|I can show what I mean|S|3
+Member|search past discussions|I do not ask what was already answered|S|3`],
+['Notifications',`
+Member|get notified of replies and mentions|I come back at the right time|M|3
+Member|choose which notifications I get|I am not overloaded|C|2`],
+['Moderation',`
+Member|report a post that breaks the rules|the community stays safe|M|3
+Moderator|review reported posts and act on them|bad content is removed fast|M|5
+Admin|mute or remove a member|repeat offenders are stopped|S|3
+Admin|see activity and growth of the community|I can see what is working|S|5`],
+['Events',`
+Member|see upcoming events and say I am going|I can plan to attend|C|5`]]}},
+ {id:'market',label:'Marketplace and listings',test:/\b(marketplace|directory|classifieds?|aggregator|listings?|near me|nearby)\b/,epics:function(ent,one){return [
+['Listings',`
+Seller|post a listing for ${ent} with photos, price and location|buyers can find it|M|5
+Seller|edit or remove my listing|it stays accurate|M|2
+Seller|promote my listing to the top|I get seen sooner|C|5`],
+['Discovery',`
+Buyer|search ${ent} by keyword, location and price|I see only what is relevant|M|5
+Buyer|open a listing with details and the seller profile|I can judge it|M|3
+Buyer|save a search and get alerts for new matches|I do not check every day|S|5
+Buyer|compare listings side by side|I can choose|C|3`],
+['Contact',`
+Buyer|message the seller inside the app|I do not share my number first|M|5
+Seller|get notified of enquiries|I reply fast|M|3
+Buyer|make an offer|I can negotiate|S|3`],
+['Trust and safety',`
+Admin|review and approve listings|the marketplace stays genuine|S|5
+Buyer|report a suspicious listing|scams are caught|S|3
+Buyer|rate a seller after a deal|others can trust good sellers|S|3`]]}},
+ {id:'content',label:'Business website',test:/\b(blog|portfolio|landing|brochure|magazine|cms|personal site|company site|business website|website for)\b/,lite:true,epics:function(ent,one){return [
+['Pages',`
+Visitor|understand what the business offers from a clear home page|I know in seconds if it is for me|M|3
+Visitor|see services, prices or products|I can compare before I contact|M|3
+Visitor|read about the team and the story|I trust the business|S|2
+Visitor|view photos, videos or case studies|I see proof of the work|S|3`],
+['Enquiries',`
+Visitor|send an enquiry through a contact form|I can get in touch without calling|M|3
+Owner|get an email for every enquiry|no lead is missed|M|2
+Visitor|start a WhatsApp chat in one tap|I get a quick answer|C|2`],
+['Content',`
+Owner|edit pages and publish blog posts without a developer|the site stays fresh|M|5
+Owner|add customer testimonials|new visitors trust us|S|2
+Visitor|subscribe to a newsletter|I hear about new offers|C|3`],
+['Findability and insight',`
+Visitor|find the site on Google with proper titles and descriptions|more people reach us|S|3
+Owner|see visits and where enquiries come from|I know what brings business|S|3`]]}},
+ {id:'service',label:'Service booking',test:/\b(salon|spa|barber|repair|cleaning|plumber|electrician|carpenter|laundry|photograph\w*|yoga|massage|tutor|tuition|driving|mechanic|garage|car wash|pest|clinic|dentist|vet|therapist|physio|catering|decorator|coaching|classes|class)\b/,epics:function(ent,one){return [
+['Services and availability',`
+Provider|list my ${one} services with duration and price|customers know what to book|M|3
+Provider|set working hours and days off|nobody books when I am away|M|5`],
+['Booking',`
+Customer|pick a ${one} service and an available time slot|I book without calling|M|8
+Customer|get a confirmation by email or SMS|I know it is confirmed|M|3
+Customer|reschedule or cancel a booking|plans can change|M|5`],
+['Reminders and payments',`
+Customer|receive a reminder before my appointment|I do not forget|S|3
+Customer|pay a deposit online|my slot is held|S|5
+Provider|mark an appointment as attended or no-show|I can see patterns|C|2`],
+['Provider view',`
+Provider|see my day's appointments in a calendar|I can prepare|M|3
+Customer|rate the service I received|quality improves|S|3
+Admin|see bookings by service and by provider|I can plan capacity|C|5`]]}},
+ {id:'retail',label:'Online store',test:null,epics:function(ent,one){return [
+['Browse and choose',`
+Shopper|browse ${ent} by category and filter by price, size or colour|I find what I want fast|M|5
+Shopper|open an item page with photos, description, price and stock|I can buy with confidence|M|3
+Shopper|search for ${ent} by name or keyword|I skip the browsing|S|3
+Shopper|save ${ent} to a wishlist|I can come back to them later|C|2`],
+['Cart and checkout',`
+Shopper|add items to a cart and change quantities|I can review before paying|M|3
+Shopper|check out as a guest or with an account|buying is quick|M|8
+Shopper|pay with card, UPI or cash on delivery|I choose how to pay|M|8
+Shopper|apply a coupon code|I get my discount|S|3`],
+['Orders and delivery',`
+Shopper|track the status of my order|I know when it arrives|M|5
+Shopper|request a return or refund|I can fix a wrong purchase|S|5
+Seller|see new orders and mark them packed or shipped|orders go out on time|M|5
+Shopper|get SMS or email updates on my order|I do not have to keep checking|S|3`],
+['Catalogue',`
+Seller|add and edit ${ent} with images, price and stock|the shop stays current|M|5
+Seller|get an alert when stock is low|I can restock in time|S|3
+Seller|set offers and discounts on ${ent}|I can attract more orders|C|3`],
+['Trust and insight',`
+Shopper|read and write reviews of ${ent}|I learn from other buyers|S|5
+Admin|see sales by day, item and channel|I know what sells|S|5`]]}},
+ {id:'make',label:'Making a physical product',test:null,nocommon:true,epics:function(ent,one,l){
+  l=l||'';
+  var kind=/\b(chair|chairs|table|tables|sofa|bed|furniture|shelf|shelves|bookshelf|bookcase|almirah|cupboard|desk|cot|bench|stool|wardrobe|door|gate|fence|cabinet|rack|swing)\b/.test(l)?'wood':
+    /\b(cake|bread|bakery|biscuit|cookie|snack|pickle|sweet|sweets|chocolate|meal|dish|recipe|food|tiffin|juice|jam)\b/.test(l)?'food':
+    /\b(shirt|dress|saree|kurta|uniform|garment|cloth|clothes|bag|curtain|blanket|sweater|jacket|jeans)\b/.test(l)?'cloth':
+    /\b(house|home|room|building|office|wall|boundary|shed|farmhouse|bridge|road|well|toilet|kitchen|floor|roof|bathroom|garage)\b/.test(l)?'build':'generic';
+  var seat=/\b(chair|chairs|sofa|bed|bench|stool|seat|cot|swing)\b/.test(l);
+  if(kind==='wood')return [
+['Design',`
+Designer|sketch the ${one} with exact dimensions and a cut list|everyone builds from the same plan|M|3
+Designer|choose the style, wood type, finish and colour|the result matches what the customer wants|M|2
+Owner|approve the final design and the budget|there are no surprises later|M|2`],
+['Buy materials',`
+Buyer|buy timber logs or boards, screws, glue and hardware as per the cut list|nothing is missing when work starts|M|5
+Buyer|check wood quality, moisture and straightness before accepting|weak or bent wood is not used|M|3
+Storekeeper|record materials received, used and left over|I know the true cost|S|2`],
+['Cut and fit',`
+Carpenter|cut the wood to size from the cut list|every part fits the plan|M|5
+Carpenter|shape, drill and sand the parts|joints are clean and safe|M|5
+Carpenter|dry-fit the joints and check the ${one} stands true|mistakes are fixed before gluing|M|3
+Carpenter|glue, screw and clamp the frame|the ${one} is strong|M|5`],
+['Test',`
+Tester|test the ${one} for load, balance and wobble|it is safe to use|M|3
+Tester|check joints, corners and sharp edges|nobody gets hurt|M|2
+Carpenter|fix the problems found in testing|the ${one} passes before painting|M|3`],
+['Paint and finish',`
+Painter|sand the surface smooth and clean off the dust|paint sticks evenly|M|3
+Painter|apply primer, paint or polish and let it cure|the ${one} looks good and lasts|M|5
+Painter|touch up marks and check the final look|the customer sees a clean finish|S|2`]
+ ].concat(seat?[['Cushion and upholstery',`
+Upholsterer|cut foam and fabric to the seat and back size|the cushion fits properly|S|3
+Upholsterer|stitch the cover and fix the cushion to the ${one}|it is comfortable to sit on|S|5
+Customer|choose the cushion fabric and colour|it matches the room|C|2`]]:[]).concat([['Pack and deliver',`
+Packer|wrap and pack the ${one} with protective cover|it arrives without scratches|S|2
+Owner|deliver the ${one} and get the customer's sign-off|the job is closed|M|3
+Owner|compare the actual cost with the budget|I know my profit|S|3`]]);
+  if(kind==='food')return [
+['Recipe and plan',`
+Cook|finalise the recipe and quantities for this batch|the taste is the same every time|M|3
+Owner|decide the size, price and delivery date|the customer knows what to expect|M|2`],
+['Ingredients',`
+Buyer|buy fresh ingredients as per the recipe|nothing is missing on the day|M|3
+Buyer|check expiry and quality before accepting|the food is safe|M|2`],
+['Prepare and cook',`
+Cook|prepare the base, dough or batter as per the recipe|the texture is right|M|5
+Cook|bake or cook at the right temperature and time|it is neither raw nor burnt|M|5
+Cook|cool it properly before the next step|the shape and taste hold|S|2`],
+['Taste and quality',`
+Tester|taste and check texture, colour and smell|only good food goes out|M|3
+Cook|note changes to improve the next batch|the recipe gets better|S|2`],
+['Decorate and pack',`
+Decorator|decorate as the customer asked|it looks special|S|5
+Packer|pack hygienically with a label and date|it stays fresh and trusted|M|3`],
+['Orders and delivery',`
+Owner|take the order with date, quantity and message|nothing is forgotten|M|3
+Owner|deliver on time and collect payment|the customer is happy and I am paid|M|3`]];
+  if(kind==='cloth')return [
+['Design and pattern',`
+Designer|choose the style and take the customer's measurements|the fit is right|M|3
+Cutter|make the pattern and mark the fabric|there is little waste|M|3`],
+['Fabric and trims',`
+Buyer|buy fabric, lining, thread, buttons and zips|everything matches|M|3
+Buyer|check colour, strength and shrinkage of the fabric|it does not fade or shrink|S|2`],
+['Cut and stitch',`
+Cutter|cut the fabric by the pattern|all pieces are accurate|M|3
+Tailor|stitch the pieces together|the ${one} takes shape|M|5
+Tailor|add hems, buttons, zips and finishing|it looks neat|M|3`],
+['Fitting',`
+Customer|try on the ${one} and give feedback|I get a good fit|M|2
+Tailor|make alterations after the fitting|the fit is perfect|M|3`],
+['Finish and deliver',`
+Tailor|iron, fold and pack the ${one}|it is delivered neat|S|2
+Owner|deliver and collect the balance payment|the order is closed|M|3`]];
+  if(kind==='build')return [
+['Plan and approvals',`
+Owner|finalise the plan, size and budget|the work has a clear target|M|3
+Engineer|prepare drawings with dimensions|the builders know what to build|M|5
+Owner|get the permissions and approvals needed|the work is legal|M|3`],
+['Site and foundation',`
+Contractor|clear and level the site|work can start safely|M|3
+Mason|dig and lay the foundation|the structure stands strong|M|8
+Engineer|inspect the foundation before concrete is poured|hidden errors are caught|M|2`],
+['Structure',`
+Mason|build the walls and columns|the shape is ready|M|8
+Mason|cast the roof slab or fix the roof|the building is covered|M|8
+Carpenter|fit doors and windows|it can be locked and ventilated|S|5`],
+['Services',`
+Electrician|lay wiring and fix switch points|power is safe and ready|M|5
+Plumber|lay water supply and drain pipes|water works without leaks|M|5`],
+['Finishing',`
+Plasterer|plaster and cure the walls|the surface is smooth|S|5
+Tiler|lay flooring and tiles|the floor is level|S|5
+Painter|paint inside and outside|it looks complete|S|5`],
+['Inspection and handover',`
+Engineer|do a final inspection with a checklist|quality is confirmed|M|3
+Owner|list defects and get them fixed|the work is complete|M|3
+Owner|compare total cost with the budget and take possession|the project is closed|M|3`]];
+  return [
+['Design and plan',`
+Maker|sketch the ${one} with size and requirements|everyone works from one plan|M|3
+Owner|approve the design and the budget|there are no surprises later|M|2
+Maker|list the materials and tools needed|nothing is missing when work starts|M|2`],
+['Buy materials',`
+Buyer|buy the materials from the list at the best price|the cost stays in budget|M|3
+Buyer|check quality before accepting|poor material is not used|M|2
+Storekeeper|record stock used and left over|I know the true cost|S|2`],
+['Make',`
+Maker|make the main parts of the ${one}|the work progresses|M|5
+Maker|assemble the parts together|the ${one} takes shape|M|5`],
+['Test and fix',`
+Tester|test the ${one} against the requirements|it works as expected|M|3
+Maker|fix the problems found in testing|it passes the check|M|3`],
+['Finish',`
+Maker|finish the surface and details|it looks good and lasts|S|3
+Maker|add the final touches the customer asked for|the customer is happy|C|2`],
+['Pack and deliver',`
+Packer|pack the ${one} safely|it arrives in good condition|S|2
+Owner|hand over and get sign-off|the job is closed|M|2
+Owner|compare actual cost with the budget|I know my profit|S|3`]];
+ }},
+ {id:'tracker',label:'Records and workflow',test:null,epics:function(ent,one){return [
+['Records',`
+Staff|add a new ${one} record with the required details|nothing is kept on paper|M|5
+Staff|edit a record and see who changed it|history is trustworthy|M|3
+Staff|search and filter ${ent} by any field|I find the right one fast|M|3
+Staff|attach documents or photos to a record|everything is in one place|S|3
+Staff|import ${ent} from a spreadsheet|I do not retype old data|S|5`],
+['Workflow',`
+Staff|set a status and move a record through its stages|everyone sees where it stands|M|5
+Staff|assign a record to a person with a due date|ownership is clear|M|3
+Staff|get reminders when a due date is close|nothing slips|S|3`],
+['Collaboration',`
+Staff|add comments and notes on a record|the team shares context|S|3
+Manager|approve or reject a record|control stays with the right person|S|3`],
+['Reporting',`
+Manager|see counts by status on a dashboard|I can judge progress|M|5
+Manager|export ${ent} to Excel or PDF|I can share them|S|3
+Admin|see an activity log|I can trace any change|C|3`]]}}
+];
+/* ---------- life, career and project plans ---------- */
+var LIFE=[
+{id:'marriage',label:'Getting married',mode:'personal',test:/\b(get(ting)? married|marriage|wedding|engagement|engaged|marry|shaadi|vivah|sangeet|honeymoon)\b/,epics:function(){return [
+['Talk and decide',`
+Me|talk with my partner about what we both want|we start on the same page|M|3|We have both shared what we want;Anything we disagree on is written down
+Partner|tell what is very important to me|nothing is a surprise later|M|2
+Me|fix one total budget and who pays what|money does not cause fights|M|3|One total budget is fixed;Each side's share is written down
+Parents|hear about our plan from us first|everyone feels respected|M|2`],
+['Families',`
+Parents|meet and talk about customs and dates|both families are happy|M|3
+Me|choose the rituals we want to keep|the wedding feels like ours|S|3
+Partner|fix a date that works for both families|the main people can come|M|3
+Me|share the work between both families|nobody feels left out|S|2`],
+['Date, place and money',`
+Planner|decide how many guests will come|we can plan the cost|M|3
+Planner|visit and compare halls for price, size and place|we choose the best one|M|5
+Me|book the hall in writing and pay the advance|the date is safe|M|3|The booking paper is signed;The advance receipt is saved;The cancel rules are clear
+Planner|divide the money for hall, food, clothes, photos and travel|we do not overspend|M|3`],
+['Hire people and get ready',`
+Planner|book the cook, decorator, photographer and music|the day goes smoothly|M|5
+Planner|taste the food and fix the menu|guests enjoy the food|S|2
+Me|buy clothes and jewellery|we look nice|S|5
+Partner|book makeup or other grooming|we are ready on time|C|2`],
+['Guests and cards',`
+Me|make the guest list with both families|nobody is forgotten|M|3
+Me|send the invites one month before|guests can plan|M|3
+Guests|say if they will come|we know the food count|S|3
+Planner|arrange rooms and cabs for guests from far|they feel comfortable|C|3`],
+['Papers and rules',`
+Me|find out which papers are needed to register the marriage|the marriage is legal|M|5|We know the list of papers;The registration date is booked
+Partner|collect ID proof, address proof and photos|the office work is quick|M|2
+Me|decide if we want to change names or address|our papers match|C|3`],
+['Life together',`
+Partner|decide where we will live and set up the home|we start life in comfort|S|5
+Me|talk about savings, insurance and our dreams|we plan the future together|S|3`],
+['Wedding day and after',`
+Planner|check the full list two weeks before|nothing is missed|M|3
+Planner|give every helper one clear job|I can enjoy the day|S|3
+Me|plan the honeymoon and ask for leave|we can rest after the wedding|C|5
+Me|thank everyone and pay all bills|we end on a good note|S|2`]]}},
+{id:'baby',label:'Having a baby',mode:'personal',test:/\b(have a baby|baby|pregnan\w*|newborn|adopt\w*|expecting a child|parenthood|become a (father|mother|dad|mom|parent))\b/,epics:function(){return [
+['Health and doctor',`
+Me|see a doctor and ask what to do|we start healthy|M|3
+Partner|come to the visits and learn|we share the work|S|2
+Doctor|tell us about food, tests and warning signs|we know when to call for help|M|2`],
+['Money and leave',`
+Me|check what my health insurance covers|there are no surprise bills|M|3
+Me|find out the leave rules at work|time off is planned early|M|3
+Me|make a monthly budget for the baby|we feel safe about money|S|3`],
+['Home and things',`
+Partner|make a safe place for the baby to sleep|the baby is comfortable|M|5
+Me|buy or borrow the main things from a list|nothing important is missing|M|5
+Family|give used things and help|we save money|C|2`],
+['Learn and get help',`
+Me|join a baby care class|I feel ready|S|3
+Parents|plan who will help after the birth|we are not alone|M|3
+Me|choose a baby doctor|someone trusted is ready|S|2`],
+['Papers',`
+Me|pack the hospital bag and papers|the big day is easy|M|3
+Me|get the birth certificate and add the baby to the insurance|papers and cover are on time|M|3`]]}},
+{id:'home',label:'Buying or moving home',mode:'personal',test:/\b(buy(ing)? (a |my |our )?(first |new )?(house|home|flat|apartment|plot|land|villa)|home loan|house hunting|relocat\w*|move (to|into|out)|moving (to|house)|shift(ing)? (to|house|home)|renovat\w*)\b/,epics:function(){return [
+['Know what I need',`
+Me|list what I must have and what I do not want|I search with a clear aim|M|2
+Me|pick areas by travel time, school, safety and price|I only see places that fit|M|3
+Partner|say what matters to the family|the home suits everyone|S|2`],
+['Money and loan',`
+Me|find out how much I can pay as down payment|I do not stretch too much|M|3
+Me|ask two or three banks about a loan|I get the best offer|M|5
+Me|collect salary, tax and ID papers|the loan is not delayed|M|3`],
+['Search and choose',`
+Me|make a short list and visit each home with a checklist|I can compare fairly|M|5
+Agent|show homes that fit my list|I do not waste time|S|3
+Me|compare the best three on price, size and running cost|I choose with confidence|M|3`],
+['Legal checks and buying',`
+Lawyer|check the ownership papers and dues|there are no hidden problems|M|5|The ownership is clear;No dues are pending;The approvals are in order
+Me|bargain on the price and sign the agreement|the terms are fair|M|3
+Me|pay the stamp duty and register the home|I am the legal owner|M|5`],
+['Move and settle',`
+Me|book packers and pack with labels|the move is easy|S|5
+Me|move electricity, water, internet and gas to the new home|the home works from day one|S|3
+Me|change my address in bank, ID and office records|nothing goes to the old address|S|3`]]}},
+{id:'trip',label:'Planning a trip',mode:'personal',test:/\b(trip|vacation|holiday|travel(ling|ing)?|tour|backpack\w*|road trip|pilgrimage|itinerary|getaway)\b/,epics:function(){return [
+['Fix the basics',`
+Me|decide the dates, the place and who is going|everyone can plan|M|3
+Family|say what they want to see and do|the trip suits all|S|2
+Me|set a total budget and a daily limit|we do not overspend|M|3`],
+['Tickets and papers',`
+Me|book the tickets early|we pay less|M|3
+Me|check passport and ID for everyone|nobody is stopped|M|3|Every ID is valid;The visa is confirmed if needed
+Me|buy travel and health insurance|we are safe if plans change|S|2`],
+['Stay and travel',`
+Me|compare and book hotels near the places we want to see|we save travel time|M|5
+Me|plan local cabs and airport pickup|we are not stuck|S|3`],
+['Day plan',`
+Me|list the must-see places and group them by area|each day is easy to do|M|3
+Me|book tickets for famous places early|we skip long lines|S|3
+Me|keep one day free to rest|we do not get tired|C|1`],
+['Pack and get ready',`
+Me|make a packing list with clothes, medicines and chargers|nothing is forgotten|M|2
+Me|keep some cash, cards and a working phone plan|we can pay and call|M|2
+Me|tell family and office and lock the house|I can relax|S|2`],
+['On the trip',`
+Me|note the daily spending|we stay in budget|S|2
+Family|share photos in one place|we enjoy them later|C|2`]]}},
+{id:'health',label:'Health and fitness goal',mode:'personal',test:/\b(lose (\d+\s*)?(kg|kgs|pounds|lbs|weight)|weight loss|get fit|fitness goal|run a (marathon|half marathon|10k|5k)|marathon|quit smoking|build muscle|sleep better|diet plan|stay healthy|healthy lifestyle)\b/,epics:function(){return [
+['Set a clear goal',`
+Me|write my goal, the date and why it matters|I stay motivated|M|2
+Me|note my weight, waist and how I feel today|I can see the change|M|2
+Doctor|check that my goal is safe|I do not harm my health|M|2`],
+['Food',`
+Me|plan simple meals for the week and buy for them|healthy food is easy|M|3
+Me|write down what I eat for two weeks|I see what to change|S|3
+Me|plan for parties, travel and cravings|one bad day does not stop me|C|2`],
+['Move',`
+Me|pick activities I like and fix three days a week|exercise becomes a habit|M|3
+Coach|give a simple plan that grows slowly|I do not get hurt|S|3
+Me|keep a short home workout for busy days|I never skip fully|C|2`],
+['Sleep and habits',`
+Me|sleep at the same time and drink enough water|my body rests well|S|2
+Buddy|ask me every week how it is going|I stay on track|S|1
+Me|remove the one thing that breaks my routine|I can continue|S|2`],
+['Check and improve',`
+Me|check my progress once a week|I see real change|M|1
+Me|change the plan if nothing moves for two weeks|I do not give up|S|2
+Me|reward myself for each small win|I enjoy the journey|C|1`]]}},
+{id:'learn',label:'Learning or exam goal',mode:'personal',test:/\b(learn(ing)? (to|how|a|an|the)\b|study (for|abroad)|prepare for|preparing for|crack (the )?(exam|test)|exam|ielts|toefl|gre|gmat|upsc|neet|jee|cat exam|get certified|masters|higher studies|take (a )?course)\b/,epics:function(){return [
+['Goal and plan',`
+Me|write what I want to achieve and by when|my effort has a target|M|2
+Me|find the syllabus, exam pattern and pass marks|I know what to study|M|3
+Me|make a weekly plan, going back from the exam date|the work fits my life|M|3`],
+['Books and help',`
+Me|pick one main book or course and one practice source|I do not collect too many things|M|3
+Mentor|tell me what to study first and what to skip|I save time|S|2
+Me|keep a quiet place and fixed study hours|I can focus|S|2`],
+['Daily study',`
+Me|study at a fixed time every day and note the hours|the habit stays|M|3
+Me|revise old topics every weekend|I do not forget|M|2
+Buddy|study with me or check my progress|I stay motivated|C|2`],
+['Practice and feedback',`
+Me|take a mock test every two weeks|I know where I stand|M|3
+Me|list weak topics after each test and work on them|my score goes up|M|3
+Mentor|check my answers and give feedback|I fix mistakes early|S|3`],
+['Exam day',`
+Me|register for the exam and pay the fee on time|I do not lose my seat|M|2
+Me|check the place, ID and travel time a week before|nothing goes wrong on the day|M|2
+Me|sleep well the night before|I do my best|S|1`]]}},
+{id:'career',label:'Career move',mode:'personal',test:/\b(get (a )?(new )?job|job search|find a job|change (my )?(job|career)|switch(ing)? (my )?(job|career|careers)|career (change|switch|growth|move)|get promoted|get a promotion|my promotion|interview prep\w*|crack (an? )?interview|become (a|an) (engineer|doctor|lawyer|teacher|developer|programmer|designer|analyst|scientist|manager|pilot|chef|nurse|architect|accountant|entrepreneur|founder|freelancer|writer|artist|musician)|resign\w*|notice period|work abroad|new role)\b/,epics:function(){return [
+['Know what I want',`
+Me|decide which jobs I want and why|my search has a focus|M|2
+Me|list my strengths, gaps and the pay I need|I know what to offer and what to learn|M|3
+Mentor|give me honest advice on my plan|I avoid blind spots|S|2`],
+['Resume and profile',`
+Me|update my resume with results and numbers|employers see my value|M|3|The resume is two pages or less;Each job shows one result with a number
+Me|update my LinkedIn profile and photo|recruiters can find me|M|2
+Me|collect samples of my work|I can show my skills|S|5`],
+['Apply and meet people',`
+Me|apply to a fixed number of jobs each week|I keep moving|M|3
+Referrer|refer me or introduce me to a hiring manager|my application stands out|S|2
+Recruiter|understand my profile and share good openings|I hear about the right jobs|S|2
+Me|note every application and follow up|nothing is missed|M|2`],
+['Interviews',`
+Me|prepare answers for common questions using real examples|I speak with confidence|M|3
+Me|practise mock interviews with a friend|I improve before the real ones|S|3
+Me|read about each company before the interview|I ask good questions|S|2`],
+['Offer and move',`
+Me|compare offers on pay, growth, team and place|I choose what is best|M|3
+Me|ask for the offer in writing|the terms are clear|M|3
+Manager|agree my last date and handover|I leave on good terms|M|3
+Me|plan my first 90 days in the new job|I start strong|C|3`]]}},
+{id:'venture',label:'Starting a business',mode:'personal',test:/\b(start(ing)? (my |a |an |our )?(own |small |new )?(business|startup|company|restaurant|cafe|shop|store|farm|firm|clinic|agency|brand|channel|bakery|gym|salon|boutique)|launch (my|a|our) (own )?(business|startup|brand|company)|open (a|my|our) (shop|store|restaurant|cafe|clinic|office|bakery|gym|salon)|side hustle|become an entrepreneur|new venture)\b/,epics:function(){return [
+['Check the idea',`
+Founder|say who my customer is and what problem I solve|my idea is clear|M|3
+Customer|tell me what they would pay for|I make what people want|M|3
+Founder|look at three similar businesses and see what I can do better|I stand out|S|3
+Founder|try a small test sale first|I take less risk|S|3`],
+['Plan and money',`
+Founder|list the set-up costs and the monthly costs|I know how much money I need|M|3
+Founder|fix my price and my profit on each sale|the business can survive|M|3
+Founder|decide how to arrange the money: savings, partner or loan|the money is ready before I start|M|5
+Accountant|guide me on tax and books|I stay legal and neat|S|3`],
+['Papers and set-up',`
+Founder|register the business and get the licences|I can work legally|M|5|The registration is done;The licences needed are listed and applied for
+Founder|open a separate business bank account|business and personal money stay apart|M|2
+Supplier|give prices and delivery terms|I buy at a fair cost|S|3`],
+['Make the offer',`
+Founder|get the product or service ready to a good standard|customers are happy|M|8
+Founder|set up the shop, place or online page|customers can find me|M|5
+Founder|choose a name, logo and simple look|people remember me|S|3`],
+['First customers',`
+Founder|get my first ten customers from people I know|I get early feedback|M|3
+Customer|give honest feedback|I improve fast|M|2
+Founder|promote on one or two channels|more people know about me|S|3
+Founder|note sales, costs and profit every week|I know if it is working|M|3`],
+['Run and grow',`
+Founder|set daily routines and a checklist|work runs smoothly|S|3
+Founder|hire help when I am too busy|I can grow|C|5
+Investor|see my numbers and plan|I can raise money later|C|3`]]}},
+{id:'money',label:'Savings and money goal',mode:'personal',test:/\b(save (money|for|up)|savings goal|pay off|clear (my )?(debt|loan)|become debt.?free|emergency fund|retire(ment)?|financial (freedom|goal|plan)|build wealth|invest(ing)? (for|in)|budget plan)\b/,epics:function(){return [
+['Know my numbers',`
+Me|write my income, fixed costs and loans|I see where I stand|M|2
+Me|note all spending for one month|I find the leaks|M|3
+Me|fix a target amount and a date|my goal is clear|M|2`],
+['Make room',`
+Me|cut the three biggest costs I can avoid|I free money every month|M|3
+Me|earn more with overtime, a skill or a side job|I reach the goal sooner|C|5
+Partner|agree to the plan with me|we move together|S|2`],
+['Save on autopilot',`
+Me|set an automatic transfer to savings on salary day|saving needs no effort|M|2
+Me|keep the money in a safe account or fund|it grows while it waits|S|3
+Me|set auto-pay for loans and bills|I never pay late fees|S|2`],
+['Stay safe',`
+Me|build an emergency fund for a few months of costs|a shock does not ruin my plan|M|3
+Me|check my life, health and vehicle insurance|a big loss does not hit me|S|3`],
+['Check every month',`
+Me|check my progress on the first day of each month|I stay on track|M|1
+Me|change the plan if income or costs change|the plan stays real|S|2
+Me|celebrate each milestone|I stay motivated|C|1`]]}},
+{id:'purchase',label:'Big purchase',mode:'personal',test:/\b(buy|purchase|get)\s+(a |an |my |our )?(new |used |second.?hand |electric )?(car|bike|scooter|laptop|phone|mobile|tv|camera|motorcycle|ev|fridge|washing machine|ac|sofa|mattress)\b/,epics:function(){return [
+['Decide',`
+Me|write why I need it and my top budget|I do not overspend|M|2
+Family|say what they need from it|it suits everyone|S|2
+Me|decide new or used, and cash or loan|I know the real cost|M|3`],
+['Research',`
+Me|pick three choices from reviews|I narrow down fast|M|3
+Me|compare the full cost of owning each, not just the price|I see the true cost|M|3
+Friend|share their experience with the same thing|I hear real problems|C|1`],
+['Try and bargain',`
+Me|try the best two in person|I choose what feels right|M|3
+Dealer|give a written quote with the best price|I can compare offers|M|2
+Me|bargain on price, extras and warranty|I save money|S|3`],
+['Pay and papers',`
+Bank|approve my loan if I need one|I can pay in easy parts|S|3
+Me|arrange insurance, registration or warranty|I am safe and legal|M|3
+Me|check the bill and delivery before accepting|I get what I paid for|M|2`],
+['After buying',`
+Me|keep bills, warranty and service dates in one place|I can claim help easily|S|2
+Me|sell or give away the old one|I get some value back|C|2`]]}},
+{id:'event',label:'Event or party',mode:'personal',test:/\b(birthday|anniversary|party|housewarming|get.?together|reunion|farewell|baby shower|conference|corporate event|seminar|team outing|offsite|annual day|festival|celebration)\b/,epics:function(){return [
+['Plan',`
+Host|decide why, when and how many guests|the event has a clear shape|M|3
+Host|fix a total budget|we do not overspend|M|2
+Planner|list every job with a name and a date|nothing is forgotten|M|3`],
+['Place and helpers',`
+Planner|compare places on price, size and how easy they are to reach|we choose well|M|5
+Host|book food, decoration, music and photos|the day goes smoothly|M|5
+Vendor|confirm time and price in writing|there are no last-minute surprises|S|2`],
+['Guests',`
+Host|make the guest list and send the invites|everyone knows when and where|M|3
+Guest|say if they will come and any food needs|the count is right|S|2
+Host|arrange parking, stay or cabs if needed|guests arrive easily|C|3`],
+['Programme',`
+Host|plan the day from welcome to goodbye|the event flows well|M|3
+Host|plan a few games, speeches or special moments|people enjoy it|S|3`],
+['On the day and after',`
+Planner|check the list and tell every helper their job|everything starts on time|M|3
+Host|pay everyone and collect the photos|accounts are clean and memories are saved|S|2
+Host|thank the guests and ask what they liked|the next one is better|C|1`]]}},
+{id:'campaign',label:'Marketing campaign',mode:'work',nonsoft:true,test:/\b(marketing campaign|product launch|launch campaign|rebrand\w*|go.?to.?market|gtm|ad campaign|social media campaign|brand awareness|promotion plan)\b/,epics:function(){return [
+['Strategy',`
+Marketing manager|set the goal, audience and one clear message|every piece of work has a purpose|M|3|The goal has a number and a date;The audience is described in one paragraph
+Sales|share what customers ask and object to|the message answers real concerns|S|2
+Marketing manager|fix the budget and the metrics for success|we can judge results|M|3`],
+['Creative and content',`
+Designer|create the visuals and layouts|the campaign looks consistent|M|5
+Writer|write the copy for each channel|the message is clear|M|5
+Marketing manager|approve the content in one round|we do not miss the date|S|2`],
+['Channels and schedule',`
+Marketing manager|choose the two or three best channels|the budget is not spread too thin|M|3
+Marketing manager|build a posting and launch calendar|everything goes out on time|M|3
+Sales|prepare follow-up scripts for leads|interest turns into sales|S|3`],
+['Launch',`
+Marketing manager|go live and monitor the first 48 hours|problems are fixed quickly|M|3
+Customer|see and respond to the campaign|we start getting leads|M|2`],
+['Measure and improve',`
+Analyst|report reach, leads and cost per lead each week|we see what works|M|3
+Marketing manager|move budget to what works and stop what does not|results improve|S|3
+Marketing manager|share a final report with learnings|the next campaign is better|S|3`]]}},
+{id:'project',label:'Work project',mode:'work',nonsoft:true,test:/\b(migrat\w*|implement\w*|roll.?out|restructur\w*|process improvement|audit|compliance|set up (a |the )?(team|department|office)|go.?live|project plan|new process|cost reduction)\b/,epics:function(){return [
+['Initiate',`
+Sponsor|state the business goal and what success looks like|the team works toward one outcome|M|3
+Project manager|define the scope and what is out of scope|we avoid scope creep|M|3
+Project manager|list the stakeholders and what each expects|nobody is surprised later|S|2`],
+['Plan',`
+Project manager|break the work into tasks with owners and dates|everyone knows what to do|M|5
+Project manager|estimate cost and effort and agree the budget|funding is secured|M|3
+Project manager|list the top risks with a response for each|problems are handled early|S|3`],
+['Team and kickoff',`
+Project manager|hold a kickoff meeting to share goals, roles and ways of working|the team starts aligned|M|2
+Team member|confirm my tasks and availability|the plan is realistic|M|2`],
+['Execute',`
+Team member|update my progress weekly|the plan stays current|M|2
+Project manager|run a short weekly review and clear blockers|work keeps moving|M|3
+Sponsor|approve changes to scope or budget|changes are controlled|S|2`],
+['Review and handover',`
+Reviewer|test the result against the agreed goals|quality is confirmed|M|3
+Client|sign off the final result|the work is formally accepted|M|2
+Project manager|hand over documents and train the owners|the result keeps working after we leave|S|3
+Project manager|hold a lessons-learned session|the next project is better|C|2`]]}},
+{id:'goal',label:'Personal goal',mode:'personal',test:null,epics:function(ent,one,l,g){return (function(){g=g||'reach this goal';return [
+['Know the goal',`
+Me|write why I want to ${g} and what success looks like|I stay motivated|M|2
+Me|set a date and a way to check my progress|I know if I am on track|M|2
+Mentor|share what they learned from doing this|I avoid common mistakes|S|2`],
+['Make a plan',`
+Me|break the goal into small steps for each week|it feels easy to do|M|3
+Me|list the money, time and help I need|there are no surprises|M|3
+Me|pick the first three steps for this week|I start right now|M|2`],
+['Get ready',`
+Me|collect the things, people and information I need|nothing blocks me later|M|3
+Family|know my plan and how to help|I get support at home|S|2`],
+['Keep going',`
+Me|check my progress for ten minutes every week|I see problems early|M|1
+Me|decide what to do if I miss a day|one slip does not stop me|S|2
+Friend|check on me|I stay on track|C|1`],
+['Finish and celebrate',`
+Me|check if the goal is done by my own measure|I know it is done|M|1
+Me|celebrate and note what I learned|I enjoy it and plan the next goal|C|1`]]})()}}
+];
+LIFE.forEach(function(a){a.life=true;a.nonsoft=true});
+ARCH=ARCH.concat(LIFE);
+(function(){var m=ARCH.filter(function(a){return a.id==='make'})[0];if(m){m.life=true;m.nonsoft=true;m.mode='personal'}})();
+var SOFT=/\b(app|apps|application|website|web ?site|web ?page|webpage|page|portal|software|dashboard|api|chatbot|saas|online|digital|mobile|crm|erp|database|tracker|booking|marketplace|ecommerce|e-commerce|ordering|store|shop|invoicing|ticketing|automation|plugin)\b/;
+function bizHit(l){
+  var d=Object.keys(DOMAINS).some(function(k){return DOMAINS[k].kw.some(function(w){return new RegExp('\\b'+w.replace(/[-]/g,'\\-')).test(l)})});
+  var a=ARCH.some(function(x){return !x.life&&x.test&&x.test.test(l)});
+  return d||a;
+}
+function isGoal(l){
+  return /^(i|we)\b.*\b(want|wanna|wish|hope|plan|planning|need|going|trying|would like)\b/.test(l)||/^(want|wanna|wish|hope|plan|need)\s+to\b/.test(l)||
+    /^(get|become|stop|quit|find|improve|finish|complete|achieve|win|read|write|visit|meet|reach|reduce|increase|save|gain|practi[sc]e|prepare|organi[sz]e|arrange|start|launch|open|apply|move|shift|adopt|celebrate|renew|learn|clear|build my|grow)\b/.test(l);
+}
+function isMaking(l){
+  var verb=/\b(build|building|make|making|craft|manufacture|manufacturing|produce|assemble|construct|bake|baking|cook|stitch|sew|sewing|knit|weave|carve|fabricate|renovate|install)\b/.test(l);
+  var soft=/\b(app|apps|website|web ?site|web ?page|portal|software|platform|system|tool|dashboard|api|chatbot|saas|online|digital|mobile|crm|erp|database|tracker|management|booking|marketplace|ecommerce|e-commerce|ordering|store|shop)\b/.test(l);
+  return verb&&!soft;
+}
+function detectFn(l){
+  if(isMaking(l))return 'a:make';
+  if(!SOFT.test(l)){
+    for(var i=0;i<LIFE.length;i++){var a=LIFE[i];if(a.test&&a.test.test(l))return 'a:'+a.id}
+    if(isGoal(l)&&!bizHit(l))return 'a:goal';
+  }
+  var best=null,score=0;
+  Object.keys(DOMAINS).forEach(function(k){
+    var s=DOMAINS[k].kw.filter(function(w){return new RegExp('\\b'+w.replace(/[-]/g,'\\-')).test(l)}).length;
+    if(s>score){score=s;best=k}
+  });
+  var strong=['farm','finance','delivery','community','market','content'].map(archById).filter(function(a){return a.test.test(l)})[0];
+  if(strong&&score<2)return 'a:'+strong.id;
+  if(best)return 'd:'+best;
+  return 'a:'+detectArch(l).id;
+}
+function archById(id){return ARCH.filter(function(a){return a.id===id})[0]}
+function detectArch(l){
+  for(var i=0;i<ARCH.length;i++){var a=ARCH[i];if(!a.life&&a.test&&a.test.test(l))return a}
+  var hit=GOODS.some(function(w){return new RegExp('\\b'+w+'\\b').test(l)})||/\b(sell|selling|shop|store|products?|merchandise|retail|wholesale|ecommerce|e-commerce)\b/.test(l);
+  return archById(hit?'retail':'tracker');
+}
+function plural(w){
+  if(/(ss|x|z|ch|sh)$/.test(w))return w+'es';
+  if(/[^aeiou]y$/.test(w))return w.slice(0,-1)+'ies';
+  if(/s$/.test(w))return w;
+  return w+'s';
+}
+function pluralPhrase(e){
+  return e.split(/\s*(?:,|\band\b|&)\s*/).filter(Boolean).map(function(p){var ws=p.trim().split(' ');ws[ws.length-1]=plural(ws[ws.length-1]);return ws.join(' ')}).join(' and ');
+}
+var LBL={
+ work:{story:'story',stories:'stories',epics:'epics',pts:'points',mvp:'MVP points',corner:'Epics',add:'+ Story',map:'Story map',sprints:'Sprints',chart:'Points by epic',ac:'Acceptance criteria',unit:'Sprint',
+  lanes:[['M','MVP','Release 1'],['S','Next','Release 2'],['C','Later','Nice to have'],['W','Not now','Parked']],
+  cap:'Points your team finishes per sprint',
+  done:function(n){return 'The whole MVP is done by sprint '+n+'. Next and Later stories follow.'},none:'There are no MVP stories in this backlog.',
+  note:'Stories are ordered by priority and fitted into each sprint in turn. Not now stories are left out.',totals:'user stories',unit2:'story points'},
+ personal:{story:'step',stories:'steps',epics:'phases',pts:'effort',mvp:'must-do effort',corner:'Phases',add:'+ Step',map:'Plan board',sprints:'Weekly plan',chart:'Effort by phase',ac:'Done when',unit:'Week',
+  lanes:[['M','Must do','Essential'],['S','Should do','Important'],['C','If time','Nice to have'],['W','Not now','Parked']],
+  cap:'Effort points you can do per week',
+  done:function(n){return 'Every must-do step fits by week '+n+'. Should-do and if-time steps follow.'},none:'There are no must-do steps in this plan.',
+  note:'Steps are ordered by priority and fitted into each week in turn. Parked steps are left out.',totals:'steps',unit2:'effort points'}
+};
+function lb(k){return LBL[state&&state.mode==='personal'?'personal':'work'][k]}
+var LANES=[['M','MVP','Release 1'],['S','Next','Release 2'],['C','Later','Nice to have'],['W','Not now','Parked']];
+var PERSONA_WORDS=['student','teacher','parent','doctor','patient','farmer','driver','manager','customer','vendor','seller','buyer','employee','candidate','recruiter','tenant','landlord','agent','trainer','member','volunteer','donor','nurse','supplier','cashier','freelancer','coach','investor','visitor','guest','owner','admin'];
+var SYN=[['student','learner','trainee','pupil'],['teacher','instructor','tutor','trainer','coach'],['customer','shopper','client','buyer'],['seller','vendor','merchant','owner'],['manager','admin','administrator'],['employee','staff','hr'],['candidate','applicant'],['visitor','guest','user']];
+
+var ui={screen:'create',chart:false,resetScroll:false,force:null,view:'sprint',sel:null,editing:false,persona:'All',cap:null,nextId:101,source:'live',dirty:false,flash:'',undo:null,confirmEpic:null,busy:null,ai:false,exp:null};
+var state=null,PM={},sample=null,ctl=null,STORE='backlog-builder-v5';
+
+function subjectOf(t){
+  var l=(t.split('\n').filter(function(x){return x.trim()})[0]||'').trim();
+  l=l.replace(/^(hi|hello|hey)[,!. ]*/i,'').replace(/^(i|we)\s+(need|want|would like|have|am planning|plan)\s+(to\s+)?/i,'')
+     .replace(/^(to\s+)?(build|create|make|develop|design|set up)\s+/i,'').replace(/^(an?|the)\s+/i,'');
+  var m=l.match(/^(?:mobile\s+)?(?:app|application|website|web ?site|web app|web ?page|portal|system|tool|platform|page|software)\s+(?:to|for|that lets|that helps|where)\s+(.+)$/i);
+  if(m)l=m[1];
+  l=l.split(/\s+(?:with|including|that has|which has)\s+/i)[0].replace(/[.!?]+$/,'').trim();
+  if(!l)l='Business need';
+  if(l.length>64)l=l.slice(0,61).trim()+'...';
+  return cap1(l);
+}
+function entityOf(subj){
+  var e=subj.toLowerCase();
+  var m=e.match(/^(.+?)\s+for\s+/);if(m&&m[1].split(' ').length>1)e=m[1];
+  e=e.replace(/\b(web ?page|website|web app|app|portal|system|tool|site|platform|page|application|software|online|simple|small|new|my|our|best|business|management|tracker|manager)\b/g,' ')
+     .replace(/^(book|manage|track|create|build|sell|buy|find|order|plan|organi[sz]e|share|learn|teach|monitor|schedule|handle|process)\s+/,'')
+     .replace(/\s+/g,' ').trim();
+  return e||'items';
+}
+function detect(t){
+  var best=null,score=0;
+  Object.keys(DOMAINS).forEach(function(k){
+    var s=DOMAINS[k].kw.filter(function(w){return new RegExp('\\b'+w.replace(/[-]/g,'\\-')).test(t)}).length;
+    if(s>score){score=s;best=k}
+  });
+  return best;
+}
+function goalOf(t){
+  var l=(t.split('\n').filter(function(x){return x.trim()})[0]||'').trim();
+  return l.replace(/^(hi|hello|hey)[,!. ]*/i,'').replace(/^(i|we)\s+(really\s+|also\s+)?(want|wanna|need|would like|plan|am planning|are planning|hope|wish|am going|are going|have)\s+to\s+/i,'').replace(/^(want|wanna|need|plan|wish|hope)\s+to\s+/i,'').replace(/^to\s+/i,'').replace(/[.!?]+$/,'').trim();
+}
+function toGoalP(c){
+  c=c.replace(/^(and|also|to|be able to|can|should|must|will)\s+/i,'').trim();
+  if(!c)return '';
+  var V='book buy arrange invite hire choose decide plan sort send call visit check confirm pay collect prepare organise organize find compare talk ask tell set make get take finish learn practise practice start stop apply register renew order pack clean cook write read sell save'.split(' ');
+  var first=c.split(/\s+/)[0].toLowerCase();
+  var g=V.indexOf(first)>=0?c:'take care of '+c;
+  return g.charAt(0).toLowerCase()+g.slice(1);
+}
+function ns(n){return n+' '+(n===1?lb('story'):lb('stories'))}
+function newId(){return 'US-'+(ui.nextId++)}
+function mk(s){s.id=newId();return s}
+function allStories(){var a=[];state.epics.forEach(function(e){e.stories.forEach(function(s){a.push(s)})});return a}
+function pointsOf(l){return l.reduce(function(n,s){return n+s.pts},0)}
+function hasPersona(word,epics){
+  var grp=[word];SYN.forEach(function(g){if(g.indexOf(word)>=0)grp=grp.concat(g)});
+  return epics.some(function(e){return e.stories.some(function(s){var p=s.persona.toLowerCase();return grp.some(function(w){return p.indexOf(w)>=0})})});
+}
+function toGoal(c){
+  c=c.replace(/^(and|also|to|be able to|can|should|must|will)\s+/i,'').replace(/^(an?|the)\s+/i,'').trim();
+  if(!c)return '';
+  var verbs='add create view track search pay book upload download share send manage see get receive edit filter compare rate review schedule order apply submit print export import chat login log register sign find buy sell reserve cancel approve reject assign invite verify scan save pick choose browse check update delete'.split(' ');
+  var first=c.split(/\s+/)[0].toLowerCase();
+  var g=verbs.indexOf(first)>=0?c:'use '+c;
+  return g.charAt(0).toLowerCase()+g.slice(1);
+}
+function clausesOfFirstLine(line){
+  var m=line.match(/\b(?:with|including|includes|that has|which has|where \w+ can|should have|should allow|having|plus)\b(.*)$/i);
+  if(!m)return [];
+  return m[1].split(/,|;|\band\b|\bplus\b|\balso\b/i).map(function(c){return c.trim().replace(/[.!?]+$/,'')}).filter(function(c){return c.length>=4&&c.split(/\s+/).length<=9});
+}
+
+function build(text,force){
+  ui.nextId=101;
+  var lower=text.toLowerCase(),subj=subjectOf(text);
+  var one=entityOf(subj),ent=pluralPhrase(one);
+  var fn,label,epics=[],nonsoft=false,mode='work';
+  if(force&&force.indexOf('d:')===0&&DOMAINS[force.slice(2)])fn=force;
+  else if(force&&force.indexOf('a:')===0&&archById(force.slice(2)))fn=force;
+  else fn=detectFn(lower);
+  var auto=!force;
+  if(fn.charAt(0)==='d'){
+    var D=DOMAINS[fn.slice(2)];label=D.label;
+    D.epics.forEach(function(e){epics.push({name:e[0],stories:P(e[1]).map(mk)})});
+  }else{
+    var A=archById(fn.slice(2));label=A.label;
+    nonsoft=!!(A.nonsoft||A.life);mode=A.mode||'work';
+    genMode=nonsoft?'personal':'work';
+    var gl=goalOf(text);
+    A.epics(ent,one,lower,gl).forEach(function(e){epics.push({name:e[0],stories:P(e[1]).map(mk)})});
+    if(!A.nocommon&&!nonsoft)epics.push({name:A.lite?'Basics':'Access and quality',stories:P(A.lite?COMMON_LITE:COMMON).map(mk)});
+    if(nonsoft&&gl){var gt=cap1(gl);subj=gt.length>64?gt.slice(0,61)+'...':gt}
+  }
+  function haystack(){return epics.map(function(e){return e.name+' '+e.stories.map(function(s){return s.goal+' '+s.benefit}).join(' ')}).join(' ').toLowerCase()}
+  // features named in the text
+  var extra=[],hs=haystack();
+  if(!nonsoft)ADDONS.forEach(function(a){
+    var hit=a.kw.some(function(w){return new RegExp('\\b'+w).test(lower)});
+    if(hit&&hs.indexOf(a.skip)<0)extra.push(P(a.s)[0]);
+  });
+  if(extra.length)epics.push({name:'Features you mentioned',stories:extra.map(mk)});
+  // user types named in the text
+  var ent2=entityOf(subj);
+  if(!nonsoft)PERSONA_WORDS.forEach(function(w){
+    if(!new RegExp('\\b'+w+'s?\\b').test(lower))return;
+    if(hasPersona(w,epics))return;
+    var N=cap1(w);
+    epics.push({name:'For '+w+'s',stories:P(
+      N+'|see a dashboard of what matters to me|I can act without searching|S|3\n'+
+      N+'|view and manage the '+ent2+' that concern me|I stay in control|S|5\n'+
+      N+'|update my profile and preferences|the system fits how I work|C|2').map(mk)});
+  });
+  // clauses and extra lines from the text
+  var lines=text.split('\n').map(function(l){return l.trim()}).filter(Boolean);
+  hs=haystack();
+  var mine=[];
+  function dup(c){
+    var words=c.toLowerCase().split(/[^a-z]+/).filter(function(w){return w.length>=4});
+    if(!words.length)return true;
+    return words.some(function(w){var st=w.length>=6?w.slice(0,-1):w;return hs.indexOf(st)>=0});
+  }
+  clausesOfFirstLine(lines[0]||'').forEach(function(c){
+    if(dup(c))return;
+    var g=(nonsoft?toGoalP:toGoal)(c);if(!g)return;
+    mine.push({persona:nonsoft?'Me':'User',goal:g,benefit:nonsoft?'it is not forgotten':'what I asked for is covered',pri:'S',pts:3,ac:genAC(nonsoft?'Me':'User',g)});
+  });
+  lines.slice(1).forEach(function(l){
+    l=l.replace(/^[-*\u2022\d.)\s]+/,'').trim();
+    if(l.length<4)return;
+    var g=(nonsoft?toGoalP:toGoal)(l.replace(/[.!?]+$/,''));
+    mine.push({persona:nonsoft?'Me':'User',goal:g,benefit:nonsoft?'it is not forgotten':'what I asked for is covered',pri:'S',pts:3,ac:genAC(nonsoft?'Me':'User',g)});
+  });
+  if(mine.length)epics.push({name:'From your description',stories:mine.map(mk)});
+  genMode='work';
+  return {title:subj,label:'Built-in generator',fn:fn,fnLabel:label,auto:auto,mode:mode,epics:epics};
+}
+
+function recolor(){
+  PM={};var n=0;
+  if(!state)return;
+  allStories().forEach(function(s){if(!(s.persona in PM)){PM[s.persona]=n%8;n++}});
+}
+function initial(p){return esc((p||'?').trim().charAt(0).toUpperCase())}
+function findStory(id){
+  var f=null;
+  state.epics.forEach(function(ep,ei){ep.stories.forEach(function(s,si){if(s.id===id)f={s:s,ep:ep,ei:ei,si:si}})});
+  return f;
+}
+function dimmed(s){return ui.persona!=='All'&&s.persona!==ui.persona}
+
+/* ---------- rendering ---------- */
+function renderBanner(){
+  if(!(ui.dirty||ui.source==='ai'))return '';
+  var t=ui.source==='ai'&&!ui.dirty?'These stories were written by Claude, so editing the text will not change them.':'You edited this backlog, so editing the text will not overwrite it.';
+  return '<div class="banner"><span>'+t+'</span><button type="button" class="lnk" data-act="rebuild">Rebuild from the text</button></div>';
+}
+/* ---------- estimates: time, money, people ---------- */
+var TIERS={bud:['Budget',0.7],std:['Standard',1],pre:['Premium',1.5]};
+function numFrom(re,t,d){var m=t.match(re);return m?parseFloat(m[1].replace(/,/g,'')):d}
+function priceFrom(t){var m=t.match(/(\d+(?:\.\d+)?)\s*(crore|cr|lakh|lac|l)\b/);if(m)return parseFloat(m[1])*(/^c/.test(m[2])?1e7:1e5);m=t.match(/(?:rs\.?|₹)\s*([\d,]+)/);return m?parseFloat(m[1].replace(/,/g,'')):0}
+function niceN(n){if(n<=0)return 0;var mag=Math.pow(10,Math.max(0,Math.floor(Math.log(n)/Math.LN10)-1));return Math.round(n/mag)*mag}
+function inrN(n){
+  n=niceN(n);
+  if(n>=1e7){var c=n/1e7;return (c>=10?Math.round(c):+c.toFixed(1))+' crore'}
+  if(n>=1e5){var l=n/1e5;return (l>=10?Math.round(l):+l.toFixed(1))+' lakh'}
+  return String(Math.round(n)).replace(/(\d)(?=(\d\d)+\d$)/g,'$1,');
+}
+function rangeINR(lo,hi){var a=inrN(lo),b=inrN(hi);if(a===b)return '₹'+a;
+  var ua=a.split(' ')[1],ub=b.split(' ')[1];
+  return '₹'+(ua&&ua===ub?a.split(' ')[0]:a)+' to ₹'+b}
+function fmtDur(d){
+  d=Math.max(1,Math.round(d));
+  if(d<14)return d+(d===1?' day':' days');
+  if(d<90){var w=Math.round(d/7);return w+(w===1?' week':' weeks')}
+  var m=Math.round(d/30*2)/2;return m+(m===1?' month':' months');
+}
+function fmtSpan(lo,hi){
+  var a=fmtDur(lo),b=fmtDur(hi);if(a===b)return a;
+  var pa=a.split(' '),pb=b.split(' ');
+  return pa[1]===pb[1]?pa[0]+' to '+b:a+' to '+b;
+}
+function clampN(n,a,b){return Math.max(a,Math.min(b,n))}
+function estimate(){
+  if(!state)return null;
+  var all=allStories(),tp=pointsOf(all.filter(function(s){return s.pri!=='W'}));
+  var text=($('#need')&&$('#need').value||'').toLowerCase();
+  var id=state.fn&&state.fn.indexOf('a:')===0?state.fn.slice(2):'';
+  var personal=state.mode==='personal';
+  var e=null;
+  if(state.est){
+    e={days:[state.est.days_low,state.est.days_high],cost:state.est.cost_high>0?[state.est.cost_low,state.est.cost_high]:null,people:state.est.people||[],things:state.est.things||[],basis:state.est.basis||'Estimated by Claude for Indian market rates.'};
+  }else if(!id){ // software and business systems
+    var devs=clampN(Math.ceil(tp/50),1,4),pd=tp*0.8;
+    var work=Math.ceil(pd/devs*1.25),cal=Math.round(work*1.4);
+    var cost=pd*3000*1.2+10000;
+    var ppl=[{n:devs,label:devs>1?'IT engineers':'IT engineer'}];
+    if(tp>=20)ppl.push({n:1,label:'UI designer',opt:'part-time'});
+    if(tp>=40)ppl.push({n:1,label:'Tester'});
+    ppl.push({n:1,label:'You, as the owner who decides',self:1});
+    var th=[];
+    if(/(website|web ?site|portal|online|web app|webpage|web page|store|shop|course)/.test(text))th.push('Domain name and hosting');
+    if(/(pay|payment|checkout|fee|subscription|booking|order|buy|sell|cart|invoice)/.test(text))th.push('Payment gateway account');
+    if(/(email|sms|notif|otp|remind)/.test(text))th.push('Email or SMS service');
+    if(/(video|course|lesson|webinar)/.test(text))th.push('Video hosting');
+    if(/(map|delivery|location|track)/.test(text))th.push('Maps service');
+    e={days:[Math.round(cal*0.8),Math.round(cal*1.4)],cost:[cost*0.7,cost*1.5],people:ppl,things:th,basis:'Based on '+tp+' points of work at about 0.8 person-days per point and a rate of ₹3,000 per engineer-day, plus tools and testing.'};
+  }else if(id==='make'){
+    var q=Math.max(1,Math.round(numFrom(/(\d+)/,text,1))),wood=/\b(chair|chairs|table|tables|sofa|bed|furniture|shelf|shelves|bookshelf|bookcase|almirah|cupboard|desk|cot|bench|stool|wardrobe|door|gate|fence|cabinet|rack|swing)\b/.test(text);
+    var food=/\b(cake|bread|bakery|biscuit|cookie|snack|pickle|sweet|sweets|chocolate|meal|dish|recipe|food|tiffin|juice|jam)\b/.test(text);
+    var cloth=/\b(shirt|dress|saree|kurta|uniform|garment|cloth|clothes|bag|curtain|blanket|sweater|jacket|jeans)\b/.test(text);
+    var build=/\b(house|home|room|building|office|wall|boundary|shed|farmhouse|bridge|road|well|toilet|kitchen|floor|roof|bathroom|garage)\b/.test(text);
+    var seat=/\b(chair|chairs|sofa|bed|bench|stool|seat|cot|swing)\b/.test(text);
+    if(wood){
+      e={days:[5+2*(q-1),9+3*(q-1)],cost:[4000*q,9000*q],people:[{n:1,label:'Carpenter'}],things:[(3*q)+' cubic feet of timber (about '+q+' '+(q>1?'pieces':'piece')+' worth)','Nails, screws and glue','Sandpaper, polish or paint'],basis:'Per piece: timber, hardware, polish and the carpenter\'s labour, at local rates.'};
+      if(q>2)e.people.push({n:1,label:'Helper'});
+      e.people.push({n:1,label:'Painter or polisher',opt:'if not the carpenter'});
+      if(seat){e.people.push({n:1,label:'Upholsterer',opt:'if you want cushions'});e.things.push('Foam and cloth for cushions')}
+    }else if(food){
+      e={days:[7,21],cost:[1500,5000],people:[{n:1,label:'You, to cook and test',self:1},{n:1,label:'Helper',opt:'for bigger batches'}],things:['Ingredients for test batches','Packing and labels','Food licence (FSSAI) if you sell'],basis:'A few test batches, packing and the licence for a small start.'};
+    }else if(cloth){
+      e={days:[7+q,14+2*q],cost:[800*q,2500*q],people:[{n:1,label:'Tailor'},{n:1,label:'Pattern maker',opt:'for new designs'}],things:['Cloth, thread and buttons','Measurements of the person'],basis:'Per piece: cloth, stitching and finishing.'};
+    }else if(build){
+      e={days:[90,240],cost:[1500000,3500000],people:[{n:1,label:'Architect or engineer'},{n:1,label:'Mason team'},{n:1,label:'Electrician'},{n:1,label:'Plumber'}],things:['Cement, steel, bricks and sand','Local approvals','Fittings and paint'],basis:'A broad range for a small build. A site visit is needed for a real quote.'};
+    }else{
+      e={days:[14,60],cost:[5000,50000],people:[{n:1,label:'You',self:1},{n:1,label:'A skilled maker or vendor'}],things:['Materials','Tools','A small buffer for mistakes'],basis:'A wide range because the item is not specific.'};
+    }
+  }else if(id==='marriage'){
+    var g=Math.round(numFrom(/(\d[\d,]*)\s*(guests|people|persons|members)/,text,150));
+    e={days:[120,270],cost:[2000*g+100000,5000*g+400000],people:[{n:2,label:'Family elders to guide'},{n:1,label:'Wedding planner',opt:'if you can afford one'},{n:1,label:'Cook or caterer'},{n:1,label:'Decorator'},{n:1,label:'Photographer'},{n:1,label:'Priest or registrar'}],things:['Hall for about '+g+' guests','Food for '+g+' guests','Clothes and jewellery','Invitation cards','Marriage registration papers'],basis:'Guest cost at ₹2,000 to ₹5,000 each, plus about ₹1 to ₹4 lakh for clothes, photos and the rest. Assumes '+g+' guests.'};
+  }else if(id==='baby'){
+    e={days:[240,280],cost:[100000,300000],people:[{n:1,label:'Doctor'},{n:1,label:'Partner and family'},{n:1,label:'Baby care trainer',opt:'optional'}],things:['Hospital or delivery cost','Health insurance check','Baby bed, clothes and basic things','Hospital bag and papers'],basis:'A rough range for a normal delivery. Cost depends mostly on the hospital and your insurance.'};
+  }else if(id==='home'){
+    var pr=priceFrom(text);
+    e={days:[90,240],cost:pr?[pr*0.25,pr*0.3]:null,costText:pr?null:'Keep about 25 to 30 percent of the home price ready in cash',people:[{n:1,label:'Property agent'},{n:1,label:'Lawyer'},{n:1,label:'Bank loan officer'},{n:1,label:'Packers and movers'}],things:['Down payment','Stamp duty and registration','Loan papers','Moving cost'],basis:pr?'Down payment of 25 to 30 percent plus stamp duty and fees; the rest comes as a loan.':'Depends on the home price. Add a price (like 60 lakh) to see rupees.'};
+  }else if(id==='trip'){
+    var pp=Math.round(numFrom(/(\d+)\s*(people|persons|members|of us|adults|friends|travell?ers)/,text,4)),dd=Math.round(numFrom(/(\d+)\s*(days?|nights?)/,text,5));
+    e={days:[14,42],cost:[pp*dd*3000,pp*dd*8000],people:[{n:1,label:'Travel agent',opt:'optional'},{n:1,label:'You, to plan',self:1}],things:['Tickets for '+pp+' people','Hotel for '+dd+' days','Local cabs','Passport or ID, insurance'],basis:'About ₹3,000 to ₹8,000 per person per day for '+pp+' people and '+dd+' days. Days shown are the time you need to plan.'};
+  }else if(id==='health'){
+    var mo=Math.round(numFrom(/(\d+)\s*months?/,text,3));
+    e={days:[mo*30,mo*30],cost:[3000*mo,10000*mo],people:[{n:1,label:'Doctor',opt:'for a check'},{n:1,label:'Coach or dietitian',opt:'optional'},{n:1,label:'A buddy to keep you going',opt:'optional'}],things:['Healthy food','Gym, class or home workout gear','Shoes and basic clothes'],basis:'About ₹3,000 to ₹10,000 a month for food, a class and basic gear, for '+mo+' months.'};
+  }else if(id==='learn'){
+    var mo2=Math.round(numFrom(/(\d+)\s*months?/,text,3));
+    e={days:[mo2*30,mo2*30],cost:[8000,50000],people:[{n:1,label:'Mentor or teacher'},{n:1,label:'Study buddy',opt:'optional'}],things:['Books or an online course','Mock tests','Exam fee','A quiet place to study'],basis:'Course, books, mock tests and exam fee. Coaching classes cost more.'};
+  }else if(id==='career'){
+    e={days:[60,150],cost:[5000,30000],people:[{n:1,label:'Mentor'},{n:1,label:'Referrer or friend at the company'},{n:1,label:'Recruiter',opt:'optional'}],things:['Updated resume and LinkedIn','Work samples','Interview practice','A course or certificate if needed'],basis:'Mostly your time. Money goes to a course, resume help and travel for interviews.'};
+  }else if(id==='venture'){
+    e={days:[60,180],cost:[100000,1000000],people:[{n:1,label:'You, as the founder',self:1},{n:1,label:'Accountant'},{n:1,label:'Supplier'},{n:1,label:'Helper',opt:'when busy'}],things:['Registration and licences','Stock or materials','Shop or online page','First marketing'],basis:'Set-up and the first few months of running cost. It grows with the kind of business.'};
+  }else if(id==='money'){
+    e={days:[90,365],cost:null,costText:'No cost, it is a habit change',people:[{n:1,label:'You',self:1},{n:1,label:'Partner or family',opt:'to agree'},{n:1,label:'Financial advisor',opt:'optional'}],things:['A savings account','A budget sheet'],basis:'The time depends on how much you save each month.'};
+  }else if(id==='purchase'){
+    var pc=priceFrom(text);
+    e={days:[14,60],cost:pc?[pc*0.9,pc*1.1]:null,costText:pc?null:'Depends on your budget',people:[{n:1,label:'Dealer or seller'},{n:1,label:'A friend who knows it',opt:'optional'},{n:1,label:'Bank',opt:'if you take a loan'}],things:['Your budget','Insurance or warranty','Registration papers if needed'],basis:pc?'The price you wrote, plus or minus 10 percent for extras.':'Add a price (like 8 lakh) to see rupees.'};
+  }else if(id==='event'){
+    var ge=Math.round(numFrom(/(\d[\d,]*)\s*(guests|people|persons|members)/,text,50));
+    e={days:[21,60],cost:[500*ge+10000,2000*ge+50000],people:[{n:1,label:'Event planner',opt:'optional'},{n:1,label:'Caterer'},{n:1,label:'Decorator'},{n:1,label:'Photographer'},{n:2,label:'Friends or family as helpers'}],things:['Place for about '+ge+' guests','Food for '+ge+' guests','Decoration and music','Invites'],basis:'About ₹500 to ₹2,000 per guest plus ₹10,000 to ₹50,000 for place and extras. Assumes '+ge+' guests.'};
+  }else if(id==='campaign'){
+    e={days:[28,56],cost:[50000,500000],people:[{n:1,label:'Marketing manager'},{n:1,label:'Designer'},{n:1,label:'Writer'},{n:1,label:'Ads specialist'}],things:['Ad budget','Design files and videos','Landing page'],basis:'Team time plus ad spend for a one to two month campaign.'};
+  }else if(id==='project'){
+    var d2=clampN(Math.ceil(tp/40),2,8),pd2=tp*0.7,cal2=Math.round(pd2/d2*1.4*1.3);
+    e={days:[Math.round(cal2*0.8),Math.round(cal2*1.4)],cost:[pd2*2500*0.7,pd2*2500*1.5],people:[{n:1,label:'Project manager'},{n:d2,label:d2>1?'Team members':'Team member'},{n:1,label:'Sponsor who decides',self:1}],things:['Approval from leaders','Tools or licences','Training for users'],basis:'Based on '+tp+' points of work at about ₹2,500 per person-day.'};
+  }else{ // goal and anything else
+    e={days:[30,90],cost:[0,5000],people:[{n:1,label:'You',self:1},{n:1,label:'Mentor',opt:'optional'},{n:1,label:'A friend to keep you going',opt:'optional'}],things:['A few small things you will need'],basis:'A rough guide. Add your own numbers in the text to make it closer.'};
+  }
+  e.mid=(e.days[0]+e.days[1])/2;
+  var units=Math.max(1,Math.round(e.mid/(personal?7:14)));
+  e.cap=Math.max(3,Math.ceil(tp/units));
+  e.personal=personal;
+  return e;
+}
+function curCap(){if(ui.cap)return ui.cap;var e=estimate();return e&&e.cap||20}
+function normEst(x){
+  if(!x||typeof x!=='object')return null;
+  var n=function(v){v=+v;return isFinite(v)&&v>=0?v:0};
+  var dl=n(x.days_low),dh=n(x.days_high);if(!dh)return null;if(dl>dh||!dl)dl=Math.round(dh*0.8);
+  var cl=n(x.cost_low),ch=n(x.cost_high);if(cl>ch)cl=ch;
+  var people=(Array.isArray(x.people)?x.people:[]).map(function(p){return p&&p.label?{n:Math.max(1,Math.round(+p.n||1)),label:String(p.label).trim(),opt:p.optional?'optional':''}:null}).filter(Boolean).slice(0,8);
+  var things=(Array.isArray(x.things)?x.things:[]).map(function(t){return String(t).trim()}).filter(Boolean).slice(0,8);
+  return {days_low:dl,days_high:dh,cost_low:cl,cost_high:ch,people:people,things:things,basis:String(x.basis||'').trim()};
+}
+function renderGlance(){
+  var e=estimate();if(!e)return '';
+  var m=(TIERS[ui.tier]||TIERS.std)[1];
+  var time=fmtSpan(e.days[0],e.days[1]);
+  var money=e.cost?(e.cost[1]<=0?'Almost free':rangeINR(e.cost[0]*m,e.cost[1]*m)):(e.costText||'Not clear yet');
+  var real=e.people.filter(function(p){return !p.self&&!p.opt}).reduce(function(a,p){return a+p.n},0);
+  var helpers=e.people.filter(function(p){return !p.self}).reduce(function(a,p){return a+p.n},0);
+  var head='<h2>Plan at a glance</h2><p class="gl-head">'+(e.cost&&e.cost[1]>0?'You will need about <b>'+esc(money)+'</b>, ':'')+(helpers?'<b>'+(real||helpers)+' '+((real||helpers)===1?'helper':'helpers')+'</b>':'<b>no outside help</b>')+(e.cost&&e.cost[1]>0||helpers?' and ':'')+'<b>'+esc(time)+'</b>.</p>';
+  var tile=function(ic,l,v,sub){return '<div class="gtile"><span class="gi" aria-hidden="true">'+ic+'</span><div><div class="gl">'+l+'</div><b>'+esc(v)+'</b>'+(sub?'<small>'+esc(sub)+'</small>':'')+'</div></div>'};
+  var tiles='<div class="gtiles">'+tile('⏱','How long',time,e.personal?'start to finish':'with the team working')+
+    tile('₹','How much money',money,e.cost?(TIERS[ui.tier]||TIERS.std)[0]+' level':'')+
+    tile('☺','Who helps',helpers?(real||helpers)+' '+((real||helpers)===1?'person':'people'):'Just you',real&&real!==helpers?(helpers-real)+' more if you want':(!real&&helpers?'all optional':''))+'</div>';
+  var seg=e.cost?'<div class="gseg" role="group" aria-label="Spending level">'+Object.keys(TIERS).map(function(k){return '<button type="button" data-act="tier" data-v="'+k+'" aria-pressed="'+((ui.tier||'std')===k)+'">'+TIERS[k][0]+'</button>'}).join('')+'</div>':'';
+  var pl='<div class="gcol"><h3>Whose help you need</h3><ul>'+e.people.map(function(p){return '<li>'+(p.self?'':'<b>'+p.n+' ×</b> ')+esc(p.label)+(p.opt?' <em>('+esc(p.opt)+')</em>':'')+'</li>'}).join('')+'</ul></div>';
+  var tl=e.things&&e.things.length?'<div class="gcol"><h3>What you need to arrange</h3><ul>'+e.things.map(function(t){return '<li>'+esc(t)+'</li>'}).join('')+'</ul></div>':'';
+  return '<section class="glance" aria-label="Plan at a glance">'+head+tiles+seg+'<div class="gcols">'+pl+tl+'</div><details><summary>How this is estimated</summary><p>'+esc(e.basis)+' These are rough guesses to help you plan, not a quote. Rates are for India.</p></details></section>';
+}
+function renderInsights(){
+  var all=allStories(),tp=pointsOf(all);
+  var must=all.filter(function(s){return s.pri==='M'});
+  var counts={};all.forEach(function(s){counts[s.persona]=(counts[s.persona]||0)+1});
+  var names=Object.keys(counts);
+  var tile=function(n,l,hl){return '<div class="tile'+(hl?' hl':'')+'"><b>'+n+'</b><span>'+l+'</span></div>'};
+  var chips=names.map(function(n){return '<button type="button" class="pchip p'+PM[n]+'" data-act="persona" data-v="'+esc(n)+'" aria-pressed="'+(ui.persona===n)+'"><span class="av">'+initial(n)+'</span>'+esc(n)+' <b>'+counts[n]+'</b></button>'}).join('');
+  var chart='';
+  if(ui.chart){
+    var max=Math.max.apply(null,state.epics.map(function(e){return pointsOf(e.stories)}).concat([1]));
+    chart='<div class="chart"><h3>'+lb('chart')+'</h3>'+state.epics.map(function(ep){
+      var tot=pointsOf(ep.stories);
+      var segs=['M','S','C','W'].map(function(p,i){var v=pointsOf(ep.stories.filter(function(s){return s.pri===p}));return v?'<i class="s'+(i+1)+'" style="flex:'+v+'"></i>':''}).join('');
+      return '<div class="crow"><span class="cl" title="'+esc(ep.name)+'">'+esc(ep.name)+'</span><span class="cbt"><span class="cb" style="width:'+(tot/max*100).toFixed(1)+'%">'+segs+'</span></span><span class="cv">'+tot+'</span></div>';
+    }).join('')+'<ul class="legend">'+lb('lanes').map(function(L,i){return '<li><i class="s'+(i+1)+'"></i>'+L[1]+'</li>'}).join('')+'</ul></div>';
+  }
+  return renderGlance()+'<section class="insights" aria-label="Summary"><p class="facts"><b>'+all.length+'</b> '+(all.length===1?lb('story'):lb('stories'))+' in <b>'+state.epics.length+'</b> '+lb('epics')+' &middot; <b>'+tp+'</b> '+lb('pts')+' &middot; <b>'+pointsOf(must)+'</b> '+lb('mvp')+'</p>'+
+    '<div class="pchips" role="group" aria-label="Filter by user type">'+chips+'</div>'+
+    '<button type="button" class="lnk" data-act="chart" aria-expanded="'+(!!ui.chart)+'">'+(ui.chart?'Hide':'Show')+' '+lb('chart').toLowerCase()+'</button>'+chart+'</section>';
+}
+function fnOptions(){
+  var cur=state.auto?'auto':state.fn;
+  var opt=function(v,l){return '<option value="'+v+'"'+(cur===v?' selected':'')+'>'+esc(l)+'</option>'};
+  var o=opt('auto','Auto: '+state.fnLabel).replace('<option value="auto"','<option value="auto"');
+  o+='<optgroup label="Software and business">';
+  Object.keys(DOMAINS).forEach(function(k){o+=opt('d:'+k,DOMAINS[k].label)});
+  ARCH.filter(function(a){return !a.life}).forEach(function(a){o+=opt('a:'+a.id,a.label)});
+  o+='</optgroup><optgroup label="Life, career and projects">';
+  ARCH.filter(function(a){return a.life}).forEach(function(a){o+=opt('a:'+a.id,a.label)});
+  return o+'</optgroup>';
+}
+function fnChip(){
+  if(state.fn)return '<label class="fnchip"><span>Function</span><select id="fn" aria-label="Business function">'+fnOptions()+'</select></label>';
+  return '<span class="fnchip static">'+esc(state.label)+'</span>';
+}
+function renderTop(){
+  var v=function(id,l){return '<button type="button" data-act="view" data-v="'+id+'" aria-pressed="'+(ui.view===id)+'">'+l+'</button>'};
+  return '<header class="top2"><div class="tt"><h1 class="pt1">'+esc(state.title)+'</h1><div class="sub">'+fnChip()+'</div></div>'+
+    '<div class="vtabs" role="group" aria-label="View">'+v('sprint',lb('sprints'))+v('map',lb('map'))+v('cards','Cards')+v('people','People')+'</div>'+
+    '<button type="button" class="ghost" data-act="export" data-v="md">Export</button></header>';
+}
+function renderTabbar(){
+  var sp=document.querySelector('#tabbar [data-v="sprint"] span');if(sp)sp.textContent=state?lb('sprints'):'Sprints';
+  var mp=document.querySelector('#tabbar [data-v="map"] span');if(mp)mp.textContent=state&&state.mode==='personal'?'Board':'Map';
+  [].forEach.call(document.querySelectorAll('#tabbar button'),function(b){
+    var v=b.getAttribute('data-v');
+    b.setAttribute('aria-pressed',String(ui.screen==='create'?v==='create':v===ui.view));
+  });
+}
+function noteHtml(s){
+  return '<button type="button" class="note p'+PM[s.persona]+(ui.sel===s.id?' on':'')+(dimmed(s)?' dim':'')+'" data-act="sel" data-id="'+s.id+'" title="'+esc(s.persona)+'"><span class="av">'+initial(s.persona)+'</span><span class="nt">'+esc(cap1(s.goal))+'</span><span class="np">'+s.pts+'</span></button>';
+}
+function renderMap(){
+  var n=state.epics.length,hasW=allStories().some(function(s){return s.pri==='W'});
+  var h='<div class="mapwrap"><div class="map" style="grid-template-columns:104px repeat('+n+',minmax(220px,1fr))"><div class="corner">'+lb('corner')+'</div>';
+  state.epics.forEach(function(ep,ei){
+    h+='<div class="eh2"><div class="en">'+esc(ep.name)+'</div><div class="em">'+ns(ep.stories.length)+', '+pointsOf(ep.stories)+' pts</div><div class="ea">'+
+      '<button type="button" class="lnk" data-act="add" data-e="'+ei+'">'+lb('add')+'</button>'+moreBtn(ei)+
+      '<button type="button" class="lnk" data-act="delEpic" data-e="'+ei+'">'+(ui.confirmEpic===ei?'Confirm delete':'Delete')+'</button></div></div>';
+  });
+  lb('lanes').forEach(function(L){
+    if(L[0]==='W'&&!hasW)return;
+    var ls=allStories().filter(function(s){return s.pri===L[0]});
+    h+='<div class="lane-label l-'+L[0]+'"><b>'+L[1]+'</b><span>'+L[2]+'</span><i>'+ns(ls.length)+'<br>'+pointsOf(ls)+' pts</i></div>';
+    state.epics.forEach(function(ep){
+      h+='<div class="cell l-'+L[0]+'">'+ep.stories.filter(function(s){return s.pri===L[0]}).map(noteHtml).join('')+'</div>';
+    });
+  });
+  return h+'</div></div>';
+}
+function storyText(s){return (s.persona==='Me'?'I want to ':'As '+art(s.persona)+' '+s.persona+', I want to ')+s.goal+' so that '+s.benefit+'.'}
+function sentence(s){
+  if(s.persona==='Me')return '<p class="sentence"><span class="k">I want to</span> '+esc(s.goal)+' <span class="k">so that</span> '+esc(s.benefit)+'.</p>';
+  return '<p class="sentence"><span class="k">As '+art(s.persona)+'</span> <b>'+esc(s.persona)+'</b>, <span class="k">I want to</span> '+esc(s.goal)+' <span class="k">so that</span> '+esc(s.benefit)+'.</p>';
+}
+function renderCards(){
+  var h='';
+  state.epics.forEach(function(ep,ei){
+    h+='<div class="group-h"><h3>'+esc(ep.name)+'</h3><span>'+ns(ep.stories.length)+', '+pointsOf(ep.stories)+' pts</span><button type="button" class="lnk" data-act="add" data-e="'+ei+'">'+lb('add')+'</button></div><div class="cards">'+
+    ep.stories.map(function(s){
+      return '<article class="card p'+PM[s.persona]+(ui.sel===s.id?' on':'')+(dimmed(s)?' dim':'')+'"><div class="ch"><span class="av">'+initial(s.persona)+'</span>'+esc(s.persona)+'<span class="id">'+s.id+'</span></div><div class="cbody">'+sentence(s)+
+       '<div class="meta-row"><span class="pill '+s.pri+'">'+PR[s.pri]+'</span><span class="pts">'+s.pts+' pts</span><span class="hint">'+s.ac.length+' criteria</span></div>'+
+       '<button type="button" class="ghost openbtn" data-act="sel" data-id="'+s.id+'">Open</button></div></article>';
+    }).join('')+'</div>';
+  });
+  return h;
+}
+function renderPeople(){
+  var names=[];allStories().forEach(function(s){if(names.indexOf(s.persona)<0)names.push(s.persona)});
+  return '<div class="people">'+names.map(function(n){
+    var ss=allStories().filter(function(s){return s.persona===n});
+    var eps=state.epics.filter(function(e){return e.stories.some(function(s){return s.persona===n})}).map(function(e){return e.name});
+    var rank={M:0,S:1,C:2,W:3};
+    var top=ss.slice().sort(function(a,b){return rank[a.pri]-rank[b.pri]}).slice(0,3);
+    var segs=['M','S','C','W'].map(function(p,i){var v=pointsOf(ss.filter(function(s){return s.pri===p}));return v?'<i class="s'+(i+1)+'" style="flex:'+v+'"></i>':''}).join('');
+    return '<article class="person p'+PM[n]+(ui.persona!=='All'&&ui.persona!==n?' dim':'')+'"><div class="ph"><span class="av">'+initial(n)+'</span><div><h3>'+esc(n)+'</h3><span>'+ns(ss.length)+', '+pointsOf(ss)+' pts</span></div></div>'+
+     '<div class="cbt"><span class="cb" style="width:100%">'+segs+'</span></div>'+
+     '<div><div class="jl">Where they appear</div><div class="journey">'+eps.map(function(e,i){return (i?'<em>&rarr;</em>':'')+'<span>'+esc(e)+'</span>'}).join('')+'</div></div>'+
+     '<div><div class="jl">Top needs</div><ul>'+top.map(function(s){return '<li><button type="button" class="lnk" data-act="sel" data-id="'+s.id+'">'+esc(cap1(s.goal))+'</button></li>'}).join('')+'</ul></div></article>';
+  }).join('')+'</div>';
+}
+function sprintsOf(){
+  var CAP=curCap();
+  var rank={M:0,S:1,C:2},list=[];
+  state.epics.forEach(function(ep){ep.stories.forEach(function(s){if(s.pri!=='W')list.push({s:s,epic:ep.name})})});
+  list.sort(function(a,b){return rank[a.s.pri]-rank[b.s.pri]});
+  var out=[],cur={items:[],pts:0};
+  list.forEach(function(x){
+    if(cur.items.length&&cur.pts+x.s.pts>CAP){out.push(cur);cur={items:[],pts:0}}
+    cur.items.push(x);cur.pts+=x.s.pts;
+  });
+  if(cur.items.length)out.push(cur);
+  return out;
+}
+function renderSprints(){
+  var sp=sprintsOf(),lastMust=-1;
+  sp.forEach(function(x,i){if(x.items.some(function(y){return y.s.pri==='M'}))lastMust=i});
+  var msg=lastMust>=0?lb('done')(lastMust+1):lb('none');
+  return '<div class="cap"><label for="cap"><b>'+lb('cap')+'</b></label><input type="number" id="cap" min="1" max="200" value="'+curCap()+'"></div>'+
+   '<p class="note-t">'+msg+' '+lb('note')+'</p>'+
+   '<div class="sprints">'+sp.map(function(x,i){
+     var segs=['M','S','C'].map(function(p,k){var v=x.items.filter(function(y){return y.s.pri===p}).reduce(function(n,y){return n+y.s.pts},0);return v?'<i class="s'+(k+1)+'" style="width:'+Math.min(100,v/curCap()*100)+'%"></i>':''}).join('');
+     return '<section class="sprint"><h3>'+lb('unit')+' '+(i+1)+'<span>'+x.pts+' / '+curCap()+' pts</span></h3><div class="meter">'+segs+'</div>'+
+       x.items.map(function(y){return noteHtml(y.s)}).join('')+'</section>';
+   }).join('')+'</div>';
+}
+function renderPanel(){
+  var f=ui.sel&&findStory(ui.sel);
+  if(!f){return ''}
+  var s=f.s,c=PM[s.persona];
+  var head='<div class="pt p'+c+'"><span class="av">'+initial(s.persona)+'</span>'+esc(s.persona)+'<span class="id">'+s.id+'</span><button type="button" class="x" data-act="close" aria-label="Close">&times;</button></div>';
+  if(ui.editing){
+    var i=function(n){return 'e-'+n};
+    return '<aside class="drawer" aria-label="Edit story">'+head+'<form class="pb edit" data-id="'+s.id+'">'+
+     '<label for="'+i('persona')+'">Who (user type)<input type="text" id="'+i('persona')+'" name="persona" value="'+esc(s.persona)+'"></label>'+
+     '<label for="'+i('goal')+'">I want to<input type="text" id="'+i('goal')+'" name="goal" value="'+esc(s.goal)+'"></label>'+
+     '<label for="'+i('benefit')+'">So that<input type="text" id="'+i('benefit')+'" name="benefit" value="'+esc(s.benefit)+'"></label>'+
+     '<label for="'+i('ac')+'">'+lb('ac')+', one per line<textarea id="'+i('ac')+'" name="ac" rows="5">'+esc(s.ac.join('\n'))+'</textarea></label>'+
+     '<div class="pf"><button type="submit" class="primary sm">Save</button><button type="button" class="lnk" data-act="cancel">Cancel</button></div></form></aside>';
+  }
+  var pts=[1,2,3,5,8,13];if(pts.indexOf(s.pts)<0){pts.push(s.pts);pts.sort(function(a,b){return a-b})}
+  return '<aside class="drawer" aria-label="Story details">'+head+'<div class="pb">'+sentence(s)+
+   '<div><div class="lbl">Priority (moves it on the board)</div><div class="seg" role="group" aria-label="Priority">'+['M','S','C','W'].map(function(p){return '<button type="button" data-act="setpri" data-v="'+p+'" aria-pressed="'+(s.pri===p)+'">'+PR[p]+'</button>'}).join('')+'</div></div>'+
+   '<div><div class="lbl">'+(state.mode==='personal'?'Effort points':'Story points')+'</div><div class="seg" role="group" aria-label="Story points">'+pts.map(function(n){return '<button type="button" data-act="setpts" data-v="'+n+'" aria-pressed="'+(s.pts===n)+'">'+n+'</button>'}).join('')+'</div></div>'+
+   '<div><div class="lbl">'+lb('ac')+'</div><ul class="ac">'+s.ac.map(function(a){return '<li>'+esc(a)+'</li>'}).join('')+'</ul></div>'+
+   '<div class="lbl" style="margin:0">Epic: '+esc(f.ep.name)+'</div>'+
+   '<div class="pf"><button type="button" class="ghost" data-act="edit">Edit text</button><button type="button" class="lnk danger" data-act="del">Delete story</button></div></div></aside>';
+}
+function render(){
+  var cv=document.querySelector('.canvas'),cvt=(cv&&!ui.resetScroll)?cv.scrollTop:0;
+  var mw=document.querySelector('.mapwrap'),sl=(mw&&!ui.resetScroll)?mw.scrollLeft:0;
+  var pn=document.querySelector('.drawer'),pt=pn?pn.scrollTop:0;
+  ui.resetScroll=false;
+  recolor();renderTabbar();
+  $('#app').setAttribute('data-screen',ui.screen);
+  var box=$('#results');
+  if(!state||!state.epics.length){
+    box.innerHTML='<div class="blank"><h2>'+(state?'No epics left':'No stories yet')+'</h2><p>'+(state?'Every epic was deleted. Change the text and press Create the plan to start again.':'Describe what you want to build, plan or achieve and press Create the plan.')+'</p></div>';
+    return;
+  }
+  if(ui.sel&&!findStory(ui.sel)){ui.sel=null;ui.editing=false}
+  var main=ui.view==='map'?renderMap():ui.view==='cards'?renderCards():ui.view==='people'?renderPeople():renderSprints();
+  var undo=ui.undo?' <button type="button" class="lnk" data-act="undo">Undo</button>':'';
+  box.innerHTML=renderTop()+'<div class="body2"><div class="canvas"><div class="cvin">'+renderBanner()+
+    (ui.flash?'<p class="flash" role="status">'+esc(ui.flash)+undo+'</p>':'')+
+    renderInsights()+main+'</div></div>'+(ui.sel?'<div class="scrim" data-act="close"></div>'+renderPanel():'')+'</div>';
+  var c2=document.querySelector('.canvas');if(c2)c2.scrollTop=cvt;
+  var m2=document.querySelector('.mapwrap');if(m2)m2.scrollLeft=sl;
+  var p2=document.querySelector('.drawer');if(p2)p2.scrollTop=pt;
+}
+
+/* ---------- export ---------- */
+function toMD(){
+  var all=allStories();
+  var o='# '+state.title+'\n\n'+all.length+' '+lb('totals')+', '+pointsOf(all)+' '+lb('unit2')+'.\n';
+  state.epics.forEach(function(ep){
+    o+='\n## '+(state.mode==='personal'?'Phase':'Epic')+': '+ep.name+'\n';
+    ep.stories.forEach(function(s){
+      o+='\n### '+s.id+' ['+PR[s.pri]+', '+s.pts+' pts]\n'+storyText(s)+'\n\n**'+lb('ac')+'**\n'+s.ac.map(function(a){return '- '+a}).join('\n')+'\n';
+    });
+  });
+  return o;
+}
+function toCSV(){
+  var q=function(v){return '"'+String(v).replace(/"/g,'""')+'"'};
+  var rows=[['Epic','ID','Who','Story','Priority','Points','Done when'].map(q).join(',')];
+  state.epics.forEach(function(ep){ep.stories.forEach(function(s){
+    rows.push([ep.name,s.id,s.persona,storyText(s),PR[s.pri],s.pts,s.ac.join(' | ')].map(q).join(','));
+  })});
+  return rows.join('\n');
+}
+function toast(m){var t=$('#toast');t.textContent=m;setTimeout(function(){if(t.textContent===m)t.textContent=''},3500)}
+
+/* ---------- generate (local, live) ---------- */
+function save(){
+  try{localStorage.setItem(STORE,JSON.stringify({text:$('#need').value,force:ui.force,state:(ui.dirty||ui.source==='ai')?state:null,source:ui.source,dirty:ui.dirty,next:ui.nextId}))}catch(e){}
+}
+function regen(manual){
+  var text=$('#need').value;
+  if(!text.trim()){state=null;ui.sel=null;ui.source='live';ui.dirty=false;ui.flash='';render();save();return}
+  state=build(text,ui.force);
+  ui.cap=null;ui.sel=null;ui.editing=false;ui.persona='All';ui.source='live';ui.dirty=false;ui.flash=manual?'Created from your text.':'';ui.undo=null;ui.confirmEpic=null;if(manual)ui.resetScroll=true;
+  render();save();
+}
+var timer=null;
+$('#need').addEventListener('input',function(){
+  clearTimeout(timer);
+  timer=setTimeout(function(){
+    if(state&&(ui.dirty||ui.source==='ai')){save();return}
+    regen();
+  },180);
+});
+$('#gen').addEventListener('click',create);
+$('#need').addEventListener('keydown',function(e){if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();$('#gen').click()}});
+
+/* ---------- Claude (inside Claude, or with your own key) ---------- */
+function getKey(){try{return localStorage.getItem('bb-key')||''}catch(e){return ''}}
+function hasAI(){return !!sample||!!getKey()}
+function engineText(){
+  var e=$('#engine'),kb=$('#keybox');
+  var inClaude=!!(window.claude&&window.claude.use);
+  kb.hidden=inClaude;
+  var on=!!sample||!!getKey();
+  e.className='engine'+(on?' on':'');
+  e.textContent=sample?'Claude connected':getKey()?'Claude key saved':'Built-in';
+  e.title=on?'Create writes the stories with Claude, for any topic.':(inClaude?'Claude is not available in this view, so the built-in generator is used.':'Add a Claude key below to write stories for any topic.');
+}
+function moreBtn(ei){
+  if(!hasAI())return '';
+  var off=(ui.busy!==null||ui.ai)?' disabled':'';
+  return '<button type="button" class="lnk" data-act="more" data-e="'+ei+'"'+off+'>'+(ui.busy===ei?'Suggesting...':'Suggest more')+'</button>';
+}
+function msg(t,info){var m=$('#needMsg');m.textContent=t;m.className=info?'info':''}
+function copyFor(e){
+  var c=e&&e.code;
+  if(c==='cancelled')return 'Stopped.';
+  if(c==='bad_key')return 'Your Claude key was not accepted. Check it and save it again.';
+  if(c==='not_granted'||c==='sampling_disabled'||c==='not_declared'||c==='capability_disabled'||c==='capability_removed')return 'Claude is not available for this page.';
+  if(c==='rate_limited')return 'Too many requests right now. Wait a minute, then try again.';
+  if(c==='invalid_json'||c==='empty_completion'||c==='refused')return 'Claude’s reply could not be turned into stories.';
+  if(c==='prompt_too_large')return 'The description is too long.';
+  return 'Could not reach Claude.';
+}
+function parseLoose(t){
+  try{return JSON.parse(t)}catch(e){}
+  var m=t.match(/```(?:json)?\s*([\s\S]*?)```/);if(m){try{return JSON.parse(m[1])}catch(e){}}
+  var a=t.search(/[\[{]/),z=Math.max(t.lastIndexOf('}'),t.lastIndexOf(']'));
+  if(a>=0&&z>a){try{return JSON.parse(t.slice(a,z+1))}catch(e){}}
+  return undefined;
+}
+async function askJSON(prompt,signal){
+  if(sample)return sample.json(prompt,{signal:signal,cache:false});
+  var key=getKey();if(!key)throw {code:'no_provider'};
+  var r;
+  try{
+    r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',signal:signal,
+      headers:{'content-type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-5-5',max_tokens:8000,messages:[{role:'user',content:prompt}]})});
+  }catch(e){if(e&&e.name==='AbortError')throw {code:'cancelled'};throw {code:'upstream_error'}}
+  if(!r.ok)throw {code:(r.status===401||r.status===403)?'bad_key':r.status===429?'rate_limited':'upstream_error'};
+  var j=await r.json();
+  var txt=(j.content||[]).map(function(c){return c.text||''}).join('');
+  var v=parseLoose(txt);if(v===undefined)throw {code:'invalid_json'};
+  return v;
+}
+function normStory(x){
+  if(!x||typeof x!=='object')return null;
+  var goal=String(x.goal||'').trim().replace(/^(i\s+want\s+to|want\s+to|to)\s+/i,'').replace(/[.!?]+$/,'');
+  if(!goal)return null;
+  var persona=String(x.persona||'User').trim().replace(/^(an?|the)\s+/i,'')||'User';
+  var benefit=String(x.benefit||'').trim().replace(/^so\s+that\s+/i,'').replace(/[.!?]+$/,'')||'it is useful to me';
+  var pri=String(x.pri||'S').charAt(0).toUpperCase();if('MSCW'.indexOf(pri)<0)pri='S';
+  var sizes=[1,2,3,5,8,13],n=+x.pts||3,pts=sizes.reduce(function(a,b){return Math.abs(b-n)<Math.abs(a-n)?b:a});
+  var ac=(Array.isArray(x.ac)?x.ac:[]).map(function(a){return String(a).trim()}).filter(Boolean).slice(0,6);
+  if(!ac.length)ac=genAC(persona,goal);
+  return {persona:persona,goal:goal,benefit:benefit,pri:pri,pts:pts,ac:ac};
+}
+var AI_PROMPT='You are a senior business analyst. Break the business need below into a user story backlog.\n'+
+ '- First work out what this really is and who the real people involved are, then write stories specific to it. Do not write generic filler.\n'+
+ '- If it is software or a business system, write normal user stories for its users and set "mode" to "work". If it is a personal or professional goal or project that is not software (getting married, moving home, starting a business, a career move, learning for an exam, a trip, an event), write each story as a real step in a plan, use the real people involved as personas ("Me" is the person asking, plus for example Partner, Parents, Planner, Vendor, Mentor), write "acceptance criteria" as short done-when checks, and set "mode" to "personal".\n'+
+ '- 5 to 8 epics, ordered the way the product would be built, 3 to 6 stories each.\n'+
+ '- Cover every real user type (including admins and outside parties), the core flow, admin tasks, notifications, and basic quality needs such as security, speed and accessibility where they matter.\n'+
+ '- Priority is MoSCoW: M must, S should, C could, W won\'t for now. Keep Must to about 40 percent of the stories so a first release is realistic.\n'+
+ '- pts is a size from 1, 2, 3, 5, 8 or 13.\n'+
+ '- 2 to 4 acceptance criteria per story, each testable, with concrete numbers where they help.\n'+
+ '- Also estimate the whole plan: calendar days (low and high), total cost in Indian rupees at current Indian market rates (low and high, 0 if there is no money cost), the people or trades needed with counts (for example 2 IT engineers), and the things to arrange (for example 5 logs of timber). Keep it realistic and short.\n'+
+ '- For personal mode, write epic names, goals and benefits in very simple English with short sentences a school student could follow.\n'+
+ '- Plain language, no jargon. "goal" completes the sentence "I want to ..." and "benefit" completes "so that ...".\n'+
+ 'Reply with only JSON in this shape: {"title":"short project name","function":"what kind of project this is in 2 to 4 words","mode":"work or personal","estimate":{"days_low":0,"days_high":0,"cost_low":0,"cost_high":0,"people":[{"n":1,"label":"role or material","optional":false}],"things":["what to arrange"],"basis":"one short sentence"},"epics":[{"name":"epic name","stories":[{"persona":"user type","goal":"...","benefit":"...","pri":"M","pts":3,"ac":["..."]}]}]}\n\nBusiness need:\n';
+function setBusy(on){ui.ai=on;$('#gen').disabled=on;$('#gen').textContent=on?'Creating with Claude...':'Create the plan';$('#stop').hidden=!on}
+async function create(){
+  var text=$('#need').value;
+  if(!text.trim()){msg('Describe what you need to build first, for example: an app to book salon appointments.');$('#need').focus();return}
+  clearTimeout(timer);msg('');
+  if(hasAI()){await aiGenerate(text);return}
+  ui.screen='board';regen(true);
+}
+async function aiGenerate(text){
+  ctl=new AbortController();setBusy(true);msg('Claude is working out the business function and writing the stories. This takes about 20 to 40 seconds.',true);
+  try{
+    var data=await askJSON(AI_PROMPT+text,ctl.signal);
+    var epics=[];ui.nextId=101;
+    genMode=(data&&data.mode==='personal')?'personal':'work';
+    ((data&&data.epics)||[]).forEach(function(ep){
+      var st=((ep&&ep.stories)||[]).map(normStory).filter(Boolean);
+      if(ep&&ep.name&&st.length)epics.push({name:String(ep.name).trim(),stories:st.map(mk)});
+    });
+    if(!epics.length)throw {code:'invalid_json'};
+    state={title:String((data&&data.title)||'').trim()||subjectOf(text),mode:(data&&data.mode==='personal')?'personal':'work',label:'Written by Claude'+(data&&data.function?' · '+String(data.function).trim():''),epics:epics,est:normEst(data&&data.estimate)};
+    ui.cap=null;ui.sel=null;ui.editing=false;ui.persona='All';ui.view='sprint';ui.source='ai';ui.dirty=false;ui.flash='';ui.undo=null;
+    ui.screen='board';ui.resetScroll=true;msg('');render();save();
+  }catch(e){
+    if(e&&e.code==='cancelled'){msg('Stopped.',true)}
+    else{
+      msg('');ui.screen='board';regen(true);ui.flash=copyFor(e)+' Showing the built-in version instead.';render();
+    }
+  }finally{genMode='work';setBusy(false)}
+}
+async function moreFor(ei){
+  if(!hasAI()||ui.busy!==null||ui.ai||!state)return;
+  var ep=state.epics[ei];if(!ep)return;
+  ui.busy=ei;ui.flash='';render();
+  var have=ep.stories.map(function(s){return '- '+s.persona+': '+s.goal}).join('\n')||'(none yet)';
+  var prompt='You are a senior business analyst extending a user story backlog.\nProject: '+state.title+'\nEpic: '+ep.name+'\nOriginal request:\n'+$('#need').value+'\n\nStories already in this epic:\n'+have+
+   '\n\nSuggest 3 or 4 NEW stories for this epic that do not repeat the ones above. Plain language. "goal" completes "I want to ..." and "benefit" completes "so that ...". pri is M, S, C or W. pts is 1, 2, 3, 5, 8 or 13. Give 2 to 4 testable acceptance criteria each.\n'+
+   'Reply with only a JSON array: [{"persona":"user type","goal":"...","benefit":"...","pri":"S","pts":3,"ac":["..."]}]';
+  try{
+    var arr=await askJSON(prompt,undefined);
+    genMode=state.mode==='personal'?'personal':'work';
+    var list=(Array.isArray(arr)?arr:((arr&&arr.stories)||[])).map(normStory).filter(Boolean).slice(0,6);
+    genMode='work';
+    if(state.epics.indexOf(ep)>=0){
+      list.forEach(function(s){s.id=newId();ep.stories.push(s)});
+      if(list.length)ui.dirty=true;
+      ui.flash=list.length?'Added '+list.length+' suggested stories to '+ep.name+'.':'Claude had no new stories to add to '+ep.name+'.';
+    }
+  }catch(e){ui.flash=copyFor(e)}
+  ui.busy=null;render();save();
+}
+$('#stop').addEventListener('click',function(){if(ctl)ctl.abort()});
+$('#savekey').addEventListener('click',function(){
+  var v=$('#apikey').value.trim();if(!v)return;
+  try{localStorage.setItem('bb-key',v)}catch(e){}
+  $('#apikey').value='';engineText();render();msg('Key saved. Press Create the plan to use Claude.',true);
+});
+$('#clearkey').addEventListener('click',function(){try{localStorage.removeItem('bb-key')}catch(e){}engineText();render();msg('Key removed.',true)});
+engineText();
+if(window.claude&&window.claude.use){
+  window.claude.use('sample').then(function(s){if(s){sample=s}engineText();render()}).catch(function(){engineText()});
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click',function(e){
+  var b=e.target.closest('[data-act]');if(!b)return;if(!state&&['export','tab'].indexOf(b.getAttribute('data-act'))<0)return;
+  var act=b.getAttribute('data-act'),id=b.getAttribute('data-id'),v=b.getAttribute('data-v');
+  if(act!=='more'&&act!=='undo')ui.flash='';
+  if(act!=='delEpic')ui.confirmEpic=null;
+  if(act!=='del'&&act!=='undo'&&act!=='sel'&&act!=='view'&&act!=='persona'&&act!=='export'&&act!=='tab'&&act!=='chart')ui.undo=null;
+  var changed=false;
+  if(act==='view'){ui.view=v;ui.resetScroll=true}
+  else if(act==='tab'){if(v==='create'){ui.screen='create'}else{ui.screen='board';ui.view=v;ui.resetScroll=true}}
+  else if(act==='chart'){ui.chart=!ui.chart}
+  else if(act==='tier'){ui.tier=v}
+  else if(act==='persona'){ui.persona=(ui.persona===v)?'All':v}
+  else if(act==='sel'){ui.sel=id;ui.editing=false}
+  else if(act==='close'){ui.sel=null;ui.editing=false}
+  else if(act==='edit'){ui.editing=true}
+  else if(act==='cancel'){var cf=ui.sel&&findStory(ui.sel);if(cf&&!cf.s.goal){cf.ep.stories.splice(cf.si,1);ui.sel=null}ui.editing=false}
+  else if(act==='del'){var d=ui.sel&&findStory(ui.sel);if(d){d.ep.stories.splice(d.si,1);ui.undo={ei:d.ei,si:d.si,s:d.s};ui.flash='Deleted "'+cap1(d.s.goal)+'".';ui.sel=null;ui.editing=false;changed=true}}
+  else if(act==='undo'){if(ui.undo){var ep=state.epics[ui.undo.ei];if(ep){ep.stories.splice(Math.min(ui.undo.si,ep.stories.length),0,ui.undo.s);ui.sel=ui.undo.s.id}ui.undo=null;changed=true}}
+  else if(act==='setpri'){var p=ui.sel&&findStory(ui.sel);if(p){p.s.pri=v;changed=true}}
+  else if(act==='setpts'){var q=ui.sel&&findStory(ui.sel);if(q){q.s.pts=+v;changed=true}}
+  else if(act==='add'){
+    var ep2=state.epics[+b.getAttribute('data-e')];
+    var ns={id:newId(),persona:'User',goal:'',benefit:'',pri:'S',pts:3,ac:[]};
+    ep2.stories.push(ns);ui.sel=ns.id;ui.editing=true;ui.persona='All';changed=true;
+  }
+  else if(act==='delEpic'){
+    var ei=+b.getAttribute('data-e');
+    if(ui.confirmEpic===ei){state.epics.splice(ei,1);ui.confirmEpic=null;changed=true}else ui.confirmEpic=ei;
+  }
+  else if(act==='rebuild'){regen(true);return}
+  else if(act==='more'){moreFor(+b.getAttribute('data-e'));return}
+  else if(act==='export'){
+    ui.exp=v;
+    $('#exTitle').textContent='Export';
+    $('#exText').value=state?(v==='md'?toMD():toCSV()):'Nothing to export yet.';
+    ['md','csv'].forEach(function(k){var el=document.querySelector('#exportPanel [data-v="'+k+'"]');if(el)el.setAttribute('aria-pressed',String(k===v))});
+    $('#exportPanel').hidden=false;
+    return;
+  }
+  if(changed)ui.dirty=true;
+  render();save();
+  if(act==='edit'||act==='add'){var fi=document.querySelector('form.edit input');if(fi)fi.focus()}
+});
+document.addEventListener('submit',function(e){
+  var f=e.target.closest('form.edit');if(!f)return;e.preventDefault();
+  var r=findStory(f.getAttribute('data-id'));if(!r)return;
+  var g=function(n){return f.elements[n].value.trim()};
+  if(!g('goal')){f.elements.goal.focus();return}
+  r.s.persona=g('persona')||'User';r.s.goal=g('goal');r.s.benefit=g('benefit')||'it is useful to me';
+  r.s.ac=f.elements.ac.value.split('\n').map(function(x){return x.trim()}).filter(Boolean);
+  if(!r.s.ac.length)r.s.ac=genAC(r.s.persona,r.s.goal);
+  ui.editing=false;ui.dirty=true;render();save();
+});
+document.addEventListener('change',function(e){
+  if(e.target.id==='fn'){ui.force=e.target.value==='auto'?null:e.target.value;regen(true);return}
+  if(e.target.id==='cap'){var n=parseInt(e.target.value,10);ui.cap=n>0?n:null;render();var c=$('#cap');if(c)c.focus()}
+});
+$('#exClose').addEventListener('click',function(){$('#exportPanel').hidden=true});
+$('#exportPanel').addEventListener('click',function(e){if(e.target===this)this.hidden=true});
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Escape')return;
+  var xp=$('#exportPanel');
+  if(!xp.hidden){xp.hidden=true;return}
+  if(state&&ui.sel){ui.sel=null;ui.editing=false;render()}
+});
+$('#exCopy').addEventListener('click',function(){
+  var ta=$('#exText');
+  var fb=function(){ta.focus();ta.select();toast('Text selected. Press Ctrl+C or Cmd+C to copy.')};
+  try{navigator.clipboard.writeText(ta.value).then(function(){toast('Copied')},fb)}catch(err){fb()}
+});
+
+/* ---------- start ---------- */
+var EX=[
+ ['Get married','I want to get married'],
+ ['Plan a family trip','Plan a family trip to Goa in December with kids and parents'],
+ ['Buy my first home','I want to buy my first home'],
+ ['Start a business','Start a small bakery business'],
+ ['Switch careers','I want to switch careers into data analytics'],
+ ['Prepare for IELTS','Prepare for the IELTS exam in 3 months'],
+ ['Course website','I need to build a course and certification webpage'],
+ ['Salon booking app','An app to book salon appointments with reminders and online payment'],
+ ['Online store','Online store for handmade soap with payments, coupons and reviews'],
+ ['Support desk','Customer support ticketing system with live chat'],
+ ['Marketing campaign','Launch a marketing campaign for our new product']
+];
+var exBox=$('#examples');
+EX.forEach(function(x){
+  var b=document.createElement('button');b.type='button';b.className='tpl';
+  var sp=document.createElement('span');sp.textContent=x[0];var ar=document.createElement('i');ar.textContent='\u203A';b.appendChild(sp);b.appendChild(ar);
+  b.addEventListener('click',function(){$('#need').value=x[1];ui.force=null;ui.screen='board';regen(true)});
+  exBox.appendChild(b);
+});
+var restored=false;
+try{
+  var raw=localStorage.getItem(STORE);
+  if(raw){
+    var d=JSON.parse(raw);
+    if(d&&typeof d.text==='string')$('#need').value=d.text;
+    if(d&&d.force)ui.force=d.force;
+    if(d&&d.state&&d.state.epics&&(d.dirty||d.source==='ai')){state=d.state;ui.source=d.source||'live';ui.dirty=!!d.dirty;ui.nextId=d.next||101;restored=true}
+  }
+}catch(e){}
+if(restored){ui.screen='board';render()}else regen();
+})();
+</script>

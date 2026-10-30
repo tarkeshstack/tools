@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>JobSwipe</title>
+<style>
+:root{--bg:#f4f1ec;--card:#fff;--ink:#1c1c1e;--mut:#6b6b70;--green:#12a150;--red:#e5484d;--blue:#2563eb;--amber:#d98e04;--line:#e6e2da}
+@media(prefers-color-scheme:dark){:root{--bg:#141416;--card:#1f1f23;--ink:#f3f3f4;--mut:#9a9aa2;--line:#2c2c32}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+header{width:100%;max-width:440px;display:flex;align-items:center;justify-content:space-between;padding:14px 16px 6px}
+h1{font-size:20px;margin:0;letter-spacing:-.3px}
+h1 span{color:var(--green)}
+nav{display:flex;gap:6px}
+nav button{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:6px 11px;border-radius:999px;font-size:13px;cursor:pointer}
+nav button.on{background:var(--ink);color:var(--bg)}
+main{width:100%;max-width:440px;padding:0 16px 24px;flex:1}
+.sub{color:var(--mut);font-size:13px;margin:2px 0 10px}
+.stack{position:relative;height:430px;margin-top:6px}
+.card{position:absolute;inset:0;background:var(--card);border-radius:22px;border:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,.08);padding:22px;display:flex;flex-direction:column;touch-action:pan-y;user-select:none;will-change:transform}
+.card.back{transform:scale(.95) translateY(14px);opacity:.7;pointer-events:none}
+.stamp{position:absolute;top:22px;font-weight:800;font-size:22px;border:3px solid;padding:2px 10px;border-radius:8px;opacity:0;letter-spacing:1px}
+.stamp.l{left:20px;color:var(--red);transform:rotate(-12deg)}
+.stamp.r{right:20px;color:var(--green);transform:rotate(12deg)}
+.ring{width:132px;height:132px;border-radius:50%;margin:14px auto 12px;display:grid;place-items:center;background:conic-gradient(var(--c) calc(var(--p)*1%),var(--line) 0)}
+.ring div{width:104px;height:104px;border-radius:50%;background:var(--card);display:grid;place-items:center;text-align:center}
+.ring b{font-size:34px;line-height:1}
+.ring small{display:block;color:var(--mut);font-size:11px;margin-top:2px}
+.title{font-size:21px;font-weight:700;text-align:center;letter-spacing:-.3px}
+.co{text-align:center;color:var(--mut);margin-top:2px}
+.meta{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:12px}
+.chip{font-size:12px;padding:4px 9px;border-radius:999px;background:var(--bg);border:1px solid var(--line)}
+.chip.hit{background:rgba(18,161,80,.12);border-color:rgba(18,161,80,.4);color:var(--green)}
+.why{margin-top:auto;text-align:center;font-size:13px;color:var(--mut)}
+.actions{display:flex;gap:12px;margin-top:14px;align-items:center}
+.btn{flex:1;border:0;border-radius:14px;padding:14px;font-size:16px;font-weight:600;cursor:pointer;color:#fff}
+.btn.apply{background:var(--green)}
+.btn.share{background:var(--blue)}
+.btn.skip{flex:0 0 56px;background:var(--card);color:var(--red);border:1px solid var(--line);font-size:20px}
+.link{display:block;text-align:center;margin-top:10px;font-size:13px;color:var(--blue)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+label{display:block;font-size:13px;color:var(--mut);margin:10px 0 4px}
+input,textarea,select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
+textarea{min-height:90px;font:12px ui-monospace,monospace}
+.row{display:flex;gap:8px}.row>*{flex:1}
+.pbtn{margin-top:12px;width:100%;padding:12px;border:0;border-radius:12px;background:var(--ink);color:var(--bg);font-weight:600;cursor:pointer}
+.li{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.li:last-child{border:0}.li small{color:var(--mut)}
+.tag{font-size:11px;padding:2px 8px;border-radius:999px;color:#fff}
+.empty{text-align:center;color:var(--mut);padding:60px 10px}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:14px;opacity:0;transition:.25s;pointer-events:none}
+#toast.on{opacity:1}
+.hide{display:none!important}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:6px}
+.tabs button{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:7px 12px;border-radius:999px;font-size:13px;cursor:pointer;white-space:nowrap}
+.tabs button.on{background:var(--ink);color:var(--bg)}
+.panel h3{margin:0 0 8px;font-size:15px}
+.tl{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--line);color:var(--ink);text-decoration:none}
+.tl:last-child{border:0}
+.tl small{color:var(--mut);display:block}
+.dem{font-size:11px;padding:2px 8px;border-radius:999px;color:#fff;white-space:nowrap}
+.dem.High{background:var(--green)}.dem.Rising{background:var(--blue)}.dem.Steady{background:#8a8a90}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.steps{margin:0;padding-left:20px}.steps li{margin:6px 0}
+</style>
+</head>
+<body>
+<header><h1>Job<span>Swipe</span></h1>
+<nav><button data-t="swipe" class="on">Swipe</button><button data-t="trending">Trending</button><button data-t="saved">Done</button><button data-t="setup">Setup</button></nav></header>
+<main>
+
+<section id="swipe">
+  <div class="sub" id="status"></div>
+  <div class="stack" id="stack"></div>
+  <div class="actions" id="acts"></div>
+  <a class="link" id="liSearch" target="_blank" rel="noopener">See today's jobs on LinkedIn ↗</a>
+</section>
+
+<section id="trending" class="hide">
+  <div class="sub">What's in demand and how to get ready. Your track is picked from your role; tap another to explore.</div>
+  <div class="tabs" id="trTabs"></div>
+  <div id="trBody"></div>
+  <p class="sub">Indicative snapshot based on general market trends, not live data. Always confirm demand on job boards before investing in a course.</p>
+</section>
+
+<section id="saved" class="hide"><div class="panel" id="savedList"></div></section>
+
+<section id="setup" class="hide">
+  <div class="panel">
+    <b>Your profile</b>
+    <label>Current role</label><input id="role" placeholder="e.g. Informatica ETL Developer">
+    <label>Key skills (comma separated)</label><input id="skills" placeholder="informatica, sql, etl, data warehouse">
+    <div class="row">
+      <div><label>Location (optional)</label><input id="loc" placeholder="Hyderabad"></div>
+      <div><label>Match needed to Apply: <span id="thv">60</span>%</label><input id="th" type="range" min="30" max="90" value="60"></div>
+    </div>
+  </div>
+  <div class="panel">
+    <b>Job source</b>
+    <label>Source</label>
+    <select id="src"><option value="adzuna">Adzuna (real jobs, last 24h)</option><option value="demo">Demo jobs</option><option value="paste">Pasted JSON</option><option value="api">My jobs API URL</option></select>
+    <div id="pasteBox" class="hide"><label>JSON array: title, company, location, url, postedAt (ISO), skills[]</label><textarea id="paste"></textarea></div>
+    <div id="adzBox" class="hide">
+      <label>Country</label>
+      <select id="cc"><option value="in">India</option><option value="gb">United Kingdom</option><option value="us">United States</option><option value="au">Australia</option><option value="ca">Canada</option><option value="sg">Singapore</option></select>
+      <div class="row"><div><label>App ID</label><input id="aid" autocomplete="off"></div><div><label>App Key</label><input id="akey" type="password" autocomplete="off"></div></div>
+      <label>Proxy base URL (optional, only if the browser blocks the request)</label><input id="proxy" placeholder="https://your-proxy.workers.dev">
+      <p class="sub">Free keys: developer.adzuna.com. Keys are stored only in this browser.</p>
+    </div>
+    <div id="apiBox" class="hide"><label>URL returning that same JSON</label><input id="api" placeholder="https://your-server/jobs.json"></div>
+    <p class="sub" style="margin-top:10px">LinkedIn has no public jobs feed and scraping it breaks its terms. Plug in a licensed jobs API (via your own server) or paste exports here. Only jobs posted in the last 24 hours are shown.</p>
+  </div>
+  <button class="pbtn" id="saveBtn">Save &amp; start swiping</button>
+</section>
+</main>
+<div id="toast"></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const LS=k=>{try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}};
+const SV=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+let P=LS('js_profile')||{role:'',skills:'',loc:'',th:60,src:'demo',paste:'',api:''};
+let done=LS('js_done')||[];
+let jobs=[],idx=0;
+
+// ---- demo data (replace via Setup) ----
+function demo(){
+  const now=Date.now(),h=3600e3;
+  const d=[
+   ['Informatica ETL Developer','Infosys','Hyderabad',['informatica','etl','sql'],2],
+   ['Senior Data Engineer','Accenture','Bengaluru',['sql','python','etl','spark'],5],
+   ['IICS Cloud Data Integration Lead','Cognizant','Pune',['informatica','iics','cloud'],7],
+   ['Spoken English Trainer','Edu Bridge','Remote',['english','training','communication'],9],
+   ['Data Warehouse Tester','Capgemini','Chennai',['sql','etl','testing'],11],
+   ['Frontend Developer','Zoho','Chennai',['react','javascript','css'],13],
+   ['Sales Executive','Bharti Retail','Delhi',['sales','crm'],14],
+   ['Informatica Production Support Analyst','TCS','Hyderabad',['informatica','unix','sql'],16],
+   ['Hindi Content Writer','Vernac Media','Remote',['hindi','writing'],18],
+   ['DevOps Engineer','Wipro','Bengaluru',['aws','docker','kubernetes'],20],
+   ['ETL Architect','HCL','Noida',['etl','informatica','data warehouse'],22],
+   ['Delivery Driver','Swiggy','Mumbai',['driving'],23]
+  ];
+  return d.map((x,i)=>({id:'d'+i,title:x[0],company:x[1],location:x[2],skills:x[3],postedAt:new Date(now-x[4]*h).toISOString(),url:'https://www.linkedin.com/jobs/search/?keywords='+encodeURIComponent(x[0])}));
+}
+
+// ---- matching ----
+const STOP=new Set('senior sr jr junior lead principal staff associate the and of for in a an at to i ii iii intern trainee'.split(' '));
+const SYN={developer:'engineer',dev:'engineer',programmer:'engineer',analyst:'analyst',iics:'informatica',powercenter:'informatica',datawarehouse:'etl',dwh:'etl',tester:'testing',qa:'testing',support:'support'};
+const tok=s=>(s||'').toLowerCase().replace(/[^a-z0-9+#\s]/g,' ').split(/\s+/).filter(w=>w&&!STOP.has(w)).map(w=>SYN[w]||w);
+function match(j){
+  const rt=new Set(tok(P.role)), st=new Set(tok((P.skills||'').replace(/,/g,' ')));
+  const jt=[...new Set(tok(j.title))], js=[...new Set((j.skills||[]).flatMap(s=>tok(s)))];
+  const mine=new Set([...rt,...st]);
+  const titleHit=jt.filter(w=>rt.has(w)||st.has(w));
+  const skillHit=js.filter(w=>mine.has(w));
+  const t=jt.length?titleHit.length/jt.length:0;
+  const s=js.length?skillHit.length/js.length:0;
+  let sc=(st.size||js.length)?0.5*t+0.5*s:t;
+  if(P.loc&&j.location&&(j.location.toLowerCase().includes(P.loc.toLowerCase())||/remote/i.test(j.location)))sc+=0.05;
+  const pct=Math.min(99,Math.round(sc*100));
+  return {pct,hits:[...new Set([...titleHit,...skillHit])]};
+}
+
+// ---- Adzuna (real jobs) ----
+const KNOWN=['informatica','iics','powercenter','etl','sql','python','java','javascript','react','node','aws','azure','gcp','snowflake','databricks','spark','kafka','airflow','dbt','tableau','power bi','docker','kubernetes','terraform','linux','unix','testing','selenium','data warehouse','oracle','hadoop','sales','marketing','english','hindi','training','communication','excel','crm','seo','figma','security','devops'];
+async function fetchAdzuna(){
+  if(!P.aid||!P.akey)throw new Error('Add your Adzuna App ID and Key in Setup');
+  const words=[...new Set(tok((P.role||'')+' '+(P.skills||'').replace(/,/g,' ')))].slice(0,8).join(' ');
+  const base=P.proxy||'https://api.adzuna.com';
+  const mine=(P.skills||'').toLowerCase().split(',').map(s=>s.trim()).filter(Boolean);
+  let out=[];
+  for(const pg of [1,2]){
+    const u=`${base}/v1/api/jobs/${P.cc||'in'}/search/${pg}?app_id=${encodeURIComponent(P.aid)}&app_key=${encodeURIComponent(P.akey)}&results_per_page=50&max_days_old=1&sort_by=date`+(words?'&what_or='+encodeURIComponent(words):'')+(P.loc?'&where='+encodeURIComponent(P.loc):'');
+    let r;
+    try{r=await fetch(u)}catch(e){throw new Error('Request blocked by the browser (CORS). Set a Proxy URL in Setup')}
+    if(!r.ok)throw new Error('Adzuna returned '+r.status+' (check ID/key)');
+    const d=await r.json();const res=d.results||[];
+    out=out.concat(res);
+    if(res.length<50)break;
+  }
+  return out.map(x=>{
+    const text=((x.title||'')+' '+(x.description||'')).toLowerCase();
+    const sk=[...new Set([...KNOWN,...mine].filter(k=>text.includes(k)))];
+    return {id:'adz'+x.id,title:(x.title||'').replace(/<[^>]+>/g,''),company:x.company&&x.company.display_name,location:x.location&&x.location.display_name,postedAt:x.created,url:x.redirect_url,skills:sk};
+  });
+}
+
+// ---- load ----
+function ago(iso){const m=Math.max(1,Math.round((Date.now()-new Date(iso))/6e4));return m<60?m+'m ago':Math.round(m/60)+'h ago'}
+async function load(){
+  let raw=[];
+  try{
+    if(P.src==='paste')raw=JSON.parse(P.paste||'[]');
+    else if(P.src==='adzuna')raw=await fetchAdzuna();
+    else if(P.src==='api'&&P.api){const r=await fetch(P.api);raw=await r.json();}
+    else raw=demo();
+  }catch(e){toast('Could not read jobs: '+e.message);raw=[];}
+  const cut=Date.now()-24*3600e3, seen=new Set(done.map(d=>d.id));
+  jobs=raw.map((j,i)=>({id:j.id||j.url||('j'+i),...j}))
+    .filter(j=>j.postedAt&&new Date(j.postedAt)>=cut&&!seen.has(j.id))
+    .map(j=>({...j,m:match(j)})).sort((a,b)=>b.m.pct-a.m.pct);
+  idx=0;render();
+}
+
+// ---- render ----
+function colour(p){return p>=P.th?'var(--green)':p>=P.th-20?'var(--amber)':'var(--red)'}
+function cardHTML(j){
+  const c=colour(j.m.pct);
+  const chips=[j.location,ago(j.postedAt),...(j.skills||[]).slice(0,3)].filter(Boolean)
+    .map(x=>`<span class="chip ${j.m.hits.includes((x||'').toLowerCase())?'hit':''}">${esc(x)}</span>`).join('');
+  return `<div class="stamp l">SKIP</div><div class="stamp r">GO</div>
+  <div class="ring" style="--p:${j.m.pct};--c:${c}"><div><span><b>${j.m.pct}%</b><small>match</small></span></div></div>
+  <div class="title">${esc(j.title)}</div><div class="co">${esc(j.company||'')}</div>
+  <div class="meta">${chips}</div>
+  <div class="why">${P.role?`vs your role: ${esc(P.role)}`:'Add your role in Setup for better matching'}</div>`;
+}
+function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function render(){
+  const st=$('#stack');st.innerHTML='';
+  $('#liSearch').href='https://www.linkedin.com/jobs/search/?f_TPR=r86400&keywords='+encodeURIComponent(P.role||'')+(P.loc?'&location='+encodeURIComponent(P.loc):'');
+  const left=jobs.length-idx;
+  $('#status').textContent=left>0?`${left} new job${left>1?'s':''} from the last 24 hours, best matches first`:'';
+  if(left<=0){st.innerHTML='<div class="empty">You\'re all caught up for today 🎉<br>Check back tomorrow or change your source in Setup.</div>';$('#acts').innerHTML='';return;}
+  [1,0].forEach(o=>{const j=jobs[idx+o];if(!j)return;
+    const el=document.createElement('div');el.className='card'+(o?' back':'');el.innerHTML=cardHTML(j);st.appendChild(el);
+    if(!o)drag(el);});
+  const j=jobs[idx],ok=j.m.pct>=P.th;
+  $('#acts').innerHTML=`<button class="btn skip" id="bSkip" aria-label="Skip">✕</button>
+   <button class="btn ${ok?'apply':'share'}" id="bMain">${ok?'Apply now':'Not a fit · Share'}</button>`;
+  $('#bSkip').onclick=()=>fly(-1);$('#bMain').onclick=()=>fly(1);
+}
+function drag(el){
+  let x0=null,dx=0;
+  const L=el.querySelector('.l'),R=el.querySelector('.r');
+  el.onpointerdown=e=>{x0=e.clientX;el.setPointerCapture(e.pointerId);el.style.transition='none'};
+  el.onpointermove=e=>{if(x0===null)return;dx=e.clientX-x0;el.style.transform=`translateX(${dx}px) rotate(${dx/18}deg)`;R.style.opacity=Math.max(0,dx/100);L.style.opacity=Math.max(0,-dx/100)};
+  el.onpointerup=()=>{if(x0===null)return;x0=null;if(Math.abs(dx)>90)fly(dx>0?1:-1);else{el.style.transition='.2s';el.style.transform='';R.style.opacity=L.style.opacity=0}dx=0};
+}
+function fly(dir){
+  const el=$('#stack .card:not(.back)');if(!el)return;
+  el.style.transition='.28s';el.style.transform=`translateX(${dir*500}px) rotate(${dir*25}deg)`;el.style.opacity=0;
+  const j=jobs[idx];
+  setTimeout(()=>{act(j,dir);idx++;render()},230);
+}
+function act(j,dir){
+  if(dir<0){log(j,'skipped');return}
+  if(j.m.pct>=P.th){window.open(j.url||'https://www.linkedin.com/jobs/','_blank');log(j,'applied');toast('Opened apply page')}
+  else{share(j);log(j,'shared')}
+}
+async function share(j){
+  const text=`${j.title} at ${j.company||''} (${j.location||''}) — maybe someone you know?`;
+  const url=j.url||location.href;
+  if(navigator.share){try{await navigator.share({title:j.title,text,url});return}catch(e){if(e.name==='AbortError')return}}
+  try{await navigator.clipboard.writeText(text+' '+url);toast('Link copied, paste to share')}
+  catch(e){window.open('https://wa.me/?text='+encodeURIComponent(text+' '+url),'_blank')}
+}
+function log(j,s){done.unshift({id:j.id,title:j.title,company:j.company,pct:j.m.pct,url:j.url,s,t:Date.now()});done=done.slice(0,200);SV('js_done',done)}
+function renderSaved(){
+  const c={applied:'var(--green)',shared:'var(--blue)',skipped:'#8a8a90'};
+  $('#savedList').innerHTML=done.length?done.map(d=>`<div class="li"><div><b>${esc(d.title)}</b><br><small>${esc(d.company||'')} · ${d.pct}% match</small></div><div style="text-align:right"><span class="tag" style="background:${c[d.s]}">${d.s}</span>${d.s!=='skipped'?`<br><a class="link" style="margin:4px 0 0" href="${esc(d.url||'#')}" target="_blank" rel="noopener">open</a>`:''}</div></div>`).join(''):'<div class="empty">Nothing yet. Start swiping.</div>';
+}
+
+// ---- trending ----
+const TR={
+ data:{n:'Data & ETL',kw:['informatica','etl','data','sql','warehouse','bi','analyst','snowflake','iics'],
+  titles:[['Data Engineer','High'],['Cloud Data Integration (IICS) Developer','Rising'],['Analytics Engineer','Rising'],['Data Platform Engineer','Rising'],['ETL Developer','Steady'],['BI / Power BI Developer','High']],
+  skills:['SQL','Python','Cloud DWH (Snowflake, BigQuery)','Informatica IICS','dbt','Spark / Databricks','Data quality & governance'],
+  certs:['Informatica Cloud Data Integration certification','SnowPro Core (Snowflake)','Databricks Certified Data Engineer Associate','AWS Certified Data Engineer – Associate','Azure DP-700 (Fabric Data Engineer)','Google Professional Data Engineer'],
+  courses:[['Data Engineering Zoomcamp','DataTalks.Club (free)'],['Snowflake University','Snowflake'],['Informatica University','Informatica'],['SQL for Data Analysis','Mode / Coursera']],
+  ready:['Move on-prem ETL skills to cloud: learn IICS and one cloud warehouse.','Add Python and dbt to your toolkit.','Build 2 portfolio pipelines on GitHub and write about them on LinkedIn.']},
+ ai:{n:'AI & ML',kw:['ai','ml','machine','learning','llm','genai','scientist','python','nlp'],
+  titles:[['AI / ML Engineer','High'],['GenAI / LLM Application Developer','High'],['MLOps Engineer','Rising'],['Data Scientist','Steady'],['AI Product Manager','Rising'],['Prompt / AI Automation Specialist','Rising']],
+  skills:['Python','LLM APIs & prompt design','RAG & vector databases','Evaluation & testing of AI output','MLOps basics','Statistics'],
+  certs:['AWS Certified AI Practitioner / ML Engineer – Associate','Azure AI-102 (AI Engineer)','Google Professional ML Engineer','Databricks Generative AI Engineer Associate'],
+  courses:[['Machine Learning Specialization','DeepLearning.AI / Coursera'],['Practical Deep Learning','fast.ai (free)'],['LLM Course','Hugging Face (free)'],['Generative AI short courses','DeepLearning.AI (free)']],
+  ready:['Build a small RAG app or AI agent and publish it.','Learn to evaluate AI output, not just call APIs.','Show real use cases from your current domain.']},
+ cloud:{n:'Cloud & DevOps',kw:['cloud','devops','aws','azure','gcp','sre','kubernetes','docker','linux','infra'],
+  titles:[['DevOps Engineer','High'],['Cloud Engineer','High'],['Site Reliability Engineer','Rising'],['Platform Engineer','Rising'],['Kubernetes / Container Engineer','Rising'],['FinOps Analyst','Rising']],
+  skills:['Linux','Docker & Kubernetes','Terraform / IaC','CI/CD pipelines','AWS or Azure','Monitoring & observability'],
+  certs:['AWS Solutions Architect – Associate','Azure AZ-104','Certified Kubernetes Administrator (CKA)','HashiCorp Terraform Associate','Google Associate Cloud Engineer'],
+  courses:[['DevOps bootcamp labs','KodeKloud'],['Linux Foundation intro courses','Linux Foundation / edX'],['Cloud Resume Challenge','cloudresumechallenge.dev (free)'],['AWS Skill Builder','AWS (free tier)']],
+  ready:['Deploy a real app with Terraform + CI/CD.','Pick one cloud and go deep before adding a second.','Get one associate-level certification.']},
+ sec:{n:'Cybersecurity',kw:['security','cyber','soc','pentest','grc','iam','infosec'],
+  titles:[['SOC Analyst','High'],['Cloud Security Engineer','High'],['GRC / Compliance Analyst','Rising'],['Identity & Access (IAM) Engineer','Rising'],['Penetration Tester','Steady'],['Application Security Engineer','Rising']],
+  skills:['Networking fundamentals','SIEM tools','Cloud security','Risk & compliance frameworks','Incident response','Scripting'],
+  certs:['CompTIA Security+','ISC2 Certified in Cybersecurity (CC)','Azure AZ-500','CEH','CISSP (needs experience)'],
+  courses:[['Google Cybersecurity Certificate','Coursera'],['Hands-on labs','TryHackMe'],['Networking basics','Cisco Networking Academy'],['Security fundamentals','Professor Messer (free)']],
+  ready:['Start with networking and Security+.','Practise daily on lab platforms and keep a write-up log.','Aim for a SOC or GRC entry role, then specialise.']},
+ dev:{n:'Software Dev',kw:['developer','software','java','react','frontend','backend','fullstack','javascript','web','qa','tester','sdet'],
+  titles:[['Full-Stack Developer','High'],['Backend Engineer (Java / Python / Go)','High'],['QA Automation / SDET','Steady'],['React / Frontend Developer','Steady'],['Mobile Developer','Steady'],['AI-assisted Developer','Rising']],
+  skills:['Data structures & algorithms','One backend language + SQL','React / TypeScript','APIs & system design basics','Testing','Using AI coding tools well'],
+  certs:['AWS Developer – Associate','Oracle Java certification','ISTQB Foundation (for QA)','Meta / Google developer certificates'],
+  courses:[['CS50','Harvard / edX (free)'],['The Odin Project','theodinproject.com (free)'],['freeCodeCamp curriculum','freeCodeCamp (free)'],['NPTEL computer science courses','NPTEL (free)']],
+  ready:['Ship 2–3 deployed projects, not tutorials.','Practise DSA a little every day.','Learn to review and test AI-written code.']},
+ biz:{n:'Business & Training',kw:['sales','marketing','trainer','english','hindi','teacher','content','product','hr','customer','tutor','writer'],
+  titles:[['Digital Marketing Specialist','High'],['Customer Success Manager','Rising'],['Corporate / Soft-skills Trainer','Steady'],['Spoken English Trainer','Steady'],['Regional-language Content Writer','Rising'],['Product Manager','Steady']],
+  skills:['Communication','Social & performance marketing','CRM tools','Data-driven decisions','Regional languages','Using AI tools for content'],
+  certs:['Google Digital Marketing & E-commerce','HubSpot certifications','CELTA / TEFL (English teaching)','Google Project Management','CSPO / PMP (later career)'],
+  courses:[['Digital Marketing Certificate','Google / Coursera'],['Inbound Marketing','HubSpot Academy (free)'],['Teaching English to speakers of other languages','TEFL / Coursera'],['Product Management basics','Coursera / Reforge']],
+  ready:['Build a visible portfolio: sample content, campaigns or lessons.','Learn AI tools for your craft.','Teach or post publicly so people can find you.']}
+};
+let trSel=null;
+function trendKey(){const t=((P.role||'')+' '+(P.skills||'')).toLowerCase();let best='data',bs=0;for(const k in TR){const s=TR[k].kw.filter(w=>t.includes(w)).length;if(s>bs){bs=s;best=k}}return best}
+function renderTrend(){
+  const k=trSel||trendKey(),d=TR[k];
+  $('#trTabs').innerHTML=Object.keys(TR).map(x=>`<button data-k="${x}" class="${x===k?'on':''}">${TR[x].n}</button>`).join('');
+  const li=t=>'https://www.linkedin.com/jobs/search/?f_TPR=r86400&keywords='+encodeURIComponent(t);
+  const gs=t=>'https://www.google.com/search?q='+encodeURIComponent(t);
+  $('#trBody').innerHTML=
+   `<div class="panel"><h3>🔥 Trending job titles</h3>${d.titles.map(t=>`<a class="tl" href="${li(t[0])}" target="_blank" rel="noopener"><span>${esc(t[0])}<small>Tap to see today's openings</small></span><span class="dem ${t[1]}">${t[1]}</span></a>`).join('')}</div>
+    <div class="panel"><h3>🧰 Skills to build</h3><div class="chips">${d.skills.map(s=>`<span class="chip">${esc(s)}</span>`).join('')}</div></div>
+    <div class="panel"><h3>🎓 Certifications</h3>${d.certs.map(c=>`<a class="tl" href="${gs(c)}" target="_blank" rel="noopener"><span>${esc(c)}</span><span>↗</span></a>`).join('')}</div>
+    <div class="panel"><h3>📚 Courses &amp; learning</h3>${d.courses.map(c=>`<a class="tl" href="${gs(c[0]+' '+c[1])}" target="_blank" rel="noopener"><span>${esc(c[0])}<small>${esc(c[1])}</small></span><span>↗</span></a>`).join('')}</div>
+    <div class="panel"><h3>🚀 How to get ready</h3><ol class="steps">${d.ready.map(r=>`<li>${esc(r)}</li>`).join('')}</ol></div>`;
+}
+$('#trTabs').onclick=e=>{const b=e.target.closest('button');if(b){trSel=b.dataset.k;renderTrend()}};
+
+// ---- setup / tabs ----
+function tab(t){if(t==='trending')renderTrend();document.querySelectorAll('section').forEach(s=>s.classList.toggle('hide',s.id!==t));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+  if(t==='saved')renderSaved();}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>tab(b.dataset.t));
+function srcUI(){$('#adzBox').classList.toggle('hide',$('#src').value!=='adzuna');$('#pasteBox').classList.toggle('hide',$('#src').value!=='paste');$('#apiBox').classList.toggle('hide',$('#src').value!=='api')}
+$('#src').onchange=srcUI;$('#th').oninput=e=>$('#thv').textContent=e.target.value;
+function fill(){$('#role').value=P.role;$('#skills').value=P.skills;$('#loc').value=P.loc;$('#th').value=P.th;$('#thv').textContent=P.th;$('#src').value=P.src;$('#paste').value=P.paste;$('#api').value=P.api;$('#cc').value=P.cc||'in';$('#aid').value=P.aid||'';$('#akey').value=P.akey||'';$('#proxy').value=P.proxy||'';srcUI()}
+$('#saveBtn').onclick=()=>{P={role:$('#role').value.trim(),skills:$('#skills').value.trim(),loc:$('#loc').value.trim(),th:+$('#th').value,src:$('#src').value,paste:$('#paste').value,api:$('#api').value.trim(),cc:$('#cc').value,aid:$('#aid').value.trim(),akey:$('#akey').value.trim(),proxy:$('#proxy').value.trim().replace(/\/$/,'')};SV('js_profile',P);tab('swipe');load()};
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200)}
+
+fill();
+if(!P.role){tab('setup')}
+load();
+</script>
+</body>
+</html>
