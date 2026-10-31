@@ -1061,6 +1061,324 @@ interviewer:["जॉब इंटरव्यू में आपसे पू�
  ["“आपने पिछली कंपनी क्यों छोड़ी?”",[["मेरा बॉस बहुत ख़राब था और सैलरी कम थी।","बुराई करना आपको नुक़सान पहुँचाता है।"],["मैं ज़्यादा ग्रोथ और ज़िम्मेदारी चाहता/चाहती था/थी, और इस रोल के स्कोप को लेकर उत्साहित हूँ।","सकारात्मक, ईमानदार और आगे देखने वाला।"],["बस बदलाव चाहिए था।","अस्पष्ट; तैयार नहीं लगता।"]],["“हम्म, नोट किया।”","“क्या और बता सकते हैं?”","“अच्छा। बताइए आप किसमें बढ़ना चाहते हैं।”"]],
  ["“किसी चुनौती का वक़्त बताइए जब आपने सामना किया।”",[["मेरे सामने ज़्यादा चुनौतियाँ नहीं आईं।","बिना सोचे-समझे जैसा लगता है।"],["हमारी डेडलाइन आधी कर दी गई थी। मैंने काम बाँटा, रोज़ चेक-इन किए और समय पर डिलीवर किया। मैंने रिस्क जल्दी बताना सीखा।","स्थिति, एक्शन, नतीजा और सीख।"],["मैं मेहनत करता/करती हूँ और कुछ भी संभाल लेता/लेती हूँ।","सबूत के बिना आम दावा।"]],["“ठीक है…”","“क्या आप कोई उदाहरण दे सकते हैं?”","“हमें इसी तरह की ओनरशिप चाहिए।”"]]]]
 });
+const O = [
+{id:"hike",em:"💰",name:"Asking for a raise",tag:"Facts, timing and calm",
+ why:"Money talks feel awkward, so people avoid them or sound demanding. Your manager has budgets and approvals to deal with too.",
+ steps:[["Gather evidence","List your results, extra responsibilities and market pay for your role."],["Pick the moment","After a win or at review time, not in the middle of a crisis."],["Make a clear ask","Name a number or range and tie it to your value."],["Discuss and follow up","Listen to constraints, ask what would make it possible, and confirm next steps in writing."]],
+ script:["“Could we discuss my compensation? I’d like to share what I’ve delivered this year.”","“In the last 12 months I… (results). Based on my responsibilities and market research, I’m looking at X–Y.”","“What would help us get there, and when can we review it again?”"],
+ dos:["Prepare 3 specific achievements","Stay calm and curious if the answer is “not now”","Ask for a timeline or a plan"],
+ donts:["Don’t compare yourself with colleagues’ salaries","Don’t threaten to quit unless you mean it","Don’t make it personal (“I need money for…”)"],
+ emp:"Show you understand their constraints. People help those who make it easy to say yes."},
+{id:"promotion",em:"🚀",name:"Asking for a promotion",tag:"Show the next-level you",
+ why:"Managers promote people who already work at the next level. You need to make that visible without bragging.",
+ steps:[["Know the next-level expectations","Ask what the role needs and compare it with what you already do."],["Collect proof","Examples of ownership, leadership and impact beyond your current role."],["Ask for a proper conversation","Request dedicated time to discuss growth, not a hallway chat."],["Agree a path","If not now, agree the gaps, the support and a review date."]],
+ script:["“I’m aiming for the X role. Could we talk about what it would take?”","“Over the last six months I led… and handled… which are part of that role.”","“If I’m not there yet, which skills should I build, and when can we review?”"],
+ dos:["Ask for feedback on gaps","Show impact on the team and the business","Say thanks even if the answer is “not yet”"],
+ donts:["Don’t argue “I deserve it because of my years”","Don’t go over your manager’s head first","Don’t stop performing if the answer is “later”"],
+ emp:"Make your manager your ally: ask for their advice, not only their approval."},
+{id:"leave",em:"🏖️",name:"Asking for leave",tag:"Early, clear, covered",
+ why:"Leave affects workload and planning. Managers worry less when they see you’ve thought about the team.",
+ steps:[["Ask early","Give as much notice as you can, especially for long leave or busy seasons."],["Be specific","State the dates, and a short reason only if you want to share it."],["Offer cover","Say who can handle urgent tasks and what you’ll finish before leaving."],["Confirm in writing","Send a short mail and update the shared calendar."]],
+ script:["“I’d like to take leave from X to Y. Does that work with the team’s plans?”","“I’ll finish A and B before I go and hand over C to Riya with notes.”","“I’ll be reachable only for emergencies.”"],
+ dos:["Check the team calendar first","Offer a handover","For an emergency, call first, then follow up in writing"],
+ donts:["Don’t announce leave at the last minute","Don’t assume approval","Don’t over-explain or make up reasons"],
+ emp:"Ask “How does this look from your side?” It shows you care about the team, not only your plans."},
+{id:"resign",em:"🚪",name:"Resigning gracefully",tag:"Leave well, stay respected",
+ why:"People remember how you left. A smooth exit protects your reputation and your references.",
+ steps:[["Decide and prepare","Have your offer, notice period and handover plan ready."],["Tell your manager first","Face to face or by call, before anyone else hears."],["Be brief and grateful","Say you’ve decided, thank them, and avoid blame."],["Hand over well","Document your work, train your successor, finish key tasks."],["Send a formal letter","Short, polite, with your last working day."]],
+ script:["“I wanted you to hear this from me first. I’ve decided to move on.”","“I’m grateful for the opportunities and learning here.”","“My last day will be X. I’ll make the handover smooth.”"],
+ dos:["Stay professional until the last day","Keep the reason short","Thank people individually"],
+ donts:["Don’t badmouth the company","Don’t slack off","Don’t tell colleagues before your manager"],
+ emp:"Expect surprise or disappointment. Give them space and stay kind."},
+{id:"negotiate",em:"🤝",name:"Negotiating (price, deal, terms)",tag:"Win–win, prepared, calm",
+ why:"Negotiation feels like confrontation, but it is a joint search for a fair deal. Preparation gives you confidence.",
+ steps:[["Know your goal and limit","Your ideal, your fair target and your walk-away point."],["Understand their needs","Ask what matters to them besides price."],["Make a reasoned offer","Explain the value and start at a sensible number."],["Trade, don’t just give","If you concede something, ask for something in return."],["Confirm the deal","Summarise and put it in writing."]],
+ script:["“What matters most to you in this deal?”","“Based on X and Y, I’d like to propose Z.”","“I can do that if we can extend the timeline.”","“To confirm, we’ve agreed…”"],
+ dos:["Stay calm and polite","Use silence","Be ready to walk away"],
+ donts:["Don’t bluff about what you can’t back up","Don’t take it personally","Don’t accept the first offer without thinking"],
+ emp:"The best deals leave the other side feeling respected too, so they honour them."},
+{id:"feedback",em:"🗣️",name:"Giving feedback",tag:"Specific, kind, useful",
+ why:"People fear feedback because it feels like judgement. Done well, it shows you believe they can grow.",
+ steps:[["Ask permission","“Can I share something I noticed?”"],["Describe the behaviour","What you saw or heard, not who they are."],["Explain the impact","How it affected the work or you."],["Agree the next step","Ask their view and agree what to try."]],
+ script:["“Can I share some feedback on the presentation?”","“On the cost slide the numbers weren’t explained, so the client looked confused.”","“Next time, could you add one example for each number?”","“How did it feel from your side?”"],
+ dos:["Be timely and private","Mention what’s working too","Give specific examples"],
+ donts:["Don’t attack the person","Don’t pile on old issues","Don’t give feedback when angry"],
+ emp:"Imagine how you would like to hear it, then say it that way."},
+{id:"criticism",em:"🛡️",name:"Receiving criticism",tag:"Listen, learn, don’t defend",
+ why:"Criticism triggers defence. If you can pause, you can separate the useful information from the sting.",
+ steps:[["Breathe and listen","Don’t interrupt or defend yet."],["Clarify","Ask for examples so you understand."],["Thank them","For their time and honesty, even if it hurts."],["Decide later","Take time, then pick what to act on."]],
+ script:["“Thanks for telling me. Can you give me an example?”","“What would you like me to do differently?”","“Let me think about it and come back to you.”"],
+ dos:["Take notes","Look for the part that is true","Follow up with what you changed"],
+ donts:["Don’t argue instantly","Don’t treat it as a verdict on your worth","Don’t sulk or retaliate"],
+ emp:"Assume they are trying to help, even when it’s clumsy. You can still disagree later."},
+{id:"hostmeet",em:"🪑",name:"Hosting a meeting",tag:"Purpose, agenda, decisions",
+ why:"Meetings waste time when there’s no goal. As host you set the tone and make sure people leave with clarity.",
+ steps:[["Set the purpose and agenda","Share the goal, topics and timing in advance."],["Invite the right people","Only those who decide or contribute."],["Open on time","Welcome, restate the goal, agree ground rules."],["Facilitate","Hear everyone, keep to time, park side topics."],["Close with actions","Summarise decisions, owners and deadlines, and send notes."]],
+ script:["“Thanks for joining. By the end we want to decide X.”","“Let’s hear from each person for two minutes.”","“Good point. Let’s park that and come back to it at the end.”","“To summarise: Sam will do A by Tuesday, Priya will do B by Friday.”"],
+ dos:["Send the agenda early","Start and end on time","Share notes within 24 hours"],
+ donts:["Don’t let one person dominate","Don’t end without decisions","Don’t invite everyone “just in case”"],
+ emp:"Invite quieter people directly: “Meera, what’s your view on this?” It makes the room safer."},
+{id:"attendmeet",em:"📝",name:"Attending a meeting",tag:"Prepared, present, positive",
+ why:"People attend meetings without preparing or contributing, then complain about them. Your presence is a chance to be seen and be useful.",
+ steps:[["Prepare","Read the agenda and any documents, and note your points."],["Arrive on time","Join early, camera on if remote, phone away."],["Listen actively","Take notes, don’t multitask, let others finish."],["Contribute briefly","Make one clear point, ask relevant questions, build on others’ ideas."],["Follow up","Do your action items and send a short recap if you own something."]],
+ script:["“Before we move on, can I add one point?”","“Building on what Dev said, I suggest…”","“Just to confirm: I own X by Friday, right?”","“Could you share what ‘done’ looks like?”"],
+ dos:["Speak early in the meeting","Agree owners and dates","Disagree respectfully, with data"],
+ donts:["Don’t check your phone","Don’t interrupt","Don’t stay silent and then disagree later"],
+ emp:"Credit others’ ideas by name. People remember who made them feel heard."},
+{id:"anchor",em:"🎙️",name:"Anchoring a discussion or event",tag:"Be the glue, not the star",
+ why:"An anchor keeps the group on track, gives everyone a voice and makes the audience comfortable. It’s a service role, not a performance.",
+ steps:[["Prepare the flow","Know the agenda, names, timings and the key message."],["Open warmly","Welcome everyone, set the purpose and explain how the session runs."],["Guide and connect","Introduce speakers, ask questions, summarise and link topics."],["Manage time and voices","Gently handle long speakers and invite quiet ones."],["Close well","Recap, thank everyone and state next steps."]],
+ script:["“Good evening everyone, and welcome. Today we’ll explore…”","“Thank you, Anita. That connects to what Raj mentioned. Raj, what do you think?”","“We have five minutes left, so let’s take one last question.”","“Thank you all. To recap, we decided…”"],
+ dos:["Learn names and pronunciations beforehand","Use short, simple sentences","Stay neutral during disagreements"],
+ donts:["Don’t talk more than the speakers","Don’t interrupt rudely","Don’t joke at someone’s expense"],
+ emp:"Watch faces. If someone looks lost or left out, bring them in with a friendly question."},
+{id:"presentation",em:"📊",name:"Giving a presentation",tag:"Clear message, calm delivery",
+ why:"Nervousness makes people rush or read their slides. Your audience wants one clear message and a human voice.",
+ steps:[["Know your one message","What should they remember or do?"],["Structure it simply","Opening, three points, close."],["Practise aloud","Time it and rehearse the first minute until it’s smooth."],["Connect with the audience","Eye contact, pauses, simple words, a story or example."],["Handle questions","Listen, repeat the question, answer briefly, or say “I’ll find out.”"]],
+ script:["“By the end of this talk, I’d like you to see how we can cut delays by 20%.”","“There are three ideas. First…”","“That’s a good question. Let me make sure I understood it…”","“To close, the key takeaway is…”"],
+ dos:["Breathe and pause","Use fewer slides and fewer words","Speak to people, not the screen"],
+ donts:["Don’t read your slides","Don’t apologise for nerves","Don’t rush the ending"],
+ emp:"Imagine the audience as people who want you to do well. Most of them do."},
+{id:"speech",em:"🎂",name:"Speech or toast",tag:"Short, warm, personal",
+ why:"At weddings, farewells and birthdays people want warmth, not a long speech. A short personal story beats a list of praise.",
+ steps:[["Know the occasion and audience","Keep the tone right for the room."],["Start with a hook or a story","A short moment that shows who the person is."],["Add one or two points","Qualities or wishes, not a CV."],["End with a toast","A clear closing line, then raise the glass."]],
+ script:["“For those who don’t know me, I’m Ravi, Meera’s friend since school.”","“I remember when she… and that’s who she is.”","“So please raise your glasses: to Meera and Arjun, to love and laughter!”"],
+ dos:["Keep it to 2–3 minutes","Practise out loud","Use humour that is kind"],
+ donts:["Don’t embarrass anyone","Don’t mention exes or stories that sting","Don’t drink before you speak"],
+ emp:"Speak about the person, not about yourself."},
+{id:"intro",em:"👋",name:"Introducing yourself / networking",tag:"Warm, short, curious",
+ why:"Many people dread networking. It is simply curious conversation, where being interested beats being impressive.",
+ steps:[["Smile and greet","Make eye contact and say your name."],["Share a short intro","Who you are and one interesting detail."],["Ask open questions","About them, their work or interests."],["Listen and connect","Find common ground and offer something useful."],["Close and follow up","Exchange contacts and message within two days."]],
+ script:["“Hi, I’m Asha. I work in data. What brings you here?”","“That’s interesting. How did you get into that?”","“I’d love to stay in touch. Could I message you on LinkedIn?”"],
+ dos:["Prepare a 15-second intro","Remember names","Offer help before asking for it"],
+ donts:["Don’t pitch immediately","Don’t scan the room while talking","Don’t monopolise the conversation"],
+ emp:"People remember how you made them feel more than what you said."},
+{id:"proposal",em:"💍",name:"Marriage proposal",tag:"Sincere, ready for any answer",
+ why:"A proposal is a vulnerable moment: you are asking for a lifetime commitment. Pressure, an audience or a surprise can take away the other person’s freedom to answer honestly.",
+ steps:[["Be sure of the timing","Talk about the future together first, so the question isn’t a shock."],["Choose a private, comfortable place","Somewhere meaningful to them, not a public stage that makes “no” hard."],["Speak from the heart","Share specific things you love and the life you imagine, in your own words."],["Ask clearly, then listen","Ask the question, give them space and accept any answer with grace."]],
+ script:["“These years with you have taught me what home feels like.”","“I love how you… and I want to build a life with you.”","“Will you marry me?”","If they need time: “Take all the time you need. I’m not going anywhere.”"],
+ dos:["Respect their family’s culture and wishes if it matters to them","Keep it personal, not a performance","Have a calm response ready for “I need time”"],
+ donts:["Don’t propose in public to pressure a “yes”","Don’t read from a long script","Don’t sulk or argue if the answer isn’t yes"],
+ emp:"Think about how they will feel, not how it will look. A comfortable “yes” matters more than a spectacular one."},
+{id:"apology",em:"🙏",name:"Saying sorry",tag:"Own it, repair it",
+ why:"A weak apology (“sorry you feel that way”) adds hurt. A real one acknowledges the impact and shows change.",
+ steps:[["Own it","Name what you did, without a “but”."],["Acknowledge the impact","Show you understand how they felt."],["Make it right","Offer to repair the damage, if you can."],["Commit to change","Say what you’ll do differently, then do it."]],
+ script:["“I’m sorry I spoke over you in the meeting. That was disrespectful.”","“I can see it made you feel unheard.”","“I’d like to fix it by correcting it with the team.”","“From now on, I’ll let you finish.”"],
+ dos:["Apologise soon","Keep it simple and sincere","Let them respond, even with anger"],
+ donts:["Don’t say “sorry, but…”","Don’t expect instant forgiveness","Don’t over-explain to excuse yourself"],
+ emp:"An apology is for them, not to relieve your own guilt."},
+{id:"condolence",em:"🕯️",name:"Offering condolences",tag:"Presence over perfect words",
+ why:"We fear saying the wrong thing, so we say nothing. Simple, sincere words and your presence matter most.",
+ steps:[["Reach out soon","A short message or visit now beats a perfect one later."],["Say a simple line","Acknowledge the loss and your care."],["Listen","Let them talk or be silent. Don’t try to fix."],["Offer specific help","Meals, errands, calls – and follow up weeks later."]],
+ script:["“I’m so sorry for your loss. I’m thinking of you.”","“He was a wonderful person. I remember when…”","“I’m here. If you want to talk, or if you’d rather not, that’s okay.”","“Can I bring dinner on Thursday?”"],
+ dos:["Use their loved one’s name","Share a good memory if you have one","Check in after the funeral"],
+ donts:["Don’t say “they’re in a better place” unless you know it fits","Don’t compare griefs","Don’t say “let me know if you need anything” and leave it there"],
+ emp:"You don’t have to make them feel better. You only have to not leave them alone."},
+{id:"thanks",em:"💛",name:"Appreciating & thanking",tag:"Specific and sincere",
+ why:"A generic “thanks” is easy to forget. Specific appreciation makes people feel seen and willing to help again.",
+ steps:[["Be specific","Name what they did."],["Share the impact","How it helped you or the team."],["Say it soon","Within a day or two."],["Use the right channel","In person, a note, or in front of others if they like that."]],
+ script:["“Thank you for staying late to fix the report. It saved our launch.”","“I really appreciated how you explained it without making me feel small.”"],
+ dos:["Praise effort and qualities","Copy their manager when suitable","Be genuine"],
+ donts:["Don’t add a request in the same breath","Don’t exaggerate","Don’t thank only the leaders"],
+ emp:"Appreciation costs little. Do it more often than feels necessary."},
+{id:"no",em:"🙅",name:"Politely saying no",tag:"Kind, clear, brief",
+ why:"We say yes to avoid guilt and then resent it. A clear, kind no protects your time and the relationship.",
+ steps:[["Pause","“Let me check and get back to you” buys you time."],["Appreciate","Thank them for thinking of you."],["Say no clearly","One short reason, or none, without apologising again and again."],["Offer an alternative","If you genuinely can: another time, smaller help, or another person."]],
+ script:["“Thank you for asking. I can’t take this on right now.”","“I’m at capacity this week, so I won’t be able to do it well.”","“I can help next month, or suggest someone else.”"],
+ dos:["Be firm and warm","Say “I can’t” rather than a long excuse","Stick to your answer when pushed"],
+ donts:["Don’t give a long justification","Don’t make up excuses that can be checked","Don’t say “maybe” when you mean no"],
+ emp:"A no to the request is not a no to the person. Let your tone say that."},
+{id:"conflict",em:"⚖️",name:"Managing conflict",tag:"Cool the heat, solve the problem",
+ why:"Conflict feels like a threat, so people attack or avoid. The goal is to protect the relationship while solving the problem.",
+ steps:[["Cool down","Pause until you can speak calmly. Say when you’ll talk."],["Listen first","Let them finish, then repeat what you heard."],["State your side with “I”","Describe facts and your feelings without blame."],["Find a shared goal","Ask what both want and brainstorm options together."],["Agree and follow up","Write down who does what by when."]],
+ script:["“I want to sort this out. Can we talk after lunch?”","“What I’m hearing is… did I get that right?”","“I felt worried when… I’d like us to…”","“What would work for both of us?”"],
+ dos:["Separate the people from the problem","Take a break if emotions rise","Look for a win–win"],
+ donts:["Don’t use “always” and “never”","Don’t bring in past issues","Don’t recruit others to take sides"],
+ emp:"Ask what the other person is protecting. Often it’s respect, fairness or safety."},
+{id:"badnews",em:"⚠️",name:"Giving bad news",tag:"Honest, early, supportive",
+ why:"Delaying bad news makes it worse. People handle it better when they feel respected and supported.",
+ steps:[["Choose the right place","Private and unhurried, in person or by call for serious matters."],["Give a warning shot","“I have some difficult news.”"],["Say it plainly","Short, clear, no jargon, no blaming."],["Allow reactions","Pause, listen and acknowledge feelings."],["Explain next steps","What happens now and how you’ll help."]],
+ script:["“I have some difficult news to share.”","“We weren’t able to get the project. I know how hard you worked on it.”","“I’m so sorry. Take a moment.”","“Here’s what happens next, and I’m with you.”"],
+ dos:["Be honest","Stay calm","Follow up later"],
+ donts:["Don’t sugar-coat","Don’t overload with details","Don’t deliver serious news by text or email"],
+ emp:"Let silence do some work. People need time before they can hear the next step."},
+{id:"askhelp",em:"🤲",name:"Asking for help",tag:"Specific, respectful, grateful",
+ why:"People hesitate to ask, fearing they’ll be a burden or look weak. Specific, respectful requests are easy to say yes to.",
+ steps:[["Know what you need","Be clear about the task and the deadline."],["Pick the right person","Someone with the skill and the time."],["Ask directly and kindly","Explain, ask, and give an easy way out."],["Say thanks and update","Share the result so they feel part of it."]],
+ script:["“Could I ask for 15 minutes of your help with X? I’m stuck on Y.”","“No worries if you’re busy. I can ask next week.”","“Thank you, that helped. Here’s how it turned out.”"],
+ dos:["Show what you’ve already tried","Respect their time","Return the favour"],
+ donts:["Don’t be vague","Don’t guilt-trip","Don’t ask only when you’re desperate"],
+ emp:"Allow a no. A freely given yes is more generous."}
+];
+const OGROUPS = [
+ ["💼 Career & work",["hike","promotion","leave","resign","negotiate","feedback","criticism"]],
+ ["🎤 Meetings & speaking",["hostmeet","attendmeet","anchor","presentation","speech","intro"]],
+ ["💞 Personal moments",["proposal","apology","condolence","thanks"]],
+ ["🤝 Everyday situations",["no","conflict","badnews","askhelp"]]
+];
+const oById = Object.fromEntries(O.map(o=>[o.id,o]));
+const HO = {
+hike:["सैलरी बढ़ाने (हाइक) की बात","तथ्य, सही समय और शांति",
+ "पैसों की बात अजीब लगती है, इसलिए लोग टाल देते हैं या माँग करते हुए लगते हैं। आपके मैनेजर के पास भी बजट और अप्रूवल की मजबूरियाँ होती हैं।",
+ [["सबूत जुटाइए","अपने नतीजे, अतिरिक्त ज़िम्मेदारियाँ और अपने रोल की मार्केट सैलरी लिख लीजिए।"],["सही मौक़ा चुनिए","किसी जीत के बाद या रिव्यू के समय, किसी संकट के बीच नहीं।"],["साफ़ माँग रखिए","कोई नंबर या रेंज बताइए और उसे अपनी वैल्यू से जोड़िए।"],["बात कीजिए और फ़ॉलो-अप कीजिए","उनकी मजबूरियाँ सुनिए, पूछिए क्या इसे मुमकिन बनाएगा, और अगले कदम लिखित में तय कीजिए।"]],
+ ["“क्या हम मेरी सैलरी पर बात कर सकते हैं? मैं बताना चाहता/चाहती हूँ कि इस साल मैंने क्या डिलीवर किया है।”","“पिछले 12 महीनों में मैंने… (नतीजे)। अपनी ज़िम्मेदारियों और मार्केट रिसर्च के आधार पर मैं X–Y के आसपास देख रहा/रही हूँ।”","“वहाँ तक पहुँचने में क्या मदद करेगा, और हम इसे दोबारा कब रिव्यू कर सकते हैं?”"],
+ ["3 ख़ास उपलब्धियाँ तैयार रखिए","“अभी नहीं” का जवाब मिले तो शांत और जिज्ञासु रहिए","टाइमलाइन या प्लान माँगिए"],
+ ["अपनी तुलना साथियों की सैलरी से मत कीजिए","जब तक सच में छोड़ना नहीं है, छोड़ने की धमकी मत दीजिए","इसे निजी मत बनाइए (“मुझे पैसों की ज़रूरत है…”)"],
+ "उनकी मजबूरियाँ समझते हुए दिखाइए। लोग उसकी मदद करते हैं जो उनके लिए ‘हाँ’ कहना आसान बनाता है।"],
+promotion:["प्रमोशन माँगना","अगले लेवल वाला ‘आप’ दिखाइए",
+ "मैनेजर उन्हें प्रमोट करते हैं जो पहले से अगले लेवल का काम कर रहे हों। आपको ये बिना शेखी बघारे दिखाना है।",
+ [["अगले लेवल की उम्मीदें जानिए","पूछिए उस रोल को क्या चाहिए और उसे अपने काम से मिलाइए।"],["सबूत जुटाइए","अपने मौजूदा रोल से आगे की ओनरशिप, लीडरशिप और असर के उदाहरण।"],["सही बातचीत माँगिए","ग्रोथ पर चर्चा के लिए अलग समय माँगिए, गलियारे की बातचीत नहीं।"],["रास्ता तय कीजिए","अभी नहीं, तो कमियाँ, सपोर्ट और रिव्यू की तारीख़ तय कीजिए।"]],
+ ["“मैं X रोल की तरफ़ बढ़ना चाहता/चाहती हूँ। क्या हम बात कर सकते हैं कि इसके लिए क्या चाहिए?”","“पिछले छह महीनों में मैंने… लीड किया और… संभाला, जो उस रोल का हिस्सा हैं।”","“अगर मैं अभी तैयार नहीं हूँ, तो मुझे कौन-सी स्किल्स बनानी चाहिए और हम कब रिव्यू करें?”"],
+ ["कमियों पर फ़ीडबैक माँगिए","टीम और बिज़नेस पर अपना असर दिखाइए","“अभी नहीं” हो तब भी शुक्रिया कहिए"],
+ ["“मेरे इतने साल हो गए, मैं हक़दार हूँ” मत कहिए","पहले मैनेजर के ऊपर वाले के पास मत जाइए","“बाद में” सुनकर परफ़ॉर्म करना मत छोड़िए"],
+ "मैनेजर को अपना साथी बनाइए: सिर्फ़ उनकी मंज़ूरी नहीं, उनकी सलाह माँगिए।"],
+leave:["छुट्टी माँगना","जल्दी, साफ़, इंतज़ाम के साथ",
+ "छुट्टी से वर्कलोड और प्लानिंग पर असर पड़ता है। जब मैनेजर देखते हैं कि आपने टीम के बारे में सोचा है तो उनकी चिंता कम होती है।",
+ [["जल्दी माँगिए","जितना हो सके पहले बताइए, ख़ासकर लंबी छुट्टी या व्यस्त सीज़न में।"],["साफ़ बताइए","तारीख़ें बताइए, और वजह तभी जब आप बताना चाहें।"],["कवर का इंतज़ाम दीजिए","बताइए अर्जेंट काम कौन संभालेगा और जाने से पहले आप क्या पूरा करेंगे।"],["लिखित में कन्फ़र्म कीजिए","एक छोटा मेल भेजिए और शेयर्ड कैलेंडर अपडेट कीजिए।"]],
+ ["“मैं X से Y तक छुट्टी लेना चाहता/चाहती हूँ। क्या ये टीम के प्लान के साथ ठीक रहेगा?”","“जाने से पहले मैं A और B पूरा कर दूँगा/दूँगी और C रिया को नोट्स के साथ सौंप दूँगा/दूँगी।”","“मैं सिर्फ़ इमरजेंसी में उपलब्ध रहूँगा/रहूँगी।”"],
+ ["पहले टीम का कैलेंडर देखिए","हैंडओवर ऑफ़र कीजिए","इमरजेंसी में पहले कॉल कीजिए, फिर लिखित में फ़ॉलो-अप"],
+ ["छुट्टी की बात आख़िरी पल पर मत बताइए","मंज़ूरी मान मत लीजिए","बहुत सफ़ाई मत दीजिए या बहाने मत बनाइए"],
+ "पूछिए “आपको ये कैसा लग रहा है?” इससे दिखता है कि आपको टीम की परवाह है, सिर्फ़ अपने प्लान की नहीं।"],
+resign:["इस्तीफ़ा शालीनता से देना","अच्छे से जाइए, इज़्ज़त बनाए रखिए",
+ "लोग याद रखते हैं कि आप कैसे गए। एक सहज विदाई आपकी साख और रेफ़रेंस की रक्षा करती है।",
+ [["तय कीजिए और तैयारी कीजिए","अपना ऑफ़र, नोटिस पीरियड और हैंडओवर प्लान तैयार रखिए।"],["पहले मैनेजर को बताइए","किसी और को पता चलने से पहले, आमने-सामने या कॉल पर।"],["छोटा और आभार भरा रहिए","बताइए कि आपने फ़ैसला कर लिया है, शुक्रिया कहिए, और दोष मत दीजिए।"],["अच्छे से हैंडओवर दीजिए","अपना काम डॉक्यूमेंट कीजिए, उत्तराधिकारी को सिखाइए, ज़रूरी काम पूरे कीजिए।"],["औपचारिक पत्र भेजिए","छोटा, शिष्ट, अंतिम कार्य-दिवस के साथ।"]],
+ ["“मैं चाहता/चाहती था/थी कि आप ये मुझसे सबसे पहले सुनें। मैंने आगे बढ़ने का फ़ैसला किया है।”","“यहाँ के मौक़ों और सीख के लिए मैं आभारी हूँ।”","“मेरा आख़िरी दिन X होगा। मैं हैंडओवर सहज रखूँगा/रखूँगी।”"],
+ ["आख़िरी दिन तक प्रोफ़ेशनल रहिए","वजह छोटी रखिए","लोगों को अलग-अलग शुक्रिया कहिए"],
+ ["कंपनी की बुराई मत कीजिए","काम में ढीले मत पड़िए","मैनेजर से पहले साथियों को मत बताइए"],
+ "हैरानी या निराशा की उम्मीद रखिए। उन्हें जगह दीजिए और दयालु रहिए।"],
+negotiate:["मोल-भाव / डील की बातचीत","दोनों की जीत, तैयारी और शांति",
+ "बातचीत टकराव जैसी लगती है, पर असल में ये एक निष्पक्ष डील की साझा तलाश है। तैयारी आपको आत्मविश्वास देती है।",
+ [["अपना लक्ष्य और हद जानिए","आपकी आदर्श स्थिति, वाजिब टारगेट और वो बिंदु जहाँ आप पीछे हट जाएँगे।"],["उनकी ज़रूरतें समझिए","पूछिए दाम के अलावा उनके लिए क्या मायने रखता है।"],["तर्क के साथ ऑफ़र दीजिए","वैल्यू समझाइए और सही नंबर से शुरू कीजिए।"],["सिर्फ़ दीजिए नहीं, लेन-देन कीजिए","अगर आप कुछ छोड़ें तो बदले में कुछ माँगिए।"],["डील पक्की कीजिए","सारांश बताइए और लिखित में लीजिए।"]],
+ ["“इस डील में आपके लिए सबसे ज़्यादा क्या मायने रखता है?”","“X और Y के आधार पर, मैं Z प्रस्तावित करना चाहता/चाहती हूँ।”","“अगर हम टाइमलाइन बढ़ा सकें तो मैं ये कर सकता/सकती हूँ।”","“कन्फ़र्म करने के लिए, हमने ये तय किया है…”"],
+ ["शांत और शिष्ट रहिए","चुप्पी का इस्तेमाल कीजिए","पीछे हटने के लिए तैयार रहिए"],
+ ["जिस बात का सबूत नहीं उस पर झूठा दबाव मत बनाइए","इसे निजी मत लीजिए","बिना सोचे पहला ऑफ़र मत मानिए"],
+ "सबसे अच्छी डील में दूसरे पक्ष को भी इज़्ज़त महसूस होती है, इसलिए वे उसे निभाते हैं।"],
+feedback:["फ़ीडबैक देना","ख़ास, दयालु, काम का",
+ "लोग फ़ीडबैक से डरते हैं क्योंकि वो जजमेंट जैसा लगता है। अच्छे तरीके से दिया जाए तो दिखाता है कि आप मानते हैं वे बढ़ सकते हैं।",
+ [["इजाज़त लीजिए","“क्या मैं एक बात बता सकता/सकती हूँ जो मैंने notice की?”"],["व्यवहार बताइए","आपने क्या देखा या सुना, वे कौन हैं ये नहीं।"],["असर समझाइए","इससे काम पर या आप पर क्या असर पड़ा।"],["अगला कदम तय कीजिए","उनकी राय पूछिए और तय कीजिए क्या आज़माना है।"]],
+ ["“क्या मैं प्रेज़ेंटेशन पर कुछ फ़ीडबैक दे सकता/सकती हूँ?”","“कॉस्ट वाली स्लाइड पर नंबर समझाए नहीं गए, इसलिए क्लाइंट उलझा हुआ लगा।”","“अगली बार क्या आप हर नंबर के साथ एक उदाहरण जोड़ सकते हैं?”","“आपको अपनी तरफ़ से कैसा लगा?”"],
+ ["सही समय पर और अकेले में दीजिए","जो अच्छा चल रहा है वो भी बताइए","ख़ास उदाहरण दीजिए"],
+ ["इंसान पर हमला मत कीजिए","पुराने मुद्दे मत जोड़िए","गुस्से में फ़ीडबैक मत दीजिए"],
+ "सोचिए आप इसे कैसे सुनना पसंद करते, फिर वैसे ही कहिए।"],
+criticism:["आलोचना सुनना","सुनिए, सीखिए, बचाव मत कीजिए",
+ "आलोचना बचाव की प्रतिक्रिया जगाती है। अगर आप रुक सकें तो काम की जानकारी को चुभन से अलग कर सकते हैं।",
+ [["साँस लीजिए और सुनिए","अभी बीच में मत बोलिए या बचाव मत कीजिए।"],["साफ़ पूछिए","समझने के लिए उदाहरण माँगिए।"],["शुक्रिया कहिए","उनके समय और ईमानदारी के लिए, भले चुभे।"],["बाद में तय कीजिए","समय लीजिए, फिर चुनिए किस पर काम करना है।"]],
+ ["“बताने के लिए शुक्रिया। क्या आप कोई उदाहरण दे सकते हैं?”","“आप चाहते हैं मैं क्या अलग करूँ?”","“मैं इस पर सोचकर आपसे बात करता/करती हूँ।”"],
+ ["नोट्स लीजिए","उस हिस्से को ढूँढिए जो सच है","जो बदला उसके साथ फ़ॉलो-अप कीजिए"],
+ ["तुरंत बहस मत कीजिए","इसे अपनी क़ीमत का फ़ैसला मत समझिए","मुँह मत फुलाइए या बदला मत लीजिए"],
+ "मान लीजिए वे मदद करने की कोशिश कर रहे हैं, भले तरीका ठीक न हो। आप बाद में भी असहमत हो सकते हैं।"],
+hostmeet:["मीटिंग होस्ट करना","मक़सद, एजेंडा, फ़ैसले",
+ "बिना लक्ष्य के मीटिंग समय बर्बाद करती है। होस्ट के रूप में आप माहौल तय करते हैं और ये पक्का करते हैं कि लोग स्पष्टता के साथ जाएँ।",
+ [["मक़सद और एजेंडा तय कीजिए","लक्ष्य, विषय और समय पहले से शेयर कीजिए।"],["सही लोगों को बुलाइए","सिर्फ़ उन्हें जो फ़ैसला करते हैं या योगदान देते हैं।"],["समय पर शुरू कीजिए","स्वागत कीजिए, लक्ष्य दोहराइए, ग्राउंड रूल्स तय कीजिए।"],["संचालन कीजिए","सबकी सुनिए, समय पर रहिए, इधर-उधर की बातें बाद के लिए रखिए।"],["एक्शन के साथ ख़त्म कीजिए","फ़ैसले, ज़िम्मेदार लोग और डेडलाइन का सारांश दीजिए और नोट्स भेजिए।"]],
+ ["“जुड़ने के लिए शुक्रिया। मीटिंग के अंत तक हमें X तय करना है।”","“चलिए हर इंसान से दो मिनट सुनते हैं।”","“अच्छी बात है। इसे अभी रोक देते हैं और अंत में लौटेंगे।”","“सारांश: सैम मंगलवार तक A करेगा, प्रिया शुक्रवार तक B।”"],
+ ["एजेंडा पहले भेजिए","समय पर शुरू और ख़त्म कीजिए","24 घंटे में नोट्स शेयर कीजिए"],
+ ["किसी एक को हावी मत होने दीजिए","बिना फ़ैसले के मत ख़त्म कीजिए","“कहीं ज़रूरत पड़ जाए” सोचकर सबको मत बुलाइए"],
+ "कम बोलने वालों से सीधे पूछिए: “मीरा, आपकी इस पर क्या राय है?” इससे कमरा सुरक्षित लगता है।"],
+attendmeet:["मीटिंग में शामिल होना","तैयार, मौजूद, सकारात्मक",
+ "लोग बिना तैयारी और बिना योगदान के मीटिंग में आते हैं और फिर उनकी शिकायत करते हैं। आपकी मौजूदगी दिखने और काम आने का मौक़ा है।",
+ [["तैयारी कीजिए","एजेंडा और दस्तावेज़ पढ़िए और अपने पॉइंट्स नोट कीजिए।"],["समय पर पहुँचिए","जल्दी जुड़िए, रिमोट हो तो कैमरा ऑन, फ़ोन दूर।"],["ध्यान से सुनिए","नोट्स लीजिए, मल्टीटास्किंग मत कीजिए, दूसरों को पूरा बोलने दीजिए।"],["छोटा योगदान दीजिए","एक साफ़ बात रखिए, सही सवाल पूछिए, दूसरों के आइडिया पर आगे बढ़ाइए।"],["फ़ॉलो-अप कीजिए","अपने एक्शन आइटम कीजिए, और ज़िम्मेदारी हो तो छोटा रिकैप भेजिए।"]],
+ ["“आगे बढ़ने से पहले क्या मैं एक पॉइंट जोड़ सकता/सकती हूँ?”","“देव की बात को आगे बढ़ाते हुए मेरा सुझाव है…”","“कन्फ़र्म करने के लिए: X मेरी ज़िम्मेदारी है, शुक्रवार तक, सही?”","“क्या आप बता सकते हैं ‘पूरा हुआ’ कैसा दिखेगा?”"],
+ ["मीटिंग में जल्दी बोलिए","ज़िम्मेदार और तारीख़ें तय कीजिए","डेटा के साथ सम्मान से असहमत हों"],
+ ["फ़ोन मत देखिए","बीच में मत टोकिए","चुप रहकर बाद में असहमति मत जताइए"],
+ "दूसरों के आइडिया का क्रेडिट नाम लेकर दीजिए। लोग याद रखते हैं कि किसने उन्हें सुना हुआ महसूस कराया।"],
+anchor:["चर्चा या कार्यक्रम का संचालन (एंकरिंग)","जोड़ने वाले बनिए, स्टार नहीं",
+ "एंकर समूह को पटरी पर रखता है, सबको बोलने का मौक़ा देता है और दर्शकों को सहज करता है। ये सेवा का रोल है, प्रदर्शन नहीं।",
+ [["फ़्लो तैयार कीजिए","एजेंडा, नाम, समय और मुख्य संदेश जान लीजिए।"],["गर्मजोशी से शुरू कीजिए","सबका स्वागत कीजिए, मक़सद बताइए और समझाइए सत्र कैसे चलेगा।"],["दिशा दीजिए और जोड़िए","वक्ताओं का परिचय दीजिए, सवाल पूछिए, सारांश दीजिए और विषय जोड़िए।"],["समय और आवाज़ें संभालिए","लंबे बोलने वालों को नरमी से रोकिए और चुप लोगों को बुलाइए।"],["अच्छे से समाप्त कीजिए","रिकैप कीजिए, सबको धन्यवाद दीजिए और अगले कदम बताइए।"]],
+ ["“सभी को शुभ संध्या और स्वागत है। आज हम… के बारे में जानेंगे।”","“शुक्रिया अनीता जी। ये राज की बात से जुड़ता है। राज, आप क्या सोचते हैं?”","“हमारे पास पाँच मिनट बचे हैं, तो आख़िरी सवाल ले लेते हैं।”","“आप सबका शुक्रिया। रिकैप: हमने तय किया…”"],
+ ["पहले से नाम और उच्चारण सीख लीजिए","छोटे, सरल वाक्य बोलिए","असहमति में तटस्थ रहिए"],
+ ["वक्ताओं से ज़्यादा मत बोलिए","बदतमीज़ी से टोकिए मत","किसी की कीमत पर मज़ाक मत कीजिए"],
+ "चेहरे देखिए। अगर कोई खोया या छूटा हुआ लगे तो दोस्ताना सवाल से उसे शामिल कीजिए।"],
+presentation:["प्रेज़ेंटेशन देना","साफ़ संदेश, शांत अंदाज़",
+ "घबराहट में लोग जल्दी बोलते हैं या स्लाइड पढ़ने लगते हैं। आपके दर्शक एक साफ़ संदेश और एक इंसानी आवाज़ चाहते हैं।",
+ [["अपना एक संदेश जानिए","वे क्या याद रखें या क्या करें?"],["सरल ढाँचा बनाइए","शुरुआत, तीन बातें, अंत।"],["ज़ोर से प्रैक्टिस कीजिए","समय नापिए और पहला मिनट तब तक दोहराइए जब तक सहज न हो जाए।"],["दर्शकों से जुड़िए","आँखों में आँखें, ठहराव, सरल शब्द, कोई कहानी या उदाहरण।"],["सवाल संभालिए","सुनिए, सवाल दोहराइए, छोटा जवाब दीजिए, या कहिए “मैं पता करके बताता/बताती हूँ।”"]],
+ ["“इस टॉक के अंत तक मैं चाहता/चाहती हूँ आप देखें कि हम देरी 20% कैसे घटा सकते हैं।”","“तीन आइडिया हैं। पहला…”","“अच्छा सवाल है। मैं पक्का कर लूँ कि मैंने सही समझा…”","“अंत में, मुख्य बात ये है…”"],
+ ["साँस लीजिए और रुकिए","कम स्लाइड और कम शब्द रखिए","स्क्रीन से नहीं, लोगों से बात कीजिए"],
+ ["अपनी स्लाइड पढ़िए मत","घबराहट के लिए माफ़ी मत माँगिए","अंत में जल्दबाज़ी मत कीजिए"],
+ "कल्पना कीजिए कि दर्शक ऐसे लोग हैं जो चाहते हैं आप अच्छा करें। ज़्यादातर यही चाहते हैं।"],
+speech:["भाषण या टोस्ट","छोटा, गर्म, निजी",
+ "शादी, विदाई और जन्मदिन पर लोग लंबा भाषण नहीं, अपनापन चाहते हैं। एक छोटी निजी कहानी तारीफ़ों की लिस्ट से बेहतर होती है।",
+ [["मौक़ा और दर्शक जानिए","माहौल के हिसाब से लहजा रखिए।"],["हुक या कहानी से शुरू कीजिए","एक छोटा पल जो दिखाए वो इंसान कैसा है।"],["एक-दो बातें जोड़िए","गुण या शुभकामनाएँ, CV नहीं।"],["टोस्ट पर ख़त्म कीजिए","एक साफ़ आख़िरी लाइन और फिर ग्लास उठाइए।"]],
+ ["“जो मुझे नहीं जानते उनके लिए, मैं रवि हूँ, स्कूल से मीरा का दोस्त।”","“मुझे याद है जब उसने… और यही वो है।”","“तो कृपया अपने ग्लास उठाइए: मीरा और अर्जुन के नाम, प्यार और हँसी के नाम!”"],
+ ["2–3 मिनट में ख़त्म कीजिए","ज़ोर से प्रैक्टिस कीजिए","ऐसा हास्य रखिए जो प्यार भरा हो"],
+ ["किसी को शर्मिंदा मत कीजिए","एक्स या चुभने वाली कहानियाँ मत सुनाइए","बोलने से पहले शराब मत पीजिए"],
+ "उस इंसान के बारे में बोलिए, अपने बारे में नहीं।"],
+intro:["अपना परिचय देना / नेटवर्किंग","गर्मजोशी, छोटा, जिज्ञासु",
+ "कई लोग नेटवर्किंग से डरते हैं। ये बस जिज्ञासा भरी बातचीत है, जहाँ दिलचस्पी लेना प्रभावित करने से बेहतर है।",
+ [["मुस्कुराइए और नमस्ते कीजिए","आँखों में आँखें डालकर अपना नाम बताइए।"],["छोटा परिचय दीजिए","आप कौन हैं और एक दिलचस्प बात।"],["खुले सवाल पूछिए","उनके बारे में, उनके काम या रुचियों के बारे में।"],["सुनिए और जुड़िए","कॉमन बातें ढूँढिए और कुछ काम की चीज़ ऑफ़र कीजिए।"],["विदा लीजिए और फ़ॉलो-अप कीजिए","संपर्क लीजिए और दो दिन में मैसेज कीजिए।"]],
+ ["“हाय, मैं आशा हूँ। मैं डेटा में काम करती हूँ। आप यहाँ कैसे आए?”","“ये दिलचस्प है। आप इसमें कैसे आए?”","“मैं संपर्क में रहना चाहूँगी/चाहूँगा। क्या मैं आपको LinkedIn पर मैसेज कर सकता/सकती हूँ?”"],
+ ["15 सेकंड का परिचय तैयार रखिए","नाम याद रखिए","माँगने से पहले मदद ऑफ़र कीजिए"],
+ ["तुरंत पिच मत कीजिए","बात करते समय कमरे में इधर-उधर मत देखिए","पूरी बातचीत पर क़ब्ज़ा मत कीजिए"],
+ "लोगों को ये ज़्यादा याद रहता है कि आपने उन्हें कैसा महसूस कराया, ये नहीं कि आपने क्या कहा।"],
+proposal:["शादी का प्रस्ताव (प्रपोज़ल)","सच्चा, किसी भी जवाब के लिए तैयार",
+ "प्रपोज़ल एक नाज़ुक पल होता है: आप ज़िंदगी भर के साथ की माँग कर रहे हैं। दबाव, दर्शक या सरप्राइज़ सामने वाले की ईमानदारी से जवाब देने की आज़ादी छीन सकते हैं।",
+ [["समय के बारे में पक्के रहिए","पहले साथ में भविष्य पर बात कीजिए ताकि सवाल झटका न लगे।"],["निजी, आरामदायक जगह चुनिए","उनके लिए मायने रखने वाली जगह, कोई सार्वजनिक मंच नहीं जहाँ ‘ना’ कहना मुश्किल हो।"],["दिल से बोलिए","अपने शब्दों में बताइए आपको उनमें क्या पसंद है और आप कैसी ज़िंदगी सोचते हैं।"],["साफ़ पूछिए, फिर सुनिए","सवाल पूछिए, उन्हें जगह दीजिए और कोई भी जवाब शालीनता से मानिए।"]],
+ ["“तुम्हारे साथ इन सालों ने मुझे सिखाया है कि घर कैसा लगता है।”","“मुझे तुम्हारी… बात बहुत पसंद है और मैं तुम्हारे साथ ज़िंदगी बनाना चाहता/चाहती हूँ।”","“क्या तुम मुझसे शादी करोगे/करोगी?”","अगर उन्हें समय चाहिए: “जितना समय चाहिए लो। मैं कहीं नहीं जा रहा/रही।”"],
+ ["अगर उनके लिए मायने रखता हो तो उनके परिवार की संस्कृति और इच्छा का सम्मान कीजिए","इसे निजी रखिए, तमाशा नहीं","“मुझे समय चाहिए” के लिए शांत जवाब तैयार रखिए"],
+ ["‘हाँ’ का दबाव बनाने के लिए सबके सामने प्रपोज़ मत कीजिए","लंबी स्क्रिप्ट मत पढ़िए","जवाब ‘हाँ’ न हो तो मुँह मत फुलाइए या बहस मत कीजिए"],
+ "सोचिए उन्हें कैसा लगेगा, दूसरों को कैसा दिखेगा ये नहीं। आरामदायक ‘हाँ’ शानदार ‘हाँ’ से ज़्यादा मायने रखती है।"],
+apology:["माफ़ी माँगना","ज़िम्मेदारी लीजिए, भरपाई कीजिए",
+ "कमज़ोर माफ़ी (“तुम्हें बुरा लगा, इसके लिए सॉरी”) चोट बढ़ाती है। सच्ची माफ़ी असर को मानती है और बदलाव दिखाती है।",
+ [["ज़िम्मेदारी लीजिए","आपने क्या किया ये बताइए, “लेकिन” के बिना।"],["असर को मानिए","दिखाइए कि आप समझते हैं उन्हें कैसा लगा।"],["भरपाई कीजिए","हो सके तो नुक़सान ठीक करने का ऑफ़र दीजिए।"],["बदलाव का वादा कीजिए","बताइए आप क्या अलग करेंगे, फिर वो कीजिए।"]],
+ ["“मुझे अफ़सोस है कि मैं मीटिंग में आपकी बात काटता/काटती रहा/रही। वो बदतमीज़ी थी।”","“मैं देख सकता/सकती हूँ कि इससे आपको अनसुना महसूस हुआ।”","“मैं इसे टीम के सामने सुधारकर ठीक करना चाहता/चाहती हूँ।”","“अब से मैं आपको पूरा बोलने दूँगा/दूँगी।”"],
+ ["जल्दी माफ़ी माँगिए","सरल और सच्चे रहिए","उन्हें जवाब देने दीजिए, गुस्से में भी"],
+ ["“सॉरी, लेकिन…” मत कहिए","तुरंत माफ़ी की उम्मीद मत रखिए","ख़ुद को बचाने के लिए ज़्यादा सफ़ाई मत दीजिए"],
+ "माफ़ी उनके लिए है, अपने अपराध-बोध को हल्का करने के लिए नहीं।"],
+condolence:["संवेदना जताना","सही शब्दों से ज़्यादा साथ मायने रखता है",
+ "हम ग़लत बात कहने से डरते हैं, इसलिए कुछ नहीं कहते। सरल, सच्चे शब्द और आपकी मौजूदगी सबसे ज़्यादा मायने रखते हैं।",
+ [["जल्दी संपर्क कीजिए","अभी एक छोटा मैसेज या मुलाक़ात बाद की परफ़ेक्ट बात से बेहतर है।"],["एक सरल पंक्ति कहिए","नुक़सान को मानिए और अपनी परवाह जताइए।"],["सुनिए","उन्हें बोलने दीजिए या चुप रहने दीजिए। ठीक करने की कोशिश मत कीजिए।"],["ख़ास मदद ऑफ़र कीजिए","खाना, काम, कॉल – और कुछ हफ़्तों बाद फिर पूछिए।"]],
+ ["“आपके नुक़सान का मुझे बहुत दुख है। मैं आपके बारे में सोच रहा/रही हूँ।”","“वे बहुत अच्छे इंसान थे। मुझे याद है जब…”","“मैं यहीं हूँ। बात करना चाहें या न चाहें, दोनों ठीक है।”","“क्या मैं गुरुवार को खाना ला सकता/सकती हूँ?”"],
+ ["उनके अपने का नाम लीजिए","कोई अच्छी याद हो तो साझा कीजिए","अंतिम संस्कार के बाद भी हालचाल पूछिए"],
+ ["“वे बेहतर जगह पर हैं” तब तक मत कहिए जब तक पता न हो वह ठीक बैठता है","दुखों की तुलना मत कीजिए","“कुछ चाहिए तो बताना” कहकर बात वहीं मत छोड़िए"],
+ "आपको उन्हें बेहतर महसूस कराना ज़रूरी नहीं। बस उन्हें अकेला नहीं छोड़ना है।"],
+thanks:["सराहना और धन्यवाद","ख़ास और सच्चा",
+ "सामान्य “शुक्रिया” आसानी से भूल जाता है। ख़ास सराहना लोगों को दिखा हुआ महसूस कराती है और वे फिर मदद के लिए तैयार रहते हैं।",
+ [["ख़ास बनिए","बताइए उन्होंने क्या किया।"],["असर बताइए","इससे आपको या टीम को कैसे मदद मिली।"],["जल्दी कहिए","एक-दो दिन के अंदर।"],["सही तरीका चुनिए","आमने-सामने, नोट में, या अगर उन्हें पसंद हो तो सबके सामने।"]],
+ ["“रिपोर्ट ठीक करने के लिए देर तक रुकने का शुक्रिया। इसने हमारा लॉन्च बचा लिया।”","“मुझे बहुत अच्छा लगा कि आपने मुझे छोटा महसूस कराए बिना समझाया।”"],
+ ["मेहनत और गुणों की तारीफ़ कीजिए","सही हो तो उनके मैनेजर को भी कॉपी कीजिए","सच्चे रहिए"],
+ ["उसी साँस में कोई माँग मत जोड़िए","बढ़ा-चढ़ाकर मत कहिए","सिर्फ़ लीडर्स को धन्यवाद मत दीजिए"],
+ "सराहना में कम ख़र्च होता है। इसे उससे ज़्यादा बार कीजिए जितना ज़रूरी लगे।"],
+no:["विनम्रता से ‘ना’ कहना","दयालु, साफ़, संक्षिप्त",
+ "हम गिल्ट से बचने के लिए ‘हाँ’ कहते हैं और फिर नाराज़ होते हैं। एक साफ़, दयालु ‘ना’ आपके समय और रिश्ते दोनों की रक्षा करती है।",
+ [["रुकिए","“मुझे चेक करके बताने दीजिए” से आपको समय मिलता है।"],["क़दर कीजिए","उन्होंने आपके बारे में सोचा, इसके लिए शुक्रिया कहिए।"],["साफ़ ‘ना’ कहिए","एक छोटी वजह, या कोई नहीं, बार-बार माफ़ी माँगे बिना।"],["विकल्प दीजिए","अगर सच में दे सकते हैं: दूसरा समय, छोटी मदद, या कोई और इंसान।"]],
+ ["“पूछने के लिए शुक्रिया। मैं अभी ये नहीं ले सकता/सकती।”","“इस हफ़्ते मेरी क्षमता पूरी भरी हुई है, इसलिए मैं इसे अच्छे से नहीं कर पाऊँगा/पाऊँगी।”","“मैं अगले महीने मदद कर सकता/सकती हूँ, या किसी और का नाम सुझा सकता/सकती हूँ।”"],
+ ["दृढ़ और गर्मजोशी वाले रहिए","लंबी वजह की जगह “मैं नहीं कर सकता/सकती” कहिए","दबाव डालने पर भी अपने जवाब पर टिके रहिए"],
+ ["लंबी सफ़ाई मत दीजिए","ऐसे बहाने मत बनाइए जिनकी जाँच हो सके","जिसका मतलब ‘ना’ हो उसे “शायद” मत कहिए"],
+ "अनुरोध को ‘ना’ का मतलब इंसान को ‘ना’ नहीं है। अपने लहजे से ये कहिए।"],
+conflict:["टकराव संभालना","गर्मी शांत कीजिए, समस्या सुलझाइए",
+ "टकराव ख़तरे जैसा लगता है, इसलिए लोग हमला करते हैं या बचते हैं। मक़सद है समस्या सुलझाते हुए रिश्ते को बचाना।",
+ [["ठंडे हो जाइए","जब तक शांति से बोल न सकें रुकिए। बताइए आप कब बात करेंगे।"],["पहले सुनिए","उन्हें पूरा बोलने दीजिए, फिर दोहराइए आपने क्या सुना।"],["“मैं” से अपनी बात रखिए","बिना दोष के तथ्य और अपनी भावना बताइए।"],["साझा लक्ष्य ढूँढिए","पूछिए दोनों क्या चाहते हैं और साथ में विकल्प सोचिए।"],["सहमत हों और फ़ॉलो-अप कीजिए","लिख लीजिए कि कौन क्या कब तक करेगा।"]],
+ ["“मैं इसे सुलझाना चाहता/चाहती हूँ। क्या हम लंच के बाद बात कर सकते हैं?”","“जो मैं सुन रहा/रही हूँ वो ये है… क्या मैंने सही समझा?”","“जब… हुआ तो मुझे चिंता हुई। मैं चाहता/चाहती हूँ हम…”","“दोनों के लिए क्या काम करेगा?”"],
+ ["इंसान और समस्या को अलग रखिए","भावनाएँ चढ़ें तो ब्रेक लीजिए","दोनों की जीत वाला हल ढूँढिए"],
+ ["“हमेशा” और “कभी नहीं” मत कहिए","पुराने मुद्दे मत लाइए","पक्ष लेने के लिए दूसरों को शामिल मत कीजिए"],
+ "पूछिए सामने वाला क्या बचाने की कोशिश कर रहा है। अक्सर वो इज़्ज़त, निष्पक्षता या सुरक्षा होती है।"],
+badnews:["बुरी ख़बर देना","ईमानदार, जल्दी, सहारा देते हुए",
+ "बुरी ख़बर में देरी उसे और बुरा बनाती है। लोग उसे बेहतर संभालते हैं जब उन्हें इज़्ज़त और सहारा मिले।",
+ [["सही जगह चुनिए","निजी और बिना जल्दबाज़ी के, गंभीर मामलों में आमने-सामने या कॉल पर।"],["पहले हल्का संकेत दीजिए","“मेरे पास एक मुश्किल ख़बर है।”"],["सीधे कहिए","छोटा, साफ़, बिना जार्गन, बिना दोष।"],["प्रतिक्रिया का मौक़ा दीजिए","रुकिए, सुनिए और भावनाओं को मानिए।"],["अगले कदम समझाइए","अब क्या होगा और आप कैसे मदद करेंगे।"]],
+ ["“मुझे एक मुश्किल ख़बर बतानी है।”","“हमें वो प्रोजेक्ट नहीं मिला। मुझे पता है आपने इस पर कितनी मेहनत की थी।”","“मुझे बहुत अफ़सोस है। थोड़ा समय लीजिए।”","“आगे ये होगा, और मैं आपके साथ हूँ।”"],
+ ["ईमानदार रहिए","शांत रहिए","बाद में फ़ॉलो-अप कीजिए"],
+ ["बात पर चीनी मत चढ़ाइए","बहुत सारी डिटेल्स मत लादिए","गंभीर ख़बर टेक्स्ट या ईमेल से मत दीजिए"],
+ "चुप्पी को अपना काम करने दीजिए। अगला कदम सुनने से पहले लोगों को समय चाहिए।"],
+askhelp:["मदद माँगना","ख़ास, सम्मान भरा, आभारी",
+ "लोग माँगने में झिझकते हैं, डरते हैं कि बोझ बनेंगे या कमज़ोर दिखेंगे। ख़ास और सम्मान भरे अनुरोध पर ‘हाँ’ कहना आसान होता है।",
+ [["जानिए आपको क्या चाहिए","काम और डेडलाइन साफ़ रखिए।"],["सही इंसान चुनिए","जिसके पास स्किल और समय हो।"],["सीधे और प्यार से माँगिए","समझाइए, माँगिए, और ‘ना’ कहने का आसान रास्ता दीजिए।"],["शुक्रिया कहिए और अपडेट दीजिए","नतीजा बताइए ताकि वे ख़ुद को उसका हिस्सा महसूस करें।"]],
+ ["“क्या मैं X में आपसे 15 मिनट की मदद माँग सकता/सकती हूँ? मैं Y पर अटका/अटकी हूँ।”","“अगर आप व्यस्त हैं तो कोई बात नहीं। मैं अगले हफ़्ते पूछ लूँगा/लूँगी।”","“शुक्रिया, इससे मदद मिली। नतीजा ये रहा।”"],
+ ["बताइए आपने क्या आज़माया","उनके समय की इज़्ज़त कीजिए","एहसान लौटाइए"],
+ ["अस्पष्ट मत रहिए","गिल्ट मत दिलाइए","सिर्फ़ मजबूरी में मत माँगिए"],
+ "‘ना’ की गुंजाइश रखिए। अपनी मर्ज़ी से दी गई ‘हाँ’ ज़्यादा उदार होती है।"]
+};
+const HX_OG = ["💼 करियर और काम","🎤 मीटिंग और बोलना","💞 निजी पल","🤝 रोज़मर्रा की स्थितियाँ"];
+Object.assign(UI,{
+ tOcc:["Occasions","मौक़े"],
+ occH:["Special occasions & situations","ख़ास मौक़े और स्थितियाँ"],
+ occSub:["Pick a moment you’re preparing for and get steps, sample words and what to avoid.","जिस मौक़े की तैयारी कर रहे हैं उसे चुनिए और पाइए स्टेप्स, सैंपल शब्द और किन बातों से बचना है।"],
+ allOcc:["← All occasions","← सभी मौक़े"],
+ oWhy:["Why it’s tricky","ये मुश्किल क्यों है"],
+ oSteps:["How to do it","कैसे करें"],
+ oScript:["💬 Words you can use","💬 ये शब्द इस्तेमाल कर सकते हैं"],
+ oEmp:["💛 The empathy angle","💛 Empathy का नज़रिया"],
+ copy:["📋 Copy sample words","📋 सैंपल शब्द कॉपी करें"],
+ copied:["✓ Copied","✓ कॉपी हो गया"]
+});
 /* ---------- HELPERS ---------- */
 const $ = s => document.querySelector(s);
 const view = $("#view");
@@ -1070,8 +1388,8 @@ const _meta = (document.querySelector('meta[name="h2h-lang"]')||{}).content;
 let LANG = (_qs||_meta)==="hi" ? "hi" : "en";
 const isHi = () => LANG==="hi";
 const u = k => UI[k][isHi()?1:0];
-const state = {tab:"people",pid:null,pr:null,style:null,mood:null,rel:null};
-const TABS = [["people","👥","tPeople"],["practice","🎭","tPractice"],["read","🔎","tRead"],["tools","🧰","tTools"]];
+const state = {tab:"people",pid:null,oid:null,pr:null,style:null,mood:null,rel:null};
+const TABS = [["people","👥","tPeople"],["occ","📅","tOcc"],["practice","🎭","tPractice"],["read","🔎","tRead"],["tools","🧰","tTools"]];
 const shuffle = a => { const b=a.slice(); for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]} return b; };
 const li = a => "<ul>"+a.map(x=>"<li>"+x+"</li>").join("")+"</ul>";
 
@@ -1094,7 +1412,7 @@ const feelList = () => isHi()?HX.feel:FEEL;
 const swapList = () => isHi()?HX.swap:SWAP;
 const knowList = () => isHi()?HX.getknow:GETKNOW;
 
-function go(tab, pid){ state.tab=tab; if(tab==="people") state.pid=pid||null; if(tab==="practice"&&pid) startPractice(pid); else if(tab==="practice") state.pr=null; render(); window.scrollTo(0,0); }
+function go(tab, pid){ state.tab=tab; if(tab==="people") state.pid=pid||null; if(tab==="occ") state.oid=pid||null; if(tab==="practice"&&pid) startPractice(pid); else if(tab==="practice") state.pr=null; render(); window.scrollTo(0,0); }
 function setLang(l){ LANG=l; render(); }
 function renderChrome(){
   document.documentElement.lang = isHi()?"hi":"en";
@@ -1104,7 +1422,32 @@ function renderChrome(){
   $("#tabs").innerHTML = TABS.map(t=>`<button class="${state.tab===t[0]?"on":""}" onclick="go('${t[0]}')"><b>${t[1]}</b>${u(t[2])}</button>`).join("");
 }
 
+function LO(o){ if(!isHi()||!HO[o.id]) return o; const h=HO[o.id]; return {id:o.id,em:o.em,name:h[0],tag:h[1],why:h[2],steps:h[3],script:h[4],dos:h[5],donts:h[6],emp:h[7]}; }
+const ogname = i => isHi()?HX_OG[i]:OGROUPS[i][0];
+let _script = "";
+function copyScript(btn){
+  const done=()=>{ btn.textContent=u("copied"); setTimeout(()=>{btn.textContent=u("copy")},1800); };
+  try{ navigator.clipboard.writeText(_script).then(done,()=>fallbackCopy(done)); }catch(e){ fallbackCopy(done); }
+}
+function fallbackCopy(done){ try{ const t=document.createElement("textarea"); t.value=_script; document.body.appendChild(t); t.select(); document.execCommand("copy"); t.remove(); done(); }catch(e){} }
+
 /* ---------- VIEWS ---------- */
+function occList(){
+  return `<h2>${u("occH")}</h2><p class="sub">${u("occSub")}</p>`+OGROUPS.map((g,gi)=>`<h3>${ogname(gi)}</h3><div class="grid">${g[1].map(id=>LO(oById[id])).map(o=>`<button class="pc" onclick="go('occ','${o.id}')"><div class="em">${o.em}</div><strong>${o.name}</strong><small>${o.tag}</small></button>`).join("")}</div>`).join("");
+}
+function occDetail(o0){
+  const o=LO(o0); _script=o.script.join("\n");
+  return `<button class="back" onclick="go('occ')">${u("allOcc")}</button>
+  <h2>${o.em} ${o.name}</h2><p class="sub">${o.tag}</p>
+  <div class="card mind"><strong>${u("oWhy")}</strong><p>${o.why}</p></div>
+  <h3>${u("oSteps")}</h3>
+  ${o.steps.map((s,i)=>`<div class="step"><b class="l">${i+1}</b><div><strong>${s[0]}</strong><br>${s[1]}</div></div>`).join("")}
+  <h3>${u("oScript")}</h3>
+  <div class="card">${li(o.script.map(x=>`<span class="quote">${x}</span>`))}</div>
+  <button class="btn alt" onclick="copyScript(this)">${u("copy")}</button>
+  <div class="cols"><div class="card do"><h3>${u("sDo")}</h3>${li(o.dos)}</div><div class="card dont"><h3>${u("sDont")}</h3>${li(o.donts)}</div></div>
+  <div class="card mind"><strong>${u("oEmp")}</strong><p>${o.emp}</p></div>`;
+}
 function groupedGrid(tab,withTag){
   return GROUPS.map((g,gi)=>`<h3>${gname(gi)}</h3><div class="grid">${g[1].map(id=>LP(byId[id])).map(p=>`<button class="pc" onclick="go('${tab}','${p.id}')"><div class="em">${p.em}</div><strong>${p.name}</strong>${withTag?`<small>${p.tag}</small>`:""}</button>`).join("")}</div>`).join("");
 }
@@ -1210,6 +1553,7 @@ function tools(){
 function render(){
   renderChrome();
   if(state.tab==="people") view.innerHTML = state.pid?personDetail(byId[state.pid]):peopleList();
+  else if(state.tab==="occ") view.innerHTML = state.oid?occDetail(oById[state.oid]):occList();
   else if(state.tab==="practice") view.innerHTML = state.pr?practiceRun():practiceHome();
   else if(state.tab==="read") view.innerHTML = readThem();
   else { view.innerHTML = tools(); const n=$("#notes"); n.value=store.get("h2h-notes",""); n.addEventListener("input",()=>store.set("h2h-notes",n.value)); }
