@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Life &amp; Beyond | Free Video Lessons</title>
+<style>
+:root{--bg:#fff;--alt:#f5f7fa;--text:#1c1d1f;--muted:#5f6670;--line:#dde1e6;--accent:#0056d2;--accent-d:#00419e;--soft:#e8f0fe;--card:#fff;--top:#0b1f4d}
+@media(prefers-color-scheme:dark){:root{--bg:#14151a;--alt:#1b1d24;--text:#f0f1f4;--muted:#a0a6b0;--line:#33363f;--accent:#6ea8ff;--accent-d:#9cc2ff;--soft:#16233d;--card:#1b1d24;--top:#0a1226}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Devanagari",sans-serif;line-height:1.45}
+button{font:inherit;cursor:pointer;color:inherit}a{color:inherit}
+/* top bar */
+.bar{position:sticky;top:0;z-index:40;background:var(--top);color:#fff;display:flex;align-items:center;gap:8px;height:56px;padding:0 12px}
+.bar .brand{font-weight:800;font-size:1.05rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+.fb{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:16px;background:#000 center/cover no-repeat;color:#fff}
+.fb::before{content:"";position:absolute;inset:0;background:rgba(0,0,0,.65)}.fb>*{position:relative}
+.fb a{background:#ff0000;color:#fff;font-weight:800;text-decoration:none;padding:12px 20px;border-radius:8px}
+.ib{background:rgba(255,255,255,.12);border:0;color:#fff;border-radius:8px;min-width:38px;height:38px;font-size:1.1rem;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:0 10px;text-decoration:none}
+.ib:hover:not(:disabled){background:rgba(255,255,255,.25)}.ib:disabled{opacity:.35;cursor:default}
+.nav{display:flex;gap:6px;align-items:center}
+@media(max-width:480px){.pos{min-width:40px;font-size:.75rem}.ib{min-width:34px;height:34px;padding:0 8px}.bar{gap:6px;padding:0 8px}}
+.pos{font-size:.82rem;color:#c9d6f5;min-width:54px;text-align:center}
+.menu{display:none}
+.coach{background:#1fa855;font-weight:700;font-size:.85rem}
+.hidem{}
+@media(max-width:860px){.menu{display:inline-flex}.hidem{display:none}}
+/* layout */
+.shell{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 56px)}
+aside{background:var(--alt);border-right:1px solid var(--line);position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto}
+.side-h{padding:14px 16px 6px;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.cat{border-bottom:1px solid var(--line)}
+.cat>button{width:100%;display:flex;align-items:center;gap:10px;text-align:left;background:none;border:0;padding:12px 16px;font-weight:700}
+.cat>button .n{margin-left:auto;font-size:.75rem;color:var(--muted);font-weight:600}
+.cat>button .ch{transition:transform .2s;color:var(--muted)}
+.cat.open>button .ch{transform:rotate(90deg)}
+.cat.cur>button{color:var(--accent)}
+.cat ul{list-style:none;margin:0;padding:0 0 8px;display:none}.cat.open ul{display:block}
+.cat li button{width:100%;display:flex;gap:10px;text-align:left;background:none;border:0;padding:8px 16px 8px 20px;font-size:.86rem;color:var(--muted);border-left:3px solid transparent}
+.cat li button:hover{background:var(--soft);color:var(--text)}
+.cat li button.on{background:var(--soft);color:var(--accent);font-weight:700;border-left-color:var(--accent)}
+.cat li .i{flex:none;width:20px;font-variant-numeric:tabular-nums;opacity:.7}
+.scrim{display:none}
+@media(max-width:860px){
+ .shell{grid-template-columns:1fr}
+ aside{position:fixed;left:0;top:56px;bottom:0;width:86%;max-width:340px;height:auto;z-index:60;transform:translateX(-102%);transition:transform .25s;box-shadow:4px 0 20px rgba(0,0,0,.3)}
+ body.sb aside{transform:none}
+ body.sb .scrim{display:block;position:fixed;inset:56px 0 0 0;background:rgba(0,0,0,.5);z-index:55}
+}
+/* hero */
+.hero{color:#fff;padding:36px 24px 30px;position:relative;overflow:hidden}
+.hero::after{content:attr(data-emoji);position:absolute;right:16px;bottom:-18px;font-size:9rem;opacity:.18;line-height:1}
+.hero .k{font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+.hero h1{margin:6px 0 8px;font-size:clamp(1.6rem,4.5vw,2.4rem);line-height:1.15;max-width:700px}
+.hero p{margin:0 0 14px;max-width:600px;opacity:.92}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.chips span{background:rgba(255,255,255,.18);border-radius:99px;padding:3px 12px;font-size:.82rem}
+.cta{display:flex;gap:10px;flex-wrap:wrap}
+.btn{border:0;border-radius:6px;padding:11px 18px;font-weight:800;text-decoration:none;display:inline-block;background:#fff;color:#0b1f4d}
+.btn.o{background:transparent;color:#fff;border:1px solid #fff}
+main{min-width:0}
+.body{padding:20px 24px 50px;max-width:1100px}
+/* player */
+#player{margin-bottom:26px;scroll-margin-top:70px}
+.frame{position:relative;aspect-ratio:16/9;background:#000;border-radius:10px;overflow:hidden}
+.frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.now{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;margin-top:12px}
+.now h2{margin:0;font-size:1.2rem;flex:1 1 280px}
+.now .row{display:flex;gap:8px}
+.pill{border:1px solid var(--line);background:var(--card);border-radius:6px;padding:8px 12px;font-weight:700;font-size:.85rem;text-decoration:none}
+.pill:hover{border-color:var(--accent);color:var(--accent)}
+h3.sec{margin:6px 0 12px;font-size:1.25rem}
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.v{cursor:pointer;background:none;border:0;text-align:left;padding:0}
+.th{position:relative;aspect-ratio:4/3;border-radius:8px;overflow:hidden;background:#000}
+.th img{width:100%;height:100%;object-fit:contain;display:block}
+.th .pl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2rem;color:#fff;background:rgba(0,0,0,.18);opacity:.9}
+.th .no{position:absolute;left:8px;top:8px;background:rgba(0,0,0,.7);color:#fff;font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:4px}
+.v:hover .th .pl{background:rgba(0,0,0,.35)}
+.v .t{font-weight:700;font-size:.94rem;margin-top:8px;line-height:1.3}
+.v.on .t{color:var(--accent)}.v.on .th{outline:3px solid var(--accent)}
+.foot{border-top:1px solid var(--line);padding:22px 24px;color:var(--muted);font-size:.88rem}
+.foot a{color:var(--accent);font-weight:700}
+</style>
+</head>
+<body>
+<div class="bar">
+  <button class="ib menu" id="menuBtn" aria-label="Open menu">☰</button>
+  <button class="ib" id="homeBtn" aria-label="Home" title="Home">🏠<span class="hidem">Home</span></button>
+  <span class="brand">Life &amp; Beyond</span>
+  <div class="nav">
+    <button class="ib" id="prevBtn" aria-label="Previous video" title="Previous video">←</button>
+    <span class="pos" id="pos">–</span>
+    <button class="ib" id="nextBtn" aria-label="Next video" title="Next video">→</button>
+    <a class="ib coach" id="coachBtn" target="_blank" rel="noopener">💬<span class="hidem">1-to-1 coaching</span></a>
+  </div>
+</div>
+<div class="scrim" id="scrim"></div>
+<div class="shell">
+  <aside id="side" aria-label="Categories and videos"></aside>
+  <main>
+    <section class="hero" id="hero"></section>
+    <div class="body">
+      <div id="player" hidden>
+        <div class="frame" id="frame"></div>
+        <div class="now"><h2 id="nowT"></h2>
+          <div class="row"><a class="pill" id="ytLink" target="_blank" rel="noopener">Open on YouTube</a></div></div>
+      </div>
+      <h3 class="sec" id="gridT"></h3>
+      <div class="grid" id="grid"></div>
+    </div>
+    <div class="foot">Free lessons by <b id="fName"></b> · <a href="https://www.youtube.com/@tarkeshonline" target="_blank" rel="noopener">Subscribe on YouTube</a> · <a id="fWa" target="_blank" rel="noopener">WhatsApp</a></div>
+  </main>
+</div>
+<script>
+/* ===== EDIT THESE ===== */
+const SITE={tutor:"Your Name",whatsapp:"910000000000",channel:"https://www.youtube.com/@tarkeshonline"};
+const CATS=[{"id": "prod", "cat": "Workplace Coaching", "title": "Work Smarter: Productivity & Learning Habits", "sub": "Short, practical videos on time, focus, follow-ups and learning fast at work.", "emoji": "⏱️", "g": ["#1e3a8a", "#3b82f6"], "v": [{"id": "V34i_6Ohbbk", "t": "Know When to Multitask and When Not To"}, {"id": "E-yreKORCJc", "t": "Don't Manage Your Time, Manage This"}, {"id": "9-po3OSEy68", "t": "Do This to Get Things Completed"}, {"id": "xXYWlEFVj-o", "t": "Do Not Compete, Do This"}, {"id": "f2FTlRS2cyU", "t": "How to Make Your or Others' Life Easier"}, {"id": "vkRI6M3n4Rk", "t": "Right Way to Think About the Future"}, {"id": "GfhjAuBVEs4", "t": "Don't Practise Incomplete Sentences"}, {"id": "RZm6d4gl8_k", "t": "Instruction or Intention: Work Smarter"}, {"id": "iNCZ5bYk8t8", "t": "To Learn Fast, Do This"}, {"id": "8-IPNc9F-jQ", "t": "Get Cross-Functional Knowledge Too"}], "short": "Work Smarter"}, {"id": "comm", "cat": "Workplace Coaching", "title": "Present, Pitch & Simplify: Communication at Work", "sub": "How to present a solution, pitch an idea and keep everything as simple as possible.", "emoji": "🎤", "g": ["#7c2d12", "#ea580c"], "v": [{"id": "tOjg7iXBxRM", "t": "Present Your Solution This Way: Demo Skills"}, {"id": "HANWHvo1ZQo", "t": "The Elevator Pitch"}, {"id": "_EQf4u9OjfE", "t": "Make Your Solutions Easy to Use"}, {"id": "-qdG_c9DZX8", "t": "ASAP: As Simple As Possible"}], "short": "Present & Pitch"}, {"id": "mind", "cat": "Life Skills", "title": "Mindset & Happiness: Life Lessons", "sub": "Bite-sized thoughts on action, worry, frustration, priorities and happiness.", "emoji": "🌱", "g": ["#064e3b", "#10b981"], "v": [{"id": "Q7I-qoifFdM", "t": "Time Pass = Time Passed"}, {"id": "E-pgPNRe8cM", "t": "Just Do It"}, {"id": "PsoRHIrzOBE", "t": "OK, Not OK: Respect and Priorities"}, {"id": "LFxWyuh0cn8", "t": "HaaS: Happiness as a Skill"}, {"id": "-MQilmwpFFU", "t": "Keep the Frustration Away"}, {"id": "ONhJCXmjR44", "t": "Please Do Worry, But the Right Way"}, {"id": "XW1zGCPicCo", "t": "Lighten Up Yourself and Surroundings"}, {"id": "kfiaNoMk_uI", "t": "Lighten Yourself and Surroundings (Part 2)"}, {"id": "pHd52PXhZds", "t": "Dream Big, Do Big"}, {"id": "xmvibDOcWoI", "t": "Are You a Defaulter? Appreciation and Recognition"}, {"id": "BCzWAR_Jf74", "t": "Money, Deficiency and Health (Short)"}], "short": "Mindset & Happiness"}, {"id": "data", "cat": "Data & Analytics", "title": "Data & AI Explained in Simple Hinglish", "sub": "Data warehouses, primary keys, IoT, ChatGPT, prompts and data storytelling explained with everyday examples.", "emoji": "📊", "g": ["#4c1d95", "#7c3aed"], "v": [{"id": "WtUNNlr96Xo", "t": "DataWarehouse Kya Hota Hai?"}, {"id": "0PLUpxRAG3M", "t": "Your Own Primary Key: Aadhaar / SSN"}, {"id": "cs2oQ6k0w6w", "t": "IoT: Connected Machines (IT meets OT)"}, {"id": "KZVOIt0Q2gY", "t": "ChatGPT and Data"}, {"id": "YovFgeKZQPk", "t": "Prompt Engineering and Communication Skills"}, {"id": "T2SpqKVLtJI", "t": "GenAI and the Cricket Lover"}, {"id": "EXkC37TrLvc", "t": "Automation: Smart Work"}, {"id": "gf-QwmMv-PI", "t": "Data Story: Kahani Tables Ki"}, {"id": "GzUwxkF2Ilc", "t": "How Does a Proverb (Muhavare) Originate? Data Insights"}, {"id": "CYbncUEzoXg", "t": "Data Dikhao: Show and Tell"}, {"id": "Lku8E2ab9z4", "t": "Kitne Aadmi The? Data Enquiry"}], "short": "Data & AI"}, {"id": "hindi", "cat": "Hindi", "title": "Hindi Shayari & Soulful Poetry", "sub": "Relaxing shayari, ghazal and Bollywood soul to enjoy and improve your Hindi.", "emoji": "📜", "g": ["#831843", "#ec4899"], "v": [{"id": "XMFv5pz34XM", "t": "Hum Tere Pyaar Mein: Soulful Classic Bollywood"}, {"id": "oa4ZRz4qZog", "t": "Tassali Bhram Ki: Gulzar, Jaun Elia, Ghalib"}, {"id": "iUVKUnVizjk", "t": "Shayari: Jaun Elia and Life"}, {"id": "mV77QDQAFEQ", "t": "Aasman: Peace and Relaxing Shayari"}, {"id": "Wa3F24oszcg", "t": "Hum Tum Aur Waqt"}, {"id": "2oMedrbRIUE", "t": "Ishq, Zaroorat: Nagme and Ghazal"}], "short": "Hindi Shayari"}];
+/* ====================== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const FLAT=[];CATS.forEach((c,ci)=>c.v.forEach((v,vi)=>FLAT.push({ci,vi,id:v.id,t:v.t})));
+const wa=t=>"https://wa.me/"+SITE.whatsapp+"?text="+encodeURIComponent(t);
+let ci=0,cur=-1; // current category index, current flat index (-1 = none playing)
+const open=new Set([0]);
+
+function thumb(id,g){return `<img loading="lazy" alt="" referrerpolicy="no-referrer" src="https://i.ytimg.com/vi/${id}/hqdefault.jpg" onerror="tf(this,'${id}')">`}
+function tf(img,id){if(!img.dataset.t){img.dataset.t=1;img.src="https://img.youtube.com/vi/"+id+"/mqdefault.jpg";return}img.onerror=null;img.style.display="none"}
+
+function renderSide(){
+  $("#side").innerHTML='<div class="side-h">Categories</div>'+CATS.map((c,i)=>`
+   <div class="cat ${open.has(i)?"open":""} ${i===ci?"cur":""}">
+    <button data-cat="${i}"><span>${c.emoji}</span><span>${esc(c.short)}</span><span class="n">${c.v.length}</span><span class="ch">›</span></button>
+    <ul>${c.v.map((v,j)=>{const f=FLAT.findIndex(x=>x.id===v.id&&x.ci===i);return `<li><button data-play="${f}" class="${f===cur?"on":""}"><span class="i">${j+1}</span><span>${esc(v.t)}</span></button></li>`}).join("")}</ul>
+   </div>`).join("");
+}
+function renderMain(){
+  const c=CATS[ci];
+  const h=$("#hero");h.style.background=`linear-gradient(120deg,${c.g[0]},${c.g[1]})`;h.dataset.emoji=c.emoji;
+  h.innerHTML=`<div class="k">${esc(c.cat)} · Free course</div><h1>${esc(c.title)}</h1><p>${esc(c.sub)}</p>
+   <div class="chips"><span>${c.v.length} videos</span><span>Free</span><span>${esc(c.cat)}</span></div>
+   <div class="cta"><button class="btn" data-start>▶ Start watching</button><a class="btn o" target="_blank" rel="noopener" href="${wa("Hi, I'd like 1-to-1 coaching on: "+c.title)}">Book 1-to-1 coaching</a></div>`;
+  $("#gridT").textContent="All videos in this course";
+  $("#grid").innerHTML=c.v.map((v,j)=>{const f=FLAT.findIndex(x=>x.id===v.id&&x.ci===ci);return `
+   <button class="v ${f===cur?"on":""}" data-play="${f}" style="--g:linear-gradient(135deg,${c.g[0]},${c.g[1]})">
+    <div class="th">${thumb(v.id)}<span class="pl">▶</span><span class="no">${j+1}</span></div><div class="t">${esc(v.t)}</div></button>`}).join("");
+}
+function renderBar(){
+  $("#prevBtn").disabled=cur<=0;$("#nextBtn").disabled=cur>=FLAT.length-1;
+  $("#pos").textContent=cur<0?"–":(cur+1)+" / "+FLAT.length;
+  $("#coachBtn").href=wa("Hi, I'd like 1-to-1 coaching. I watched: "+(cur>=0?FLAT[cur].t:CATS[ci].title));
+}
+function show(){renderSide();renderMain();renderBar();
+  const p=$("#player");
+  if(cur<0){p.hidden=true;$("#frame").innerHTML="";}
+}
+function play(f,scroll=true){
+  const x=FLAT[f];if(!x)return;cur=f;ci=x.ci;open.add(ci);
+  mount(x);
+  $("#nowT").textContent=x.t;$("#ytLink").href="https://www.youtube.com/watch?v="+x.id;
+  $("#player").hidden=false;show();
+  history.replaceState(null,"","#"+x.id);
+  if(scroll)$("#player").scrollIntoView({behavior:"smooth",block:"start"});
+  document.body.classList.remove("sb");
+}
+let ytReady=false,ytq=null,yp=null;
+(function(){const s=document.createElement("script");s.src="https://www.youtube.com/iframe_api";s.async=true;document.head.appendChild(s)})();
+window.onYouTubeIframeAPIReady=()=>{ytReady=true;if(ytq)mount(ytq)};
+function fallback(x){
+  $("#frame").innerHTML=`<div class="fb" style="background-image:url(https://i.ytimg.com/vi/${x.id}/hqdefault.jpg)"><div>Tap below to watch this video in YouTube.</div><a href="https://www.youtube.com/watch?v=${x.id}" target="_blank" rel="noopener">▶ Watch on YouTube</a></div>`;
+}
+function mount(x){
+  ytq=x;const f=$("#frame");
+  if(!/^https?:$/.test(location.protocol)){fallback(x);return}
+  if(!ytReady){ if(location.protocol==="file:"||!window.navigator.onLine){fallback(x);return}
+    f.innerHTML=`<iframe src="https://www.youtube.com/embed/${x.id}?autoplay=1&rel=0&playsinline=1" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="${esc(x.t)}"></iframe>`;return}
+  if(yp){try{yp.destroy()}catch(e){}yp=null}
+  f.innerHTML='<div id="ytp"></div>';
+  const vars={autoplay:1,rel:0,playsinline:1};
+  if(/^https?:$/.test(location.protocol))vars.origin=location.origin;
+  yp=new YT.Player("ytp",{width:"100%",height:"100%",videoId:x.id,playerVars:vars,
+    events:{onError:()=>fallback(x),onStateChange:ev=>{if(ev.data===0&&cur<FLAT.length-1&&window.autoNext)play(cur+1,false)}}});
+}
+function home(){cur=-1;ci=0;open.clear();open.add(0);show();history.replaceState(null,"","#");window.scrollTo({top:0,behavior:"smooth"})}
+function goCat(i){ci=i;if(open.has(i)&&i!==ci){}show()}
+
+document.addEventListener("click",e=>{
+  const t=e.target.closest("button,a");if(!t)return;
+  if(t.dataset.play!==undefined){play(+t.dataset.play);return}
+  if(t.dataset.cat!==undefined){const i=+t.dataset.cat;
+    if(i===ci&&open.has(i))open.delete(i);else{open.add(i);ci=i;if(cur>=0&&FLAT[cur].ci!==i){/* keep playing, just browse */}renderMain();}
+    renderSide();window.scrollTo({top:0,behavior:"smooth"});return}
+  if(t.hasAttribute("data-start")){const f=FLAT.findIndex(x=>x.ci===ci);play(f);return}
+});
+$("#homeBtn").onclick=home;
+$("#prevBtn").onclick=()=>{if(cur>0)play(cur-1)};
+$("#nextBtn").onclick=()=>{play(cur<0?FLAT.findIndex(x=>x.ci===ci):Math.min(cur+1,FLAT.length-1))};
+$("#menuBtn").onclick=()=>document.body.classList.toggle("sb");
+$("#scrim").onclick=()=>document.body.classList.remove("sb");
+document.addEventListener("keydown",e=>{if(e.target.matches("input,textarea"))return;if(e.key==="ArrowRight")$("#nextBtn").click();if(e.key==="ArrowLeft")$("#prevBtn").click()});
+$("#fName").textContent=SITE.tutor;$("#fWa").href="https://wa.me/"+SITE.whatsapp;
+show();
+const h=location.hash.slice(1);if(h){const f=FLAT.findIndex(x=>x.id===h);if(f>=0)play(f,false)}
+</script>
+</body>
+</html>
