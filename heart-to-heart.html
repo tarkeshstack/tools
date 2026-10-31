@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="h2h-lang" content="en">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Heart to Heart – Talk to Anyone with Empathy</title>
 <style>
@@ -1064,7 +1065,9 @@ interviewer:["जॉब इंटरव्यू में आपसे पू�
 const $ = s => document.querySelector(s);
 const view = $("#view");
 const store = {get(k,d){try{const v=localStorage.getItem(k);return v===null?d:v}catch(e){return d}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
-let LANG = store.get("h2h-lang","en")==="hi" ? "hi" : "en";
+const _qs = new URLSearchParams(location.search).get("lang");
+const _meta = (document.querySelector('meta[name="h2h-lang"]')||{}).content;
+let LANG = (_qs||_meta)==="hi" ? "hi" : "en";
 const isHi = () => LANG==="hi";
 const u = k => UI[k][isHi()?1:0];
 const state = {tab:"people",pid:null,pr:null,style:null,mood:null,rel:null};
@@ -1092,7 +1095,7 @@ const swapList = () => isHi()?HX.swap:SWAP;
 const knowList = () => isHi()?HX.getknow:GETKNOW;
 
 function go(tab, pid){ state.tab=tab; if(tab==="people") state.pid=pid||null; if(tab==="practice"&&pid) startPractice(pid); else if(tab==="practice") state.pr=null; render(); window.scrollTo(0,0); }
-function setLang(l){ LANG=l; store.set("h2h-lang",l); render(); }
+function setLang(l){ LANG=l; render(); }
 function renderChrome(){
   document.documentElement.lang = isHi()?"hi":"en";
   document.body.classList.toggle("hi",isHi());
