@@ -78,6 +78,12 @@ h3.sec{margin:6px 0 12px;font-size:1.25rem}
 .v:hover .th .pl{background:rgba(0,0,0,.35)}
 .v .t{font-weight:700;font-size:.94rem;margin-top:8px;line-height:1.3}
 .v.on .t{color:var(--accent)}.v.on .th{outline:3px solid var(--accent)}
+.tr{margin:16px 0 0;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+.tr h4{margin:0;padding:10px 14px;font-size:.95rem;border-bottom:1px solid var(--line)}
+.tr .box{max-height:240px;overflow-y:auto;padding:6px 0;scroll-behavior:smooth}
+.tr .l{display:flex;gap:10px;width:100%;text-align:left;background:none;border:0;padding:6px 14px;font-size:.92rem;line-height:1.4;color:var(--muted)}
+.tr .l b{flex:none;font-weight:600;font-variant-numeric:tabular-nums;color:var(--accent);font-size:.78rem;padding-top:2px}
+.tr .l.on{background:var(--soft);color:var(--text);font-weight:600}
 .foot{border-top:1px solid var(--line);padding:22px 24px;color:var(--muted);font-size:.88rem}
 .foot a{color:var(--accent);font-weight:700}
 </style>
@@ -105,6 +111,7 @@ h3.sec{margin:6px 0 12px;font-size:1.25rem}
         <div class="now"><h2 id="nowT"></h2>
           <div class="row"><a class="pill" id="ytLink" target="_blank" rel="noopener">Open on YouTube</a></div></div>
       </div>
+      <div class="tr" id="tr" hidden><h4>Transcript · tap a line to jump</h4><div class="box" id="trBox"></div></div>
       <h3 class="sec" id="gridT"></h3>
       <div class="grid" id="grid"></div>
     </div>
@@ -115,6 +122,8 @@ h3.sec{margin:6px 0 12px;font-size:1.25rem}
 /* ===== EDIT THESE ===== */
 const SITE={tutor:"Your Name",whatsapp:"910000000000",channel:"https://www.youtube.com/@tarkeshonline"};
 const CATS=[{"id": "prod", "cat": "Workplace Coaching", "title": "Work Smarter: Productivity & Learning Habits", "sub": "Short, practical videos on time, focus, follow-ups and learning fast at work.", "emoji": "⏱️", "g": ["#1e3a8a", "#3b82f6"], "v": [{"id": "V34i_6Ohbbk", "t": "Know When to Multitask and When Not To"}, {"id": "E-yreKORCJc", "t": "Don't Manage Your Time, Manage This"}, {"id": "9-po3OSEy68", "t": "Do This to Get Things Completed"}, {"id": "xXYWlEFVj-o", "t": "Do Not Compete, Do This"}, {"id": "f2FTlRS2cyU", "t": "How to Make Your or Others' Life Easier"}, {"id": "vkRI6M3n4Rk", "t": "Right Way to Think About the Future"}, {"id": "GfhjAuBVEs4", "t": "Don't Practise Incomplete Sentences"}, {"id": "RZm6d4gl8_k", "t": "Instruction or Intention: Work Smarter"}, {"id": "iNCZ5bYk8t8", "t": "To Learn Fast, Do This"}, {"id": "8-IPNc9F-jQ", "t": "Get Cross-Functional Knowledge Too"}], "short": "Work Smarter"}, {"id": "comm", "cat": "Workplace Coaching", "title": "Present, Pitch & Simplify: Communication at Work", "sub": "How to present a solution, pitch an idea and keep everything as simple as possible.", "emoji": "🎤", "g": ["#7c2d12", "#ea580c"], "v": [{"id": "tOjg7iXBxRM", "t": "Present Your Solution This Way: Demo Skills"}, {"id": "HANWHvo1ZQo", "t": "The Elevator Pitch"}, {"id": "_EQf4u9OjfE", "t": "Make Your Solutions Easy to Use"}, {"id": "-qdG_c9DZX8", "t": "ASAP: As Simple As Possible"}], "short": "Present & Pitch"}, {"id": "mind", "cat": "Life Skills", "title": "Mindset & Happiness: Life Lessons", "sub": "Bite-sized thoughts on action, worry, frustration, priorities and happiness.", "emoji": "🌱", "g": ["#064e3b", "#10b981"], "v": [{"id": "Q7I-qoifFdM", "t": "Time Pass = Time Passed"}, {"id": "E-pgPNRe8cM", "t": "Just Do It"}, {"id": "PsoRHIrzOBE", "t": "OK, Not OK: Respect and Priorities"}, {"id": "LFxWyuh0cn8", "t": "HaaS: Happiness as a Skill"}, {"id": "-MQilmwpFFU", "t": "Keep the Frustration Away"}, {"id": "ONhJCXmjR44", "t": "Please Do Worry, But the Right Way"}, {"id": "XW1zGCPicCo", "t": "Lighten Up Yourself and Surroundings"}, {"id": "kfiaNoMk_uI", "t": "Lighten Yourself and Surroundings (Part 2)"}, {"id": "pHd52PXhZds", "t": "Dream Big, Do Big"}, {"id": "xmvibDOcWoI", "t": "Are You a Defaulter? Appreciation and Recognition"}, {"id": "BCzWAR_Jf74", "t": "Money, Deficiency and Health (Short)"}], "short": "Mindset & Happiness"}, {"id": "data", "cat": "Data & Analytics", "title": "Data & AI Explained in Simple Hinglish", "sub": "Data warehouses, primary keys, IoT, ChatGPT, prompts and data storytelling explained with everyday examples.", "emoji": "📊", "g": ["#4c1d95", "#7c3aed"], "v": [{"id": "WtUNNlr96Xo", "t": "DataWarehouse Kya Hota Hai?"}, {"id": "0PLUpxRAG3M", "t": "Your Own Primary Key: Aadhaar / SSN"}, {"id": "cs2oQ6k0w6w", "t": "IoT: Connected Machines (IT meets OT)"}, {"id": "KZVOIt0Q2gY", "t": "ChatGPT and Data"}, {"id": "YovFgeKZQPk", "t": "Prompt Engineering and Communication Skills"}, {"id": "T2SpqKVLtJI", "t": "GenAI and the Cricket Lover"}, {"id": "EXkC37TrLvc", "t": "Automation: Smart Work"}, {"id": "gf-QwmMv-PI", "t": "Data Story: Kahani Tables Ki"}, {"id": "GzUwxkF2Ilc", "t": "How Does a Proverb (Muhavare) Originate? Data Insights"}, {"id": "CYbncUEzoXg", "t": "Data Dikhao: Show and Tell"}, {"id": "Lku8E2ab9z4", "t": "Kitne Aadmi The? Data Enquiry"}], "short": "Data & AI"}, {"id": "hindi", "cat": "Hindi", "title": "Hindi Shayari & Soulful Poetry", "sub": "Relaxing shayari, ghazal and Bollywood soul to enjoy and improve your Hindi.", "emoji": "📜", "g": ["#831843", "#ec4899"], "v": [{"id": "XMFv5pz34XM", "t": "Hum Tere Pyaar Mein: Soulful Classic Bollywood"}, {"id": "oa4ZRz4qZog", "t": "Tassali Bhram Ki: Gulzar, Jaun Elia, Ghalib"}, {"id": "iUVKUnVizjk", "t": "Shayari: Jaun Elia and Life"}, {"id": "mV77QDQAFEQ", "t": "Aasman: Peace and Relaxing Shayari"}, {"id": "Wa3F24oszcg", "t": "Hum Tum Aur Waqt"}, {"id": "2oMedrbRIUE", "t": "Ishq, Zaroorat: Nagme and Ghazal"}], "short": "Hindi Shayari"}];
+/* Transcripts: { "VIDEO_ID": [[startSeconds,"text"],...] } */
+const TRANSCRIPTS={};
 /* ====================== */
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -151,11 +160,11 @@ function renderBar(){
 }
 function show(){renderSide();renderMain();renderBar();
   const p=$("#player");
-  if(cur<0){p.hidden=true;$("#frame").innerHTML="";}
+  if(cur<0){p.hidden=true;$("#frame").innerHTML="";$("#tr").hidden=true;trLines=[];}
 }
 function play(f,scroll=true){
   const x=FLAT[f];if(!x)return;cur=f;ci=x.ci;open.add(ci);
-  mount(x);
+  mount(x);renderTr(x.id);
   $("#nowT").textContent=x.t;$("#ytLink").href="https://www.youtube.com/watch?v="+x.id;
   $("#player").hidden=false;show();
   history.replaceState(null,"","#"+x.id);
@@ -172,19 +181,34 @@ function mount(x){
   ytq=x;const f=$("#frame");
   if(!/^https?:$/.test(location.protocol)){fallback(x);return}
   if(!ytReady){ if(location.protocol==="file:"||!window.navigator.onLine){fallback(x);return}
-    f.innerHTML=`<iframe src="https://www.youtube.com/embed/${x.id}?autoplay=1&rel=0&playsinline=1" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="${esc(x.t)}"></iframe>`;return}
+    f.innerHTML=`<iframe src="https://www.youtube.com/embed/${x.id}?autoplay=1&rel=0&playsinline=1&cc_load_policy=1" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="${esc(x.t)}"></iframe>`;return}
   if(yp){try{yp.destroy()}catch(e){}yp=null}
   f.innerHTML='<div id="ytp"></div>';
-  const vars={autoplay:1,rel:0,playsinline:1};
+  const vars={autoplay:1,rel:0,playsinline:1,cc_load_policy:1};
   if(/^https?:$/.test(location.protocol))vars.origin=location.origin;
   yp=new YT.Player("ytp",{width:"100%",height:"100%",videoId:x.id,playerVars:vars,
     events:{onError:()=>fallback(x),onStateChange:ev=>{if(ev.data===0&&cur<FLAT.length-1&&window.autoNext)play(cur+1,false)}}});
 }
+const mmss=s=>Math.floor(s/60)+":"+String(Math.floor(s%60)).padStart(2,"0");
+let trLines=[],trIdx=-1;
+function renderTr(id){
+  const L=TRANSCRIPTS[id]||[];trLines=L;trIdx=-1;$("#tr").hidden=!L.length;
+  $("#trBox").innerHTML=L.map((r,i)=>`<button class="l" data-seek="${r[0]}" data-i="${i}"><b>${mmss(r[0])}</b><span>${esc(r[1])}</span></button>`).join("");
+}
+setInterval(()=>{
+  if(!yp||!yp.getCurrentTime||!trLines.length)return;
+  let tm;try{tm=yp.getCurrentTime()}catch(e){return}
+  let i=-1;for(let k=0;k<trLines.length;k++){if(trLines[k][0]<=tm)i=k;else break}
+  if(i===trIdx)return;trIdx=i;
+  const box=$("#trBox");box.querySelectorAll(".on").forEach(n=>n.classList.remove("on"));
+  const el=box.querySelector(`[data-i="${i}"]`);if(el){el.classList.add("on");box.scrollTop=el.offsetTop-box.clientHeight/2+el.clientHeight/2}
+},500);
 function home(){cur=-1;ci=0;open.clear();open.add(0);show();history.replaceState(null,"","#");window.scrollTo({top:0,behavior:"smooth"})}
 function goCat(i){ci=i;if(open.has(i)&&i!==ci){}show()}
 
 document.addEventListener("click",e=>{
   const t=e.target.closest("button,a");if(!t)return;
+  if(t.dataset.seek!==undefined){if(yp&&yp.seekTo)yp.seekTo(+t.dataset.seek,true);return}
   if(t.dataset.play!==undefined){play(+t.dataset.play);return}
   if(t.dataset.cat!==undefined){const i=+t.dataset.cat;
     if(i===ci&&open.has(i))open.delete(i);else{open.add(i);ci=i;if(cur>=0&&FLAT[cur].ci!==i){/* keep playing, just browse */}renderMain();}
