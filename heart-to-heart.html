@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Heart to Heart – Talk to Anyone with Empathy</title>
+<style>
+:root{--bg:#fbf7f2;--card:#fff;--ink:#2b2a33;--mute:#6b6877;--line:#ece4da;--acc:#e0685a;--acc2:#3f7f86;--soft:#fdeceb;--soft2:#e6f2f3;--good:#2e8b57;--ok:#c58a1a;--bad:#c0392b;--r:16px}
+@media(prefers-color-scheme:dark){:root{--bg:#17161b;--card:#222128;--ink:#f1eee9;--mute:#a8a4b3;--line:#34323d;--acc:#f08a7c;--acc2:#6fb7be;--soft:#3a2523;--soft2:#1f3235;--good:#5cc98a;--ok:#e4b04a;--bad:#ee7a6c}}
+*{box-sizing:border-box;margin:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;padding-bottom:84px}
+header{padding:22px 18px 8px;max-width:820px;margin:auto}
+header h1{font-size:1.7rem;letter-spacing:-.02em}
+header h1 span{color:var(--acc)}
+header p{color:var(--mute);font-size:.95rem;margin-top:4px}
+main{max-width:820px;margin:auto;padding:10px 16px 30px}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:center;gap:2px;padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:9}
+nav button{flex:1;max-width:200px;border:0;background:none;color:var(--mute);font:inherit;font-size:.72rem;padding:6px 2px;border-radius:12px;cursor:pointer}
+nav button b{display:block;font-size:1.3rem;font-weight:400}
+nav button.on{color:var(--acc);background:var(--soft);font-weight:600}
+h2{font-size:1.25rem;margin:14px 0 6px}
+h3{font-size:1rem;margin:16px 0 6px}
+.sub{color:var(--mute);font-size:.92rem;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.pc{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 12px;text-align:left;cursor:pointer;font:inherit;color:inherit;transition:.15s}
+.pc:hover{transform:translateY(-2px);border-color:var(--acc)}
+.pc .em{font-size:1.9rem}
+.pc strong{display:block;margin-top:4px;font-size:.98rem}
+.pc small{color:var(--mute);font-size:.8rem;line-height:1.3;display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;margin:10px 0}
+.card.mind{background:var(--soft2);border-color:transparent}
+ul{padding-left:20px}li{margin:4px 0}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:560px){.cols{grid-template-columns:1fr}}
+.do h3{color:var(--good)}.dont h3{color:var(--bad)}
+.do,.dont{margin:0}
+.swap{border-left:4px solid var(--acc);padding:6px 12px;margin:8px 0;background:var(--card);border-radius:0 12px 12px 0}
+.swap .x{color:var(--bad);text-decoration:line-through;text-decoration-color:rgba(192,57,43,.5);font-size:.92rem}
+.swap .y{color:var(--good);font-weight:600;font-size:.95rem}
+.btn{background:var(--acc);color:#fff;border:0;border-radius:999px;padding:11px 20px;font:inherit;font-weight:600;cursor:pointer;margin:8px 8px 0 0}
+.btn.alt{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.back{background:none;border:0;color:var(--acc2);font:inherit;cursor:pointer;padding:6px 0;font-weight:600}
+.chip{display:inline-block;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:999px;margin:4px 6px 4px 0;cursor:pointer;font:inherit;font-size:.9rem}
+.chip.on{background:var(--acc2);color:#fff;border-color:var(--acc2)}
+.bubble{background:var(--card);border:1px solid var(--line);padding:12px 14px;border-radius:4px 16px 16px 16px;margin:10px 0;max-width:92%}
+.bubble.me{margin-left:auto;background:var(--soft);border-radius:16px 4px 16px 16px}
+.opt{display:block;width:100%;text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:8px 0;font:inherit;color:inherit;cursor:pointer}
+.opt:hover:not([disabled]){border-color:var(--acc)}
+.opt.s2{border-color:var(--good);background:rgba(46,139,87,.1)}
+.opt.s1{border-color:var(--ok);background:rgba(197,138,26,.1)}
+.opt.s0{border-color:var(--bad);background:rgba(192,57,43,.08)}
+.fb{font-size:.9rem;margin:2px 0 6px 6px}
+.meter{height:10px;background:var(--line);border-radius:99px;overflow:hidden;margin:6px 0 2px}
+.meter i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--good));transition:width .5s}
+.big{font-size:2.6rem;text-align:center}
+.tag{display:inline-block;font-size:.75rem;background:var(--soft);color:var(--acc);padding:2px 10px;border-radius:99px;margin-right:6px}
+.feel{display:flex;flex-wrap:wrap;gap:6px}
+.feel span{background:var(--soft2);padding:4px 12px;border-radius:99px;font-size:.88rem}
+textarea{width:100%;min-height:120px;border:1px solid var(--line);border-radius:12px;padding:10px;font:inherit;background:var(--card);color:var(--ink)}
+.step{display:flex;gap:12px;align-items:flex-start;margin:8px 0}
+.step b.l{flex:none;width:38px;height:38px;border-radius:50%;background:var(--acc);color:#fff;display:grid;place-items:center;font-size:1.1rem}
+.quote{font-style:italic}
+.note{font-size:.8rem;color:var(--mute);margin-top:18px;text-align:center}
+</style>
+</head>
+<body>
+<header>
+  <h1>Heart <span>to</span> Heart</h1>
+  <p>Learn how to talk with seniors, juniors, family, teachers and friends – with empathy.</p>
+</header>
+<main id="view"></main>
+<nav id="tabs"></nav>
+
+<script>
+/* ---------- DATA ---------- */
+const P = [
+{id:"boss",em:"👔",name:"Senior / Boss",tag:"Clear, brief, no surprises",
+ mind:"Carries accountability for results and people above them. Time is short; they want clarity, ownership and early warning.",
+ needs:["Brief, structured updates","Solutions, not only problems","Early warning on risks","Respect for their time"],
+ dos:["Lead with the point, then the detail","Bring one recommendation with every problem","Say “I’ll update you by Thursday” – and do it","Ask for feedback and thank them for it"],
+ donts:["Don’t vent without a proposal","Don’t hide bad news – it grows","Don’t go over their head without telling them","Don’t say “that’s not my job”"],
+ swaps:[["I can’t do this by Friday.","I can deliver X by Friday, or everything by Tuesday. Which matters more?"],["You never told me.","Can we agree on how priorities reach me? I want to catch these early."],["It’s not my fault.","Here’s what happened and what I’ll change."]],
+ openers:["Do you have 5 minutes? I need one decision from you.","I want to flag a risk early, and I have a suggestion."],
+ hard:[["You disagree with a decision","Ask for the goal first, then voice your concern as a risk to that goal: “I want this to succeed, and I’m worried about X. Could we try Y?”"],["You need to say no to extra work","Show your current load and let them choose: “To take this on, what should I drop?”"]],
+ tone:"Calm, concise, confident. Steady pace, eye contact."},
+{id:"junior",em:"🌱",name:"Junior / New joiner",tag:"Safe to ask, safe to grow",
+ mind:"Worried about looking incompetent, so may stay silent rather than ask. Watching closely how you react to mistakes.",
+ needs:["Clear context and expectations","Safety to ask questions","Specific feedback","Visible trust and growth"],
+ dos:["Explain the why, not just the task","Ask “which part feels unclear?” instead of “got it?”","Praise specific effort in public, correct in private","Share your own early mistakes"],
+ donts:["Don’t say “it’s easy”","Don’t take over the moment they struggle","Don’t compare them with others","Don’t give feedback only when something is wrong"],
+ swaps:[["It’s simple, just do it.","This part has tricks. Let’s walk through it once, then you try."],["Why didn’t you ask?","I’d rather hear a question than fix a surprise. What would make asking easier?"],["Any questions?","Which part would you like me to explain again?"]],
+ openers:["How is the work feeling this week? Anything you’d like to go through?","You did X well. Let’s also look at one thing to grow."],
+ hard:[["They made a serious mistake","Fix the problem first, then the learning: “What happened? What would you do differently? How can I help?” Separate the person from the error."],["Their work is below standard","Show a good example, name the gap specifically, agree one next step and a check-in date."]],
+ tone:"Warm, patient, steady. Smile before you critique."},
+{id:"parent",em:"🏡",name:"Parents",tag:"Love that sounds like worry",
+ mind:"Their love often comes out as worry or control. They remember you as a child and want to feel needed, not replaced.",
+ needs:["Respect and inclusion","Regular small updates","Reassurance that you are safe","Appreciation for their sacrifices"],
+ dos:["Share small updates before they ask","Thank them for something specific","Say “I hear your worry” before explaining your choice","Pick a calm moment, not mid-argument"],
+ donts:["Don’t say “you don’t understand”","Don’t dismiss their experience as outdated","Don’t call only when you need something","Don’t argue in front of others"],
+ swaps:[["Stop controlling my life!","I know you worry because you care. I need to try this my way, and I’ll keep you updated."],["You don’t understand.","Let me explain how it looks from my side, then I’d love your view."],["I’m fine, stop asking.","I’ll call every evening so you don’t have to worry."]],
+ openers:["I wanted to talk to you about something important to me.","I appreciate everything you did for me. May I share what I’m planning?"],
+ hard:[["Disagreeing about career or marriage","Acknowledge their dream for you, share your reasons, offer a middle path or trial period, and give them time. Big decisions rarely land in one talk."],["Setting boundaries","Be loving but specific: “I’d love to visit on Sundays; on weekdays I need to focus.”"]],
+ tone:"Respectful, unhurried, affectionate. Sit together, don’t stand over them."},
+{id:"elder",em:"👵",name:"Grandparents / Elders",tag:"Dignity, patience, stories",
+ mind:"May feel their usefulness and independence shrinking. They value being heard, respected and asked for wisdom more than being “fixed”.",
+ needs:["Patience and time","Dignity – no talking down","Connection and routine","Being asked for their wisdom"],
+ dos:["Face them; speak slowly and clearly, not loudly","Ask about their stories and listen fully","Offer choices instead of orders","Teach tech or medical steps one at a time, and write them down"],
+ donts:["Don’t use baby talk","Don’t finish their sentences","Don’t say “I already told you”","Don’t decide for them without asking"],
+ swaps:[["I told you this yesterday!","No problem, let me show you again. We’ll write it down together."],["You can’t do that anymore.","Let’s find a way you can do it safely. What would help?"],["Give me the phone, I’ll do it.","Shall I show you? You press here and I’ll watch."]],
+ openers:["Tell me about the time when you…","I was thinking of you. How was your day?"],
+ hard:[["They repeat the same story","Listen as if it’s new – the telling is the connection. Add a fresh question: “What happened next?”"],["They resist help (doctor, medicine)","Ask what worries them, honour it, then offer a choice: “Morning or evening visit? I’ll come with you.”"]],
+ tone:"Slow, warm, at eye level. Gentle touch if welcome."},
+{id:"teacher",em:"📚",name:"Teachers / Mentors",tag:"Effort, curiosity, humility",
+ mind:"Invest time in your growth. Appreciate effort, curiosity and honesty; tire of excuses and passivity.",
+ needs:["Effort and preparation","Respectful questions","Openness to feedback","Updates on your progress"],
+ dos:["Come with specific questions and what you tried","Admit what you don’t understand","Thank them and share outcomes","Ask “What would you do in my place?”"],
+ donts:["Don’t make excuses","Don’t contact them only when in trouble","Don’t argue publicly","Don’t ask them to do your thinking"],
+ swaps:[["I didn’t get it.","I understood A and B, but I’m stuck at C. Could you explain it another way?"],["Why did I get low marks?","Could you show me where I lost marks so I can improve?"],["Sorry, I forgot.","I missed it. Here’s what I’ll do now and how I’ll avoid it next time."]],
+ openers:["May I ask a doubt? I already tried X.","Your advice helped – here’s what happened."],
+ hard:[["You disagree with a grade","Ask privately to review it together, bring your reasoning, and be ready to listen."],["You need an extension","Ask early, give the reason briefly, propose a new date."]],
+ tone:"Respectful, curious, humble but not afraid."},
+{id:"partner",em:"💞",name:"Partner / Spouse",tag:"Feel chosen, heard, safe",
+ mind:"Wants to feel understood before being advised. Because the bond matters so much, criticism cuts deeper.",
+ needs:["Understanding before fixing","Daily appreciation","Shared responsibility","Undivided attention"],
+ dos:["Use “I feel… when… I need…”","Repeat back what you heard before replying","If heated, take a break and say when you’ll return","Express appreciation every day"],
+ donts:["Don’t say “always” or “never”","Don’t bring up old fights","Don’t use silence as punishment","Don’t compare with others"],
+ swaps:[["You never listen!","I feel unheard when the phone is out while I talk. Can we have 10 minutes of full attention?"],["You’re overreacting.","I can see this really hurt. Tell me more."],["Fine. Whatever.","I’m upset and need 20 minutes. Let’s talk at 8."]],
+ openers:["Is now a good time? I want to understand you better.","There’s something I appreciate about you…"],
+ hard:[["A recurring fight","Name the pattern, not the person: “We keep getting stuck on chores. Let’s solve it together.”"],["They are venting","Don’t fix. Say “That sounds exhausting,” then ask “Do you want advice or just company?”"]],
+ tone:"Soft, slow, close. Phones away."},
+{id:"friend",em:"🤝",name:"Friend",tag:"Seen without being judged",
+ mind:"Friendship runs on feeling accepted. Distance usually grows from silence, not from fights.",
+ needs:["Honest, non-judgmental company","Reliability","Someone to celebrate wins","Presence in bad times"],
+ dos:["Reach out first, sometimes","Ask “advice or support?”","Be honest, kindly","Remember what matters to them"],
+ donts:["Don’t one-up their story","Don’t share their secrets","Don’t vanish, then return only for favours","Don’t start with “at least…”"],
+ swaps:[["At least it’s not worse.","That’s really hard. I’m here."],["I told you so.","What do you want to do next? I’ll help."],["You’ve changed.","I miss you. Can we catch up properly?"]],
+ openers:["Been thinking of you. How are you, really?","No agenda, just wanted to hear your voice."],
+ hard:[["A friend has gone distant","Reach out without blame: “I miss us. No pressure, I’m around.”"],["You need to say something hard","Ask permission, then be kind and specific: “Can I share something I’ve noticed? It’s because I care.”"]],
+ tone:"Relaxed, genuine, humour when welcome."},
+{id:"teen",em:"🎧",name:"Teenager / Child",tag:"Respect, not lectures",
+ mind:"Building identity and independence. Hears lectures as distrust. Behind attitude there is often stress, fear or embarrassment. (Younger children: use simple words and get down to their eye level.)",
+ needs:["Listening without lecturing","Trust and some autonomy","Consistent, explained boundaries","Feeling accepted"],
+ dos:["Talk side by side (car, walk, cooking) rather than face to face","Name the feeling: “That sounds frustrating”","Ask permission before giving advice","Keep rules few, clear and explained"],
+ donts:["Don’t mock their interests","Don’t read their messages secretly","Don’t compare siblings","Don’t shame them in front of friends"],
+ swaps:[["Because I said so.","Here’s my worry. Help me find something that works for both of us."],["What is wrong with you?","You seem down. I’m here whenever you want to talk."],["When I was your age…","That sounds tough. What do you think you’ll do?"]],
+ openers:["Want to grab a snack and chat? No lecture, promise.","I noticed you were quiet today. I’m around."],
+ hard:[["They shut down","Don’t chase. Stay available: “I’m here when you’re ready.” Try again in a low-pressure moment."],["Grades or screen time","Start with their view, set the limit together, link it to something they care about."]],
+ tone:"Casual, calm, respectful. Short sentences."},
+{id:"relative",em:"🧑‍🤝‍🧑",name:"Relatives & In-laws",tag:"Face-saving warmth",
+ mind:"Family roles and expectations carry history. Advice is often how they show belonging; comments can feel personal but are rarely meant to hurt.",
+ needs:["Respect for their position","Inclusion in occasions","Face-saving – no public conflict","Courtesy and warmth"],
+ dos:["Greet and ask about them first","Answer intrusive questions with a smile and a pivot","Thank them for advice; decide privately","Keep one ally and keep communication open"],
+ donts:["Don’t argue at gatherings","Don’t carry stories between relatives","Don’t take sides in old feuds","Don’t reply to jibes with sarcasm"],
+ swaps:[["Mind your own business.","Thank you for caring. We’re comfortable with our plan."],["That’s not how we do it.","That’s a nice idea. We’ll try our way this time."],["You always criticise.","I know you mean well. It helps me more when you say it privately."]],
+ openers:["How have you been? It’s been too long!","Could I get your advice on something?"],
+ hard:[["Intrusive questions (salary, marriage, kids)","Smile, answer lightly, redirect: “We’ll share when there’s news. How is your…?”"],["Disagreement with in-laws","Speak privately, begin with shared goals, and make your partner part of the team."]],
+ tone:"Courteous, warm, patient, a touch of humour."},
+{id:"colleague",em:"💼",name:"Colleague / Peer",tag:"Fair, direct, credit-sharing",
+ mind:"Shares your pressure but not your priorities. Wants fairness, credit and not being blindsided.",
+ needs:["Credit for their work","Clear handoffs","Reliability","Respect for boundaries"],
+ dos:["Assume good intent first","Clarify who owns what","Give credit in public","Ask “What would help you?”"],
+ donts:["Don’t email-fight – call","Don’t complain to others first","Don’t take credit","Don’t ignore messages"],
+ swaps:[["You didn’t do your part.","I’m missing X for my part. What’s blocking you? How can I help?"],["That’s your problem.","I can’t take this on today, but let’s find who can."],["As I said in my email…","Let me summarise quickly so we’re aligned."]],
+ openers:["Got a minute? I want to align on something.","Thanks for your help on X – it made a difference."],
+ hard:[["Someone takes credit for your idea","Speak privately, stick to facts, state what you want: “I’d like us to credit each other’s work in updates.”"],["Clash of work styles","Talk about the outcome you both want, then agree how you’ll work."]],
+ tone:"Friendly, direct, fair."},
+{id:"mother",em:"🤱",name:"Mother",tag:"Love shown through care",
+ mind:"Often the emotional centre of the family. Shows love through food, worry and sacrifice, and rarely asks for anything for herself.",
+ needs:["Feeling appreciated, not taken for granted","Time and attention, not only gifts","Knowing you are safe","Her own wishes being noticed"],
+ dos:["Thank her for the small daily things","Call just to chat, without needing anything","Help before being asked","Ask “How are you? What would you like?”"],
+ donts:["Don’t snap when she repeats advice","Don’t say “you’re too emotional”","Don’t hide big news and explain later","Don’t make her the go-between in family fights"],
+ swaps:[["Stop nagging me!","I know you ask because you care. Can I tell you my plan so you worry less?"],["I’ll eat outside.","Thanks for cooking. Let me help, and next time let’s cook together."],["You don’t know anything about this.","You’ve seen a lot of life. I’d like your view, then I’ll share mine."]],
+ openers:["I was thinking of you. Have you eaten? Tell me about your day.","Thank you for… I don’t say it enough."],
+ hard:[["She is overprotective","Reassure first, then set the boundary: “I’ll message when I reach. I need to make this decision myself.”"],["She compares you with others","Stay calm: “I know you want the best for me. Comparison hurts; I’m doing my best.”"]],
+ tone:"Gentle, appreciative, patient. A hug helps if welcome."},
+{id:"father",em:"👨",name:"Father",tag:"Respect, facts, quiet connection",
+ mind:"Often shows love by providing and protecting. May find it hard to talk about feelings, and can hide worry behind strictness or silence.",
+ needs:["Respect for his effort","Being kept informed of big decisions","A chance to advise","Quiet, genuine connection"],
+ dos:["Ask for his advice, even if you may not follow it","Do an activity together – a drive, cricket, a repair","Present plans with facts and a safety net","Tell him directly that you appreciate him"],
+ donts:["Don’t start with accusations","Don’t interrupt or raise your voice","Don’t contact him only for money","Don’t mock his old-fashioned ways"],
+ swaps:[["You never understood me!","I wish we understood each other better. May I explain what matters to me?"],["Your generation is outdated.","Your experience helps me. Here’s what’s different now."],["I don’t need your money.","Thank you for offering. I’d like to manage this myself, and I’ll come to you if I need help."]],
+ openers:["I need your advice on something.","Can we have tea together? I’d like to talk."],
+ hard:[["He is strict or critical","Look for the worry underneath: “I think you’re worried about my future. Here’s my plan.”"],["He is emotionally distant","Connect through shared activity and small gestures. One sincere “thank you” can open a lot."]],
+ tone:"Respectful, calm, factual, warm. Pick a quiet moment."},
+{id:"sibling",em:"👫",name:"Siblings",tag:"Old rivalry, deep bond",
+ mind:"Shared history means shared wounds, old rivalries and unspoken competition. Underneath, they usually want fairness and to be seen as an individual.",
+ needs:["Fair treatment","Not being compared","Loyalty and privacy","Being seen as an equal adult"],
+ dos:["Talk about today’s issue, not old scores","Ask how they’re really doing","Celebrate their wins without comparing","Offer help without taking over"],
+ donts:["Don’t tease with painful childhood nicknames","Don’t pass on their secrets to parents","Don’t compete in front of family","Don’t say “you were always the favourite”"],
+ swaps:[["You always get the attention!","I sometimes feel left out. Can we talk about it?"],["That’s your problem.","I can’t fix it, but I’m with you. What do you need?"],["Grow up!","I’m frustrated, and I’d like us to talk it through calmly."]],
+ openers:["Hey, how are you doing – really?","I miss how we used to talk. Can we catch up?"],
+ hard:[["Conflict about money or caring for parents","Agree on facts and a fair split, write it down, and act as partners, not rivals."],["Old resentment resurfaces","Name it once without blame: “That time hurt me. I’d like us to move forward.”"]],
+ tone:"Honest, light, equal-to-equal. Humour helps if kind."},
+{id:"neighbour",em:"🏘️",name:"Neighbour",tag:"Small issues, early and kind",
+ mind:"Shares your space but not your routines. Small irritations (noise, parking, garbage) grow when left unspoken.",
+ needs:["Courtesy and predictability","To be approached early, not at boiling point","Respect for peace and privacy","Community goodwill"],
+ dos:["Introduce yourself and say hello","Raise issues early, in person and kindly","Suggest a solution","Say thanks when they help"],
+ donts:["Don’t leave angry notes","Don’t complain to everyone except them","Don’t open with threats","Don’t gossip"],
+ swaps:[["Your noise is unbearable!","I’m having trouble sleeping around 11. Could we find a quieter time?"],["Move your car!","Could we work out the parking so we’re both comfortable?"],["I’ll report you.","I’d prefer to sort this between us first."]],
+ openers:["Hi, I’m your neighbour from number 12. I wanted to say hello.","Could I ask a small favour?"],
+ hard:[["Repeated noise or rule-breaking","Speak in person, calmly, describe the effect on you, agree a fix, and involve the society or authority only if it persists."]],
+ tone:"Friendly, calm, matter-of-fact."},
+{id:"stranger",em:"🚶",name:"Stranger / New person",tag:"Warm, polite, safe",
+ mind:"Doesn’t know you, so they read tone, eyes and words quickly for safety. A little warmth goes a long way; so does respecting a “no”.",
+ needs:["Politeness and clarity","Personal space","No pressure","A sense of safety"],
+ dos:["Smile and use a calm, clear voice","Introduce yourself with context","Respect a “no” at once","Use small talk to find common ground"],
+ donts:["Don’t ask personal questions early","Don’t touch or crowd","Don’t assume their situation","Don’t overshare your own details"],
+ swaps:[["Hey you, help me.","Excuse me, sorry to bother you. Could you help me with directions?"],["Why are you staring?","Sorry, did you need something?"],["Where are you from?","Lovely weather today, isn’t it?"]],
+ openers:["Hello, I’m new here. Is this the right place for…?","Excuse me, may I sit here?"],
+ hard:[["Someone seems lost or upset","Keep a respectful distance and ask: “Are you okay? Can I help?” Accept their answer."],["A stranger is too pushy","Be polite but firm: “No, thank you.” Move to a busy, public place."]],
+ tone:"Calm, friendly, relaxed posture, open hands."},
+{id:"manipulator",em:"🎭",name:"Manipulator",tag:"Kind, but not controlled",
+ mind:"Uses guilt, flattery, pressure or silence to get their way, often because direct asking never worked for them. You can stay kind and still refuse to be controlled.",
+ needs:["Your guilt or fear","Your quick “yes”","You to explain and justify yourself","You to chase them when they go silent"],
+ dos:["Pause: “Let me think and get back to you”","Name the behaviour calmly, not their character","Say no briefly, without a long justification","Keep notes if it is serious or repeated"],
+ donts:["Don’t argue every point","Don’t decide while pressured or guilty","Don’t retaliate with the same tactics","Don’t expect to change them"],
+ swaps:[["Okay, fine, I’ll do it… (resentfully)","I can’t do that. I can help with X instead."],["How dare you say that!","I see it differently, and my answer is still no."],["I’m sorry, I’m a terrible person…","I’m not judging you. My decision stays the same."]],
+ openers:["I hear you. I need time before I decide.","I’m not comfortable with that, and I’ll leave it there."],
+ hard:[["Guilt trips (“after all I’ve done for you”)","Acknowledge the care, hold the line: “I’m grateful. And I still can’t do this.”"],["Silent treatment or anger to pressure you","Don’t chase or appease: “I’ll be glad to talk when we can both be calm.” If this is constant, or you feel afraid or controlled, talk to someone you trust or a counsellor."]],
+ tone:"Calm, slow, steady. Boring is powerful – don’t take the bait."},
+{id:"scammer",em:"🚨",name:"Scammer / Fraudster",tag:"Slow down, verify, hang up",
+ mind:"Not someone to empathise with in the moment. They create urgency, fear or excitement so you act before thinking. Your protection is to slow down and verify through official channels.",
+ needs:["Your panic and urgency","Your OTP, PIN, passwords or money","Your secrecy (“don’t tell anyone”)","Your trust in a stranger’s authority"],
+ dos:["Pause, hang up and call back on the official number you find yourself","Ask someone you trust before paying","Keep OTPs, PINs, passwords and card details to yourself","Report to your bank and the police or cyber-crime helpline"],
+ donts:["Don’t act under pressure or secrecy","Don’t click links or install apps they send","Don’t pay to “win” or “release” anything","Don’t feel ashamed – it happens to smart people"],
+ swaps:[["Oh no! What should I do? (panicking)","I’ll call you back on the official number. Goodbye."],["Okay, I’ll send the OTP.","No genuine person asks for an OTP. I’m ending this call."],["Please don’t block my account!","I’ll visit the branch or check the app myself."]],
+ openers:["I’ll verify this myself and call back.","I don’t share personal details on calls."],
+ hard:[["Someone claims to be a family member in an emergency","Hang up and call that person or another relative directly, on a number you already have."],["You already paid or shared details","Act fast: call your bank to freeze or block, change passwords, and report to the police or cyber-crime helpline. Don’t blame yourself."],["An elderly relative is being targeted","Gently, without shame: “Let’s check this together before paying.” Agree a family rule that big payments are discussed first."]],
+ tone:"Firm, short, unemotional. You owe a stranger no explanation."},
+{id:"bully",em:"😤",name:"Bully / Aggressive person",tag:"Calm, firm, safe",
+ mind:"Aggression often covers insecurity, but that never excuses it. Your first aim is safety and dignity; understanding comes second.",
+ needs:["A reaction from you (don’t give it)","Power and an audience","Clear consequences","Boundaries that are enforced every time"],
+ dos:["Stay calm; speak low and slow","Set one clear boundary: “Stop. Don’t speak to me like that.”","Leave if you feel unsafe","Document it and report to someone with authority"],
+ donts:["Don’t shout back or insult","Don’t handle danger alone","Don’t laugh it off if it hurts","Don’t keep it secret"],
+ swaps:[["Shut up!","I’m willing to talk when we both speak respectfully."],["Why are you doing this to me?","Stop. That’s not okay."],["I’m sorry, please don’t be angry.","I’m leaving this conversation now. We can speak later with someone present."]],
+ openers:["I want to solve this, but not like this.","Let’s take a break and talk when it’s calmer."],
+ hard:[["Public humiliation or bullying at work","Stay composed, state the boundary, then record dates and words and report to HR or a manager."],["Online harassment","Don’t reply. Screenshot, block, report on the platform and tell someone you trust."],["You feel physically unsafe","Leave, go to a safe public place and get help. Safety first, conversation second."]],
+ tone:"Steady, firm, low voice, upright posture, no sarcasm."},
+{id:"customer",em:"🛍️",name:"Customer / Client",tag:"Make them feel valued",
+ mind:"Wants their problem solved and to feel respected. Trust is built in small moments; confusion feels like disrespect.",
+ needs:["Clear, honest answers","Quick, reliable follow-up","To feel valued, not processed","No surprises on price or timing"],
+ dos:["Listen to the full need before pitching","Confirm what you heard","Under-promise, over-deliver","Follow up when you said you would"],
+ donts:["Don’t use jargon","Don’t over-promise to close the deal","Don’t blame other teams","Don’t go silent when there’s a delay"],
+ swaps:[["That’s our policy.","Here’s what I can do for you."],["I don’t know.","I’ll find out and call you by 4 pm."],["You should have read the terms.","Let me explain how this works so it’s clear."]],
+ openers:["What would a great result look like for you?","Let me make sure I understood your need…"],
+ hard:[["You have to say no","Say what you can do first, then the no with the reason: “I can’t do X, but I can do Y by Friday.”"],["You made a mistake","Own it fast, fix it, and say what you’ll do so it won’t repeat."]],
+ tone:"Warm, professional, confident."},
+{id:"angrycustomer",em:"😡",name:"Angry customer",tag:"Calm the storm, then solve",
+ mind:"Anger is usually a problem plus feeling ignored. They want acknowledgement, then action. It is rarely personal, even when it sounds it.",
+ needs:["To be heard fully","Acknowledgement of the impact","A clear next step and timeline","One person who owns the problem"],
+ dos:["Let them finish; don’t interrupt","Acknowledge: “I’d be upset too”","Lower your voice and slow your pace","Give one clear next step with a time"],
+ donts:["Don’t say “calm down”","Don’t argue about who’s right","Don’t pass them from person to person","Don’t take it personally"],
+ swaps:[["Calm down, sir.","I understand how frustrating this is. Let me fix it."],["That’s not our fault.","I’m sorry this happened. Here’s what I’ll do."],["You’re shouting.","I want to help. Let’s go through it step by step."]],
+ openers:["I’m sorry this happened. Tell me what went wrong.","I’ll take this on and stay with you until it’s sorted."],
+ hard:[["They are abusive or threatening","Set a limit: “I want to help, and I can’t continue if I’m shouted at.” Offer a break or escalate to a senior."],["You can’t fully fix it","Be honest about what you can do, offer an alternative, and agree when the next update will come."]],
+ tone:"Slow, low, steady, sincere."},
+{id:"ex",em:"💔",name:"Ex-partner",tag:"Respectful, clear, no old fights",
+ mind:"History carries hurt, hope and habit, and conversations slip into old patterns easily. Stay clear about the purpose of each talk.",
+ needs:["Respect and civility","Clear, practical communication","Space to heal","No mixed signals"],
+ dos:["Keep it short and on topic (children, belongings, money)","Use written messages for logistics","Pause before replying when upset","Be consistent: say what you mean"],
+ donts:["Don’t reopen old arguments","Don’t use children as messengers","Don’t send late-night emotional texts","Don’t badmouth them to mutual friends"],
+ swaps:[["You ruined everything!","I’m still hurt. For now, let’s keep this to the practical things."],["Maybe we can try again? (while unsure)","I need space to know what I want. I don’t want to give mixed signals."],["Whatever, do what you want.","Here’s what works for me. Tell me what works for you."]],
+ openers:["I’d like to keep this simple. Can we sort X by Friday?","I hope you’re doing okay. I need to talk about X."],
+ hard:[["Co-parenting or shared responsibilities","Keep to the child’s needs and a shared calendar. Short, polite, in writing when possible."],["They contact you too much, or you feel pressured","State it once, clearly: “I’m not available for this. Please only contact me about X.” If you feel unsafe, seek help and keep records."]],
+ tone:"Calm, brief, neutral and kind."},
+{id:"landlord",em:"🏠",name:"Landlord / Tenant",tag:"Fair, written, respectful",
+ mind:"A practical relationship with money and property at stake. Both sides fear being taken advantage of; clarity and a paper trail build trust.",
+ needs:["Clear agreements in writing","Timely rent or repairs","Respect for property and privacy","Polite, predictable communication"],
+ dos:["Put requests and agreements in writing","Give notice and reasons","Be specific about dates and costs","Thank them for fixes"],
+ donts:["Don’t rely on verbal promises","Don’t threaten at the first problem","Don’t surprise them with visits or missed rent","Don’t post angry reviews first"],
+ swaps:[["Fix it now or I’ll leave!","The leak is getting worse. Could you send someone by Thursday? I’ll confirm by message."],["I can’t pay this month.","I’m short this month. Could we agree a plan, with full payment by the 20th?"],["You’re just greedy.","I’d like to understand how the increase was calculated."]],
+ openers:["I’d like to confirm this in writing so we’re both clear.","Can we find a time that suits you for the repair?"],
+ hard:[["Repairs aren’t done","Message with photos and dates, set a reasonable deadline, and check your agreement and local rules before escalating."],["Rent increase or deposit dispute","Ask for the reasoning in writing, compare with your agreement, and propose a fair middle path."]],
+ tone:"Polite, factual, firm when needed."},
+{id:"doctor",em:"🩺",name:"Doctor / Healthcare",tag:"Be clear, ask, understand",
+ mind:"Short on time and trained to be factual. They need accurate information from you; you need clear explanations from them. Fear can make both sides rushed.",
+ needs:["Clear, honest symptoms and history","Prepared questions","Following the plan, or telling them why not","Respect for their time"],
+ dos:["Write down symptoms, questions and medicines beforehand","Start with your main concern","Repeat the plan back: “So I should…?”","Say if you don’t understand or can’t afford something"],
+ donts:["Don’t hide habits or other treatments","Don’t stop medicine without telling them","Don’t diagnose yourself online","Don’t leave confused to avoid “bothering” them"],
+ swaps:[["I’m sure it’s nothing.","It’s been three weeks and it’s getting worse. I’m worried."],["Okay, okay. (not understanding)","Could you explain that more simply? What should I do first?"],["That medicine is too expensive.","Is there a more affordable option that works well?"]],
+ openers:["My main concern today is…","I wrote down three questions. May I ask them?"],
+ hard:[["You feel dismissed","Stay calm: “I’m still worried about X. What else could explain it? What should I watch for?” A second opinion is okay."],["Going with a parent or elder","Go together, let them speak, add details, and take notes. Ask the doctor to explain directly to them too."]],
+ tone:"Calm, honest, concise, curious."},
+{id:"roommate",em:"🛋️",name:"Roommate / Flatmate",tag:"Shared space, shared respect",
+ mind:"You share a space, not necessarily habits. Resentment builds on small things left unsaid.",
+ needs:["Fair split of chores and costs","Respect for quiet, privacy and belongings","Early, honest talk","Clear shared rules"],
+ dos:["Agree house rules early (chores, guests, noise, bills)","Raise small issues quickly and kindly","Use “I” statements","Hold a short regular check-in"],
+ donts:["Don’t leave passive-aggressive notes","Don’t talk to others about them first","Don’t borrow without asking","Don’t let bills slide"],
+ swaps:[["You’re so messy!","The dishes are piling up and it stresses me. Can we set a schedule?"],["Whatever, I’ll do it myself.","I’m doing a lot of the cleaning. Can we split it more evenly?"],["Stop bringing people over!","I need quiet on weeknights. Could guests be on weekends?"]],
+ openers:["Do you have a minute to sort something small?","Can we set up a house chat for bills and chores?"],
+ hard:[["Unpaid bills or rent","Raise it calmly with facts: “You owe X for electricity. Can you pay by Friday?” Keep a shared record."],["Different lifestyles (late nights, guests)","Find the need behind each (sleep, social life) and agree on times and limits."]],
+ tone:"Friendly, direct, fair, relaxed."},
+{id:"staff",em:"🧑‍💼",name:"Staff / Team member",tag:"Lead with trust and clarity",
+ mind:"Looks to you for direction, fairness and recognition. How you handle a bad day decides whether they speak up or hide problems.",
+ needs:["Clear goals and priorities","Recognition for effort","Fair treatment","Room to speak up and grow"],
+ dos:["Set expectations clearly, ideally in writing","Give specific praise, often","Ask “What’s blocking you?”","Give feedback early, privately and kindly"],
+ donts:["Don’t micromanage or ignore them","Don’t shout or shame in public","Don’t take credit for their work","Don’t change priorities without telling them"],
+ swaps:[["Why is this not done?","What’s getting in the way? How can I help unblock it?"],["I’ll do it myself.","Let’s go through how to do it, then you try."],["Good job. (nothing specific)","Your summary made the client call easy. Thank you."]],
+ openers:["How’s your workload this week? Anything I should know?","I appreciated how you handled X."],
+ hard:[["Missed deadlines","Understand the cause first, agree a realistic new date and one support step, then follow up."],["Low performance or poor attitude","Describe observable behaviour and its impact, ask for their view, and agree specific changes with a review date."]],
+ tone:"Firm yet warm, fair, consistent."},
+{id:"interviewer",em:"🎤",name:"Interviewer / HR",tag:"Honest, structured, confident",
+ mind:"Wants to know your skills, fit and honesty in limited time. They remember clear stories and genuine curiosity more than memorised answers.",
+ needs:["Honest, concise answers","Specific examples","Genuine interest in the role","Professional courtesy"],
+ dos:["Answer with a short story: situation, action, result","Be honest about gaps and what you’re learning","Ask thoughtful questions about the role","Thank them and follow up"],
+ donts:["Don’t badmouth past employers","Don’t exaggerate or lie","Don’t ramble","Don’t stay passive about next steps"],
+ swaps:[["I’m a hard worker and a perfectionist.","In my last role I cut report time by 30% by automating X."],["I don’t know.","I haven’t done that yet. Here’s how I’d approach it."],["My boss was terrible.","I wanted more growth, so I’m looking for a role with more scope."]],
+ openers:["Thank you for your time. I’m excited about this role because…","What does success look like in the first six months?"],
+ hard:[["A question you can’t answer","Pause, say what you do know, and explain how you would find out."],["Salary discussion","Share a researched range, say you’re flexible for the right fit, and ask about the whole package."]],
+ tone:"Confident, honest, warm, concise."},
+{id:"motherinlaw",em:"👩‍🦳",name:"Mother-in-law",tag:"Respect, patience, teamwork",
+ mind:"May feel the family’s balance has changed. Often wants respect, inclusion and relevance, and may fear being replaced.",
+ needs:["Respect and recognition","Inclusion in family decisions","Appreciation of what she does","Time and attention"],
+ dos:["Ask her advice on family matters","Praise something genuine","Keep your partner as an ally, not a messenger","Set boundaries kindly and consistently"],
+ donts:["Don’t criticise her to your spouse","Don’t compare her with your own mother","Don’t argue in front of family","Don’t avoid her completely"],
+ swaps:[["That’s not your business.","Thank you for caring. We decided this together, and we’d love your support."],["You always interfere!","I know you want to help. It would help me more if you asked first."],["I’ll do it my way.","Your way is good. May I try this way and tell you how it goes?"]],
+ openers:["Could you teach me how you make this? Everyone loves it.","Thank you for your help with the kids."],
+ hard:[["Unwanted advice or criticism","Thank her, then decide privately. Use a joint “we” with your partner and set expectations together."],["Conflict between her and your partner","Stay out of the middle. Let them speak, support your partner privately and stay respectful in public."]],
+ tone:"Respectful, warm, patient."},
+{id:"fatherinlaw",em:"👴",name:"Father-in-law",tag:"Respect and shared ground",
+ mind:"Often reserved and values tradition, status and being consulted. Respect and shared interests open him up more than words do.",
+ needs:["Respect for his role and experience","Being consulted on big matters","Quiet, steady connection","Shared interests"],
+ dos:["Greet him with respect","Ask about his experience and interests","Include him in big decisions without giving up yours","Spend time on a shared activity"],
+ donts:["Don’t argue in front of others","Don’t mock his views","Don’t avoid him","Don’t expect warmth immediately"],
+ swaps:[["That’s outdated.","That worked well then. Here’s what’s different now."],["I don’t need your advice.","Thank you. I’ll think it over and share what we decide."],["Whatever you say.","I’d like to hear your view, and then explain mine."]],
+ openers:["How was your day? Would you like some tea?","I’d love to hear how you…"],
+ hard:[["Different views on money or lifestyle","Respect his view first, present facts, take your time and keep decisions as a couple."],["He seems distant","Build trust slowly with small, regular, respectful gestures and shared activities."]],
+ tone:"Respectful, calm, patient."},
+{id:"maid",em:"🧹",name:"Maid / Domestic help",tag:"Dignity, clarity, fairness",
+ mind:"Works in your private space, often with little security. Fair pay, clear expectations and basic dignity decide whether they feel valued or on edge. They also carry their own family worries.",
+ needs:["Respect and courtesy","Clear, reasonable tasks","Fair, on-time pay and leave","Kindness when they have problems"],
+ dos:["Greet them and say please and thank you","Explain tasks once, clearly; show if needed","Agree work, hours, pay and leave upfront","Recognise good work and festivals"],
+ donts:["Don’t scold in front of others","Don’t accuse without checking facts","Don’t overload them or delay pay","Don’t treat them as “lesser”"],
+ swaps:[["Why are you late again?","I noticed you were late a few times. Is everything okay? Let’s find a time that works."],["You never clean properly!","Please also wipe the shelves like this. I’ll show you once."],["Don’t take leave so often.","Please tell me a day ahead if you can, and let’s agree the leave you need."]],
+ openers:["Good morning! How is your family?","Could we go over the work list so it’s clear for both of us?"],
+ hard:[["Something is missing","Don’t accuse. Search carefully, then ask calmly and privately: “I can’t find X. Have you seen it?”"],["Repeated absences or poor work","Ask the reason, agree expectations and leave rules, and give a fair chance before changing arrangements."]],
+ tone:"Polite, calm, appreciative, equal in respect."},
+{id:"driver",em:"🚗",name:"Driver / Cab driver",tag:"Courtesy, clear directions, safety",
+ mind:"Spends long hours handling traffic, time pressure and demanding passengers. A little courtesy and clear instructions make the ride safer and smoother.",
+ needs:["Clear destination and route","Respect for their time and effort","Fair fares and tips","Calm, safe passengers"],
+ dos:["Greet them and state the destination clearly","Share route preferences early","Agree the fare first or use the meter or app","Say thanks; tip if the service is good"],
+ donts:["Don’t shout or rush them","Don’t distract them with arguments","Don’t keep changing the destination","Don’t demean them"],
+ swaps:[["Drive faster!","I have a train at 6. Is there a quicker route you’d suggest?"],["Why is this so expensive?","Could you show me how the fare is calculated?"],["You took the wrong way!","Could we check the map together? I thought this route was shorter."]],
+ openers:["Hello, please take me to X. Is this route okay with you?","Could you please slow down a little? I feel a bit nervous."],
+ hard:[["Driving feels unsafe","Say calmly and clearly: “Please slow down. I’m not comfortable.” If it continues, end the ride at a safe place and report it."],["Fare dispute","Stay calm, check the meter or app, and offer a fair compromise or settle at a safe place."]],
+ tone:"Calm, courteous, respectful, clear."},
+{id:"delivery",em:"📦",name:"Delivery person",tag:"Patience and thanks",
+ mind:"Works against the clock, with ratings and delays beyond their control. A small kindness and clear directions can change their whole day.",
+ needs:["Clear address and contact","Patience and politeness","Fair rating and tip","Safety and respect"],
+ dos:["Share clear landmarks and answer calls","Say thanks and smile","Be patient in bad weather or traffic","Rate fairly; tip if you can"],
+ donts:["Don’t shout about delays","Don’t insult them","Don’t give a low rating for things beyond their control","Don’t leave them waiting without a word"],
+ swaps:[["You’re late!","Thank you for coming. Traffic must be tough today."],["This is wrong!","This isn’t what I ordered. How can we fix it? I’ll contact the company."],["Come inside!","I’ll come down to collect it so you can save time."]],
+ openers:["Hi, I’m at the gate with the blue board. Thanks for coming!","Please call me when you reach the main road."],
+ hard:[["Wrong or damaged item","Calmly: “It’s not your fault. I’ll report it through the app. Thanks for your effort.”"],["Address confusion","Give a landmark, offer to meet halfway, and stay polite."]],
+ tone:"Friendly, patient, grateful."},
+{id:"shopkeeper",em:"🛒",name:"Shopkeeper / Vendor",tag:"Friendly bargaining",
+ mind:"Runs on margins and relationships. Regulars earn trust and fair deals; rude bargaining or rushing hurts goodwill.",
+ needs:["Courtesy and honesty","Fair bargaining","Repeat business","Respect for their time"],
+ dos:["Greet first and ask about the product","Bargain with a smile and a fair offer","Be loyal to a few shops","Return items politely with the bill"],
+ donts:["Don’t insult the product to get a lower price","Don’t block the counter without buying","Don’t shout over a price","Don’t accuse without proof"],
+ swaps:[["This is overpriced!","That’s a bit above my budget. Can you do a better price if I buy two?"],["Cheat!","Could you please check the bill again? I think the total is different."],["Just show me everything.","I’m looking for X within my budget. What do you suggest?"]],
+ openers:["Hello! How’s business? I’m looking for…","Can you recommend something good for…?"],
+ hard:[["Wrong change or bill","Check calmly and say politely, “I think there’s a small mistake.” Stay friendly and ask them to recount."],["You want to return something","Bring the bill, explain the problem briefly, and ask what options they offer."]],
+ tone:"Friendly, light, respectful, a touch of humour."},
+{id:"tradesperson",em:"🔧",name:"Plumber / Electrician / Repair",tag:"Clear needs, fair pricing",
+ mind:"Skilled, busy and often judged on price. They respond to a clear description of the problem, respect and realistic expectations.",
+ needs:["A clear description of the issue","Access and a safe workspace","A fair price agreed in advance","Respect for their skill"],
+ dos:["Describe the symptom clearly and show it","Ask for an estimate before work starts","Be present or reachable","Pay promptly and say thanks"],
+ donts:["Don’t say “fix it however”","Don’t hover or doubt every step","Don’t haggle after the work is done","Don’t skip a written note on large jobs"],
+ swaps:[["Just fix it quickly!","The tap leaks when the water is on. Could you check and tell me the cost first?"],["You’re charging too much!","Could you break down the cost? Is there a cheaper option that still lasts?"],["It wasn’t fixed!","The problem is back after two days. Could you come and check again?"]],
+ openers:["Thanks for coming. Let me show you the problem.","Could you give me an estimate before starting?"],
+ hard:[["Price changes midway","Pause and ask: “What changed? What’s the new total? Is it necessary?” Agree before they continue."],["The fault comes back","Show it, stay calm, ask what went wrong, and agree a fix or warranty."]],
+ tone:"Respectful, practical, calm."},
+{id:"guard",em:"💂",name:"Security guard / Watchman",tag:"Respect and cooperation",
+ mind:"Responsible for safety, often on long shifts and rarely thanked. Following the rules politely makes their job easier, and they remember courtesy.",
+ needs:["Respect and cooperation","Clear visitor information","Backing from residents","Basic kindness"],
+ dos:["Greet and thank them","Tell them about guests and deliveries","Follow gate rules calmly","Appreciate them at festivals"],
+ donts:["Don’t scold in front of others","Don’t demand exceptions to the rules","Don’t ignore them","Don’t treat them as a servant"],
+ swaps:[["Do you know who I am?","Of course, I understand it’s the rule. Here’s my ID."],["Let them in, I said!","I’ll call the resident to confirm so you’re covered."],["You’re useless!","Could we find a way to avoid this next time? Thanks for your help."]],
+ openers:["Good evening! Please expect a delivery for flat 5.","Thank you for keeping us safe."],
+ hard:[["You are stopped at the gate","Show ID politely, call your host, and thank them for being careful."],["You have a complaint about their behaviour","Speak privately first, then raise it factually with management if needed."]],
+ tone:"Respectful, patient, friendly."},
+{id:"waiter",em:"🍽️",name:"Waiter / Restaurant staff",tag:"Politeness gets better service",
+ mind:"Works on their feet, balancing many tables and mistakes that aren’t always theirs. Courtesy changes the whole meal.",
+ needs:["Politeness and patience","Clear orders","Respectful feedback","A fair tip"],
+ dos:["Smile, make eye contact and order clearly","Mention dietary needs early","Raise issues quietly and early","Tip according to service"],
+ donts:["Don’t snap your fingers","Don’t shout or humiliate","Don’t wait until the end to complain","Don’t blame them for the kitchen"],
+ swaps:[["This food is terrible!","The soup is cold. Could you please warm it or bring a fresh one?"],["Where’s my food? It’s been an hour!","We ordered a while ago. Could you check how long it will be?"],["You got it wrong!","I ordered X. Could we change it, please?"]],
+ openers:["Hi! Could you tell us what’s good today?","Excuse me, when you have a moment, could we order?"],
+ hard:[["Wrong order or long wait","Speak calmly and quietly, state what’s wrong, and ask for a solution."],["Dietary needs","Say it clearly when ordering and ask them to confirm with the kitchen."]],
+ tone:"Warm, calm, appreciative."},
+{id:"official",em:"🏛️",name:"Official / Clerk / Bank staff",tag:"Prepared, polite, persistent",
+ mind:"Works within rules, queues and pressure. They can’t break procedure, but a polite, prepared person gets help faster.",
+ needs:["Complete documents","Politeness and patience","Clear, short requests","Following the process"],
+ dos:["Prepare documents and copies beforehand","State your purpose in one sentence","Ask “What is the process and what should I bring?”","Note names, dates and reference numbers"],
+ donts:["Don’t argue about the rules","Don’t pay or promise anything improper","Don’t jump the queue","Don’t show your impatience"],
+ swaps:[["Why is it taking so long?","Could you tell me what’s pending and how long it usually takes?"],["Your system is useless!","I understand it’s the system. Is there another way to complete it?"],["Do something, I’m in a hurry!","I have an urgent reason. Is there any option to expedite?"]],
+ openers:["Good morning. I’d like to… Could you tell me what I need to bring?","Thanks for your help. May I note your name and a reference number?"],
+ hard:[["You are sent from desk to desk","Ask politely: “Who is the right person for this, and what exactly should I ask?” Write it down."],["Someone hints at an informal payment","Refuse politely, ask for the official fee receipt, and escalate to a senior or the complaint channel."]],
+ tone:"Calm, courteous, persistent."}
+];
+const GROUPS = [
+ ["👨‍👩‍👧 Family & home",["mother","father","parent","sibling","partner","motherinlaw","fatherinlaw","ex","elder","teen","relative"]],
+ ["🏫 Work & learning",["boss","staff","junior","colleague","teacher","interviewer","customer","angrycustomer"]],
+ ["🏙️ Day-to-day helpers & services",["maid","driver","delivery","shopkeeper","tradesperson","guard","waiter","official","doctor"]],
+ ["🌍 Friends & community",["friend","roommate","neighbour","landlord","stranger"]],
+ ["⚠️ Handle with care",["manipulator","scammer","bully"]]
+];
+const byId = Object.fromEntries(P.map(p=>[p.id,p]));
+
+/* Practice scenarios: each round: q (what they say), o = [text, score 0-2, feedback], r = their reply for score 0/1/2 */
+const S = {
+boss:{setup:"Your manager has added a big task on top of a deadline you’re already struggling with.",rounds:[
+ {q:"“I need this report by Thursday too. Can you do it?”",o:[["Sure, no problem.",1,"Silent agreement hides the risk and leads to burnout or missed work."],["That’s impossible, I’m already overloaded!",0,"Emotional and offers no way forward. It sounds like a refusal."],["I want to do it well. I have A and B due Wednesday – which should I prioritise, or can the report move to Monday?",2,"Commitment + facts + a choice for them to make."]],r:["“Everyone is busy. Make it work.”","“Okay… just get it done.”","“Good point. Let’s push B to next week. Thanks for flagging early.”"]},
+ {q:"“Why is project B late?”",o:[["Because the other team didn’t send inputs.",0,"Blaming others sounds defensive, even if true."],["Sorry, it’s my fault.",1,"Owning it is good – add what you’ll do next."],["Inputs came late. I’ve agreed a new date with them and will update you on Friday.",2,"Facts, ownership of the fix, and a clear follow-up."]],r:["“I don’t want excuses.”","“Okay. What’s the plan?”","“Thanks, that’s the update I needed.”"]}]},
+junior:{setup:"A new joiner submits work with errors and looks nervous.",rounds:[
+ {q:"(looking down) “I think I did it right…”",o:[["There are several mistakes. Redo it.",0,"Blunt feedback without support freezes a nervous learner."],["It’s fine, I’ll fix it myself.",1,"Kind, but removes their chance to learn."],["Thanks for finishing it. Let’s look at it together – what are you most unsure about?",2,"Appreciation plus an invitation lowers fear."]],r:["“Sorry… I’ll try harder.”","(quietly) “Okay…”","“I wasn’t sure about the formula. Can you show me?”"]},
+ {q:"“I didn’t want to bother you with questions.”",o:[["You should ask – that’s how you learn.",1,"True, but may sound like a lecture."],["Questions are never a bother. I’d rather hear one now than fix a surprise later. What would make asking easier?",2,"Reassures and invites a solution."],["Next time just figure it out first.",0,"Teaches them never to ask."]],r:["“Okay…”","“I’ll try to ask next time.”","“Maybe a quick chat at 11 each day?”"]}]},
+parent:{setup:"You want to tell your parents you plan to change careers.",rounds:[
+ {q:"“Why do you want to leave a stable job?”",o:[["It’s my life, I decide!",0,"Defensive. They hear rejection, not your reasons."],["I know you worry about my security because you love me. Here’s why this matters to me…",2,"You acknowledged their feeling first."],["Don’t worry, everything’s fine.",1,"Calms for now but doesn’t help them understand."]],r:["“We sacrificed so much for you!”","“Hmm… tell us more later.”","“Okay, tell us your plan. We want to understand.”"]},
+ {q:"“What if it fails?”",o:[["It won’t.",0,"Overpromising dismisses a real fear."],["It might be risky. So I’ll save six months of expenses, try for a year, and we’ll review together.",2,"A concrete plan eases fear and includes them."],["Then I’ll deal with it.",1,"Honest, but doesn’t address their worry."]],r:["“You never listen!”","“Hmm, we’ll see.”","“That sounds responsible. We’ll support you.”"]}]},
+elder:{setup:"Your grandfather asks, for the fifth time today, how to use his phone.",rounds:[
+ {q:"“How do I call your cousin? I forgot.”",o:[["I already showed you this morning.",0,"Makes them feel like a burden."],["Here, give me the phone.",1,"Quick, but takes away independence."],["Of course! Shall we write the steps on a card so you can do it yourself? Press here first.",2,"Patient, empowering, a lasting fix."]],r:["“I’m just a burden to everyone…”","(hands over the phone, sighs)","“Wonderful! Now I can call whenever I like.”"]},
+ {q:"“In my time we didn’t need all this.”",o:[["Times change, Grandpa.",0,"True but dismissive."],["Tell me how you used to stay in touch.",2,"Invites their story and honours their experience."],["Yes, it was simpler.",1,"Agreeable, but misses a chance to connect."]],r:["“Hmph.”","“Yes… letters took weeks.”","(smiles) “Let me tell you about the letters I wrote your grandmother…”"]}]},
+teacher:{setup:"You scored low and want your teacher to re-check your paper.",rounds:[
+ {q:"“Yes? What is it?”",o:[["You marked me unfairly!",0,"Accusing closes the door."],["Sir/Ma’am, could you help me understand where I lost marks in Q3 and Q5? I want to improve.",2,"Specific, humble, growth-focused."],["Can you just increase my marks?",1,"Focuses on marks, not learning."]],r:["“I don’t appreciate that tone.”","“Marks follow the rubric.”","“Of course. Sit down, let’s go through them.”"]},
+ {q:"“Did you revise before the test?”",o:[["Yes, a lot, but it was too hard.",1,"May be true, but sounds like an excuse."],["Not enough – I studied only the last day. I’ll start earlier. May I show you my plan?",2,"Honest ownership shows maturity."],["Everyone found it hard.",0,"Deflecting reduces your credibility."]],r:["“Excuses won’t help.”","“Then work on time management.”","“Honesty is appreciated. Bring it on Monday.”"]}]},
+partner:{setup:"Your partner comes home upset and starts venting about work.",rounds:[
+ {q:"“My boss humiliated me in the meeting today.”",o:[["Just quit then.",0,"Jumps to solutions before they feel heard."],["That sounds humiliating, I’m sorry. Do you want to vent or want ideas?",2,"Validates and asks what they need."],["Don’t take it personally.",1,"Well-meant but minimises the hurt."]],r:["“You never understand me.”","(sighs) “I guess…”","“Just listen first. Thank you.”"]},
+ {q:"“And you’re on your phone while I talk!”",o:[["I was listening!",0,"Defensive; the focus shifts to being right."],["You’re right, sorry. Phone away – tell me the rest.",2,"Acknowledges and repairs immediately."],["Sorry, go on.",1,"Okay, but show it with an action (put the phone down)."]],r:["“Forget it.”","“Hmm… okay.”","“Thanks, it means a lot.”"]}]},
+friend:{setup:"Your close friend failed an important exam.",rounds:[
+ {q:"“I messed everything up.”",o:[["At least you tried. Others failed too.",1,"Meant to console, but “at least” can feel small."],["I told you to study more.",0,"Judgement while they’re hurting."],["That’s really tough. I’m here. Want to talk or take a walk?",2,"Presence and choice, without fixing."]],r:["“Don’t cheer me up.”","“I guess…”","(exhales) “Let’s walk. Thank you.”"]},
+ {q:"“Maybe I’m not good enough.”",o:[["Don’t say that. You’re brilliant!",1,"Kind, but can dismiss the feeling."],["It hurts a lot right now. One result doesn’t decide who you are. What do you need from me?",2,"Validates the pain and offers support."],["Well, maybe try something else.",0,"Gives up on them too fast."]],r:["“You also think so.”","“Thanks…”","“Just stay with me for a while.”"]}]},
+teen:{setup:"Your teenager is on the phone late at night and snaps at you.",rounds:[
+ {q:"“Leave me alone!”",o:[["Don’t talk to me like that! Phone off now!",0,"Escalates into a power struggle."],["Okay. Something seems heavy. I’m here when you want to talk.",2,"Respects space and stays available."],["Fine, but sleep by 11.",1,"The boundary is fine, but the feeling is missed."]],r:["(slams door)","(mumbles) “Whatever.”","(later) “Can we talk? I had a bad day.”"]},
+ {q:"“Everyone has a phone at night. You don’t get it.”",o:[["I don’t care what everyone does.",0,"Dismissal ends the conversation."],["It sounds like staying connected with friends matters. Let’s find a rule that works for both of us.",2,"Hears them, then co-creates."],["Fine, but just for an hour.",1,"A compromise, but they weren’t included."]],r:["“You always control me!”","“Whatever.”","“Okay. How about off at 11 on school days?”"]}]},
+relative:{setup:"At a family gathering, an uncle asks intrusive questions.",rounds:[
+ {q:"“So, when are you getting married? What salary do you make?”",o:[["That is none of your business!",0,"Creates conflict in public."],["(Smile) Thank you for caring! We’ll share good news when there is any. How is your business going?",2,"Polite, warm and redirects."],["Hmm… soon.",1,"Avoids it, but invites more questions."]],r:["“Such disrespect these days!”","“Soon when? Soon?”","“Ha, business is good! Let me tell you…”"]},
+ {q:"“Your cousin did so much better. You should learn from him.”",o:[["Then go be with your favourite cousin.",0,"Sarcasm hurts relationships."],["He’s doing well, I’m happy for him. I’m following my own path and I’d love your blessings.",2,"Gracious and boundary-setting."],["Okay, okay.",1,"Peaceful, but you may feel unheard."]],r:["“How rude!”","“Hmph, listen to elders.”","“Of course, you have my blessings.”"]}]},
+colleague:{setup:"A colleague presented your idea as their own in a meeting.",rounds:[
+ {q:"You catch them after the meeting. They say: “Hey! What’s up?”",o:[["You stole my idea! I’ll tell everyone.",0,"Accusation and threat escalate things."],["Do you have a minute? In the meeting I felt my part wasn’t mentioned. I’d like us to credit each other. Can we agree on that?",2,"Fact, feeling, request."],["Never mind. It’s fine.",1,"Silence leaves resentment and repeats the pattern."]],r:["“You’re being dramatic.”","“Okay then.”","“Fair. Sorry, I should have said it was a joint idea.”"]},
+ {q:"“I assumed it was general knowledge.”",o:[["Don’t lie.",0,"Calling them a liar closes the door."],["Maybe it looked that way. Going forward, let’s name who contributed. Deal?",2,"A face-saving exit and a forward agreement."],["Whatever.",1,"Avoids it and lets it fade."]],r:["“Fine, ignore me then.”","“…”","“Deal. Thanks for being straightforward.”"]}]},
+mother:{setup:"Your mother keeps asking if you’ve eaten, and you’re tired and short-tempered.",rounds:[
+ {q:"“Have you eaten? You look so thin. You work too much.”",o:[["Mom, stop nagging!",0,"She hears rejection of her love."],["Yes, yes, I’m fine.",1,"Ends the moment but she may feel brushed off."],["Thanks for caring about me, Mom. I had a snack. What did you cook today?",2,"Receives her love and redirects warmly."]],r:["“I only ask because I care…”","“Hmm, you never listen.”","“Dal and your favourite potatoes! Come, I’ll serve you.”"]},
+ {q:"“You don’t call me anymore. Everyone’s busy with their own life.”",o:[["I’m busy, Mom, you know that.",0,"True, but ignores the loneliness underneath."],["I’m sorry, I’ve been distracted. Let’s fix a time – 10 minutes every evening?",2,"Hears the need and offers a concrete habit."],["I’ll call soon.",1,"Vague promises often repeat the hurt."]],r:["“Of course. Nobody has time for me.”","“Hmm, okay.”","“That would make me so happy.”"]}]},
+father:{setup:"You want your father’s support for a big decision, but he is stern and quiet.",rounds:[
+ {q:"(Reading the newspaper) “What is it?”",o:[["You never support me, so I’ll do it anyway.",0,"Starts with an accusation."],["Papa, I value your advice. I’m thinking of X. Can I explain my plan and then hear what you think?",2,"Respect, clarity and an invitation."],["Nothing.",1,"Avoids the talk, so the issue stays."]],r:["“Then do what you like.”","“Hmm. Then why did you come?”","“Sit. Tell me everything. I’ll listen.”"]},
+ {q:"“Have you thought about the risks? Money doesn’t grow on trees.”",o:[["You always think negatively!",0,"Attacks instead of answering the worry."],["Yes, I’ve thought about it. Here’s my savings buffer and a fallback plan.",2,"Facts answer his worry, which is how his care shows."],["I’ll manage.",1,"Short; doesn’t reassure."]],r:["“Fine, but don’t come to me later.”","“We’ll see.”","“That’s a sensible plan. I’ll support you.”"]}]},
+sibling:{setup:"Your brother or sister is upset that you got more attention at a family event.",rounds:[
+ {q:"“It’s always about you. Nobody asks about me.”",o:[["That’s not true, stop being dramatic.",0,"Dismisses their feeling."],["I didn’t realise you felt left out. I’m sorry. What would you have liked?",2,"Validates and asks."],["Sorry. Let’s drop it.",1,"Ends the talk without resolving it."]],r:["“See, you never listen!”","“Whatever.”","“I wanted someone to ask about my new job.”"]},
+ {q:"“Remember when you got the bigger room? It’s always been like this.”",o:[["That was 15 years ago!",0,"Dismisses an old hurt."],["That sounds like it still stings. I’d like us to feel equal now. What can we change?",2,"Acknowledges history and moves forward."],["I guess life isn’t fair.",1,"True, but cold."]],r:["“You don’t care.”","“Hmm.”","“Maybe we can share things more fairly, like the holiday plans.”"]}]},
+neighbour:{setup:"Your neighbour plays loud music at midnight again.",rounds:[
+ {q:"You meet them in the corridor. They say: “Oh, hi.”",o:[["Your music is horrible! I’ll complain to the society!",0,"A threat triggers defensiveness."],["Hi! I wanted to mention the music at night is keeping me awake. Could we keep it down after 10?",2,"Friendly, specific, solution-oriented."],["Nothing, just hello.",1,"Avoiding it lets resentment grow."]],r:["“Mind your own business!”","“Okay… bye.” (nothing changes)","“Oh, sorry, I had no idea. I’ll lower it.”"]},
+ {q:"“It’s only a few nights. Don’t be so sensitive.”",o:[["You’re inconsiderate!",0,"Labelling escalates the conflict."],["I understand you enjoy it. For me, sleep matters because of early work. Can we agree on 10 pm on weekdays?",2,"Empathy plus a clear proposal."],["Fine, whatever.",1,"You give up your own need."]],r:["“Do what you want.”","“Hmm.”","“Fair enough. 10 on weekdays, deal.”"]}]},
+stranger:{setup:"On a train, an unknown person seems upset and keeps looking at you.",rounds:[
+ {q:"“Sorry… I… I’m a bit lost.”",o:[["Don’t talk to me.",0,"Cold, when this may be a simple, honest need."],["No problem. Where are you trying to go? I can show you on the map.",2,"Helpful, polite, no personal questions."],["Ask the conductor.",1,"Fine, but a little warmth costs nothing."]],r:["(looks hurt) “Sorry.”","“Okay, thanks.”","“Oh, thank you. I need to reach the north station.”"]},
+ {q:"“Can I borrow your phone? And where do you live? Maybe I can come with you.”",o:[["Sure, here’s my phone and I live at…",0,"Never hand a stranger your phone or private details."],["I can’t lend my phone or share personal details, but I can help you ask the station staff.",2,"Kind and safe, with a clear boundary."],["Hmm, no.",1,"Safe, but a kind alternative would help."]],r:["“Great, thanks. Which area exactly?”","“Oh, okay.”","“That’s fine. Thank you for helping.”"]}]},
+manipulator:{setup:"A relative uses guilt to ask for a big favour you can’t do.",rounds:[
+ {q:"“After everything I’ve done for you, you can’t even help me once?”",o:[["Fine, I’ll do it.",0,"Caving under guilt teaches that guilt works."],["I’m grateful for what you’ve done. And I can’t do this one. Can I help in another way?",2,"Acknowledges, holds the boundary, offers a limit."],["You’re emotionally blackmailing me!",1,"May be true, but starts a fight and you lose the point."]],r:["“Good. I knew you’d come around.” (next time the ask is bigger)","“How dare you! I’m your elder!”","“Hmm… fine. I’ll manage another way.”"]},
+ {q:"(After days of silence) “I’m fine. Don’t worry about me.”",o:[["I’m sorry! I’ll do it, please talk to me.",0,"Appeasing rewards the silence."],["I’m here when you want to talk. My answer hasn’t changed.",2,"Kind, firm, and not chasing."],["Okay then, stay silent.",1,"Cold, and risks escalation."]],r:["“See, I knew you’d change your mind.”","“Unbelievable.”","(after a while) “Alright, let’s talk.”"]}]},
+scammer:{setup:"You get a call: “This is your bank. Your account will be blocked in 10 minutes.”",rounds:[
+ {q:"“There is suspicious activity. Share the OTP now to stop it.”",o:[["Oh no! The OTP is…",0,"No real bank asks for your OTP. This is how accounts get emptied."],["I’ll hang up and call my bank’s official number.",2,"Exactly right: slow down and verify."],["Why do you need it?",1,"Engaging gives them room to pressure you."]],r:["“Thank you. Transaction done.” (your money is gone)","“Because it’s urgent, hurry!”","(the call ends)"]},
+ {q:"Another call: “I’m from the police. Don’t tell anyone about this.”",o:[["Okay, I won’t tell anyone.",0,"Secrecy is a classic scam tactic."],["I’m going to talk to my family and visit the police station myself.",2,"Breaking the secrecy protects you."],["Which police station are you from?",1,"They will invent an answer. Just hang up."]],r:["“Good. Now transfer the money to this account.”","“Station 5. Hurry up.”","(they hang up)"]}]},
+bully:{setup:"A colleague shouts at you in front of others and mocks your work.",rounds:[
+ {q:"“This is trash! Did a child do this? Everyone look!”",o:[["You’re a loser! Look at your own work!",0,"Escalates and gives them an audience."],["(Calmly) Please stop. I’m happy to discuss my work, but not like this.",2,"Calm, firm boundary with an offer of respectful talk."],["(Silence, look down)",1,"Understandable, but may invite more."]],r:["“Ha! Touchy, aren’t we?”","“Cat got your tongue?”","“…Fine. Let’s talk later.”"]},
+ {q:"Later: “Why are you complaining about me? Can’t you take a joke?”",o:[["I’ll get you back.",0,"Revenge puts you at risk."],["It wasn’t a joke to me. I’ve noted what happened and told my manager. I’d like us to work respectfully.",2,"Calm, factual, protects you."],["Never mind, forget it.",1,"Avoids conflict, but nothing changes."]],r:["“Try me.”","“Good, don’t make a big deal.”","“Okay. I’ll tone it down.”"]}]},
+customer:{setup:"A client asks for a delivery date you aren’t sure you can meet.",rounds:[
+ {q:"“Can you deliver by Monday? Yes or no?”",o:[["Yes, definitely!",0,"Over-promising to close breaks trust later."],["I want to give you a reliable date. Let me check with the team and call you by 4 pm today.",2,"Honest, with a clear commitment."],["Maybe, I don’t know.",1,"Honest, but gives no next step."]],r:["“Great.” (on Monday: “Where is my order?”)","“Hmm, I need an answer today.”","“Thanks, I appreciate that. I’ll wait for your call.”"]},
+ {q:"“Your competitor said they could do it by Friday.”",o:[["Then go with them.",0,"Gives up and sounds hurt."],["I understand the time matters. I can do part by Friday and everything by Monday. Which suits you better?",2,"Understands the need and offers options."],["They’re not as good as us.",1,"Criticising others rarely persuades."]],r:["“Okay, I will.”","“Hmm. Prove it.”","“Part on Friday works. Thank you.”"]}]},
+angrycustomer:{setup:"A customer shouts that their order arrived damaged.",rounds:[
+ {q:"“This is ridiculous! Third time this happens! I want a refund NOW!”",o:[["Sir, please calm down.",0,"This usually raises the temperature."],["I’m so sorry. That’s frustrating, especially the third time. Let me fix it right now. Can you tell me what happened?",2,"Acknowledge, apologise and take ownership."],["That’s not what our policy allows.",1,"Policy before empathy sounds cold."]],r:["“Don’t tell me to calm down!”","“I don’t care about your policy!”","“Thank you. The box was crushed and the item was broken.”"]},
+ {q:"“Why should I trust you again?”",o:[["Because we are the best.",0,"A claim, not a solution."],["You’re right to ask. I’ll send a replacement with tracked delivery today and call you tomorrow to confirm it arrived.",2,"A specific action and a follow-up."],["I can’t promise anything.",1,"Honest, but leaves them with nothing."]],r:["“Hmm, I doubt it.”","“Then why should I stay?”","“Okay. I’ll give you one more chance.”"]}]},
+ex:{setup:"Your ex messages about sharing belongings, then brings up old arguments.",rounds:[
+ {q:"“Fine, come and pick up your stuff Saturday. Typical of you to wait this long.”",o:[["Typical?! You were the one who…",0,"Takes the bait and reopens the fight."],["Saturday at 2 works. I’ll keep it quick.",2,"Short, practical, neutral."],["Whatever. I’ll come when I want.",1,"Sarcasm invites more conflict."]],r:["“Here we go again!”","“Don’t bother then.”","“Okay. See you then.”"]},
+ {q:"“Do you ever think about us?”",o:[["Every day. Can we talk tonight?",0,"Mixed signals when you’re unsure can hurt both of you."],["I don’t think that’s a good topic for now. I’d like to keep our messages to practical things.",2,"Kind, clear and consistent."],["Don’t ask me that.",1,"Short and cold; may feel rejecting."]],r:["“So you do still care…”","“Wow. Okay.”","“Okay. I understand.”"]}]},
+landlord:{setup:"The ceiling in your rented flat is leaking and the landlord is slow to respond.",rounds:[
+ {q:"“I’ve been busy. It’s not urgent, is it?”",o:[["You’re a terrible landlord!",0,"Attacks and shuts down cooperation."],["I understand you’re busy. The leak is spreading and could damage your property. Could someone come on Thursday? I’ll send photos and confirm in writing.",2,"Understands them, explains the stakes and documents it."],["Okay, let me know when you can.",1,"Polite, but no deadline or paper trail."]],r:["“Then find another flat.”","“Will do.” (weeks pass)","“Oh, that looks bad. I’ll send a plumber Thursday.”"]},
+ {q:"“Also, I’m planning to raise the rent next month.”",o:[["That’s greedy! I’ll leave!",0,"Threatens instead of negotiating."],["Thank you for telling me. Could you share how the increase was decided? I’d like to find something fair for both of us.",2,"Asks for reasons and invites negotiation."],["Okay.",1,"Accepting without discussion may cost you."]],r:["“Then leave.”","“Good. It’ll be 10% more.”","“Costs have gone up. Maybe we can phase it in.”"]}]},
+doctor:{setup:"At a short appointment you’re worried, and the doctor is moving quickly.",rounds:[
+ {q:"“So, what brings you in today?”",o:[["Oh, probably nothing, just a bit tired.",0,"Playing it down hides the real concern."],["My main concern is chest tightness for three weeks, mostly at night. I wrote down my questions too.",2,"Clear, specific and prepared."],["I’ve been feeling a lot of things.",1,"Too vague for a short visit."]],r:["“Alright, get some rest.”","“Can you be more specific?”","“Thanks. Let’s go through that carefully.”"]},
+ {q:"“Take this twice daily and come back in two weeks. Any questions?”",o:[["No, thanks.",0,"Leaving confused is risky."],["Could I repeat the plan to check I have it right? And what should I watch for before then?",2,"Confirms understanding and warning signs."],["Is it expensive?",1,"Good to ask, but add the other questions too."]],r:["“Alright, next patient.”","“Please, go ahead.”","“Yes, exactly. And call us if you notice X.”"]}]},
+roommate:{setup:"Dishes pile up and your roommate keeps forgetting bills.",rounds:[
+ {q:"(You raise it.) “Ugh, here we go. I do my share.”",o:[["You’re so messy and lazy!",0,"Labels the person."],["I’m not blaming you. The dishes pile up and it stresses me. Could we make a simple schedule?",2,"“I” language and a solution."],["Never mind.",1,"Resentment will grow."]],r:["“Wow. Rude.”","“Okay then.”","“Fair. Let’s do alternate days.”"]},
+ {q:"“I forgot the electricity bill again. I’ll pay soon.”",o:[["You always forget!",0,"“Always” triggers defensiveness."],["Thanks. Could you pay by Friday? Let’s set a reminder in the house chat.",2,"A clear date and a system."],["Fine, I’ll pay it.",1,"Fixes today, not the pattern."]],r:["“Stop nagging.”","“Thanks, you’re the best.” (it happens again)","“Friday works. Setting a reminder.”"]}]},
+staff:{setup:"A team member missed a deadline and looks anxious.",rounds:[
+ {q:"(hesitant) “I know I’m late with the report…”",o:[["This is unacceptable! You always do this!",0,"Shaming and “always” shut down honesty."],["It’s fine, I’ll just do it.",1,"Relieves today but doesn’t fix the cause."],["Thanks for telling me. What got in the way, and how can I help?",2,"Appreciates honesty and looks for the cause."]],r:["“I’m sorry… I’ll try harder.” (and hides problems next time)","“Okay… thank you.”","“I was unsure about the data and was waiting for it.”"]},
+ {q:"“Can I get a new date? I can finish by Friday.”",o:[["No. I need it today.",0,"Rigid without reason; may cause errors."],["Okay, Friday it is. Send me a quick update on Wednesday so we stay on track.",2,"A realistic date plus a check-in."],["Fine, whatever.",1,"Unclear and a bit cold."]],r:["“Okay…” (rushes a poor report)","“Thanks…”","“Thank you. I’ll send the update on Wednesday.”"]}]},
+maid:{setup:"Your domestic helper has come late three days in a row.",rounds:[
+ {q:"“Sorry, I was late.”",o:[["You’re always late! I’ll find someone else!",0,"A threat without listening."],["Is everything okay? I’ve noticed it a few days. Let’s see what time works for you.",2,"Concern first, then a solution."],["Okay, just don’t be late.",1,"Clear, but ignores the cause."]],r:["(silent, anxious) “Sorry…”","“Yes, I’ll try.”","“My child has been unwell. Could I come at 9 for a few days?”"]},
+ {q:"“Can I take two days off next week?”",o:[["Again?! You take too many days off.",0,"Dismissive; fairness matters."],["Of course. Thanks for telling me ahead. Let me know the exact days and I’ll arrange.",2,"Respects the request and plans ahead."],["I’ll think about it.",1,"Leaves them anxious with no answer."]],r:["“Sorry…” (hides the next absence)","“Okay…”","“Thank you! I’ll tell you on Monday.”"]}]},
+driver:{setup:"You’re running late for a flight and the cab takes a longer route.",rounds:[
+ {q:"“Traffic is heavy today.”",o:[["Are you cheating me?! Go faster!",0,"Accusing escalates things and affects safety."],["I understand. I have a flight at 6. Is there a quicker route you’d suggest?",2,"Shares the need and asks for their expertise."],["Just hurry.",1,"Clear urgency, but no teamwork."]],r:["“I’m doing my best!”","“Okay.”","“There’s a flyover. We’ll take it; it should save 10 minutes.”"]},
+ {q:"“That will be extra because of the flyover toll.”",o:[["That’s a scam!",0,"An unchecked accusation."],["Could you show me the toll receipt? If that’s the amount, I’ll pay it.",2,"Verifies calmly."],["Fine, take it.",1,"Quick, but you didn’t verify."]],r:["“I’m an honest driver!”","“Thank you.”","“Here’s the receipt. Thanks for understanding.”"]}]},
+delivery:{setup:"Your food order is 30 minutes late and the delivery person arrives.",rounds:[
+ {q:"“Sorry, there was a lot of traffic and rain.”",o:[["You’re very late! I’ll give you one star!",0,"Penalises them for things beyond their control."],["Thanks for bringing it in this weather. I hope you stay safe.",2,"Kind and appreciative."],["Okay, give me the bag.",1,"Neutral, but a small thanks matters."]],r:["(looks down) “Sorry…”","“Thanks.”","(smiles) “Thank you! Enjoy your meal.”"]},
+ {q:"“The packet looks a bit damaged. It’s not from my side.”",o:[["It’s your fault! Take it back!",0,"Blames the wrong person."],["I understand, thank you for telling me. I’ll report it through the app. I appreciate your effort.",2,"Fair, honest, constructive."],["Ugh, fine.",1,"Okay, but gives no next step."]],r:["“Please don’t complain about me…”","“Okay…”","“Thank you for understanding.”"]}]},
+shopkeeper:{setup:"You want to buy a good bag at a market stall, within your budget.",rounds:[
+ {q:"“This bag? Best quality. 800 only!”",o:[["That’s junk! Worth 200 at best!",0,"Insulting kills the deal."],["It looks nice. My budget is around 500. Could you do a better price?",2,"Friendly, honest and specific."],["Too expensive. Bye.",1,"Direct, but ends the conversation."]],r:["“Then go elsewhere!”","“Okay, 700 last price.”","“600 for you, since you’re polite. I’ll add a free strap.”"]},
+ {q:"“Do you want it? Last price 600.”",o:[["You’re a cheat! Make it 400!",0,"Escalates haggling into insult."],["Thanks, that’s fair. Could you do 550? I’ll take it right now.",2,"A respectful counter-offer with clear intent."],["Okay, give it.",1,"Fine; you may overpay without a counter."]],r:["“Nonsense, forget it!”","“Okay, here.”","“Deal! 550. Thank you, come again.”"]}]},
+tradesperson:{setup:"Your kitchen tap leaks and the plumber arrives.",rounds:[
+ {q:"“What’s the problem?”",o:[["Just fix it quickly, it’s leaking everywhere.",0,"Vague; hard to diagnose or price."],["The tap drips when it’s on. Could you check and tell me the cost before starting?",2,"A clear symptom plus agreed pricing."],["You tell me. You’re the plumber.",1,"Puts all the work on them."]],r:["“Okay… I’ll see.” (charges more later)","“Let me look.”","“The washer is worn. About 300 for the part and work.”"]},
+ {q:"“It’s done. That’s 600.”",o:[["You said 300! Cheat!",0,"Accuses before checking."],["The estimate was 300. Could you explain what changed?",2,"Calm and factual."],["Fine, take it.",1,"Avoids conflict but lets a mismatch pass."]],r:["“Do you doubt me?”","“OK.”","“I replaced one more part. I should have told you first, sorry. I’ll make it 400.”"]}]},
+guard:{setup:"A guard stops you at the gate and asks for ID after you forgot your card.",rounds:[
+ {q:"“I need to see your ID, please.”",o:[["Don’t you know me? I live here!",0,"Challenges them for doing their job."],["Of course, thank you for being careful. I forgot my card. Could you call flat 5 to confirm?",2,"Cooperative and solution-oriented."],["Ugh, hold on.",1,"Impatient, with no solution."]],r:["“Rules are rules.”","“Please wait.”","“Thank you for understanding. Please wait while I call.”"]},
+ {q:"“Please sign the visitor register for your guest.”",o:[["Why so many rules?",0,"Complaining to the wrong person."],["Sure. Thanks for keeping us safe. Please let me know if my guest needs anything at the gate.",2,"Appreciative and cooperative."],["Okay.",1,"Fine; a thank-you would help."]],r:["“It’s the society’s rule.”","“Thanks.”","“Always happy to help. Have a good evening.”"]}]},
+waiter:{setup:"Your soup arrives cold at a restaurant.",rounds:[
+ {q:"“Here’s your soup. Enjoy!”",o:[["This is cold! Take it away!",0,"Blunt and public."],["Thank you. The soup is a bit cold. Could you please warm it or bring a fresh one?",2,"Polite, specific, solution-oriented."],["(Say nothing and eat)",1,"Avoids conflict, but you stay unhappy."]],r:["“Sorry…” (flustered)","(you never get what you wanted)","“Of course, sorry! I’ll bring it right away.”"]},
+ {q:"(Later) “How was everything?”",o:[["The service was horrible!",0,"Vague and harsh."],["Thank you. The food was good. The soup was cold at first, but you fixed it quickly. We appreciate it.",2,"Balanced, specific and kind."],["Fine.",1,"Safe, but gives no useful feedback."]],r:["“Oh… sorry.”","“Thank you.”","“Thank you! I’ll tell the kitchen.”"]}]},
+official:{setup:"You need a document stamped at a government office and the clerk seems irritated.",rounds:[
+ {q:"“Which form is this? You haven’t filled it properly.”",o:[["Your system is useless! Help me now!",0,"Blame and demands raise defences."],["Sorry about that. Could you show me which fields are incomplete? I’ll correct them right away.",2,"Humble, specific, quick."],["I’ll come again.",1,"Wastes your time and theirs."]],r:["“Then wait in the queue!”","“Come tomorrow.”","“Here, sections B and C. Fix them and come back to me.”"]},
+ {q:"“Come next week. We’re busy.”",o:[["I’ll complain to your boss!",0,"A threat rarely speeds things up."],["I understand. I have an urgent reason. Is there any option to expedite, or a day when it’s less crowded?",2,"A polite request with alternatives."],["Fine.",1,"Accepts without exploring options."]],r:["“Do what you want.”","“Okay, next week.”","“Come on Thursday morning. I’ll try to finish it.”"]}]},
+motherinlaw:{setup:"Your mother-in-law criticises how you cook in front of the family.",rounds:[
+ {q:"“That’s not how my son likes it. You should do it this way.”",o:[["Then cook it yourself!",0,"Retaliation in front of family."],["Thanks, I’d love to learn. Could you show me how you make it?",2,"Turns criticism into respect and learning."],["Okay.",1,"Peaceful, but may breed resentment."]],r:["“How rude!”","“Hmm.”","(softens) “Come, I’ll show you the secret.”"]},
+ {q:"“Why don’t you visit us more often?”",o:[["I’m busy. You never understand.",0,"Defensive and dismissive."],["I’d love to spend time with you. Let’s fix a Sunday every month.",2,"Warm, specific, and sets a pattern."],["I’ll try.",1,"Vague promises repeat the issue."]],r:["“Hmph.”","“We’ll see.”","“That would make me very happy.”"]}]},
+fatherinlaw:{setup:"Your father-in-law gives advice about your finances that you disagree with.",rounds:[
+ {q:"“You should invest in land, not shares. I know better.”",o:[["That’s outdated.",0,"Dismisses his experience."],["Thank you for the advice. Could you tell me why you prefer land? We’ll think it over.",2,"Respectful and curious, with no commitment."],["Hmm, okay.",1,"Polite, but he may keep pressing."]],r:["“Young people think they know it all.”","“I’m only trying to help.”","“Let me explain from my experience…”"]},
+ {q:"“So, are you doing it?”",o:[["No, we’ve decided.",0,"Blunt and final."],["We’ll discuss it as a couple and let you know. I appreciate you caring about our future.",2,"Honours him and keeps your decision."],["Maybe.",1,"Vague, and may create false hope."]],r:["“Hmph.”","“You’ll tell me?”","“Fair. Let me know what you decide.”"]}]},
+interviewer:{setup:"In a job interview you’re asked why you left your last job and about a challenge you faced.",rounds:[
+ {q:"“Why did you leave your last company?”",o:[["My boss was terrible and the pay was low.",0,"Badmouthing hurts you."],["I wanted more growth and responsibility, and I’m excited about the scope of this role.",2,"Positive, honest and forward-looking."],["Just wanted a change.",1,"Vague; sounds unprepared."]],r:["“Hmm, noted.”","“Can you say more?”","“Good. Tell me more about what you want to grow into.”"]},
+ {q:"“Tell me about a time you faced a challenge.”",o:[["I haven’t had many challenges.",0,"Sounds unreflective."],["Our deadline was cut by half. I split the work, ran daily check-ins and delivered on time. I learned to flag risks earlier.",2,"Situation, action, result and learning."],["I work hard and manage anything.",1,"A general claim without evidence."]],r:["“Okay…”","“Can you give an example?”","“That’s the kind of ownership we like.”"]}]}
+};
+
+const STYLES = [
+ {id:"direct",em:"⚡",name:"Direct & quick",tips:["Give the bottom line first","Offer 2–3 options, not a long story","Be brief and confident"],avoid:"Long preambles or going around the point"},
+ {id:"detail",em:"🔍",name:"Detail-minded",tips:["Bring facts, examples and numbers","Give them time to think","Follow up in writing"],avoid:"Rushing them or being vague"},
+ {id:"warm",em:"🤗",name:"Warm & peace-loving",tips:["Start with a personal check-in","Go gently; reassure them of the relationship","Ask how they feel, and wait"],avoid:"Springing conflict or sounding harsh"},
+ {id:"lively",em:"🎉",name:"Lively & expressive",tips:["Show enthusiasm and let them talk","Recognise their ideas","Summarise actions afterwards in writing"],avoid:"Dry, cold, data-only delivery"}
+];
+const MOODS = [
+ {id:"stress",em:"😣",name:"Stressed",open:"You look like you’re carrying a lot. What can I take off your plate?",tips:["Keep it short","Don’t add new demands","Offer concrete help"],avoid:"“Calm down” or long discussions"},
+ {id:"sad",em:"😢",name:"Sad / hurt",open:"That sounds really painful. I’m here, no rush.",tips:["Slow down and soften your voice","Name the feeling","Don’t fix or silver-line it"],avoid:"“At least…” or “Don’t cry”"},
+ {id:"angry",em:"😠",name:"Angry",open:"I can see you’re upset, and I want to understand. Tell me what happened.",tips:["Let them vent first","Lower your voice and pace","Agree on a break if it escalates"],avoid:"Arguing facts in the heat of the moment"},
+ {id:"happy",em:"😊",name:"Happy / excited",open:"You look so happy! Tell me everything.",tips:["Celebrate with real curiosity","Ask follow-up questions","Good time for easy requests"],avoid:"Dampening it with worries"},
+ {id:"quiet",em:"🤐",name:"Quiet / withdrawn",open:"No pressure to talk. I’m here whenever you like.",tips:["Sit beside them, don’t interrogate","Offer an activity together","Return later"],avoid:"Pushing or guessing out loud"}
+];
+const GETKNOW = ["What does a really good day look like for you?","When you’re stressed, what helps you most – space or company?","What do you wish people understood about you?","What are you proud of that people rarely notice?","How do you like to receive feedback – in private, in writing, straight away or later?","What worries you most these days?","Who do you go to when things are hard?","What is one small thing I could do that would make your week easier?"];
+const FEEL = ["Worried","Overwhelmed","Hurt","Disappointed","Embarrassed","Lonely","Frustrated","Anxious","Ignored","Pressured","Proud","Relieved","Grateful","Hopeful","Confused","Excited","Tired","Misunderstood"];
+const SWAP = [["Calm down.","I can see this matters a lot to you."],["You’re wrong.","I see it differently. Can I share my view?"],["Don’t be silly.","I can see why that worries you."],["I’m just being honest.","I’d like to say this in a way that helps you."],["It’s not a big deal.","I understand this is big for you."],["Why are you like this?","Help me understand what’s going on for you."],["You should have…","Next time, what might help?"]];
+
+/* ---------- HELPERS ---------- */
+const $ = s => document.querySelector(s);
+const view = $("#view");
+const store = {get(k,d){try{const v=localStorage.getItem(k);return v===null?d:v}catch(e){return d}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const state = {tab:"people",pid:null,pr:null,style:null,mood:null,rel:null};
+const TABS = [["people","👥","People"],["practice","🎭","Practice"],["read","🔎","Read Them"],["tools","🧰","Toolkit"]];
+const shuffle = a => { const b=a.slice(); for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]} return b; };
+const li = a => "<ul>"+a.map(x=>"<li>"+x+"</li>").join("")+"</ul>";
+
+function go(tab, pid){ state.tab=tab; if(tab==="people") state.pid=pid||null; if(tab==="practice"&&pid) startPractice(pid); else if(tab==="practice") state.pr=null; render(); window.scrollTo(0,0); }
+function renderNav(){ $("#tabs").innerHTML = TABS.map(t=>`<button class="${state.tab===t[0]?"on":""}" onclick="go('${t[0]}')"><b>${t[1]}</b>${t[2]}</button>`).join(""); }
+
+/* ---------- VIEWS ---------- */
+function groupedGrid(tab,withTag){
+  return GROUPS.map(g=>`<h3>${g[0]}</h3><div class="grid">${g[1].map(id=>byId[id]).map(p=>`<button class="pc" onclick="go('${tab}','${p.id}')"><div class="em">${p.em}</div><strong>${p.name}</strong>${withTag?`<small>${p.tag}</small>`:""}</button>`).join("")}</div>`).join("");
+}
+function peopleList(){
+  return `<h2>Who are you talking to?</h2><p class="sub">Pick a person to see how they think, what they need, and exactly what to say.</p>
+  ${groupedGrid("people",true)}
+  <div class="card mind"><strong>The golden rule</strong><p>Before you speak, ask yourself: <em>“What might this person be feeling right now, and what do they need from me?”</em> Understanding comes first, advice second.</p></div>`;
+}
+function personDetail(p){
+  return `<button class="back" onclick="go('people')">← All people</button>
+  <h2>${p.em} ${p.name}</h2>
+  <div class="card mind"><strong>How they see the world</strong><p>${p.mind}</p></div>
+  <div class="card"><strong>What they need from you</strong>${li(p.needs)}</div>
+  <div class="cols"><div class="card do"><h3>✅ Do</h3>${li(p.dos)}</div><div class="card dont"><h3>🚫 Don’t</h3>${li(p.donts)}</div></div>
+  <h3>💬 Say this instead</h3>
+  ${p.swaps.map(s=>`<div class="swap"><div class="x">${s[0]}</div><div class="y">${s[1]}</div></div>`).join("")}
+  <h3>🚪 Good ways to start</h3>
+  <div class="card">${li(p.openers.map(o=>`<span class="quote">“${o}”</span>`))}</div>
+  <h3>🧩 Tricky moments</h3>
+  ${p.hard.map(h=>`<div class="card"><strong>${h[0]}</strong><p>${h[1]}</p></div>`).join("")}
+  <div class="card"><strong>🎵 Tone &amp; body language</strong><p>${p.tone}</p></div>
+  <button class="btn" onclick="go('practice','${p.id}')">🎭 Practice a conversation</button>
+  <button class="btn alt" onclick="go('read')">🔎 Read their mood</button>`;
+}
+
+function startPractice(pid){ state.pr={pid,r:0,score:0,picked:null,order:shuffle([0,1,2])}; }
+function practiceHome(){
+  return `<h2>Practice the conversation</h2><p class="sub">Choose who you’ll talk to. You’ll face two real moments and pick your reply. See how empathic each choice is.</p>
+  ${groupedGrid("practice",false)}`;
+}
+function practiceRun(){
+  const pr=state.pr, p=byId[pr.pid], sc=S[pr.pid];
+  if(pr.r>=sc.rounds.length){
+    const max=sc.rounds.length*2, pct=Math.round(pr.score/max*100);
+    const msg = pct>=100?"Beautiful. You listened first and then responded with care.":pct>=60?"Good instincts. A few replies could show more understanding.":"Tough one! Try again and notice how acknowledging feelings changes the reply.";
+    return `<div class="big">${pct>=100?"🌟":pct>=60?"👍":"🌱"}</div><h2 style="text-align:center">Empathy score: ${pct}%</h2>
+    <div class="meter"><i style="width:${pct}%"></i></div><p class="sub" style="text-align:center;margin-top:10px">${msg}</p>
+    <div class="card"><strong>Remember with ${p.name}</strong>${li(p.dos.slice(0,3))}</div>
+    <button class="btn" onclick="go('practice','${pr.pid}')">Try again</button>
+    <button class="btn alt" onclick="go('practice')">Another person</button>
+    <button class="btn alt" onclick="go('people','${pr.pid}')">Read the guide</button>`;
+  }
+  const rd=sc.rounds[pr.r], max=sc.rounds.length*2;
+  let h=`<button class="back" onclick="go('practice')">← Back</button>
+  <h2>${p.em} ${p.name}</h2><p class="sub">${sc.setup}</p>
+  <div class="meter"><i style="width:${pr.score/max*100}%"></i></div><p class="sub">Empathy meter · Moment ${pr.r+1} of ${sc.rounds.length}</p>
+  <div class="bubble">${rd.q}</div>`;
+  const picked=pr.picked;
+  pr.order.forEach(i=>{
+    const o=rd.o[i];
+    h+=`<button class="opt ${picked===i?"s"+o[1]:""}" ${picked!==null?"disabled":""} onclick="pick(${i})">${o[0]}</button>`;
+    if(picked===i) h+=`<div class="fb">${["❌","🟡","✅"][o[1]]} ${o[2]}</div>`;
+  });
+  if(picked!==null){
+    const s=rd.o[picked][1];
+    h+=`<div class="bubble">${rd.r[s]}</div>`;
+    if(s<2){ const best=rd.o.find(o=>o[1]===2); h+=`<div class="card mind"><strong>A stronger reply</strong><p class="quote">“${best[0]}”</p></div>`; }
+    h+=`<button class="btn" onclick="nextRound()">${pr.r+1>=sc.rounds.length?"See my score":"Next →"}</button>`;
+  }
+  return h;
+}
+function pick(i){ const pr=state.pr; if(pr.picked!==null) return; pr.picked=i; pr.score+=S[pr.pid].rounds[pr.r].o[i][1]; render(); }
+function nextRound(){ const pr=state.pr; pr.r++; pr.picked=null; pr.order=shuffle([0,1,2]); render(); window.scrollTo(0,0); }
+
+function readThem(){
+  const st=STYLES.find(x=>x.id===state.style), md=MOODS.find(x=>x.id===state.mood), rl=byId[state.rel];
+  let h=`<h2>Read the person</h2><p class="sub">Every person is different. Tell me about them and get a tailored approach.</p>
+  <h3>Who are they to you?</h3>${P.map(p=>`<button class="chip ${state.rel===p.id?"on":""}" onclick="setSel('rel','${p.id}')">${p.em} ${p.name}</button>`).join("")}
+  <h3>How do they usually communicate?</h3>${STYLES.map(s=>`<button class="chip ${state.style===s.id?"on":""}" onclick="setSel('style','${s.id}')">${s.em} ${s.name}</button>`).join("")}
+  <h3>How do they seem right now?</h3>${MOODS.map(m=>`<button class="chip ${state.mood===m.id?"on":""}" onclick="setSel('mood','${m.id}')">${m.em} ${m.name}</button>`).join("")}`;
+  if(st||md||rl){
+    h+=`<h2>Your approach</h2>`;
+    if(md) h+=`<div class="card mind"><strong>Start with</strong><p class="quote">“${md.open}”</p></div>`;
+    if(rl) h+=`<div class="card"><span class="tag">${rl.em} ${rl.name}</span><p style="margin-top:6px">${rl.needs.slice(0,2).join(" · ")}</p><p class="sub">Tone: ${rl.tone}</p></div>`;
+    if(md) h+=`<div class="card"><strong>${md.em} When they’re ${md.name.toLowerCase()}</strong>${li(md.tips)}<p class="sub">Avoid: ${md.avoid}</p></div>`;
+    if(st) h+=`<div class="card"><strong>${st.em} ${st.name} style</strong>${li(st.tips)}<p class="sub">Avoid: ${st.avoid}</p></div>`;
+    if(rl) h+=`<button class="btn alt" onclick="go('people','${rl.id}')">Full guide: ${rl.name}</button>`;
+  }
+  h+=`<h3>💞 Questions to truly know someone</h3><p class="sub">Ask one at a time, at a calm moment. Listen more than you speak.</p><div class="card">${li(GETKNOW)}</div>`;
+  return h;
+}
+function setSel(k,v){ state[k]=state[k]===v?null:v; render(); }
+
+function tools(){
+  return `<h2>Empathy toolkit</h2>
+  <div class="card mind"><strong>Empathy vs sympathy</strong><p>Sympathy says “I feel sorry for you.” Empathy says “I’m trying to feel what it’s like to be you.” Empathy doesn’t need to agree – it needs to understand.</p></div>
+  <h3>The H.E.A.R. method</h3>
+  <div class="step"><b class="l">H</b><div><strong>Hold the pause</strong><br>Take a breath. Don’t react or fix. Put the phone down.</div></div>
+  <div class="step"><b class="l">E</b><div><strong>Echo what you heard</strong><br>“So you felt ignored when the plan changed?” Check you have it right.</div></div>
+  <div class="step"><b class="l">A</b><div><strong>Ask with curiosity</strong><br>“What was the hardest part?” Open questions beat “why” questions.</div></div>
+  <div class="step"><b class="l">R</b><div><strong>Respond with care</strong><br>Validate first (“That makes sense”), then share your view or help.</div></div>
+  <h3>Words for feelings</h3><p class="sub">Naming a feeling helps people feel understood.</p>
+  <div class="feel">${FEEL.map(f=>`<span>${f}</span>`).join("")}</div>
+  <h3>Say it differently</h3>
+  ${SWAP.map(s=>`<div class="swap"><div class="x">${s[0]}</div><div class="y">${s[1]}</div></div>`).join("")}
+  <h3>📝 My notes about people</h3>
+  <p class="sub">What they like, what upsets them, what they said last time. Saved only on this device.</p>
+  <textarea id="notes" placeholder="e.g. Dad: prefers calls after 7pm. Don't mention salary. Loves cricket stories."></textarea>`;
+}
+
+function render(){
+  renderNav();
+  if(state.tab==="people") view.innerHTML = state.pid?personDetail(byId[state.pid]):peopleList();
+  else if(state.tab==="practice") view.innerHTML = state.pr?practiceRun():practiceHome();
+  else if(state.tab==="read") view.innerHTML = readThem();
+  else { view.innerHTML = tools()+'<p class="note">Heart to Heart offers general communication guidance, not professional counselling.</p>'; const n=$("#notes"); n.value=store.get("h2h-notes",""); n.addEventListener("input",()=>store.set("h2h-notes",n.value)); }
+  if(state.tab!=="tools") view.insertAdjacentHTML("beforeend",'<p class="note">Heart to Heart offers general communication guidance, not professional counselling.</p>');
+}
+render();
+</script>
+</body>
+</html>
