@@ -1430,7 +1430,7 @@ function groupedGrid(tab,withTag){
   return GROUPS.map((g,gi)=>`<h3>${gname(gi)}</h3><div class="grid">${g[1].map(id=>LP(byId[id])).map(p=>`<button class="pc" onclick="go('${tab}','${p.id}')"><div class="em">${p.em}</div><strong>${p.name}</strong>${withTag?`<small>${p.tag}</small>`:""}</button>`).join("")}</div>`).join("");
 }
 function peopleList(){
-  return `<h2 class="sm">${u("whoH")}</h2><p class="sub sm">${u("whoSub")}</p>
+  return `<h2 class="sm">${u("whoH")}</h2>
   ${groupedGrid("people",true)}
   <div class="card mind"><strong>${u("golden")}</strong><p>${u("goldenTxt")}</p></div>`;
 }
