@@ -1415,7 +1415,7 @@ function fallbackCopy(done){ try{ const t=document.createElement("textarea"); t.
 
 /* ---------- VIEWS ---------- */
 function occList(){
-  return `<h2 class="sm">${u("occSub")}</h2>`+OGROUPS.map((g,gi)=>`<h3>${ogname(gi)}</h3><div class="grid">${g[1].map(id=>LO(oById[id])).map(o=>`<button class="pc" onclick="go('occ','${o.id}')"><div class="em">${o.em}</div><strong>${o.name}</strong><small>${o.tag}</small></button>`).join("")}</div>`).join("");
+  return `<h2 class="sm">${u("occH")}</h2><p class="sub sm">${u("occSub")}</p>`+OGROUPS.map((g,gi)=>`<h3>${ogname(gi)}</h3><div class="grid">${g[1].map(id=>LO(oById[id])).map(o=>`<button class="pc" onclick="go('occ','${o.id}')"><div class="em">${o.em}</div><strong>${o.name}</strong><small>${o.tag}</small></button>`).join("")}</div>`).join("");
 }
 function occDetail(o0){
   const o=LO(o0); _script=o.script.join("\n");
@@ -1498,7 +1498,7 @@ function nextRound(){ const pr=state.pr; pr.r++; pr.picked=null; pr.order=shuffl
 function readThem(){
   const st=STYLES.find(x=>x.id===state.style), md=MOODS.find(x=>x.id===state.mood), rl=byId[state.rel];
   const S1=st&&lst(st), M1=md&&lmd(md), R1=rl&&LP(rl);
-  let h=`<h2>${u("rdH")}</h2><p class="sub">${u("rdSub")}</p>
+  let h=`<h2 class="sm">${u("rdH")}</h2><p class="sub sm">${u("rdSub")}</p>
   <h3>${u("rdWho")}</h3>${P.map(LP).map(p=>`<button class="chip ${state.rel===p.id?"on":""}" onclick="setSel('rel','${p.id}')">${p.em} ${p.name}</button>`).join("")}
   <h3>${u("rdStyle")}</h3>${STYLES.map(lst).map(s=>`<button class="chip ${state.style===s.id?"on":""}" onclick="setSel('style','${s.id}')">${s.em} ${s.name}</button>`).join("")}
   <h3>${u("rdMood")}</h3>${MOODS.map(lmd).map(m=>`<button class="chip ${state.mood===m.id?"on":""}" onclick="setSel('mood','${m.id}')">${m.em} ${m.name}</button>`).join("")}`;
@@ -1516,7 +1516,7 @@ function readThem(){
 function setSel(k,v){ state[k]=state[k]===v?null:v; render(); }
 
 function tools(){
-  return `<h2>${u("tlH")}</h2>
+  return `<h2 class="sm">${u("tlH")}</h2>
   <div class="card mind"><strong>${u("empVs")}</strong><p>${u("empVsTxt")}</p></div>
   <h3>${u("hear")}</h3>
   <div class="step"><b class="l">H</b><div><strong>${u("hT")}</strong><br>${u("hD")}</div></div>
