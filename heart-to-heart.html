@@ -10,16 +10,17 @@
 @media(prefers-color-scheme:dark){:root{--bg:#17161b;--card:#222128;--ink:#f1eee9;--mute:#a8a4b3;--line:#34323d;--acc:#f08a7c;--acc2:#6fb7be;--soft:#3a2523;--soft2:#1f3235;--good:#5cc98a;--ok:#e4b04a;--bad:#ee7a6c}}
 *{box-sizing:border-box;margin:0}
 body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Devanagari","Nirmala UI",Mangal,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;padding-bottom:24px}
-header{padding:22px 18px 8px;max-width:820px;margin:auto}
-header h1{font-size:1.7rem;letter-spacing:-.02em}
+header{padding:40px 18px 6px;max-width:820px;margin:auto;position:relative;text-align:center}
+header h1{font-size:1.5rem;letter-spacing:-.02em}
 header h1 span{color:var(--acc)}
-header p{color:var(--mute);font-size:.95rem;margin-top:4px}
 main{max-width:820px;margin:auto;padding:10px 16px 30px}
 nav{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,.05);display:flex;justify-content:center;gap:2px;padding:6px;z-index:9}
 nav button{flex:1;max-width:200px;border:0;background:none;color:var(--mute);font:inherit;font-size:.72rem;padding:6px 2px;border-radius:12px;cursor:pointer}
 nav button b{display:block;font-size:1.3rem;font-weight:400}
 nav button.on{color:var(--acc);background:var(--soft);font-weight:600}
 h2{font-size:1.25rem;margin:14px 0 6px}
+h2.sm{font-size:1rem;margin:10px 0 3px}
+p.sm{font-size:.8rem;margin-bottom:8px}
 h3{font-size:1rem;margin:16px 0 6px}
 .sub{color:var(--mute);font-size:.92rem;margin-bottom:12px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
@@ -61,8 +62,8 @@ textarea{width:100%;min-height:120px;border:1px solid var(--line);border-radius:
 .step{display:flex;gap:12px;align-items:flex-start;margin:8px 0}
 .step b.l{flex:none;width:38px;height:38px;border-radius:50%;background:var(--acc);color:#fff;display:grid;place-items:center;font-size:1.1rem}
 .quote{font-style:italic}
-.lang{display:inline-flex;margin-top:10px;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--card)}
-.lang button{border:0;background:none;color:var(--mute);font:inherit;font-size:.85rem;padding:7px 16px;cursor:pointer}
+.lang{position:absolute;top:8px;right:12px;display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--card)}
+.lang button{border:0;background:none;color:var(--mute);font:inherit;font-size:.7rem;padding:5px 9px;cursor:pointer}
 .lang button.on{background:var(--acc);color:#fff;font-weight:600}
 body.hi{line-height:1.7}
 .note{font-size:.8rem;color:var(--mute);margin-top:18px;text-align:center}
@@ -71,7 +72,6 @@ body.hi{line-height:1.7}
 <body>
 <header>
   <h1>Heart <span>to</span> Heart</h1>
-  <p id="h-sub"></p>
   <div class="lang" id="lang"></div>
 </header>
 <nav id="tabs"></nav>
@@ -98,15 +98,6 @@ const P = [
  openers:["How is the work feeling this week? Anything you’d like to go through?","You did X well. Let’s also look at one thing to grow."],
  hard:[["They made a serious mistake","Fix the problem first, then the learning: “What happened? What would you do differently? How can I help?” Separate the person from the error."],["Their work is below standard","Show a good example, name the gap specifically, agree one next step and a check-in date."]],
  tone:"Warm, patient, steady. Smile before you critique."},
-{id:"parent",em:"🏡",name:"Parents",tag:"Love that sounds like worry",
- mind:"Their love often comes out as worry or control. They remember you as a child and want to feel needed, not replaced.",
- needs:["Respect and inclusion","Regular small updates","Reassurance that you are safe","Appreciation for their sacrifices"],
- dos:["Share small updates before they ask","Thank them for something specific","Say “I hear your worry” before explaining your choice","Pick a calm moment, not mid-argument"],
- donts:["Don’t say “you don’t understand”","Don’t dismiss their experience as outdated","Don’t call only when you need something","Don’t argue in front of others"],
- swaps:[["Stop controlling my life!","I know you worry because you care. I need to try this my way, and I’ll keep you updated."],["You don’t understand.","Let me explain how it looks from my side, then I’d love your view."],["I’m fine, stop asking.","I’ll call every evening so you don’t have to worry."]],
- openers:["I wanted to talk to you about something important to me.","I appreciate everything you did for me. May I share what I’m planning?"],
- hard:[["Disagreeing about career or marriage","Acknowledge their dream for you, share your reasons, offer a middle path or trial period, and give them time. Big decisions rarely land in one talk."],["Setting boundaries","Be loving but specific: “I’d love to visit on Sundays; on weekdays I need to focus.”"]],
- tone:"Respectful, unhurried, affectionate. Sit together, don’t stand over them."},
 {id:"elder",em:"👵",name:"Grandparents / Elders",tag:"Dignity, patience, stories",
  mind:"May feel their usefulness and independence shrinking. They value being heard, respected and asked for wisdom more than being “fixed”.",
  needs:["Patience and time","Dignity – no talking down","Connection and routine","Being asked for their wisdom"],
@@ -406,7 +397,7 @@ const P = [
  tone:"Calm, courteous, persistent."}
 ];
 const GROUPS = [
- ["👨‍👩‍👧 Family & home",["motherinlaw","fatherinlaw","mother","father","parent","sibling","partner","ex","elder","teen","relative"]],
+ ["👨‍👩‍👧 Family & home",["motherinlaw","fatherinlaw","mother","father","sibling","partner","ex","elder","teen","relative"]],
  ["🏫 Work & learning",["boss","staff","junior","colleague","teacher","interviewer","customer","angrycustomer"]],
  ["🏙️ Day-to-day helpers & services",["maid","driver","delivery","shopkeeper","tradesperson","guard","waiter","official","doctor"]],
  ["🌍 Friends & community",["friend","roommate","neighbour","landlord","stranger"]],
@@ -422,9 +413,6 @@ boss:{setup:"Your manager has added a big task on top of a deadline you’re alr
 junior:{setup:"A new joiner submits work with errors and looks nervous.",rounds:[
  {q:"(looking down) “I think I did it right…”",o:[["There are several mistakes. Redo it.",0,"Blunt feedback without support freezes a nervous learner."],["It’s fine, I’ll fix it myself.",1,"Kind, but removes their chance to learn."],["Thanks for finishing it. Let’s look at it together – what are you most unsure about?",2,"Appreciation plus an invitation lowers fear."]],r:["“Sorry… I’ll try harder.”","(quietly) “Okay…”","“I wasn’t sure about the formula. Can you show me?”"]},
  {q:"“I didn’t want to bother you with questions.”",o:[["You should ask – that’s how you learn.",1,"True, but may sound like a lecture."],["Questions are never a bother. I’d rather hear one now than fix a surprise later. What would make asking easier?",2,"Reassures and invites a solution."],["Next time just figure it out first.",0,"Teaches them never to ask."]],r:["“Okay…”","“I’ll try to ask next time.”","“Maybe a quick chat at 11 each day?”"]}]},
-parent:{setup:"You want to tell your parents you plan to change careers.",rounds:[
- {q:"“Why do you want to leave a stable job?”",o:[["It’s my life, I decide!",0,"Defensive. They hear rejection, not your reasons."],["I know you worry about my security because you love me. Here’s why this matters to me…",2,"You acknowledged their feeling first."],["Don’t worry, everything’s fine.",1,"Calms for now but doesn’t help them understand."]],r:["“We sacrificed so much for you!”","“Hmm… tell us more later.”","“Okay, tell us your plan. We want to understand.”"]},
- {q:"“What if it fails?”",o:[["It won’t.",0,"Overpromising dismisses a real fear."],["It might be risky. So I’ll save six months of expenses, try for a year, and we’ll review together.",2,"A concrete plan eases fear and includes them."],["Then I’ll deal with it.",1,"Honest, but doesn’t address their worry."]],r:["“You never listen!”","“Hmm, we’ll see.”","“That sounds responsible. We’ll support you.”"]}]},
 elder:{setup:"Your grandfather asks, for the fifth time today, how to use his phone.",rounds:[
  {q:"“How do I call your cousin? I forgot.”",o:[["I already showed you this morning.",0,"Makes them feel like a burden."],["Here, give me the phone.",1,"Quick, but takes away independence."],["Of course! Shall we write the steps on a card so you can do it yourself? Press here first.",2,"Patient, empowering, a lasting fix."]],r:["“I’m just a burden to everyone…”","(hands over the phone, sighs)","“Wonderful! Now I can call whenever I like.”"]},
  {q:"“In my time we didn’t need all this.”",o:[["Times change, Grandpa.",0,"True but dismissive."],["Tell me how you used to stay in touch.",2,"Invites their story and honours their experience."],["Yes, it was simpler.",1,"Agreeable, but misses a chance to connect."]],r:["“Hmph.”","“Yes… letters took weeks.”","(smiles) “Let me tell you about the letters I wrote your grandmother…”"]}]},
@@ -638,15 +626,6 @@ junior:["जूनियर / नया जॉइनर","सीखने और
  ["इस हफ़्ते काम कैसा चल रहा है? कुछ ऐसा जो साथ में देखना चाहो?","तुमने X अच्छा किया। चलो एक चीज़ और देखते हैं जहाँ बढ़ सकते हो।"],
  [["उनसे कोई बड़ी ग़लती हो गई","पहले प्रॉब्लम ठीक कीजिए, फिर सीख: “क्या हुआ? आगे क्या अलग करोगे? मैं कैसे मदद करूँ?” इंसान को ग़लती से अलग रखिए।"],["उनका काम स्टैंडर्ड से नीचे है","एक अच्छा उदाहरण दिखाइए, कमी साफ़ बताइए, एक अगला कदम और चेक-इन की तारीख़ तय कीजिए।"]],
  "गर्मजोशी वाला, धैर्यवान, स्थिर। आलोचना से पहले मुस्कुराइए।"],
-parent:["माता-पिता","जो प्यार चिंता जैसा सुनाई देता है",
- "उनका प्यार अक्सर चिंता या कंट्रोल के रूप में निकलता है। उन्हें आप बच्चे की तरह याद हैं और वे चाहते हैं कि आपको उनकी ज़रूरत रहे, उनकी जगह कोई और न ले।",
- ["इज़्ज़त और शामिल किए जाने का एहसास","छोटे-छोटे अपडेट","तसल्ली कि आप सुरक्षित हैं","उनके त्याग की कद्र"],
- ["वे पूछें उससे पहले छोटे अपडेट दे दीजिए","किसी ख़ास बात के लिए शुक्रिया कहिए","अपना फ़ैसला समझाने से पहले कहिए “मैं आपकी चिंता समझता/समझती हूँ”","बहस के बीच नहीं, शांत पल चुनिए"],
- ["“आप नहीं समझते” मत कहिए","उनके तजुर्बे को पुराना कहकर मत टालिए","सिर्फ़ ज़रूरत पर फ़ोन मत कीजिए","दूसरों के सामने बहस मत कीजिए"],
- [["मेरी ज़िंदगी में कंट्रोल करना बंद करो!","मुझे पता है आपको चिंता है क्योंकि आप परवाह करते हैं। मुझे ये अपने तरीके से आज़माना है, और मैं आपको बताता/बताती रहूँगा/रहूँगी।"],["आप नहीं समझते।","मुझे बताने दीजिए ये मेरी तरफ़ से कैसा दिखता है, फिर मैं आपकी राय जानना चाहूँगा/चाहूँगी।"],["मैं ठीक हूँ, बार-बार मत पूछो।","मैं रोज़ शाम को फ़ोन करूँगा/करूँगी ताकि आपको चिंता न हो।"]],
- ["मुझे आपसे कुछ ज़रूरी बात करनी है जो मेरे लिए मायने रखती है।","आपने मेरे लिए जो किया उसके लिए शुक्रिया। क्या मैं बता सकता/सकती हूँ मैं क्या सोच रहा/रही हूँ?"],
- [["करियर या शादी पर असहमति","उनके सपने को माना दीजिए, अपनी वजहें बताइए, बीच का रास्ता या ट्रायल पीरियड सुझाइए, और उन्हें समय दीजिए। बड़े फ़ैसले एक बातचीत में नहीं होते।"],["सीमाएँ तय करना","प्यार से लेकिन साफ़-साफ़: “मैं रविवार को आना चाहूँगा/चाहूँगी; हफ़्ते के दिनों में मुझे फ़ोकस करना होता है।”"]],
- "इज़्ज़त भरा, बिना जल्दबाज़ी, प्यार भरा। साथ बैठिए, ऊपर खड़े मत रहिए।"],
 elder:["दादा-दादी / बुज़ुर्ग","इज़्ज़त, धैर्य, कहानियाँ",
  "उन्हें लग सकता है कि उनकी उपयोगिता और आज़ादी कम हो रही है। उन्हें “ठीक किए जाने” से ज़्यादा सुना जाना, सम्मान और उनसे सलाह माँगा जाना अच्छा लगता है।",
  ["धैर्य और समय","इज़्ज़त – छोटा समझकर बात न हो","जुड़ाव और रूटीन","उनकी समझदारी को पूछा जाना"],
@@ -956,9 +935,6 @@ boss:["आपके मैनेजर ने एक ऐसी डेडला�
 junior:["एक नए जॉइनर ने ग़लतियों वाला काम जमा किया है और वो घबराया हुआ लग रहा है।",[
  ["(नीचे देखते हुए) “मुझे लगता है मैंने सही किया है…”",[["कई ग़लतियाँ हैं। दोबारा करो।","सहारे के बिना सीधी बात घबराए हुए सीखने वाले को जमा देती है।"],["कोई बात नहीं, मैं खुद ठीक कर लेता/लेती हूँ।","आज के लिए अच्छा, पर उनके सीखने का मौक़ा छिन जाता है।"],["इसे पूरा करने के लिए शुक्रिया। चलो साथ में देखते हैं – तुम्हें किस बारे में सबसे कम यक़ीन है?","तारीफ़ के साथ न्योता डर कम करता है।"]],["“सॉरी… मैं और कोशिश करूँगा/करूँगी।”","(धीरे से) “ठीक है…”","“मुझे फ़ॉर्मूले पर यक़ीन नहीं था। क्या आप दिखा सकते हैं?”"]],
  ["“मैं आपको सवालों से परेशान नहीं करना चाहता/चाहती थी।”",[["तुम्हें पूछना चाहिए – इसी से सीखते हैं।","सच है, पर भाषण जैसा लग सकता है।"],["सवाल कभी परेशानी नहीं होते। मैं बाद में गड़बड़ ठीक करने से बेहतर अभी सवाल सुनना चाहता/चाहती हूँ। पूछना आसान कैसे हो?","तसल्ली देता है और हल का न्योता देता है।"],["अगली बार पहले ख़ुद समझने की कोशिश करो।","उन्हें कभी न पूछना सिखा देता है।"]],["“ठीक है…”","“अगली बार पूछने की कोशिश करूँगा/करूँगी।”","“शायद रोज़ 11 बजे एक छोटी चैट?”"]]]],
-parent:["आप अपने माता-पिता को बताना चाहते हैं कि आप करियर बदलने की सोच रहे हैं।",[
- ["“तुम एक पक्की नौकरी क्यों छोड़ना चाहते हो?”",[["ये मेरी ज़िंदगी है, मैं तय करूँगा/करूँगी!","बचाव वाला जवाब। वे आपकी वजहें नहीं, ठुकराया जाना सुनते हैं।"],["मुझे पता है आपको मेरी सुरक्षा की चिंता है क्योंकि आप मुझसे प्यार करते हैं। ये वजह है कि ये मेरे लिए मायने रखता है…","आपने पहले उनकी भावना को माना।"],["चिंता मत कीजिए, सब ठीक है।","फ़िलहाल शांत करता है पर उन्हें समझने में मदद नहीं करता।"]],["“हमने तुम्हारे लिए कितना त्याग किया!”","“हम्म… बाद में और बताना।”","“ठीक है, अपना प्लान बताओ। हम समझना चाहते हैं।”"]],
- ["“अगर फ़ेल हो गया तो?”",[["नहीं होगा।","बढ़ा-चढ़ाकर वादा करना एक असली डर को हल्का समझना है।"],["रिस्क तो है। इसलिए मैं छह महीने का ख़र्च बचाऊँगा/बचाऊँगी, एक साल कोशिश करूँगा/करूँगी, और फिर हम साथ में रिव्यू करेंगे।","ठोस प्लान डर कम करता है और उन्हें शामिल करता है।"],["तो मैं संभाल लूँगा/लूँगी।","ईमानदार है, पर उनकी चिंता का जवाब नहीं।"]],["“तुम कभी हमारी सुनते ही नहीं!”","“हम्म, देखते हैं।”","“ये ज़िम्मेदारी वाली बात लगती है। हम तुम्हारा साथ देंगे।”"]]]],
 elder:["आपके दादाजी आज पाँचवीं बार पूछ रहे हैं कि फ़ोन कैसे चलाएँ।",[
  ["“तुम्हारे भाई को कॉल कैसे करूँ? भूल गया।”",[["मैंने आपको आज सुबह ही दिखाया था।","उन्हें बोझ जैसा महसूस होता है।"],["लीजिए, फ़ोन मुझे दीजिए।","जल्दी हो जाता है, पर उनकी आज़ादी छिन जाती है।"],["बिल्कुल! क्या हम स्टेप्स एक कार्ड पर लिख लें ताकि आप ख़ुद कर सकें? पहले यहाँ दबाइए।","धैर्यवान, सशक्त करने वाला, और टिकाऊ हल।"]],["“मैं तो सबके लिए बोझ हूँ…”","(फ़ोन थमाते हुए आह भरते हैं)","“वाह! अब मैं जब चाहूँ कॉल कर सकता हूँ।”"]],
  ["“हमारे ज़माने में इस सबकी ज़रूरत नहीं थी।”",[["ज़माना बदल गया है, दादाजी।","सच है पर बात को टाल देता है।"],["बताइए आप पहले कैसे संपर्क में रहते थे।","उनकी कहानी का न्योता और उनके तजुर्बे का सम्मान।"],["हाँ, तब सब कुछ आसान था।","हामी भरना ठीक है, पर जुड़ने का मौक़ा चूक जाता है।"]],["“हुँह।”","“हाँ… चिट्ठियों में हफ़्ते लग जाते थे।”","(मुस्कुराते हुए) “मैं बताता हूँ मैंने तुम्हारी दादी को कितनी चिट्ठियाँ लिखी थीं…”"]]]],
@@ -1417,7 +1393,6 @@ function setLang(l){ LANG=l; render(); }
 function renderChrome(){
   document.documentElement.lang = isHi()?"hi":"en";
   document.body.classList.toggle("hi",isHi());
-  $("#h-sub").textContent = u("sub");
   $("#lang").innerHTML = `<button class="${!isHi()?"on":""}" onclick="setLang('en')">English</button><button class="${isHi()?"on":""}" onclick="setLang('hi')">हिंग्लिश</button>`;
   $("#tabs").innerHTML = TABS.map(t=>`<button class="${state.tab===t[0]?"on":""}" onclick="go('${t[0]}')"><b>${t[1]}</b>${u(t[2])}</button>`).join("");
 }
@@ -1433,7 +1408,7 @@ function fallbackCopy(done){ try{ const t=document.createElement("textarea"); t.
 
 /* ---------- VIEWS ---------- */
 function occList(){
-  return `<h2>${u("occH")}</h2><p class="sub">${u("occSub")}</p>`+OGROUPS.map((g,gi)=>`<h3>${ogname(gi)}</h3><div class="grid">${g[1].map(id=>LO(oById[id])).map(o=>`<button class="pc" onclick="go('occ','${o.id}')"><div class="em">${o.em}</div><strong>${o.name}</strong><small>${o.tag}</small></button>`).join("")}</div>`).join("");
+  return `<h2 class="sm">${u("occH")}</h2><p class="sub sm">${u("occSub")}</p>`+OGROUPS.map((g,gi)=>`<h3>${ogname(gi)}</h3><div class="grid">${g[1].map(id=>LO(oById[id])).map(o=>`<button class="pc" onclick="go('occ','${o.id}')"><div class="em">${o.em}</div><strong>${o.name}</strong><small>${o.tag}</small></button>`).join("")}</div>`).join("");
 }
 function occDetail(o0){
   const o=LO(o0); _script=o.script.join("\n");
@@ -1452,7 +1427,7 @@ function groupedGrid(tab,withTag){
   return GROUPS.map((g,gi)=>`<h3>${gname(gi)}</h3><div class="grid">${g[1].map(id=>LP(byId[id])).map(p=>`<button class="pc" onclick="go('${tab}','${p.id}')"><div class="em">${p.em}</div><strong>${p.name}</strong>${withTag?`<small>${p.tag}</small>`:""}</button>`).join("")}</div>`).join("");
 }
 function peopleList(){
-  return `<h2>${u("whoH")}</h2><p class="sub">${u("whoSub")}</p>
+  return `<h2 class="sm">${u("whoH")}</h2><p class="sub sm">${u("whoSub")}</p>
   ${groupedGrid("people",true)}
   <div class="card mind"><strong>${u("golden")}</strong><p>${u("goldenTxt")}</p></div>`;
 }
@@ -1476,7 +1451,7 @@ function personDetail(p0){
 
 function startPractice(pid){ state.pr={pid,r:0,score:0,picked:null,order:shuffle([0,1,2])}; }
 function practiceHome(){
-  return `<h2>${u("prH")}</h2><p class="sub">${u("prSub")}</p>
+  return `<h2 class="sm">${u("prH")}</h2><p class="sub sm">${u("prSub")}</p>
   ${groupedGrid("practice",false)}`;
 }
 function practiceRun(){
