@@ -67,6 +67,8 @@ textarea{width:100%;min-height:120px;border:1px solid var(--line);border-radius:
 .lang button{border:0;background:none;color:var(--mute);font:inherit;font-size:.6rem;padding:4px 7px;cursor:pointer}
 .lang button.on{background:var(--acc);color:#fff;font-weight:600}
 body.hi{line-height:1.7}
+footer#foot{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);color:var(--mute);font-size:.66rem;line-height:1.3;text-align:center;padding:6px 12px calc(6px + env(safe-area-inset-bottom));z-index:8}
+body{padding-bottom:46px!important}
 .note{font-size:.8rem;color:var(--mute);margin-top:18px;text-align:center}
 </style>
 </head>
@@ -78,6 +80,7 @@ body.hi{line-height:1.7}
 <nav id="tabs"></nav>
 <main id="view"></main>
 
+<footer id="foot"></footer>
 <script>
 /* ---------- DATA ---------- */
 const P = [
@@ -1396,6 +1399,7 @@ function renderChrome(){
   document.documentElement.lang = isHi()?"hi":"en";
   document.body.classList.toggle("hi",isHi());
   $("#h-sub").textContent = u("tag");
+  $("#foot").textContent = u("disclaimer");
   $("#lang").innerHTML = `<button class="${!isHi()?"on":""}" title="English" onclick="setLang('en')">EN</button><button class="${isHi()?"on":""}" title="हिंग्लिश" onclick="setLang('hi')">हिं</button>`;
   $("#tabs").innerHTML = TABS.map(t=>`<button class="${state.tab===t[0]?"on":""}" onclick="go('${t[0]}')"><b>${t[1]}</b>${u(t[2])}</button>`).join("");
 }
@@ -1534,7 +1538,6 @@ function render(){
   else if(state.tab==="practice") view.innerHTML = state.pr?practiceRun():practiceHome();
   else if(state.tab==="read") view.innerHTML = readThem();
   else { view.innerHTML = tools(); const n=$("#notes"); n.value=store.get("h2h-notes",""); n.addEventListener("input",()=>store.set("h2h-notes",n.value)); }
-  view.insertAdjacentHTML("beforeend",`<p class="note">${u("disclaimer")}</p>`);
 }
 render();
 </script>
