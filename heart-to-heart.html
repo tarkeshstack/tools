@@ -71,7 +71,7 @@ footer#foot{position:fixed;bottom:0;left:0;right:0;background:var(--card);border
 body{padding-bottom:46px!important}
 .hmid{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1;margin:0 .04em}
 .hmid small{font-size:.36em;font-weight:700;color:#e5384f;margin-top:-.2em;letter-spacing:.02em}
-.hh{width:1.15em;height:1.15em;fill:#e5384f;animation:beat 2.6s ease-in-out infinite;transform-origin:center}
+.hh{width:1.3em;height:1.3em;vertical-align:-.22em;margin:0 .02em;fill:#e5384f;animation:beat 2.6s ease-in-out infinite;transform-origin:center}
 @keyframes beat{0%,60%,100%{transform:scale(1)}20%{transform:scale(1.14)}40%{transform:scale(1.05)}}
 @media(prefers-reduced-motion:reduce){.hh{animation:none}}
 .hero{display:flex;align-items:center;gap:14px;padding:16px;border-radius:20px;background:linear-gradient(135deg,var(--soft),var(--soft2));margin:6px 0 12px}
@@ -92,7 +92,7 @@ body{padding-bottom:46px!important}
 </head>
 <body>
 <header>
-  <h1>Heart<span class="hmid"><svg class="hh" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg><small>2</small></span>Heart</h1>
+  <h1>Heart<svg class="hh" viewBox="0 0 24 24" role="img" aria-label="to"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/><text x="12" y="11.6" text-anchor="middle" dominant-baseline="central" font-size="10.5" font-weight="800" fill="#fff" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">2</text></svg>Heart</h1>
   <p id="h-sub"></p><div class="lang" id="lang"></div>
 </header>
 <nav id="tabs"></nav>
@@ -1388,7 +1388,7 @@ let LANG = (_qs||_meta)==="hi" ? "hi" : "en";
 const isHi = () => LANG==="hi";
 const u = k => UI[k][isHi()?1:0];
 const state = {tab:"people",pid:null,oid:null,pr:null,style:null,mood:null,rel:null};
-const TABS = [["people","👥","tPeople"],["occ","🎉","tOcc"],["practice","🎭","tPractice"],["read","🔎","tRead"],["tools","🧰","tTools"]];
+const TABS = [["people","👥","tPeople"],["occ","✨","tOcc"],["practice","🎭","tPractice"],["read","🔎","tRead"],["tools","🧰","tTools"]];
 const shuffle = a => { const b=a.slice(); for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]} return b; };
 const li = a => "<ul>"+a.map(x=>"<li>"+x+"</li>").join("")+"</ul>";
 
