@@ -1415,7 +1415,7 @@ function fallbackCopy(done){ try{ const t=document.createElement("textarea"); t.
 
 /* ---------- VIEWS ---------- */
 function occList(){
-  return `<h2 class="sm">${u("occH")}</h2><p class="sub sm">${u("occSub")}</p>`+OGROUPS.map((g,gi)=>`<h3>${ogname(gi)}</h3><div class="grid">${g[1].map(id=>LO(oById[id])).map(o=>`<button class="pc" onclick="go('occ','${o.id}')"><div class="em">${o.em}</div><strong>${o.name}</strong><small>${o.tag}</small></button>`).join("")}</div>`).join("");
+  return `<h2 class="sm">${u("occSub")}</h2>`+OGROUPS.map((g,gi)=>`<h3>${ogname(gi)}</h3><div class="grid">${g[1].map(id=>LO(oById[id])).map(o=>`<button class="pc" onclick="go('occ','${o.id}')"><div class="em">${o.em}</div><strong>${o.name}</strong><small>${o.tag}</small></button>`).join("")}</div>`).join("");
 }
 function occDetail(o0){
   const o=LO(o0); _script=o.script.join("\n");
