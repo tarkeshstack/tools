@@ -558,7 +558,7 @@ const HX = {
 const UI = {
  sub:["Learn how to talk with seniors, juniors, family, teachers and friends – with empathy.","सीनियर, जूनियर, परिवार, टीचर और दोस्तों से – empathy के साथ बात करना सीखिए।"],
  tPeople:["People","लोग"],tPractice:["Practice","प्रैक्टिस"],tRead:["Read Them","पहचानिए"],tTools:["Toolkit","टूलकिट"],
- whoH:["Who are you talking to?","आप किससे बात कर रहे हैं?"],
+ whoH:["Select who you need to understand better, to communicate well","अच्छे से बात करने के लिए चुनिए किसे आपको बेहतर समझना है"],
  whoSub:["Pick a person to see how they think, what they need, and exactly what to say.","किसी को चुनिए और देखिए वे कैसे सोचते हैं, उन्हें क्या चाहिए, और ठीक-ठीक क्या बोलना है।"],
  golden:["The golden rule","सुनहरा नियम"],
  goldenTxt:["Before you speak, ask yourself: <em>“What might this person be feeling right now, and what do they need from me?”</em> Understanding comes first, advice second.","बोलने से पहले खुद से पूछिए: <em>“ये इंसान अभी क्या महसूस कर रहा होगा, और उसे मुझसे क्या चाहिए?”</em> पहले समझना, फिर सलाह देना।"],
@@ -1434,7 +1434,8 @@ function groupedGrid(tab,withTag){
   return GROUPS.map((g,gi)=>`<h3>${gname(gi)}</h3><div class="grid">${g[1].map(id=>LP(byId[id])).map(p=>`<button class="pc" onclick="go('${tab}','${p.id}')"><div class="em">${p.em}</div><strong>${p.name}</strong>${withTag?`<small>${p.tag}</small>`:""}</button>`).join("")}</div>`).join("");
 }
 function peopleList(){
-  return `${groupedGrid("people",true)}
+  return `<h2 class="sm">${u("whoH")}</h2>
+  ${groupedGrid("people",true)}
   <div class="card mind"><strong>${u("golden")}</strong><p>${u("goldenTxt")}</p></div>`;
 }
 function personDetail(p0){
