@@ -87,6 +87,43 @@ body{padding-bottom:46px!important}
 .swap{font-size:.92rem;border-radius:0 14px 14px 0;box-shadow:0 1px 3px rgba(0,0,0,.04)}
 .actions{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}.actions .btn{margin:0;flex:1 1 auto;text-align:center}
 .step{font-size:.92rem}.step b.l{width:32px;height:32px;font-size:.95rem}
+body{background:radial-gradient(900px 320px at 50% -80px,var(--soft),transparent 70%),var(--bg)}
+.view-in{animation:fadeup .35s ease both}@keyframes fadeup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+h3.gh{border-left:4px solid var(--g);padding-left:10px;margin:22px 0 10px;font-size:.95rem}
+.grid .pc{border:1px solid var(--line);box-shadow:0 2px 10px rgba(30,20,10,.05);border-radius:18px;padding:12px 12px 13px}
+.grid .pc:hover{border-color:var(--g);box-shadow:0 8px 20px rgba(30,20,10,.1)}
+.pc .em{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:1.6rem;margin-bottom:8px;background:color-mix(in srgb,var(--g) 14%,var(--card))}
+.pc strong{font-size:.95rem;line-height:1.25}
+.detail .hero{background:linear-gradient(135deg,color-mix(in srgb,var(--g) 26%,var(--card)),color-mix(in srgb,var(--g) 7%,var(--card)));border:1px solid color-mix(in srgb,var(--g) 28%,transparent);padding:18px 16px}
+.detail .hero-em{width:66px;height:66px;font-size:2.1rem;box-shadow:0 0 0 5px color-mix(in srgb,var(--g) 22%,transparent),0 4px 12px rgba(0,0,0,.1)}
+.detail .hero-name{font-size:1.3rem}
+.hero-tag{display:inline-block;margin-top:6px;padding:3px 11px;border-radius:99px;font-size:.74rem;font-weight:600;color:var(--g);background:color-mix(in srgb,var(--g) 14%,var(--card));border:1px solid color-mix(in srgb,var(--g) 30%,transparent)}
+.detail .card{box-shadow:0 2px 10px rgba(30,20,10,.05);border-radius:18px}
+.detail .card.mind{background:color-mix(in srgb,var(--g) 9%,var(--card));border-color:color-mix(in srgb,var(--g) 22%,transparent)}
+.lbl{display:flex;align-items:center;gap:8px;font-size:.72rem}
+.lbl i{font-style:normal;width:26px;height:26px;border-radius:9px;display:grid;place-items:center;font-size:.9rem;background:color-mix(in srgb,var(--g,var(--acc)) 16%,var(--card))}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.pill{padding:6px 12px;border-radius:99px;font-size:.84rem;font-weight:500;background:color-mix(in srgb,var(--g) 11%,var(--card));border:1px solid color-mix(in srgb,var(--g) 26%,transparent)}
+ul.ticks,ul.crosses{list-style:none;padding:0}
+.ticks li,.crosses li{position:relative;padding-left:27px;margin:8px 0}
+.ticks li::before,.crosses li::before{position:absolute;left:0;top:1px;width:19px;height:19px;border-radius:50%;color:#fff;font-size:.68rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+.ticks li::before{content:"✓";background:var(--good)}
+.crosses li::before{content:"✕";background:var(--bad)}
+.swap2{display:flex;flex-direction:column;gap:6px;margin:12px 0}
+.swap2 .bad{align-self:flex-start;max-width:90%;padding:8px 12px;border-radius:16px 16px 16px 4px;background:rgba(192,57,43,.09);color:var(--mute);font-size:.86rem;text-decoration:line-through;text-decoration-color:rgba(192,57,43,.55)}
+.swap2 .good{align-self:flex-end;max-width:94%;padding:10px 13px;border-radius:16px 16px 4px 16px;background:rgba(46,139,87,.13);border:1px solid rgba(46,139,87,.3);font-weight:600;font-size:.92rem;line-height:1.45}
+.open{margin:8px 0 8px auto;max-width:92%;padding:10px 14px;border-radius:16px 16px 4px 16px;background:color-mix(in srgb,var(--g) 13%,var(--card));border:1px solid color-mix(in srgb,var(--g) 28%,transparent);font-style:italic;font-size:.92rem}
+details.hard{background:var(--card);border:1px solid var(--line);border-radius:16px;margin:9px 0;box-shadow:0 2px 8px rgba(30,20,10,.04);overflow:hidden}
+details.hard summary{list-style:none;cursor:pointer;padding:12px 40px 12px 14px;font-weight:600;font-size:.9rem;position:relative}
+details.hard summary::-webkit-details-marker{display:none}
+details.hard summary::after{content:"＋";position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--g);font-size:1.05rem}
+details.hard[open] summary::after{content:"−"}
+details.hard[open] summary{border-bottom:1px dashed var(--line);color:var(--g)}
+details.hard p{padding:11px 14px 13px;margin:0;font-size:.9rem;line-height:1.55}
+.detail .step b.l{background:var(--g)}
+.detail .sec{display:flex;align-items:center;gap:8px;margin:24px 0 8px}
+.detail .sec::after{content:"";flex:1;height:1px;background:var(--line)}
+.back{margin:8px 0 0}
 .note{font-size:.8rem;color:var(--mute);margin-top:18px;text-align:center}
 </style>
 </head>
@@ -1390,7 +1427,12 @@ const u = k => UI[k][isHi()?1:0];
 const state = {tab:"people",pid:null,oid:null,pr:null,style:null,mood:null,rel:null};
 const TABS = [["people","👥","tPeople"],["occ","✨","tOcc"],["practice","🎭","tPractice"],["read","🔎","tRead"],["tools","🧰","tTools"]];
 const shuffle = a => { const b=a.slice(); for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]} return b; };
-const li = a => "<ul>"+a.map(x=>"<li>"+x+"</li>").join("")+"</ul>";
+const li = (a,c) => `<ul class="${c||""}">`+a.map(x=>"<li>"+x+"</li>").join("")+"</ul>";
+const GCOL = ["#e0685a","#3f7f86","#d99a2b","#7a6cc7","#c0392b"];
+const gOf = id => { const i=GROUPS.findIndex(g=>g[1].includes(id)); return GCOL[i<0?0:i]; };
+const ogOf = id => { const i=OGROUPS.findIndex(g=>g[1].includes(id)); return GCOL[i<0?0:i]; };
+const swapHTML = s => `<div class="swap2"><div class="bad">✕ ${s[0]}</div><div class="good">✓ ${s[1]}</div></div>`;
+const lbl = (ic,t) => `<div class="lbl"><i>${ic}</i>${t}</div>`;
 
 /* localisers: English data stays the source of truth (scores, order); Hinglish only swaps the text */
 function LP(p){ if(!isHi()||!HI[p.id]) return p; const h=HI[p.id]; return {id:p.id,em:p.em,name:h[0],tag:h[1],mind:h[2],needs:h[3],dos:h[4],donts:h[5],swaps:h[6],openers:h[7],hard:h[8],tone:h[9]}; }
@@ -1433,46 +1475,48 @@ function fallbackCopy(done){ try{ const t=document.createElement("textarea"); t.
 
 /* ---------- VIEWS ---------- */
 function occList(){
-  return `<h2 class="sm">${u("occH")}</h2><p class="sub sm">${u("occSub")}</p>`+OGROUPS.map((g,gi)=>`<h3>${ogname(gi)}</h3><div class="grid">${g[1].map(id=>LO(oById[id])).map(o=>`<button class="pc" onclick="go('occ','${o.id}')"><div class="em">${o.em}</div><strong>${o.name}</strong><small>${o.tag}</small></button>`).join("")}</div>`).join("");
+  return `<h2 class="sm">${u("occH")}</h2><p class="sub sm">${u("occSub")}</p>`+OGROUPS.map((g,gi)=>`<h3 class="gh" style="--g:${GCOL[gi]}">${ogname(gi)}</h3><div class="grid" style="--g:${GCOL[gi]}">${g[1].map(id=>LO(oById[id])).map(o=>`<button class="pc" onclick="go('occ','${o.id}')"><div class="em">${o.em}</div><strong>${o.name}</strong><small>${o.tag}</small></button>`).join("")}</div>`).join("");
 }
 function occDetail(o0){
   const o=LO(o0); _script=o.script.join("\n");
   return `<button class="back" onclick="go('occ')">${u("allOcc")}</button>
+  <div class="detail" style="--g:${ogOf(o0.id)}">
   ${hero(o.em,o.name,o.tag)}
-  <div class="card mind"><div class="lbl">${u("oWhy")}</div><p>${o.why}</p></div>
+  <div class="card mind">${lbl("💡",u("oWhy"))}<p>${o.why}</p></div>
   <div class="sec">${u("oSteps")}</div>
   ${o.steps.map((s,i)=>`<div class="step"><b class="l">${i+1}</b><div><strong>${s[0]}</strong><br>${s[1]}</div></div>`).join("")}
   <div class="sec">${u("oScript")}</div>
-  <div class="card">${li(o.script.map(x=>`<span class="quote">${x}</span>`))}</div>
+  ${o.script.map(x=>`<div class="open">${x}</div>`).join("")}
   <div class="actions"><button class="btn alt" onclick="copyScript(this)">${u("copy")}</button></div>
-  <div class="cols"><div class="card do"><div class="lbl">${u("sDo")}</div>${li(o.dos)}</div><div class="card dont"><div class="lbl">${u("sDont")}</div>${li(o.donts)}</div></div>
-  <div class="card mind"><div class="lbl">${u("oEmp")}</div><p>${o.emp}</p></div>`;
+  <div class="cols"><div class="card do">${lbl("✅",u("sDo").replace("✅ ",""))}${li(o.dos,"ticks")}</div><div class="card dont">${lbl("🚫",u("sDont").replace("🚫 ",""))}${li(o.donts,"crosses")}</div></div>
+  <div class="card mind">${lbl("💛",u("oEmp").replace("💛 ",""))}<p>${o.emp}</p></div></div>`;
 }
 function groupedGrid(tab,withTag){
-  return GROUPS.map((g,gi)=>`<h3>${gname(gi)}</h3><div class="grid">${g[1].map(id=>LP(byId[id])).map(p=>`<button class="pc" onclick="go('${tab}','${p.id}')"><div class="em">${p.em}</div><strong>${p.name}</strong>${withTag?`<small>${p.tag}</small>`:""}</button>`).join("")}</div>`).join("");
+  return GROUPS.map((g,gi)=>`<h3 class="gh" style="--g:${GCOL[gi]}">${gname(gi)}</h3><div class="grid" style="--g:${GCOL[gi]}">${g[1].map(id=>LP(byId[id])).map(p=>`<button class="pc" onclick="go('${tab}','${p.id}')"><div class="em">${p.em}</div><strong>${p.name}</strong>${withTag?`<small>${p.tag}</small>`:""}</button>`).join("")}</div>`).join("");
 }
 function peopleList(){
   return `<p class="sub sm" style="margin:12px 0 4px">${u("whoH")}</p>
   ${groupedGrid("people",true)}
   <div class="card mind"><strong>${u("golden")}</strong><p>${u("goldenTxt")}</p></div>`;
 }
-function hero(em,name,tag){ return `<div class="hero"><div class="hero-em">${em}</div><div><div class="hero-name">${name}</div>${tag?`<div class="hero-tag">${tag}</div>`:""}</div></div>`; }
+function hero(em,name,tag){ return `<div class="hero"><div class="hero-em">${em}</div><div><div class="hero-name">${name}</div>${tag?`<span class="hero-tag">${tag}</span>`:""}</div></div>`; }
 function personDetail(p0){
   const p=LP(p0);
   return `<button class="back" onclick="go('people')">${u("allPeople")}</button>
+  <div class="detail" style="--g:${gOf(p0.id)}">
   ${hero(p.em,p.name,p.tag)}
-  <div class="card mind"><div class="lbl">🧠 ${u("sMind")}</div><p>${p.mind}</p></div>
-  <div class="card"><div class="lbl">🎯 ${u("sNeeds")}</div>${li(p.needs)}</div>
-  <div class="cols"><div class="card do"><div class="lbl">${u("sDo")}</div>${li(p.dos)}</div><div class="card dont"><div class="lbl">${u("sDont")}</div>${li(p.donts)}</div></div>
+  <div class="card mind">${lbl("🧠",u("sMind"))}<p>${p.mind}</p></div>
+  <div class="card">${lbl("🎯",u("sNeeds"))}<div class="chips">${p.needs.map(n=>`<span class="pill">${n}</span>`).join("")}</div></div>
+  <div class="cols"><div class="card do">${lbl("✅",u("sDo").replace("✅ ",""))}${li(p.dos,"ticks")}</div><div class="card dont">${lbl("🚫",u("sDont").replace("🚫 ",""))}${li(p.donts,"crosses")}</div></div>
   <div class="sec">${u("sSay")}</div>
-  ${p.swaps.map(s=>`<div class="swap"><div class="x">${s[0]}</div><div class="y">${s[1]}</div></div>`).join("")}
+  ${p.swaps.map(swapHTML).join("")}
   <div class="sec">${u("sOpen")}</div>
-  <div class="card">${li(p.openers.map(o=>`<span class="quote">“${o}”</span>`))}</div>
+  ${p.openers.map(o=>`<div class="open">“${o}”</div>`).join("")}
   <div class="sec">${u("sHard")}</div>
-  ${p.hard.map(h=>`<div class="card"><div class="lbl" style="text-transform:none;letter-spacing:0;font-size:.85rem;color:var(--ink)">${h[0]}</div><p>${h[1]}</p></div>`).join("")}
-  <div class="card mind"><div class="lbl">${u("sTone")}</div><p>${p.tone}</p></div>
+  ${p.hard.map((h,i)=>`<details class="hard" ${i===0?"open":""}><summary>${h[0]}</summary><p>${h[1]}</p></details>`).join("")}
+  <div class="card mind">${lbl("🎵",u("sTone").replace("🎵 ",""))}<p>${p.tone}</p></div>
   <div class="actions"><button class="btn" onclick="go('practice','${p0.id}')">${u("bPractice")}</button>
-  <button class="btn alt" onclick="go('read')">${u("bRead")}</button></div>`;
+  <button class="btn alt" onclick="go('read')">${u("bRead")}</button></div></div>`;
 }
 function startPractice(pid){ state.pr={pid,r:0,score:0,picked:null,order:shuffle([0,1,2])}; }
 function practiceHome(){
@@ -1544,7 +1588,7 @@ function tools(){
   <h3>${u("feelH")}</h3><p class="sub">${u("feelSub")}</p>
   <div class="feel">${feelList().map(f=>`<span>${f}</span>`).join("")}</div>
   <h3>${u("swapH")}</h3>
-  ${swapList().map(s=>`<div class="swap"><div class="x">${s[0]}</div><div class="y">${s[1]}</div></div>`).join("")}
+  ${swapList().map(swapHTML).join("")}
   <h3>${u("notesH")}</h3>
   <p class="sub">${u("notesSub")}</p>
   <textarea id="notes" placeholder="${u("notesPh").replace(/"/g,"&quot;")}"></textarea>`;
@@ -1552,6 +1596,7 @@ function tools(){
 
 function render(){
   renderChrome();
+  view.classList.remove("view-in"); void view.offsetWidth; view.classList.add("view-in");
   if(state.tab==="people") view.innerHTML = state.pid?personDetail(byId[state.pid]):peopleList();
   else if(state.tab==="occ") view.innerHTML = state.oid?occDetail(oById[state.oid]):occList();
   else if(state.tab==="practice") view.innerHTML = state.pr?practiceRun():practiceHome();
