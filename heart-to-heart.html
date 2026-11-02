@@ -69,12 +69,28 @@ textarea{width:100%;min-height:120px;border:1px solid var(--line);border-radius:
 body.hi{line-height:1.7}
 footer#foot{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);color:var(--mute);font-size:.66rem;line-height:1.3;text-align:center;padding:6px 12px calc(6px + env(safe-area-inset-bottom));z-index:8}
 body{padding-bottom:46px!important}
+.hh{width:.78em;height:.78em;fill:#e5384f;margin:0 .1em;vertical-align:-.03em;animation:beat 2.6s ease-in-out infinite;transform-origin:center}
+@keyframes beat{0%,60%,100%{transform:scale(1)}20%{transform:scale(1.14)}40%{transform:scale(1.05)}}
+@media(prefers-reduced-motion:reduce){.hh{animation:none}}
+.hero{display:flex;align-items:center;gap:14px;padding:16px;border-radius:20px;background:linear-gradient(135deg,var(--soft),var(--soft2));margin:6px 0 12px}
+.hero-em{flex:none;width:58px;height:58px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-size:1.9rem;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.hero-name{font-size:1.2rem;font-weight:700;line-height:1.25}
+.hero-tag{font-size:.8rem;color:var(--mute);margin-top:3px}
+.lbl{font-size:.72rem;font-weight:700;letter-spacing:.05em;color:var(--mute);margin-bottom:7px;text-transform:uppercase}
+.card{font-size:.92rem;line-height:1.55;padding:13px 15px;border-radius:16px}
+.card p{margin:0}.card ul{padding-left:18px;margin:0}.card li{margin:5px 0}.card li::marker{color:var(--acc)}
+.card.do{background:rgba(46,139,87,.07);border-color:rgba(46,139,87,.28)}.card.do .lbl{color:var(--good)}.card.do li::marker{color:var(--good)}
+.card.dont{background:rgba(192,57,43,.06);border-color:rgba(192,57,43,.24)}.card.dont .lbl{color:var(--bad)}.card.dont li::marker{color:var(--bad)}
+.sec{font-size:.85rem;font-weight:700;margin:20px 0 6px}
+.swap{font-size:.92rem;border-radius:0 14px 14px 0;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}.actions .btn{margin:0;flex:1 1 auto;text-align:center}
+.step{font-size:.92rem}.step b.l{width:32px;height:32px;font-size:.95rem}
 .note{font-size:.8rem;color:var(--mute);margin-top:18px;text-align:center}
 </style>
 </head>
 <body>
 <header>
-  <h1>Heart <span>to</span> Heart</h1>
+  <h1>Heart<svg class="hh" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>Heart</h1>
   <p id="h-sub"></p><div class="lang" id="lang"></div>
 </header>
 <nav id="tabs"></nav>
@@ -1420,42 +1436,42 @@ function occList(){
 function occDetail(o0){
   const o=LO(o0); _script=o.script.join("\n");
   return `<button class="back" onclick="go('occ')">${u("allOcc")}</button>
-  <h2>${o.em} ${o.name}</h2><p class="sub">${o.tag}</p>
-  <div class="card mind"><strong>${u("oWhy")}</strong><p>${o.why}</p></div>
-  <h3>${u("oSteps")}</h3>
+  ${hero(o.em,o.name,o.tag)}
+  <div class="card mind"><div class="lbl">${u("oWhy")}</div><p>${o.why}</p></div>
+  <div class="sec">${u("oSteps")}</div>
   ${o.steps.map((s,i)=>`<div class="step"><b class="l">${i+1}</b><div><strong>${s[0]}</strong><br>${s[1]}</div></div>`).join("")}
-  <h3>${u("oScript")}</h3>
+  <div class="sec">${u("oScript")}</div>
   <div class="card">${li(o.script.map(x=>`<span class="quote">${x}</span>`))}</div>
-  <button class="btn alt" onclick="copyScript(this)">${u("copy")}</button>
-  <div class="cols"><div class="card do"><h3>${u("sDo")}</h3>${li(o.dos)}</div><div class="card dont"><h3>${u("sDont")}</h3>${li(o.donts)}</div></div>
-  <div class="card mind"><strong>${u("oEmp")}</strong><p>${o.emp}</p></div>`;
+  <div class="actions"><button class="btn alt" onclick="copyScript(this)">${u("copy")}</button></div>
+  <div class="cols"><div class="card do"><div class="lbl">${u("sDo")}</div>${li(o.dos)}</div><div class="card dont"><div class="lbl">${u("sDont")}</div>${li(o.donts)}</div></div>
+  <div class="card mind"><div class="lbl">${u("oEmp")}</div><p>${o.emp}</p></div>`;
 }
 function groupedGrid(tab,withTag){
   return GROUPS.map((g,gi)=>`<h3>${gname(gi)}</h3><div class="grid">${g[1].map(id=>LP(byId[id])).map(p=>`<button class="pc" onclick="go('${tab}','${p.id}')"><div class="em">${p.em}</div><strong>${p.name}</strong>${withTag?`<small>${p.tag}</small>`:""}</button>`).join("")}</div>`).join("");
 }
 function peopleList(){
-  return `<h2 class="sm">${u("whoH")}</h2>
+  return `<p class="sub sm" style="margin:12px 0 4px">${u("whoH")}</p>
   ${groupedGrid("people",true)}
   <div class="card mind"><strong>${u("golden")}</strong><p>${u("goldenTxt")}</p></div>`;
 }
+function hero(em,name,tag){ return `<div class="hero"><div class="hero-em">${em}</div><div><div class="hero-name">${name}</div>${tag?`<div class="hero-tag">${tag}</div>`:""}</div></div>`; }
 function personDetail(p0){
   const p=LP(p0);
   return `<button class="back" onclick="go('people')">${u("allPeople")}</button>
-  <h2>${p.em} ${p.name}</h2>
-  <div class="card mind"><strong>${u("sMind")}</strong><p>${p.mind}</p></div>
-  <div class="card"><strong>${u("sNeeds")}</strong>${li(p.needs)}</div>
-  <div class="cols"><div class="card do"><h3>${u("sDo")}</h3>${li(p.dos)}</div><div class="card dont"><h3>${u("sDont")}</h3>${li(p.donts)}</div></div>
-  <h3>${u("sSay")}</h3>
+  ${hero(p.em,p.name,p.tag)}
+  <div class="card mind"><div class="lbl">🧠 ${u("sMind")}</div><p>${p.mind}</p></div>
+  <div class="card"><div class="lbl">🎯 ${u("sNeeds")}</div>${li(p.needs)}</div>
+  <div class="cols"><div class="card do"><div class="lbl">${u("sDo")}</div>${li(p.dos)}</div><div class="card dont"><div class="lbl">${u("sDont")}</div>${li(p.donts)}</div></div>
+  <div class="sec">${u("sSay")}</div>
   ${p.swaps.map(s=>`<div class="swap"><div class="x">${s[0]}</div><div class="y">${s[1]}</div></div>`).join("")}
-  <h3>${u("sOpen")}</h3>
+  <div class="sec">${u("sOpen")}</div>
   <div class="card">${li(p.openers.map(o=>`<span class="quote">“${o}”</span>`))}</div>
-  <h3>${u("sHard")}</h3>
-  ${p.hard.map(h=>`<div class="card"><strong>${h[0]}</strong><p>${h[1]}</p></div>`).join("")}
-  <div class="card"><strong>${u("sTone")}</strong><p>${p.tone}</p></div>
-  <button class="btn" onclick="go('practice','${p0.id}')">${u("bPractice")}</button>
-  <button class="btn alt" onclick="go('read')">${u("bRead")}</button>`;
+  <div class="sec">${u("sHard")}</div>
+  ${p.hard.map(h=>`<div class="card"><div class="lbl" style="text-transform:none;letter-spacing:0;font-size:.85rem;color:var(--ink)">${h[0]}</div><p>${h[1]}</p></div>`).join("")}
+  <div class="card mind"><div class="lbl">${u("sTone")}</div><p>${p.tone}</p></div>
+  <div class="actions"><button class="btn" onclick="go('practice','${p0.id}')">${u("bPractice")}</button>
+  <button class="btn alt" onclick="go('read')">${u("bRead")}</button></div>`;
 }
-
 function startPractice(pid){ state.pr={pid,r:0,score:0,picked:null,order:shuffle([0,1,2])}; }
 function practiceHome(){
   return `<h2 class="sm">${u("prH")}</h2><p class="sub sm">${u("prSub")}</p>
