@@ -1,0 +1,1361 @@
+<!doctype html><html lang="en" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>[hidden]{display:none!important}img{max-width:100%}</style>
+<title>College to Corporate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout concept: a guided journey. Home asks "where are you?" and shows a path of stages;
+   six colour-coded topic hubs share one browse list with type filters; a sheet opens every item. */
+:root{
+  --bg:#F5F6FB;--surf:#FFFFFF;--surf2:#EEF0F8;--ink:#1D2333;--mut:#586074;--line:#E1E4EF;
+  --accent:#4A57D6;--accent-ink:#FFFFFF;--accent-soft:#E6E8FB;--good:#1F8A5B;--good-soft:#DDF3E8;--bad:#B4443A;--bad-soft:#FBE4E0;
+  --t1:#FFE6DB;--a1:#B5502D; --t2:#DAF1E2;--a2:#1E7E4E; --t3:#DCEAFB;--a3:#2D68B8;
+  --t4:#FFF0C4;--a4:#8A6500; --t5:#E7DFFB;--a5:#6544C9; --t6:#FADFEA;--a6:#B13A6C;
+  --shadow:0 1px 2px rgba(29,35,51,.05),0 6px 18px rgba(29,35,51,.06);
+  --f-head:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --f-body:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#12151F;--surf:#1B2030;--surf2:#232940;--ink:#E9ECF6;--mut:#A3ABC2;--line:#2C334A;
+  --accent:#8F9AFF;--accent-ink:#12151F;--accent-soft:#272E55;--good:#58C896;--good-soft:#18362B;--bad:#F0877D;--bad-soft:#40201D;
+  --t1:#3A2620;--a1:#FFA98A; --t2:#1D3328;--a2:#6FD6A0; --t3:#1F3048;--a3:#8FBAF2;
+  --t4:#3B3115;--a4:#EDC862; --t5:#2E2750;--a5:#B7A2FF; --t6:#3C2230;--a6:#F59BC0;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12151F;--surf:#1B2030;--surf2:#232940;--ink:#E9ECF6;--mut:#A3ABC2;--line:#2C334A;
+  --accent:#8F9AFF;--accent-ink:#12151F;--accent-soft:#272E55;--good:#58C896;--good-soft:#18362B;--bad:#F0877D;--bad-soft:#40201D;
+  --t1:#3A2620;--a1:#FFA98A; --t2:#1D3328;--a2:#6FD6A0; --t3:#1F3048;--a3:#8FBAF2;
+  --t4:#3B3115;--a4:#EDC862; --t5:#2E2750;--a5:#B7A2FF; --t6:#3C2230;--a6:#F59BC0;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25);color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--f-body);-webkit-font-smoothing:antialiased;padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+h1,h2,h3,h4{font-family:var(--f-head);line-height:1.15;margin:0;text-wrap:balance;letter-spacing:-.01em}
+p{margin:0}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:8px}
+.wrap{max-width:980px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.t1{--t:var(--t1);--a:var(--a1)}.t2{--t:var(--t2);--a:var(--a2)}.t3{--t:var(--t3);--a:var(--a3)}
+.t4{--t:var(--t4);--a:var(--a4)}.t5{--t:var(--t5);--a:var(--a5)}.t6{--t:var(--t6);--a:var(--a6)}
+.tn{--t:var(--surf2);--a:var(--mut)}
+
+/* header */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--surf)}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--surf);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:14px;padding-block:10px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:9px;font:800 1.08rem var(--f-head);background:none;border:0;padding:0;letter-spacing:-.02em}
+.logo i{width:30px;height:30px;border-radius:10px;background:var(--accent);display:grid;place-items:center;color:var(--accent-ink);font-style:normal;font-size:.95rem}
+.sbox{position:relative;flex:1 1 220px;min-width:0}
+.sbox input{width:100%;height:42px;border-radius:999px;border:1px solid var(--line);background:var(--surf2);padding:0 16px 0 42px;outline:none}
+.sbox input:focus{border-color:var(--accent);background:var(--surf)}
+.sbox svg{position:absolute;left:14px;top:11px;width:20px;height:20px;stroke:var(--mut);fill:none;stroke-width:2;stroke-linecap:round}
+.dn{display:none;gap:4px}
+.dn button{border:0;background:none;padding:8px 14px;border-radius:999px;font-weight:600;color:var(--mut)}
+.dn button[aria-current="page"]{background:var(--accent-soft);color:var(--accent)}
+.res{position:absolute;left:0;right:0;top:48px;background:var(--surf);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);max-height:60vh;overflow:auto;padding:6px;z-index:70}
+.res button{display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:none;border:0;padding:9px 10px;border-radius:12px}
+.res button:hover,.res button:focus-visible{background:var(--surf2)}
+.res .nores{padding:14px;color:var(--mut)}
+.ty{flex:none;font:700 .68rem var(--f-body);letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--t);color:var(--a)}
+
+/* bottom nav */
+.bn{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--surf);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
+.bn button{flex:1;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.72rem;font-weight:700;color:var(--mut);padding:6px 0;border-radius:14px}
+.bn svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.bn button[aria-current="page"]{color:var(--accent)}
+.bn button[aria-current="page"] svg{fill:var(--accent-soft)}
+
+/* generic */
+main{padding-block:22px 28px}
+.view{display:none}.view.on{display:block}
+.eyebrow{font:700 .74rem var(--f-body);letter-spacing:.09em;text-transform:uppercase;color:var(--mut)}
+.sec{margin-top:34px;display:grid;gap:14px}
+.sec>h2{font-size:1.35rem}
+.sec .sub{color:var(--mut);margin-top:-8px}
+.btn{border:0;border-radius:999px;padding:11px 20px;font-weight:700;background:var(--accent);color:var(--accent-ink)}
+.btn.ghost{background:var(--surf2);color:var(--ink)}
+.btn.sm{padding:7px 14px;font-size:.88rem}
+.chip{border:1px solid var(--line);background:var(--surf);border-radius:999px;padding:7px 14px;font-weight:600;font-size:.9rem;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-block:2px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.card{background:var(--surf);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:var(--shadow)}
+.note{color:var(--mut);font-size:.92rem}
+
+/* home hero */
+.hero{display:grid;gap:10px;padding-block:6px 4px}
+.hero h1{font-size:clamp(2rem,6.4vw,3.3rem);font-weight:800;max-width:15ch}
+.hero p{color:var(--mut);max-width:50ch;font-size:1.05rem}
+.path{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);position:relative;gap:0}
+.path::before{content:"";position:absolute;left:12.5%;right:12.5%;top:21px;height:3px;background:var(--line);border-radius:3px}
+.path li{position:relative;text-align:center}
+.path button{background:none;border:0;display:grid;justify-items:center;gap:8px;width:100%;padding:0 2px;font-weight:700;font-size:.86rem;line-height:1.25;color:var(--mut)}
+.path .dot{width:44px;height:44px;border-radius:50%;background:var(--surf);border:3px solid var(--line);display:grid;place-items:center;font:800 .9rem var(--f-head);position:relative;z-index:1;transition:.2s}
+.path button[aria-pressed="true"]{color:var(--ink)}
+.path button[aria-pressed="true"] .dot{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);transform:scale(1.12)}
+.path .done .dot{border-color:var(--accent)}
+.stage{background:var(--surf);border:1px solid var(--line);border-radius:24px;padding:20px;margin-top:16px;display:grid;gap:14px;box-shadow:var(--shadow)}
+.stage h3{font-size:1.4rem}
+.stage .why{color:var(--mut);max-width:60ch}
+.list{display:grid;gap:8px}
+.row{display:flex;gap:12px;align-items:center;text-align:left;width:100%;background:var(--surf);border:1px solid var(--line);border-radius:16px;padding:12px 14px;position:relative}
+.row:hover{border-color:var(--accent)}
+.stage .row{background:var(--bg)}
+.row .bd{flex:1;min-width:0}
+.row .hd{font-weight:700;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.row .ds{color:var(--mut);font-size:.9rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.row .seen{width:22px;height:22px;border-radius:50%;flex:none;border:2px solid var(--line);display:grid;place-items:center;color:var(--accent-ink);font-size:.7rem}
+.row .seen.y{background:var(--good);border-color:var(--good)}
+.row .bm{flex:none;border:0;background:none;padding:6px;border-radius:10px;color:var(--mut)}
+.row .bm svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linejoin:round}
+.row .bm[aria-pressed="true"]{color:var(--accent)}
+.row .bm[aria-pressed="true"] svg{fill:var(--accent)}
+.rowwrap{position:relative}
+.rowwrap .bm{position:absolute;right:10px;top:50%;transform:translateY(-50%);border:0;background:none;padding:8px;color:var(--mut);border-radius:10px;z-index:2}
+.rowwrap .bm svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linejoin:round}
+.rowwrap .bm[aria-pressed="true"]{color:var(--accent)}
+.rowwrap .bm[aria-pressed="true"] svg{fill:var(--accent)}
+.rowwrap .row{padding-right:48px}
+.sits{display:flex;flex-wrap:wrap;gap:8px}
+.sits button{border:1px solid var(--line);background:var(--surf);border-radius:14px;padding:10px 14px;font-weight:600;text-align:left}
+.sits button:hover{border-color:var(--accent);color:var(--accent)}
+.tgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.tc{background:var(--t);color:var(--ink);border:0;border-radius:22px;padding:16px;text-align:left;display:grid;gap:10px;align-content:space-between;min-height:158px;position:relative;overflow:hidden}
+.tc .glyph{width:38px;height:38px;border-radius:12px;background:var(--surf);display:grid;place-items:center;color:var(--a)}
+.tc .glyph svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tc h3{font-size:1.1rem}
+.tc p{font-size:.86rem;color:var(--ink);opacity:.78}
+.tc .pg{height:6px;border-radius:6px;background:rgba(255,255,255,.55);overflow:hidden}
+:root[data-theme="dark"] .tc .pg{background:rgba(255,255,255,.14)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tc .pg{background:rgba(255,255,255,.14)}}
+.tc .pg i{display:block;height:100%;background:var(--a);border-radius:6px}
+.tc .ct{font-size:.78rem;font-weight:700;color:var(--a)}
+.strip{display:grid;gap:12px}
+.wod{display:grid;gap:6px}
+.wod h3{font-size:1.5rem}
+
+/* browse */
+.bhead{display:grid;gap:6px;margin-bottom:14px}
+.bhead h1{font-size:clamp(1.7rem,5vw,2.4rem)}
+.banner{background:var(--t);border-radius:24px;padding:20px;display:grid;gap:6px;margin-bottom:14px}
+.banner h1{font-size:clamp(1.7rem,5vw,2.4rem)}
+.banner p{max-width:56ch;opacity:.85}
+.banner .eyebrow{color:var(--a)}
+.fbar{position:sticky;top:calc(env(safe-area-inset-top,0px) + 63px);z-index:20;background:var(--bg);padding-block:8px;display:grid;gap:8px}
+.fbar .find{height:40px;border-radius:12px;border:1px solid var(--line);background:var(--surf);padding:0 14px;width:100%}
+.letter{font:800 .8rem var(--f-head);color:var(--mut);padding:10px 4px 2px;letter-spacing:.08em}
+.count{color:var(--mut);font-size:.88rem;padding:4px 2px}
+.empty{padding:30px 10px;text-align:center;color:var(--mut)}
+
+/* sheet */
+.ov{position:fixed;inset:0;z-index:100;background:rgba(15,18,30,.5);display:none;align-items:flex-end;justify-content:center}
+.ov.on{display:flex}
+.sheet{background:var(--bg);width:100%;max-width:680px;max-height:92vh;border-radius:26px 26px 0 0;display:flex;flex-direction:column;overflow:hidden;animation:up .22s ease-out}
+@keyframes up{from{transform:translateY(24px);opacity:.4}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.sheet{animation:none}.path .dot{transition:none}html{scroll-behavior:auto}}
+.sh{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:14px 16px 10px max(16px,env(safe-area-inset-left,0px));background:var(--surf);border-bottom:1px solid var(--line)}
+.sh .l{display:flex;gap:10px;align-items:center;min-width:0}
+.sh .x{border:0;background:var(--surf2);width:36px;height:36px;border-radius:50%;font-size:1.1rem;flex:none}
+.sb{overflow:auto;padding:18px max(16px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:grid;gap:16px;align-content:start}
+.sb h2{font-size:1.7rem}
+.sb .lead{font-size:1.08rem}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.pair{display:grid;gap:10px}
+.pair>div{border-radius:16px;padding:14px}
+.pair .no{background:var(--bad-soft)}.pair .yes{background:var(--good-soft)}
+.pair b{display:block;font-size:.74rem;letter-spacing:.07em;text-transform:uppercase;margin-bottom:4px}
+.pair .no b{color:var(--bad)}.pair .yes b{color:var(--good)}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.steps button{display:flex;gap:12px;text-align:left;width:100%;background:var(--surf);border:1px solid var(--line);border-radius:16px;padding:12px 14px;align-items:flex-start}
+.steps .n{flex:none;width:28px;height:28px;border-radius:50%;background:var(--surf2);display:grid;place-items:center;font:800 .82rem var(--f-head)}
+.steps button[aria-pressed="true"]{background:var(--good-soft);border-color:var(--good)}
+.steps button[aria-pressed="true"] .n{background:var(--good);color:var(--accent-ink)}
+.steps button[aria-pressed="true"] span:last-child{text-decoration:line-through;opacity:.7}
+.meter{height:8px;border-radius:8px;background:var(--surf2);overflow:hidden}
+.meter i{display:block;height:100%;background:var(--good);border-radius:8px;transition:width .25s}
+.kv{display:grid;gap:12px}
+.kv h4{font-size:.78rem;letter-spacing:.07em;text-transform:uppercase;color:var(--mut);font-family:var(--f-body);margin-bottom:3px}
+.field{display:grid;gap:5px}
+.field label{font-weight:700;font-size:.88rem}
+.field input,.field textarea{border:1px solid var(--line);border-radius:12px;background:var(--surf);padding:10px 12px;width:100%}
+.field textarea{min-height:92px;resize:vertical}
+.prev{background:var(--surf);border:1px dashed var(--line);border-radius:16px;padding:14px;white-space:pre-wrap}
+.prev mark{background:var(--accent-soft);color:var(--accent);border-radius:4px;padding:0 3px}
+.lad{display:grid;gap:8px}
+.lad button{text-align:left;background:var(--surf);border:1px solid var(--line);border-radius:16px;padding:12px 14px;display:grid;gap:2px}
+.lad button[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent)}
+.lad small{color:var(--mut)}
+.dr{display:grid;gap:8px}
+.dr>div{background:var(--surf);border:1px solid var(--line);border-radius:14px;padding:11px 14px}
+.dr b{display:block}
+.dl{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.dl li{padding-left:22px;position:relative}
+.dl li::before{content:"";position:absolute;left:4px;top:.65em;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.ctcbox{display:grid;gap:14px}
+.ctcbox .in{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.range{display:grid;gap:4px}
+.range input{width:100%;accent-color:var(--accent)}
+.big{font:800 2.2rem var(--f-head);font-variant-numeric:tabular-nums}
+.leg{display:grid;gap:6px;list-style:none;margin:0;padding:0}
+.leg li{display:flex;gap:8px;align-items:center;font-size:.92rem}
+.leg li span:nth-child(2){flex:1}
+.leg li span:last-child{font-variant-numeric:tabular-nums}
+.leg i{width:12px;height:12px;border-radius:4px;flex:none}
+.bar{display:flex;height:16px;border-radius:10px;overflow:hidden;background:var(--surf2)}
+.bar i{display:block;height:100%}
+.wins li{background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:9px 12px;display:flex;gap:8px;justify-content:space-between;align-items:flex-start}
+.wins{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.wins button{border:0;background:none;color:var(--mut);padding:0 4px}
+
+/* practice */
+.seg{display:inline-flex;background:var(--surf2);border-radius:999px;padding:4px;gap:2px}
+.seg button{border:0;background:none;padding:8px 18px;border-radius:999px;font-weight:700;color:var(--mut)}
+.seg button[aria-pressed="true"]{background:var(--surf);color:var(--ink);box-shadow:var(--shadow)}
+.fc{perspective:1000px;margin-block:6px}
+.fci{position:relative;min-height:240px;transform-style:preserve-3d;transition:transform .45s;cursor:pointer;width:100%;border:0;background:none;padding:0;display:block}
+.fc.flip .fci{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:24px;padding:22px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:grid;align-content:center;gap:10px;text-align:left}
+.face.f{background:var(--t);color:var(--ink)}
+.face.f h3{font-size:2rem}
+.face.b{background:var(--surf);border:1px solid var(--line);transform:rotateY(180deg)}
+.face .hint{font-size:.82rem;color:var(--mut);font-weight:700}
+.face.b .eg{color:var(--mut);font-size:.95rem}
+@media (prefers-reduced-motion:reduce){.fci{transition:none}}
+.fa{display:flex;gap:10px;justify-content:center;margin-top:12px}
+.q h3{font-size:1.35rem;margin-block:6px 14px}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;background:var(--surf);border:1px solid var(--line);border-radius:16px;padding:13px 15px}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt.ok{background:var(--good-soft);border-color:var(--good)}
+.opt.no{background:var(--bad-soft);border-color:var(--bad)}
+.why{background:var(--surf2);border-radius:14px;padding:12px 14px;margin-top:12px}
+
+/* me */
+.stat{display:grid;gap:10px}
+.prow{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center}
+.prow .meter i{background:var(--a)}
+.prow .dotc{width:12px;height:12px;border-radius:4px;background:var(--a)}
+.toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:700;z-index:120;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.on{opacity:1}
+
+@media (min-width:760px){
+  body{padding-bottom:0}
+  .bn{display:none}
+  .dn{display:flex}
+  .top .wrap{flex-wrap:nowrap}
+  .sbox{flex:1 1 auto;max-width:420px;margin-left:auto}
+  .tgrid{grid-template-columns:repeat(3,1fr)}
+  .strip{grid-template-columns:1.3fr 1fr}
+  .ov{align-items:center}
+  .sheet{border-radius:26px;max-height:88vh}
+  .fbar{top:calc(env(safe-area-inset-top,0px) + 62px)}
+  .pair{grid-template-columns:1fr 1fr}
+  .toast{bottom:28px}
+  .stage .list{grid-template-columns:1fr 1fr}
+}
+@media (max-width:420px){
+  .path button{font-size:.76rem}.path .dot{width:38px;height:38px}.path::before{top:18px}
+}
+
+/* ===== App-store layout: blue app bar, category rail, icon-tile grid ===== */
+:root,:root[data-theme="light"]{
+  --bg:#EEF1F8;--surf:#FFFFFF;--surf2:#E6EAF5;--ink:#1A2036;--mut:#5C647C;--line:#DCE1EE;
+  --accent:#2341D6;--accent-ink:#FFFFFF;--accent-soft:#E0E6FF;--bar:56px;--shadow:0 1px 2px rgba(26,32,54,.06),0 6px 20px rgba(26,32,54,.06);
+  --t1:#FFE3D6;--a1:#B44A22;--t2:#D7F3E3;--a2:#1F7A4D;--t3:#D7E7FB;--a3:#2A62B5;
+  --t4:#FFF1C6;--a4:#8A6200;--t5:#E6DDFB;--a5:#5E42BF;--t6:#FADCEA;--a6:#B13A6C;
+  --f-head:"Figtree",system-ui,sans-serif;--f-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;color-scheme:light}
+body{font-family:var(--f-body);padding-bottom:24px;font-size:16px}
+h1,h2,h3,h4{font-weight:800;letter-spacing:-.015em}
+.bn,.dn{display:none!important}
+body::before{background:var(--accent)}
+.appbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:60;background:var(--accent);color:#fff;height:var(--bar)}
+.appbar .wrap{height:100%;display:flex;align-items:center;gap:12px}
+.lg{width:38px;height:38px;border-radius:12px;background:#fff;border:0;display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:8px;flex:none}
+.lg i{border-radius:4px;display:block}
+.lg i:nth-child(1){background:#2341D6}.lg i:nth-child(2){background:#8FB6F5}.lg i:nth-child(3){background:#F3A98A}.lg i:nth-child(4){background:#2341D6}
+.appbar h1{flex:1;font-size:1.05rem;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0}
+.ab{width:40px;height:40px;border-radius:12px;border:0;background:rgba(255,255,255,.18);color:#fff;display:grid;place-items:center;position:relative;flex:none}
+.ab svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round}
+.ab b{position:absolute;top:-4px;right:-4px;background:#fff;color:var(--accent);font-size:.68rem;border-radius:99px;min-width:19px;height:19px;display:grid;place-items:center;padding:0 5px}
+.sbar{display:none;background:var(--surf);border-bottom:1px solid var(--line);position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--bar));z-index:55}
+.sbar.on{display:block}
+.sbar .wrap{padding-block:10px}
+.sbox{position:relative;max-width:none}
+.sbox input{width:100%;height:46px;border-radius:14px;border:1px solid var(--line);background:var(--surf2);padding:0 16px 0 44px;outline:none}
+.sbox input:focus{border-color:var(--accent);background:#fff}
+.sbox>svg{position:absolute;left:14px;top:12px;width:20px;height:20px;stroke:var(--mut);fill:none;stroke-width:2;stroke-linecap:round}
+.res{top:52px}
+.shell{display:flex;gap:14px;align-items:flex-start;padding-block:14px 8px}
+.rail2{flex:none;width:76px;background:var(--surf);border-radius:22px;padding:8px 4px;display:grid;gap:2px;position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--bar) + 14px);max-height:calc(100vh - var(--bar) - 28px);overflow-y:auto;box-shadow:var(--shadow);scrollbar-width:none}
+.rail2::-webkit-scrollbar{display:none}
+.rb{border:0;background:none;display:grid;justify-items:center;gap:4px;padding:10px 2px;border-radius:16px;color:var(--ink);font-size:.74rem;font-weight:600;line-height:1.1}
+.rb svg{width:27px;height:27px;stroke:var(--a,var(--accent));fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.rb[aria-current="page"]{background:var(--t,var(--accent-soft));font-weight:800}
+.stage0{--a:var(--accent);--t:var(--accent-soft)}
+.content{flex:1;min-width:0}
+.view{display:none}.view.on{display:block}
+.ph{margin:4px 2px 14px}
+.ph h2{font-size:1.3rem}
+.ph p{color:var(--mut);font-size:.92rem}
+.tgrid2,.pgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 4px}
+.gh{grid-column:1/-1;display:flex;align-items:baseline;gap:8px;margin:14px 4px 2px;font-size:.78rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--mut)}
+.gh:first-child{margin-top:2px}
+.gh em{font-style:normal;font-weight:600;letter-spacing:0;text-transform:none}
+.tl{display:grid;justify-items:center;align-content:start;gap:6px;background:none;border:0;padding:8px 2px;text-align:center;color:var(--ink);border-radius:16px}
+.tl:hover .ic{transform:translateY(-2px)}
+.tl .ic{width:54px;height:54px;border-radius:17px;background:var(--t);color:var(--a);display:grid;place-items:center;position:relative;transition:transform .15s;box-shadow:inset 0 -3px 0 rgba(0,0,0,.05)}
+.tl .ic svg{width:28px;height:28px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tl .ic .wd{font:800 1rem/1 var(--f-head);letter-spacing:-.03em;padding:0 4px;text-align:center;overflow:hidden;text-wrap:balance}
+.tl .ic .wd.s{font-size:.8rem}.tl .ic .wd.l{font-size:.65rem;line-height:1.05}
+.tl .nm{font-size:.8rem;line-height:1.22;font-weight:500;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-width:100%;word-break:break-word}
+.tl .ok{position:absolute;right:-3px;top:-3px;width:17px;height:17px;border-radius:50%;background:var(--good);color:#fff;font-size:.66rem;display:grid;place-items:center;font-weight:800;border:2px solid var(--bg)}
+.tl .sv{position:absolute;left:-3px;top:-3px;width:17px;height:17px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;border:2px solid var(--bg)}
+.tl .sv svg{width:10px;height:10px;stroke:#fff;fill:#fff;stroke-width:2}
+@media (prefers-reduced-motion:reduce){.tl .ic{transition:none}.tl:hover .ic{transform:none}}
+.sc{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;margin-bottom:6px}
+.sc::-webkit-scrollbar{display:none}
+.sc .chip{flex:none;font-weight:700}
+.sc .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.note2{color:var(--mut);font-size:.9rem;margin:2px 4px 6px}
+.panel{background:var(--surf);border-radius:22px;padding:16px;box-shadow:var(--shadow);margin-top:16px}
+.panel h3{font-size:1.1rem;margin-bottom:10px}
+.sits{display:flex;flex-wrap:wrap;gap:8px}
+.sits button{border:1px solid var(--line);background:var(--surf);border-radius:99px;padding:9px 14px;font-weight:600;font-size:.88rem}
+.sits button:hover{border-color:var(--accent);color:var(--accent)}
+.duo{display:grid;gap:12px;margin-top:16px}
+.duo .card{border-radius:22px}
+.card,.sheet{box-shadow:none}
+.btn{background:var(--accent);border-radius:14px}.btn.ghost{background:var(--surf2)}
+.chip{border-radius:99px}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.seg{background:var(--surf2);border-radius:14px}.seg button{border-radius:11px}
+.seg button[aria-pressed="true"]{background:var(--surf)}
+.sheet{border-radius:26px 26px 0 0}
+#v-practice>*,#v-me>*{max-width:none}
+.prow .meter i{background:var(--a)}
+@media (min-width:760px){
+  .rail2{width:96px}.rb{font-size:.8rem}
+  .tgrid2,.pgrid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr))}
+  .duo{grid-template-columns:1fr 1fr}
+  .appbar h1{font-size:1.15rem}
+}
+@media (max-width:420px){.appbar h1{font-size:.98rem}.appbar .wrap{gap:10px}}
+
+/* ===== inner pages ===== */
+.sheet{background:var(--bg);max-width:700px}
+.sh{background:var(--surf)}
+.sb{gap:14px;grid-auto-rows:max-content}
+.sb .hero2{background:var(--t);border-radius:24px;padding:18px;display:flex;gap:16px;align-items:center;position:relative;clip-path:inset(0 round 24px)}
+.hero2::before{content:"";position:absolute;right:-30px;top:-40px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.4)}
+.hero2>*{position:relative}
+.hic{width:68px;height:68px;border-radius:21px;background:var(--surf);color:var(--a);display:grid;place-items:center;flex:none}
+.hic svg{width:36px;height:36px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.hic .wd{font:800 1.15rem/1 var(--f-head);letter-spacing:-.03em;text-align:center;padding:0 4px}
+.hic .wd.s{font-size:.95rem}.hic .wd.l{font-size:.74rem}
+.sb .hero2 h2{font-size:1.55rem;line-height:1.1;color:var(--ink)}
+.hm{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.hm span{background:rgba(255,255,255,.75);border-radius:99px;padding:3px 11px;font-size:.76rem;font-weight:700;color:var(--a)}
+.sb .lead{font-size:1.05rem;color:var(--ink)}
+.sb .card{box-shadow:var(--shadow);border:0}
+.defn{background:var(--surf);border-radius:20px;padding:18px;box-shadow:var(--shadow)}
+.defn p{font-size:1.15rem;line-height:1.5;margin-top:4px}
+.bubble{background:var(--t);border-radius:20px 20px 20px 6px;padding:16px 18px;position:relative}
+.bubble .eyebrow{color:var(--a)}
+.bubble p{font-size:1.05rem;font-weight:600;margin-top:4px;line-height:1.45}
+.kv2{display:grid;gap:8px}
+.kv2 p{line-height:1.55}
+.kh{display:flex;gap:10px;align-items:center}
+.kh i{width:34px;height:34px;border-radius:11px;background:var(--t);color:var(--a);display:grid;place-items:center;flex:none}
+.kh svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.kh h4{font-size:.78rem;letter-spacing:.07em;text-transform:uppercase;color:var(--ink);font-family:var(--f-body);margin:0}
+.sb .acts .ty.tn{background:var(--surf);color:var(--ink);border:1px solid var(--line);border-radius:99px;padding:5px 11px;font-size:.72rem}
+.steps button{border:0;box-shadow:var(--shadow);border-radius:16px;padding:14px}
+.steps .n{width:32px;height:32px;background:var(--t);color:var(--a);font-size:.9rem}
+.steps button[aria-pressed="true"]{background:var(--good-soft);box-shadow:none}
+.pair>div{border-radius:18px;padding:16px 16px 16px 54px;position:relative}
+.pair>div::before{content:"";position:absolute;left:14px;top:14px;width:28px;height:28px;border-radius:50%;background:var(--surf)}
+.pair>div::after{position:absolute;left:14px;top:14px;width:28px;height:28px;display:grid;place-items:center;font-weight:800;font-size:.95rem}
+.pair .no::after{content:"✕";color:var(--bad)}
+.pair .yes::after{content:"✓";color:var(--good)}
+.pair{gap:12px}
+.lad{gap:0}
+.lad button{border:0;box-shadow:var(--shadow);border-radius:18px;margin-bottom:10px;grid-template-columns:auto 1fr;gap:14px;align-items:center;position:relative}
+.lad .lv{width:38px;height:38px;border-radius:50%;background:var(--t);color:var(--a);display:grid;place-items:center;font:800 1rem var(--f-head);font-style:normal}
+.lad .lt{display:grid;gap:2px}
+.lad button[aria-pressed="true"]{background:var(--surf);outline:2px solid var(--accent)}
+.lad button[aria-pressed="true"] .lv{background:var(--accent);color:#fff}
+.dr{gap:10px}
+.dr>div{display:flex;gap:14px;align-items:flex-start;border:0;box-shadow:var(--shadow);border-radius:18px;padding:14px 16px}
+.dr .bx{flex:none;width:34px;height:34px;border-radius:11px;background:var(--t);color:var(--a);display:grid;place-items:center;font:800 .95rem var(--f-head);font-style:normal}
+.dr>div:nth-child(6n+2) .bx{background:var(--t2);color:var(--a2)}.dr>div:nth-child(6n+3) .bx{background:var(--t3);color:var(--a3)}
+.dr>div:nth-child(6n+4) .bx{background:var(--t4);color:var(--a4)}.dr>div:nth-child(6n+5) .bx{background:var(--t5);color:var(--a5)}.dr>div:nth-child(6n+6) .bx{background:var(--t6);color:var(--a6)}
+.dr b{display:block;margin-bottom:1px}
+.dl{gap:10px}
+.dl li{background:var(--surf);border-radius:16px;padding:14px 16px 14px 52px;box-shadow:var(--shadow)}
+.dl li::before{left:14px;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:50%;background:var(--good-soft);content:"✓";color:var(--good);display:grid;place-items:center;font-weight:800;font-size:.8rem}
+.dl.bad li::before{content:"✕";background:var(--bad-soft);color:var(--bad)}
+.field input,.field textarea{border-radius:14px;border:1px solid var(--line);background:var(--surf);padding:12px 14px}
+.field input:focus,.field textarea:focus{outline:2px solid var(--accent);border-color:transparent}
+.prev{background:var(--surf);border:0;border-radius:20px 20px 20px 6px;box-shadow:var(--shadow);padding:34px 18px 16px;position:relative;line-height:1.6}
+.prev::before{content:"PREVIEW";position:absolute;left:18px;top:12px;font-size:.66rem;font-weight:800;letter-spacing:.1em;color:var(--mut)}
+.prev mark{background:var(--t);color:var(--a);padding:1px 5px;border-radius:6px;font-weight:700}
+.big{font-weight:800}
+.bar{height:14px}
+.wins li{border:0;box-shadow:var(--shadow);border-radius:14px}
+.acts.fix{position:sticky;bottom:calc(-1 * (24px + env(safe-area-inset-bottom,0px)));margin:4px -16px calc(-1 * (24px + env(safe-area-inset-bottom,0px)));padding:12px 16px calc(14px + env(safe-area-inset-bottom,0px));background:var(--surf);border-top:1px solid var(--line);z-index:3;display:flex;gap:10px}
+.acts.fix .btn{flex:1;font-size:.92rem;padding:12px}
+.acts.fix .btn[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent)}
+.sb .eyebrow{font-weight:800}
+.sb .note{font-size:.88rem}
+.sb .why{border-radius:16px}
+
+/* ===== Corporate theme ===== */
+:root,:root[data-theme="light"]{
+  --bg:#F0F3F8;--surf:#FFFFFF;--surf2:#E6EBF3;--ink:#0F1B2D;--mut:#566178;--line:#D6DDE9;
+  --navy:#0B1F3F;--navy2:#17386B;--accent:#1F4FB8;--accent-soft:#E1E9FA;
+  --t1:#E4ECF8;--a1:#1F4FB8;--t2:#DDEFEE;--a2:#0E6F73;--t3:#E8E4F5;--a3:#4B3FA0;
+  --t4:#F4ECD9;--a4:#8A5A00;--t5:#E2E8F0;--a5:#38506E;--t6:#F5E3E6;--a6:#9B2F48;
+  --good:#1E7B5A;--good-soft:#DDF0E8;--bad:#A8383A;--bad-soft:#F7E2E2;
+  --f-head:"IBM Plex Sans",system-ui,sans-serif;--f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --shadow:0 1px 2px rgba(11,31,63,.06),0 4px 14px rgba(11,31,63,.05)}
+body{background-color:var(--bg);background-image:linear-gradient(rgba(11,31,63,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(11,31,63,.028) 1px,transparent 1px);background-size:28px 28px;font-size:15.5px}
+body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:150px;background:var(--sky) repeat-x left bottom/auto 150px;pointer-events:none;z-index:-1}
+h1,h2,h3,h4{font-weight:700;letter-spacing:-.01em}
+body::before{background:var(--navy)}
+.appbar{background-color:var(--navy);background-image:var(--barsky),linear-gradient(120deg,var(--navy),var(--navy2));background-repeat:no-repeat;background-position:right bottom,center;background-size:auto 100%,cover;border-bottom:3px solid #3C6FD8}
+.appbar h1{font-weight:700;letter-spacing:.01em}
+.lg{background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231F4FB8' stroke-width='1.8' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpath d='M4 21V6l7-3v18M11 9l9 3v9M2 21h20M7 9h1M7 13h1M7 17h1M15 14h1M15 18h1'/%3E%3C/svg%3E") center/26px no-repeat;border-radius:10px}
+.ab{border-radius:10px;background:rgba(255,255,255,.14)}
+.rail2{border-radius:14px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.rb{border-radius:10px;font-weight:600}
+.rb[aria-current="page"]{background:var(--t,var(--accent-soft));box-shadow:inset 3px 0 0 var(--a,var(--accent))}
+.tl .ic{width:54px;height:54px;border-radius:14px;box-shadow:none;border:1px solid rgba(11,31,63,.07)}
+.tl .nm{font-weight:500}
+.tl .ic .wd{font-weight:700}
+.btn{border-radius:8px;background:var(--navy);font-weight:600}.btn.ghost{background:var(--surf2);color:var(--ink)}
+.chip{border-radius:8px;font-weight:600}
+.chip[aria-pressed="true"],.sc .chip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.card,.panel,.defn,.dr>div,.dl li,.steps .st,.lad button,.wins li,.prev,.kv2{border-radius:12px}
+.panel,.card{border-radius:14px}
+.sheet{border-radius:18px 18px 0 0}
+.sh{border-bottom:1px solid var(--line)}
+.sits button{border-radius:8px;font-weight:600}
+.opt{border-radius:10px}
+.seg{border-radius:10px}.seg button{border-radius:8px}
+.fc .face{border-radius:14px}
+.acts.fix .btn{border-radius:8px}
+.acts.fix .btn[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent)}
+.sb .eyebrow,.eyebrow{letter-spacing:.09em}
+/* banners with illustrated backgrounds */
+.ph.tbn{background-color:var(--t,var(--accent-soft));background-image:var(--scene);background-repeat:no-repeat;background-position:right center;background-size:auto 118%;border-radius:14px;padding:18px 16px;margin:2px 0 14px;border:1px solid rgba(11,31,63,.06);min-height:96px;display:grid;align-content:center;gap:2px}
+.ph.tbn h2{font-size:1.35rem;color:var(--ink)}
+.ph.tbn p{color:var(--ink);opacity:.75;max-width:30ch;font-size:.9rem}
+.sb .hero2{background-color:var(--t);background-image:var(--scene);background-repeat:no-repeat;background-position:right center;background-size:auto 125%;border-radius:14px;clip-path:none;border:1px solid rgba(11,31,63,.06)}
+.hero2::before{display:none}
+.hic{border-radius:14px;box-shadow:var(--shadow)}
+.hm span{border-radius:6px;background:rgba(255,255,255,.8)}
+.sb .hero2 h2{font-weight:700}
+/* steps and lists without status marks */
+.steps .st{display:flex;gap:12px;text-align:left;width:100%;background:var(--surf);padding:14px;align-items:flex-start;box-shadow:var(--shadow)}
+.steps .n{background:var(--t);color:var(--a);border-radius:8px}
+.dl li::before{content:"";left:18px;top:50%;transform:translateY(-50%);width:8px;height:8px;border-radius:2px;background:var(--accent);display:block;font-size:0}
+.dl.bad li::before{content:"";background:var(--bad)}
+.pair .yes::after{content:"→"}
+.pair>div::before{border-radius:8px}
+.lad .lv,.dr .bx,.kh i{border-radius:8px}
+.lad button[aria-pressed="true"]{outline:2px solid var(--navy)}
+.lad button[aria-pressed="true"] .lv{background:var(--navy)}
+@media (min-width:760px){.ph.tbn{min-height:112px;padding:22px 24px}.ph.tbn h2{font-size:1.6rem}.ph.tbn p{max-width:46ch}}
+@media (max-width:759px){
+  .ph.tbn{padding-right:38%;background-position:calc(100% + 56px) center;background-size:auto 112%}
+  .ph.tbn p{max-width:none}
+  .sb .hero2{background-position:calc(100% + 70px) center;background-size:auto 112%}
+}
+.sh .x:focus-visible{outline:2px solid var(--navy);outline-offset:0}
+.ph.tbn{background-image:linear-gradient(90deg,var(--t,var(--accent-soft)) 0,var(--t,var(--accent-soft)) 52%,transparent 78%),var(--scene)}
+.sb .hero2{background-image:linear-gradient(90deg,var(--t) 0,var(--t) 58%,transparent 84%),var(--scene)}
+@media (max-width:759px){.ph.tbn{background-position:0 0,calc(100% + 20px) center;background-size:100% 100%,auto 112%;padding-right:16px}.sb .hero2{background-position:0 0,calc(100% + 30px) center;background-size:100% 100%,auto 112%}}
+@media (max-width:759px){.ph.tbn p{max-width:62%}}
+
+.htabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--bar));z-index:40;background:var(--bg);border-bottom:1px solid var(--line);margin:0 0 12px;padding-top:2px}
+.htabs::-webkit-scrollbar{display:none}
+.htabs button{flex:none;border:0;background:none;padding:12px 14px;font-weight:600;font-size:.92rem;color:var(--mut);position:relative;display:flex;gap:7px;align-items:center;white-space:nowrap}
+.htabs button em{font-style:normal;font-size:.72rem;font-weight:700;background:var(--surf2);color:var(--mut);border-radius:6px;padding:1px 7px}
+.htabs button[aria-selected="true"]{color:var(--ink);font-weight:700}
+.htabs button[aria-selected="true"] em{background:var(--navy);color:#fff}
+.htabs button[aria-selected="true"]::after{content:"";position:absolute;left:8px;right:8px;bottom:-1px;height:3px;border-radius:3px 3px 0 0;background:var(--a,var(--accent))}
+
+/* collapsible rail */
+.railwrap{flex:none;width:56px;align-self:stretch;position:relative;z-index:45}
+.rail2{width:56px;padding:6px 4px;overflow-x:hidden;transition:width .18s ease,box-shadow .18s;display:grid;gap:2px;align-content:start}
+.rail2.open{width:176px;box-shadow:0 10px 30px rgba(11,31,63,.18)}
+.rail2 .rb{display:flex;align-items:center;justify-content:center;gap:12px;padding:11px 0;width:100%;text-align:left;font-size:.9rem;font-weight:600;border-radius:10px;white-space:nowrap;position:relative}
+.rail2 .rb svg{width:24px;height:24px;flex:none}
+.rail2 .rb span{display:none}
+.rail2.open .rb{justify-content:flex-start;padding:11px 12px}
+.rail2.open .rb span{display:inline}
+.rail2 .tg{color:var(--mut);border-bottom:1px solid var(--line);border-radius:10px 10px 0 0;margin-bottom:4px}
+.rail2 .tg svg{stroke:var(--ink)}
+.rail2 .rb[aria-current="page"]{box-shadow:inset 3px 0 0 var(--a,var(--accent))}
+@media (prefers-reduced-motion:reduce){.rail2{transition:none}}
+@media (min-width:760px){.railwrap{width:60px}.rail2{width:60px}.rail2.open{width:190px}}
+.htabs{margin-top:-2px}
+#v-practice>.seg,#v-me .pgrid{margin-top:4px}
+
+/* no numbers */
+.steps .n:empty,.dr .bx:empty,.lad .lv:empty{display:grid;place-items:center}
+.steps .n:empty::after,.dr .bx:empty::after,.lad .lv:empty::after{content:"";width:9px;height:9px;border-radius:3px;background:currentColor}
+.htabs button em{display:none}
+.ab b{min-width:0;width:11px;height:11px;padding:0;top:2px;right:2px;border:2px solid var(--navy);background:#6EA2FF}
+
+/* ===== interactive inner pages ===== */
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.sb>*{animation:rise .35s both}
+.sb>*:nth-child(2){animation-delay:.05s}.sb>*:nth-child(3){animation-delay:.1s}.sb>*:nth-child(4){animation-delay:.15s}.sb>*:nth-child(n+5){animation-delay:.2s}
+.ipane{display:grid;gap:14px;animation:rise .3s both}
+.ipane[hidden]{display:none}
+@media (prefers-reduced-motion:reduce){.sb>*,.ipane{animation:none}}
+.itw{display:grid;gap:14px}
+.itabs{display:flex;gap:4px;background:var(--surf2);border-radius:12px;padding:4px;position:sticky;top:0;z-index:4}
+.itabs button{flex:1;border:0;background:none;border-radius:9px;padding:10px 6px;font-weight:600;font-size:.88rem;color:var(--mut);transition:background .15s,color .15s}
+.itabs button[aria-selected="true"]{background:var(--surf);color:var(--ink);box-shadow:var(--shadow);font-weight:700}
+.tlv{list-style:none;margin:0;padding:0 0 0 30px;display:grid;gap:10px;position:relative}
+.tlv::before{content:"";position:absolute;left:11px;top:14px;bottom:14px;width:2px;background:linear-gradient(var(--a,var(--accent)),var(--line))}
+.tli{background:var(--surf);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);position:relative;transition:transform .15s}
+.tli:hover{transform:translateX(3px)}
+.tli::before{content:"";position:absolute;left:-26px;top:50%;transform:translateY(-50%);width:14px;height:14px;border-radius:50%;background:var(--surf);border:3px solid var(--a,var(--accent))}
+.sbs{background:var(--t);border-radius:16px;padding:22px 18px;display:grid;gap:18px;text-align:center}
+.sbsT{font-size:1.3rem;font-weight:600;line-height:1.4;min-height:5.6em;display:grid;place-items:center}
+.dots{display:flex;gap:6px;justify-content:center}
+.dots i{width:8px;height:8px;border-radius:99px;background:rgba(11,31,63,.2);transition:width .2s,background .2s}
+.dots i.on{width:24px;background:var(--a,var(--accent))}
+.sbs .acts{justify-content:center}
+.sbs .btn:disabled{opacity:.4}
+.kh2{display:flex;gap:10px;align-items:center;font-weight:700}
+.kh2 i{width:34px;height:34px;border-radius:9px;background:var(--t);color:var(--a);display:grid;place-items:center;flex:none}
+.kh2 svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tips2{display:grid;gap:10px}
+.tip2{display:flex;gap:12px;align-items:flex-start;text-align:left;background:var(--surf);border:0;border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);transition:transform .15s,box-shadow .15s;width:100%;animation:rise .35s both}
+.tip2:nth-child(2){animation-delay:.05s}.tip2:nth-child(3){animation-delay:.1s}.tip2:nth-child(n+4){animation-delay:.15s}
+.tip2:hover{transform:translateY(-2px)}
+.tip2:active{transform:scale(.99)}
+.tip2 i{width:30px;height:30px;border-radius:8px;background:var(--t);color:var(--a);display:grid;place-items:center;flex:none}
+.tip2 svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.tip2 span{line-height:1.5;padding-top:3px}
+.rv{display:grid;gap:14px}
+.rvY{animation:rise .3s both}
+.rvY[hidden]{display:none}
+.pair .yes{background:var(--good-soft)}
+.fgrid{display:grid;gap:10px}
+@media (min-width:560px){.fgrid{grid-template-columns:1fr 1fr}}
+.prev.mail{border-radius:12px 12px 12px 12px}
+.prev .subj{font-weight:700;padding-bottom:8px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+.prev .sig{margin-top:14px;color:var(--mut)}
+.dv .rate{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.rate button{border:1px solid var(--line);background:var(--surf);border-radius:8px;padding:6px 12px;font-size:.82rem;font-weight:600}
+.rate button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.focus{background:var(--t);border-radius:14px;padding:16px}
+.dr .dv{flex-wrap:nowrap}
+.card.kv2{padding:16px}
+.opt{transition:transform .12s}.opt:active:not(:disabled){transform:scale(.99)}
+
+/* ===== help button ===== */
+.ask{position:fixed;right:14px;bottom:18px;z-index:40;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.askb{display:flex;align-items:center;gap:8px;border:0;background:var(--navy);color:#fff;border-radius:99px;padding:12px 16px 12px 12px;font-weight:700;font-size:.9rem;box-shadow:0 8px 24px rgba(11,31,63,.3);transition:transform .15s}
+.askb:hover{transform:translateY(-2px)}.askb:active{transform:scale(.97)}
+.askb svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.askp{width:min(320px,calc(100vw - 28px));max-height:min(70vh,520px);overflow:auto;background:var(--surf);border-radius:16px;padding:16px;box-shadow:0 12px 40px rgba(11,31,63,.28);animation:rise .25s both}
+.askp[hidden]{display:none}
+.askh{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.askx{border:0;background:var(--surf2);border-radius:50%;width:30px;height:30px;display:grid;place-items:center}
+.askx svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round}
+.askp .sits{margin-top:10px}
+#ov.open~.ask,body:has(#ov.open) .ask{display:none}
+@media (max-width:480px){.askb span{display:none}.askb{padding:12px}}
+
+/* ===== screen headers ===== */
+.vh{display:block;overflow:visible;padding:2px 2px 12px;margin:0;background:none;gap:0}
+.vh h2{margin:0;font:700 1.25rem var(--f-body);color:var(--navy)}
+.vh p{margin:2px 0 0;color:var(--mut);font-size:.88rem}
+.vh.t1,.vh.t2,.vh.t3,.vh.t4,.vh.t5,.vh.t6{border-left:0}
+
+/* ===== hidden rail + hamburger, centred headers ===== */
+.railwrap{width:0;position:static}
+.rail2{display:none;position:fixed;left:10px;top:calc(env(safe-area-inset-top,0px) + var(--bar) + 8px);width:200px;max-height:calc(100vh - var(--bar) - 24px);z-index:60;padding:8px;box-shadow:0 14px 40px rgba(11,31,63,.28);animation:rise .2s both}
+.rail2.open{display:grid;width:200px}
+.rail2 .tg{display:none}
+.rail2 .rb{justify-content:flex-start;padding:11px 12px}
+.rail2 .rb span{display:inline}
+.shell{gap:0}
+.vh{text-align:center;padding:6px 8px 16px}
+.vh h2{font-size:1.4rem}
+.note2{text-align:center}
+
+/* ===== infographic inner pages ===== */
+.itabs{background:var(--t,var(--surf2));border-radius:99px;padding:4px}
+.itabs button{border-radius:99px}
+.itabs button[aria-selected="true"]{background:var(--a,var(--accent));color:#fff;box-shadow:none}
+.flow{display:grid;gap:0}
+.fl{display:flex;gap:14px;align-items:center;background:var(--surf);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow);position:relative;margin-bottom:22px;transition:transform .15s}
+.fl:hover{transform:translateY(-2px)}
+.fl:not(:last-child)::after{content:"";position:absolute;left:30px;bottom:-22px;height:22px;width:2px;background:repeating-linear-gradient(var(--a,var(--accent)) 0 4px,transparent 4px 8px)}
+.fl i{width:44px;height:44px;border-radius:50%;background:var(--t,var(--accent-soft));color:var(--a,var(--accent));display:grid;place-items:center;flex:none;border:2px solid #fff;box-shadow:0 0 0 2px var(--a,var(--accent))}
+.fl svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.fl span{line-height:1.45}
+.fl:last-child{margin-bottom:0}
+.defn.big{background:linear-gradient(135deg,var(--t,var(--accent-soft)),var(--surf));border-radius:18px;padding:20px}
+.defn.big p{font-size:1.15rem}
+.tpls{display:grid;gap:10px}
+.tpl{background:var(--surf);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow);border-top:4px solid var(--a,var(--accent));display:grid;gap:6px}
+.tpl p{margin:0;color:var(--mut);font-size:.9rem;line-height:1.45}
+.itabs button{white-space:nowrap;padding:10px 4px;font-size:.84rem}
+</style></head><body>
+<header class="appbar"><div class="wrap">
+  <button class="ab" id="menuBtn" aria-label="Menu" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <button class="lg" id="goHome" aria-label="College to Corporate, start"></button>
+  <h1>College to Corporate</h1>
+  <button class="ab" id="srchBtn" aria-label="Search" aria-expanded="false"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
+  <button class="ab" data-tab="me" aria-label="Saved and progress"><svg viewBox="0 0 24 24"><path d="M6 4h12v17l-6-4-6 4z"/></svg><b id="savedN" hidden>0</b></button>
+</div></header>
+<div class="sbar" id="sbar"><div class="wrap"><div class="sbox"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="q" type="search" placeholder="Search words, guides, tools, templates" autocomplete="off" aria-label="Search"><div class="res" id="res" hidden></div></div></div></div>
+<div class="wrap shell">
+  <div class="railwrap"><nav class="rail2" id="rail" aria-label="Categories"></nav></div>
+  <main class="content">
+    <section class="view" id="v-home"><div class="sc" id="pills" role="group" aria-label="Where are you"></div><p class="note2" id="stageWhy"></p><div class="pgrid" id="picks"></div><div id="homeMore"></div></section>
+    <section class="view" id="v-topic"><div class="htabs" id="htabs" role="tablist" aria-label="Section"></div><div class="pgrid" id="tbody"></div></section>
+    <section class="view" id="v-practice"><div class="vh"><h2>Practice</h2><p>Flashcards and real situations</p></div><div class="seg" id="pseg"><button data-p="cards" aria-pressed="true">Flashcards</button><button data-p="quiz" aria-pressed="false">Situations quiz</button></div><div id="pbody" style="margin-top:16px"></div></section>
+    <section class="view" id="v-me"><div class="vh"><h2>Saved</h2><p>Things you kept for later</p></div><div id="mebody" class="sec" style="margin-top:0"></div></section>
+  </main>
+</div>
+<div class="ov" id="ov" role="dialog" aria-modal="true" aria-labelledby="shT"><div class="sheet"><div class="sh"><div class="l" id="shL"></div><button class="x" id="shX" aria-label="Close">×</button></div><div class="sb" id="shB"></div></div></div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+const XL=[
+["Attendance","Availability","Nobody counts hours at a desk. People notice if you are reachable, on time to meetings, and reply when needed."],
+["Assignment","Deliverable","It has an owner, a due date and someone waiting on it. Late affects other people, not just your marks."],
+["Professor","Manager","Does not teach a syllabus. Sets priorities, removes blockers and writes your review. Manage that relationship."],
+["Exam","Appraisal","No single exam day. Your rating is built from a year of visible work and what people say about it."],
+["Semester","Quarter or sprint","Work is planned in two-week sprints and three-month quarters. Goals reset faster than you expect."],
+["CGPA","Rating","Companies rate delivery, behaviour and impact. After the first job, almost nobody asks for your CGPA."],
+["Group project","Cross-team delivery","Teams with different priorities. You cannot quietly do everyone’s part at night. Align early, escalate clearly."],
+["Viva","Status update or demo","Short and structured: what is done, what is next, what is blocking."],
+["Class notes","Documentation","If it is not written down, it did not happen. Tickets and wikis are how work survives people moving on."],
+["Seniors","Buddy and mentors","An official buddy plus informal mentors. Ask early. Most people are glad to help."],
+["Placement","Probation","The offer is not the finish line. Probation is when the company confirms you."],
+["Plagiarism rule","Confidentiality","Client code, data and documents are confidential. Sharing them casually can end a career."]
+];
+const PLAN=[
+{id:"30",title:"Days 1 to 30",sub:"Learn",items:[
+"Finish all mandatory trainings (security, code of conduct, POSH)",
+"Set up laptop, VPN, MFA and email signature",
+"Ask your manager: what does success look like at 30, 60 and 90 days?",
+"Meet your buddy and book 20 minutes with each teammate",
+"Attend the team rituals: stand-up, planning, retro, status call",
+"Read the project’s top five documents and sketch the flow on one page",
+"Fill your timesheet correctly from week one"]},
+{id:"60",title:"Days 31 to 60",sub:"Contribute",items:[
+"Own one small task end to end, from ticket to closure",
+"Ask for feedback at week six and write down what you hear",
+"Document one thing you struggled to find",
+"Learn who to escalate to for which kind of issue",
+"Start your win log (Grow tab)",
+"Pair with a senior on a real problem"]},
+{id:"90",title:"Days 61 to 90",sub:"Be reliable",items:[
+"Send status updates without being asked",
+"Respond to review comments calmly and fix them quickly",
+"Agree two or three goals with your manager for next quarter",
+"Learn one adjacent skill: testing, SQL, or the client’s domain",
+"Confirm probation expectations and the confirmation timeline",
+"Help the next new joiner with one thing you wish you had known"]}
+];
+const CATS=["All","People & HR","Work","Meetings & email","Money","Tech & projects"];
+const TERMS=[
+["CTC","People & HR","Cost to Company: the total a company spends on you in a year, including parts you never get monthly (employer PF, gratuity, insurance, variable pay).","“6 LPA CTC” does not mean ₹50,000 arrives every month."],
+["In-hand salary","People & HR","What reaches your bank account after deductions such as your PF, professional tax and income tax.","Ask payroll for the monthly in-hand figure before you sign a rental agreement."],
+["Variable pay","People & HR","The part of pay that depends on company, team or personal performance. Not guaranteed. Often paid yearly or quarterly.","Variable was paid at 80% because the company missed its target."],
+["Probation","People & HR","The first months (commonly 3 to 6) when the company checks fit before making you permanent. Leave and notice rules can differ.","You stay on probation until the confirmation letter arrives."],
+["Confirmation","People & HR","The formal letter or email saying probation is over and you are a permanent employee.","Ask your manager what is expected before confirmation."],
+["Notice period","People & HR","How long you must keep working after you resign. Often 30 to 90 days. The offer letter decides.","Read the notice clause before you accept any offer."],
+["Offer vs appointment letter","People & HR","The offer letter says the company wants to hire you, with role and pay. The appointment letter is the formal contract with full terms. Keep both.","Save both PDFs in a personal folder. Banks and landlords may ask."],
+["HRBP","People & HR","HR Business Partner: the HR person assigned to your business unit for policy questions, grievances and career queries.","Check with your HRBP before you apply for a transfer."],
+["Reporting manager","People & HR","The person who assigns your work, reviews it and writes your appraisal.","Your reporting manager approves leave and timesheets."],
+["Skip-level","People & HR","Your manager’s manager. Skip-level meetings are normal and are not “going behind your boss’s back”.","The director holds a skip-level coffee every quarter."],
+["Buddy","People & HR","A peer assigned to help you in the first weeks with the unwritten rules.","Ask your buddy which channels actually matter."],
+["Bench","People & HR","Time between projects when you are employed but not assigned billable work. Use it to learn.","Two weeks on the bench: finish that certification."],
+["Attrition","People & HR","The rate at which employees leave. Companies track it closely, which is why retention talks happen.","Attrition in this team is high, so expect extra work."],
+["PIP","People & HR","Performance Improvement Plan: a formal plan with targets after sustained underperformance. A serious signal.","If you hear PIP, ask for clear written targets."],
+["POSH","People & HR","Prevention of Sexual Harassment: Indian law requiring training and an Internal Committee in workplaces. Treat the training as essential.","Complete the POSH module before your first month ends."],
+["F&F","People & HR","Full and Final settlement: the last payout after you leave, covering salary, leave encashment and deductions.","F&F usually arrives a few weeks after your last day."],
+["Lateral hire","People & HR","Someone hired from another company at an experienced level, as opposed to a campus hire.","Two lateral hires joined the team last month."],
+["Deliverable","Work","A specific output you promised: a report, a module, a test pack.","The deliverable is the signed-off design document."],
+["ETA","Work","Estimated time of arrival: when you expect to finish. Different from the deadline. Warn early if your ETA passes the deadline.","My ETA is Thursday noon; the deadline is Friday."],
+["Stakeholder","Work","Anyone affected by or interested in your work: client, manager, another team, end users.","Keep stakeholders informed before they have to ask."],
+["SLA","Work","Service Level Agreement: the promised response or resolution time.","P1 tickets have a one-hour response SLA."],
+["SOW","Work","Statement of Work: the document that defines a project’s scope, timeline and cost.","That request is outside the SOW, so check with your manager."],
+["Scope creep","Work","Work grows beyond what was agreed, with no change in time or cost. Flag it early.","Three extra reports later, we have scope creep."],
+["Blocker","Work","Something stopping you from progressing. Raise it as soon as you see it.","Waiting on database access is my blocker."],
+["Escalation","Work","Raising an issue to a higher level when it cannot be solved at yours. Done with facts and a clear ask, it is professional, not disloyal.","I escalated the access delay to the infra lead with the impact."],
+["KT","Work","Knowledge Transfer: passing on work and context to a colleague before leave, a role change or exit.","Schedule KT sessions before you go on leave."],
+["RCA","Work","Root Cause Analysis: finding why something broke, not only fixing the symptom.","The RCA found a missing index, not a server fault."],
+["UAT","Work","User Acceptance Testing: business users confirm the system does what they asked for.","UAT sign-off is needed before go-live."],
+["Go-live","Work","The moment a change reaches real users. Also called release or deployment.","Go-live is Saturday at 2 am."],
+["Billable","Work","Time charged to a client. Utilisation is the share of your working time that is billable.","Your utilisation target is 80%."],
+["Onsite / offshore","Work","Onsite: working at the client’s location. Offshore: delivery team in another country, for example India.","Offshore picks up the ticket when onsite signs off."],
+["BAU","Work","Business as usual: routine ongoing work, as opposed to a project.","Expect BAU tasks alongside the migration."],
+["Runbook / SOP","Work","A step-by-step documented procedure for a recurring task or an incident.","Follow the runbook for the restart, and update it if it is wrong."],
+["POC","Work","Proof of Concept: a small experiment to show an idea can work.","Build a quick POC before we commit to the tool."],
+["Dependency","Work","Your work needs something from another person or team first.","The dependency on the API team puts us at risk."],
+["Ownership","Work","Taking responsibility for an outcome, not just completing a task.","She showed ownership by following up until the fix went live."],
+["Bandwidth","Work","Your available capacity. “No bandwidth” politely means you are full.","I do not have bandwidth this week, but can start Monday."],
+["Stand-up","Meetings & email","A short daily meeting (around 15 minutes): what I did, what I will do, what blocks me.","Keep your stand-up update to three sentences."],
+["1:1","Meetings & email","A regular private meeting with your manager. Your time. Bring an agenda.","Add the access issue to our 1:1 agenda."],
+["Sync","Meetings & email","An informal catch-up. “Let’s sync” means “let’s talk”.","Can we sync for ten minutes after lunch?"],
+["Circle back","Meetings & email","Return to a topic later. Often a polite way of not deciding now. Note it, then follow up.","Let’s circle back on this after the release."],
+["Action item","Meetings & email","A task from a meeting with an owner and a date. Often written “AI”, which here is not artificial intelligence.","AI: Rahul to share logs by Friday."],
+["MoM","Meetings & email","Minutes of Meeting: a written summary of decisions and action items, ideally sent within a day.","I will send the MoM by evening."],
+["EOD / COB","Meetings & email","End of day, close of business. Always confirm whose time zone.","Need this by EOD. Whose EOD, yours or mine?"],
+["FYI / FYA","Meetings & email","For your information (read only) versus for your action (you must do something).","FYA: please approve by Friday."],
+["PFA","Meetings & email","Please find attached. Common in Indian business email.","PFA the test report."],
+["Loop in","Meetings & email","Add someone to a conversation. Cc is the email version.","Let me loop in the security team."],
+["Take it offline","Meetings & email","Discuss later, outside this meeting, with only the people who need to be there.","Let’s take the design debate offline."],
+["Heads-up","Meetings & email","An early warning so nobody is surprised.","Quick heads-up: the release may slip by a day."],
+["OOO / WFH / WFO","Meetings & email","Out of office, work from home, work from office. Hybrid means a mix.","I am OOO Friday; Rahul is covering."],
+["Reimbursement","Money","The company repays approved work expenses when you submit bills within the deadline.","Submit the cab receipts this week for reimbursement."],
+["PF / EPF","Money","Provident Fund: retirement savings. Commonly 12% of basic from you and 12% from the employer.","Your PF balance shows on the EPFO portal."],
+["Gratuity","Money","A lump sum for long service, payable under Indian law after five years of continuous service.","Gratuity is part of CTC but paid only after five years."],
+["TDS and Form 16","Money","TDS is income tax deducted at source from your pay. Form 16 is the certificate your employer gives you for filing returns.","Download Form 16 before you file your return."],
+["Appraisal, increment, promotion","Money","Appraisal is the review process. Increment is the pay rise. Promotion is a new level or title. One can happen without the others.","Got a good rating, an increment, but no promotion yet."],
+["Joining or retention bonus","Money","A bonus tied to staying for a period. Leave early and you may have to repay it. Read the clause.","The joining bonus has a 12-month clawback."],
+["Agile / Scrum","Tech & projects","Agile: delivering in small steps and adjusting. Scrum: a framework with fixed sprints, a backlog and regular ceremonies.","Our team follows Scrum with two-week sprints."],
+["Sprint","Tech & projects","A fixed cycle, often two weeks, in which the team commits to a set of work.","This ticket is in sprint 14."],
+["Backlog","Tech & projects","The prioritised list of work waiting to be done.","Add it to the backlog and we will rank it Monday."],
+["User story","Tech & projects","A short requirement from the user’s view: “As a ___, I want ___, so that ___.”","As a customer, I want to reset my password so that I can log in."],
+["Incident / request / change","Tech & projects","Incident: something broke. Service request: a routine ask, such as access. Change: a planned modification.","Folder access is a request; the database outage is an incident."],
+["P1 / Sev 1","Tech & projects","Highest priority: business-critical, everyone drops everything. P2, P3 and so on go down from there.","P1: payments are failing."],
+["Dev, QA, UAT, Prod","Tech & projects","Environments a change moves through. Prod is real users and real data. Know which one you are in.","Test in QA first; never experiment in Prod."],
+["Pull request","Tech & projects","A proposal to merge your code, reviewed by teammates before it goes in. Comments are about the code, not about you.","I raised a pull request; please review today."],
+["CI/CD","Tech & projects","Pipelines that automatically build, test and deploy changes.","The CI build failed on a test."],
+["Tech debt","Tech & projects","Shortcuts in code or design that make future work slower. Quick fixes now, interest later.","We took on tech debt to hit the deadline."],
+["PII","Tech & projects","Personally Identifiable Information: names, phone numbers, IDs. Mask it. Never copy it into personal email or unapproved tools.","Mask PII before you share the sample data."],
+["SSO / MFA / VPN","Tech & projects","Single sign-on, multi-factor authentication, and a secure connection to company networks. You will use all three daily.","Approve the MFA prompt on your phone."],
+["Maintenance window","Tech & projects","A planned period when systems may be unavailable for upgrades.","Maintenance window is Sunday 1 to 3 am."]
+];
+const PROCS=[
+{id:"onboarding",title:"Your first week",when:"Before and after you join",steps:[
+"Collect your laptop, ID card and accounts from IT and admin.",
+"Log in, change default passwords, set up MFA and connect to the VPN.",
+"Complete mandatory trainings: security, code of conduct, POSH.",
+"Meet your manager. Ask for goals, your buddy and a list of tools you need.",
+"Raise access requests for every tool on that list. Access can take days.",
+"Join team rituals as an observer: stand-up, planning, status call.",
+"Submit HR documents (bank details, PF, nominee) and learn the timesheet."],
+slip:"Waiting for access to be handed to you.",fix:"Ask for the access list on day one and raise every request yourself."},
+{id:"ticket",title:"How a task travels",when:"From request to done",steps:[
+"A request arrives by email, chat or a call.",
+"It is logged as a ticket with a priority and an owner.",
+"The work is estimated and assigned.",
+"You work on it and update the ticket as you go.",
+"Review and testing: a teammate checks it, then QA.",
+"It is delivered or deployed.",
+"The requester confirms, and the ticket is closed with notes."],
+slip:"Working from chat messages with no ticket.",fix:"If it is not a ticket, it is not tracked, and nobody sees the effort. Ask for a ticket or create one."},
+{id:"sprint",title:"A two-week sprint",when:"If your team follows Agile",steps:[
+"Backlog refinement: the team clarifies and sizes upcoming work.",
+"Sprint planning: the team commits to what fits in two weeks.",
+"Daily stand-ups: yesterday, today, blockers.",
+"Mid-sprint check: adjust if risks appear.",
+"Sprint review: demo finished work to stakeholders.",
+"Retrospective: what went well, what to change."],
+slip:"Saying “almost done” for days.",fix:"Say what is left and how long it needs. “Two hours of testing remain; done by tomorrow noon.”"},
+{id:"leave",title:"Applying for leave",when:"Planned or sudden",steps:[
+"Check your balance and leave type in the HR portal.",
+"Tell your manager first, informally, so there are no surprises.",
+"Apply in the portal with dates and type (casual, sick, earned).",
+"Wait for approval before you travel.",
+"Hand over tasks, update your calendar and set an out-of-office reply.",
+"On return, clear your backlog and update the team."],
+slip:"Applying after the fact, or only on chat.",fix:"In an emergency, message your manager right away, then regularise it in the portal."},
+{id:"timesheet",title:"Timesheets and billing",when:"Every week",steps:[
+"Get your project and task codes from your manager.",
+"Log hours daily, not at month end.",
+"Match hours to real tasks you worked on.",
+"Submit before the weekly cut-off.",
+"Your manager approves.",
+"Finance invoices the client on approved hours."],
+slip:"Guessing hours on Friday evening.",fix:"Fill it daily in two minutes. Accurate hours protect billing and audits."},
+{id:"escalate",title:"Getting unstuck and escalating",when:"When you are blocked",steps:[
+"Try for 30 minutes. Note what you tried.",
+"Search docs, tickets and past chats.",
+"Ask your buddy or the team channel with details: goal, error, what you tried.",
+"Raise a ticket to the team that owns the problem.",
+"If it endangers a deadline, tell your manager with the impact and options.",
+"Escalate along the agreed path (level 1, level 2, then manager) using facts.",
+"Close the loop and thank the people who helped."],
+slip:"Struggling for three days without telling anyone.",fix:"Early questions look sharp. Late surprises look risky."},
+{id:"review",title:"The performance review cycle",when:"Once or twice a year",steps:[
+"Goal setting at the start of the cycle.",
+"Ongoing feedback and 1:1s through the year.",
+"Self-assessment: you write your achievements with evidence.",
+"Manager assessment.",
+"Calibration: leaders compare ratings across teams.",
+"Rating and outcomes: increment, bonus, promotion.",
+"Feedback conversation and development plan."],
+slip:"Writing the self-review the night before, from memory.",fix:"Keep a win log all year and write results with numbers."},
+{id:"expense",title:"Expense reimbursement",when:"Travel, cabs, client meals",steps:[
+"Read the policy for what is allowed and the limits.",
+"Get pre-approval for travel or large spends.",
+"Keep bills and receipts.",
+"Submit the claim in the expense tool before the deadline.",
+"Manager and finance approve.",
+"The amount is paid with your salary or separately."],
+slip:"Losing the receipt, or claiming something personal.",fix:"Photograph receipts the same day. Claim only what the policy allows."},
+{id:"exit",title:"Resigning well",when:"When you decide to move on",steps:[
+"Decide with a plan. Speak to your manager before you send anything.",
+"Submit your resignation in the portal or by email.",
+"Agree the last working day within the notice period.",
+"Do knowledge transfer and update documentation.",
+"Return laptop and access cards, and complete clearance.",
+"Attend the exit interview and be constructive.",
+"Receive F&F settlement, relieving letter and experience letter."],
+slip:"Going quiet or burning bridges in the last weeks.",fix:"Finish strong. People call your old manager for references."}
+];
+const TOOLS=[
+{id:"email",name:"Email and calendar",tags:["Outlook","Gmail"],does:"The official record of work: formal requests, approvals, invites, decisions.",setup:"Add a signature with name, role, team and phone. Set working hours and time zone. Create folders for your project.",manners:"Specific subject lines. Cc only people who need to act or know. Use Reply all sparingly. Check your calendar before accepting, and add an agenda to invites you send."},
+{id:"chat",name:"Team chat",tags:["Teams","Slack"],does:"Quick questions and daily coordination.",setup:"Join your team and project channels. Add a photo and your role. Use status for focus time and leave.",manners:"Say what you need in the first message, not just “hi”. Use threads. Move decisions into email or the ticket."},
+{id:"hrms",name:"HR portal",tags:["Workday","SuccessFactors","Keka","greytHR"],does:"Leave, attendance, payslips, tax declarations, goals and appraisals.",setup:"Check your leave balance, bank and nominee details. Submit tax declarations on time.",manners:"Apply for leave before you take it. Download payslips and Form 16 every year."},
+{id:"tickets",name:"Ticketing and boards",tags:["Jira","ServiceNow","Azure DevOps"],does:"Tracks tasks, bugs, incidents and requests with an owner, status and priority.",setup:"Get access to your project board. Learn the statuses and who moves tickets between them.",manners:"Update status as you work, not at week end. Describe what you did in comments. Link the pull request."},
+{id:"wiki",name:"Knowledge base",tags:["Confluence","SharePoint","Notion"],does:"Documents, runbooks, meeting notes and diagrams.",setup:"Bookmark your team space. Read the onboarding page and the top five documents.",manners:"Search before you ask. Fix or flag outdated pages. Add what you learned while it is fresh."},
+{id:"git",name:"Source control",tags:["Git","GitHub","GitLab","Bitbucket"],does:"Stores code history and supports review through branches and pull requests.",setup:"Install Git, set up SSH keys or a token, clone the repository.",manners:"Small commits with clear messages. Never commit passwords, keys or client data. Take review comments as feedback on the code."},
+{id:"pipeline",name:"Pipelines and environments",tags:["Jenkins","GitHub Actions","Azure DevOps"],does:"Builds, tests and deploys changes through Dev, QA, UAT and Production.",setup:"Learn which environment is which, who can deploy where, and the release calendar.",manners:"Test in lower environments. Check which one you are in before you run anything. Never experiment in production."},
+{id:"security",name:"Access and security",tags:["SSO","MFA","VPN","Password manager"],does:"Proves who you are and protects company and client data.",setup:"Enrol MFA on your phone, install the VPN, set a strong passphrase, enable disk encryption if asked.",manners:"Never share OTPs or passwords. Lock your screen when you step away. Report phishing with the report button, even if you clicked."},
+{id:"timesheet",name:"Timesheet tool",tags:["Replicon","Oracle PSA","Internal portal"],does:"Records hours against projects so the client can be billed and utilisation measured.",setup:"Get project and task codes from your manager.",manners:"Fill it daily. Match hours to real work. Submit before the cut-off."},
+{id:"learning",name:"Learning platform",tags:["LMS","Udemy Business","Coursera"],does:"Mandatory compliance courses plus optional skills and certifications.",setup:"Finish mandatory courses first. Deadlines are tracked.",manners:"Block a fixed weekly slot. Ask your manager which certifications count for growth."},
+{id:"helpdesk",name:"IT service desk",tags:["Portal","Email","Phone"],does:"Fixes laptops, access, software installs and network problems.",setup:"Save the helpdesk number and portal link. Note your laptop’s asset tag.",manners:"Give asset tag, screenshot and what you changed. Use the portal so it is tracked. Never install unapproved software."},
+{id:"meet",name:"Video meetings",tags:["Teams","Zoom","Google Meet"],does:"Stand-ups, client calls, reviews and 1:1s.",setup:"Test audio and camera, choose a tidy background, learn screen sharing.",manners:"Join two minutes early. Mute when not speaking. Close unrelated tabs before sharing. Take notes."}
+];
+const HABITS=[
+{g:"Communicate",items:[
+["Write messages that can be answered","“Hi.” Then waiting for a reply before saying what you need.","“The nightly job fails at step 3 with error 4012. I restarted it and checked the logs. Can you spare 10 minutes today?”"],
+["Lead with the ask","Three paragraphs of background before the request.","“Need access approval by Friday.” Then two lines of context."],
+["Confirm decisions in writing","Agreeing on a call and trusting everyone to remember.","A three-line recap the same day: what we decided, who does what, by when."],
+["Bring options, not only problems","“The deployment is failing. What should I do?”","“It fails because of X. Option A is quick but temporary; B takes a day. I suggest A now and B next sprint.”"]]},
+{g:"Deliver",items:[
+["Promise small, update early","“Almost done” for three days, then a late surprise.","Give an ETA with a buffer. The moment it will slip, say what changed, the new date and what you need."],
+["Ask for help on a clock","Struggling alone for days to avoid looking slow.","Try for 30 minutes, write down what you tried, then ask."],
+["Close the loop","Finishing the work and going quiet.","“Done. The fix is in PR 214, tested in QA. I’ll close the ticket unless you see an issue.”"],
+["Check your own work first","Sending it and letting the reviewer find the typos.","Read once as the reader, run once as the user, then send."],
+["Write it down","Keeping setup steps and decisions in your head.","Notes from every meeting, steps in the wiki, decisions in the ticket."]]},
+{g:"Behave",items:[
+["Receive feedback with a question","Explaining why you did it that way.","“Thanks. What would you do differently next time?” Act on one thing and tell them."],
+["Disagree with permission and data","Silence in the meeting, complaints after it.","“Can I share another view? The logs show…” Decide together, then commit."],
+["Guard confidential information","Forwarding files to personal email, pasting client data into public tools, posting screenshots.","Use approved tools and channels only. When unsure, ask before you share."],
+["Set boundaries without disappearing","Replying at midnight every day, then burning out.","Keep a visible working window, use status for focus time, and answer urgent things quickly."],
+["Be decent to everyone","Polished with seniors, curt with support staff.","Thank the service desk, admin and security teams. They can make your week easier, and people remember."]]}
+];
+const TEMPLATES=[
+{id:"help",title:"Asking for help",body:`Hi [Name], I'm stuck on [what].
+Goal: [what you're trying to do]
+What happens: [error or behaviour]
+What I tried: [one or two things]
+Could you spare 10 minutes today, or point me to the right person? I'll document the answer in [wiki or ticket].`},
+{id:"status",title:"Status update",body:`Status update, [date]
+Done: [item], [item]
+Next: [item] (ETA [date])
+Blocked or at risk: [item]. Need [what] from [who] by [date].
+Notes: [anything the reader should know]`},
+{id:"leave",title:"Leave request",body:`Hi [Manager],
+I'd like to take [leave type] on [dates] ([n] days). I will hand over [task] to [Name]. Pending items: [list]. For anything urgent I can be reached on [number or "no access"].
+I've applied in [portal]. Please approve.
+Thanks, [Your name]`},
+{id:"blocker",title:"Raising a blocker",body:`Subject: Blocked on [task], need your help by [date]
+Impact: [what slips and by how much]
+Cause: [one line]
+What I tried: [list]
+Options I see: [A / B]
+Ask: [who does what by when]`},
+{id:"mom",title:"Meeting notes (MoM)",body:`Subject: Notes, [meeting], [date]
+Decisions: 1) [ ] 2) [ ]
+Action items: [Owner], [task], [due date]
+Open questions: [ ]
+Please reply by [date] if anything is missing.`},
+{id:"pushback",title:"Saying no to extra work, politely",body:`Thanks for thinking of me. I'm on [A] and [B] with deadlines on [dates]. If I take this on, [A] would slip to [date]. Should I reprioritise, or can someone else help? I can start on [date] if that works.`},
+{id:"feedback",title:"Asking for feedback",body:`Hi [Name], could we take 15 minutes this week? I'd like your feedback on [specific thing]. What should I keep doing, and what one change would help most over the next month?`}
+];
+const LADDER=[
+["Tasks","Trainee · Associate · Analyst","You finish what you are given, with help. Reliability and learning speed matter most."],
+["A feature or module","Engineer · Consultant","You take a piece, plan it, deliver it and answer for it."],
+["A project or system","Senior Engineer · Lead","You break down vague problems, guide others and manage risk."],
+["A team or portfolio","Manager · Architect","You deliver through people, set direction and handle clients and stakeholders."],
+["A business line","Senior Manager · Director and above","You own outcomes and revenue, and shape strategy."]
+];
+const DRIVERS=[
+["Delivery you can rely on","Done when you said, at a standard people do not redo."],
+["Communication","Clear updates, early warnings, short emails."],
+["Ownership","You close loops and follow up without being chased."],
+["Learning speed","Nobody has to explain the same thing three times."],
+["Collaboration","Teammates want you on their next project."],
+["Visibility","The right people know what you did: demos, updates, notes."],
+["Impact","Time saved, defects avoided, money earned. Not just hours spent."],
+["Conduct","Integrity, respect and following policy."]
+];
+const SLOWERS=[
+"Waiting to be told what to do next.",
+"Hiding problems until they are big.",
+"Saying yes to everything, then delivering late.",
+"Skipping documentation because “everyone knows”.",
+"Treating feedback as criticism of you.",
+"Skipping fundamentals such as SQL, Excel, Git and clear writing.",
+"Doing good work that nobody sees or hears about."
+];
+const GROW_INDEX=[
+["grow:ladder","Career ladder","levels scope trainee associate engineer senior lead manager director promotion titles"],
+["grow:rating","What decides your rating","delivery communication ownership learning visibility impact conduct"],
+["grow:slow","What slows new joiners down","mistakes hiding problems documentation feedback fundamentals"],
+["grow:appraisal","Appraisals in plain words","rating increment promotion calibration self-review evidence numbers"],
+["grow:skills","Build skills on three tracks","craft domain people learning 70 20 10 courses"],
+["grow:oneone","Make your 1:1 count","manager questions agenda feedback"],
+["grow:wins","Win log","achievements brag document appraisal notes"],
+["grow:ctc","Understand your CTC","salary take-home in-hand pf gratuity variable basic hra estimate"],
+["grow:switch","Thinking of switching jobs?","job change notice period reference resign"]
+];
+const JUMPS=[
+["Day one is coming up","proc:onboarding"],
+["Need to ask for leave","proc:leave"],
+["I am stuck, who do I ask?","proc:escalate"],
+["CTC vs in-hand?","grow:ctc"],
+["Appraisal season","proc:review"],
+["Write a status update","tpl:status"],
+["Set up my tools","tool:security"]
+];
+const QUIZ=[
+{q:"Your manager says, “Let’s take this offline.” What does it mean?",o:["The meeting is cancelled","Discuss it later, outside this meeting, with only the people who need to be there","Stop working on the topic","Switch to a phone call right now"],a:1,why:"It parks a detail that does not suit everyone in the room. Note it as an action item so it does not get lost."},
+{q:"You have been stuck on an error for two hours and the deadline is tomorrow. Best next move?",o:["Keep trying quietly until it works","Post the error, what you tried and what you need in the team channel, and tell your manager if the deadline is at risk","Ask a friend at another company to fix it","Wait for your buddy to notice"],a:1,why:"Set a limit of about 30 minutes before asking, and ask well: error, steps tried, specific request. Early warnings are welcomed. Late surprises are not."},
+{q:"A US client writes, “Please send the file by EOD.” You work in Bengaluru. What do you do?",o:["Send it at 6 pm IST and hope","Reply: “Your EOD or mine, and which time zone?”","Assume it means midnight","Send it next morning"],a:1,why:"EOD means different times in different places. One line of clarification avoids a missed deadline."},
+{q:"You spot a mistake in a report you already sent to the client. First step?",o:["Hope nobody notices","Fix it quietly and resend without comment","Tell your manager right away, with the corrected version ready","Blame the source data"],a:2,why:"Owning errors early protects trust. Bring the fix with the news."},
+{q:"Meeting notes say “AI: Rahul to share logs by Friday.” What is “AI” here?",o:["An artificial intelligence tool","Action item","Approval initiated","Audit issue"],a:1,why:"In meeting notes, AI almost always means action item: a task with an owner and a date."},
+{q:"Your offer says ₹6 LPA CTC. What will your monthly in-hand pay be?",o:["Exactly ₹50,000","Lower than ₹50,000, because CTC includes employer PF, gratuity, insurance and variable pay","Higher than ₹50,000","Equal to the CTC on the letter"],a:1,why:"CTC is what the company spends. In-hand is what remains after employer-side items and your own deductions. Try the CTC estimator in the Grow tab."},
+{q:"You want an AI chatbot’s help with a bug in client code. What should you do?",o:["Paste the whole file. It saves time","Use only tools your company approved, and never paste confidential code or data into others","Remove the client name and paste anyway","Ask the chatbot whether that is allowed"],a:1,why:"Client code and data are confidential. If you are unsure whether a tool is approved, ask your manager or security team first."},
+{q:"The shared test database stops responding for the whole team. In ticket terms, this is a…",o:["Service request","Change request","Incident","Enhancement"],a:2,why:"An incident is an unplanned interruption. A service request is a routine ask such as access. A change is a planned modification."},
+{q:"Your manager says, “Can you look into the login issue?” Best reply?",o:["“Sure,” and start coding","“Sure. To confirm: do you want root cause or a fix, by when, and how does it rank against my current task?”","“That is not my module.”","Forward it to a teammate"],a:1,why:"Vague asks need a quick clarification of output, deadline and priority. Write the answer back so it is on record."},
+{q:"Which self-review line will help your rating most?",o:["“Worked very hard on many tasks.”","“Automated the weekly sales report, saving about 3 hours a week for 4 people. In use since August.”","“I am a quick learner and a team player.”","“Completed all assigned work.”"],a:1,why:"Specific, measurable results with evidence. Effort statements are weak. Outcomes are strong."},
+{q:"You wake up unwell on a Monday and cannot work. What first?",o:["Apply for leave in the portal tomorrow","Message your manager as early as possible, then regularise the leave in the portal","Email HR only","Skip it and explain on Tuesday"],a:1,why:"Tell the person who plans your work first. The portal can be updated afterwards."},
+{q:"You disagree with a senior colleague’s approach in a meeting. A good way to say so:",o:["Stay silent and fix it later","“Can I share another view? The logs show…”","Message the manager to complain","Say it is wrong"],a:1,why:"Ask permission, give your reasoning and data, and then support the decision the group makes."}
+];
+/* ---------- helpers ---------- */
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+const inr=n=>'₹'+Math.round(n).toLocaleString('en-IN');
+const store={get(k,d){try{const v=localStorage.getItem('c2c:'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('c2c:'+k,JSON.stringify(v))}catch(e){}}};
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const P=d=>`<svg viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
+const IC={
+ home:P('<path d="M4 11l8-7 8 7v9a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1z"/>'),
+ browse:P('<rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/>'),
+ practice:P('<path d="M12 3l2.4 5.3 5.6.7-4.1 3.9 1 5.6L12 15.7 7.1 18.5l1-5.6L4 9l5.6-.7z"/>'),
+ me:P('<path d="M6 4h12v17l-6-4-6 4z"/>'),
+ bm:P('<path d="M6 4h12v17l-6-4-6 4z"/>'),
+ join:P('<circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3.3 2.8-5 5.5-5s4.9 1.7 5.5 5"/><path d="M16 5.5a3 3 0 010 5.8M18 14.3c1.7.6 2.8 2.2 3 4.7"/>'),
+ work:P('<rect x="3.5" y="7" width="17" height="12" rx="2.5"/><path d="M9 7V5.5A1.5 1.5 0 0110.5 4h3A1.5 1.5 0 0115 5.5V7M3.5 12.5h17"/>'),
+ talk:P('<path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/>'),
+ money:P('<circle cx="12" cy="12" r="8.5"/><path d="M14.8 9.2c-.5-.9-1.5-1.4-2.8-1.4-1.6 0-2.7.8-2.7 2 0 3 5.6 1.2 5.6 4.2 0 1.2-1.2 2.1-2.9 2.1-1.4 0-2.5-.6-3-1.6M12 6v1.8M12 16.4V18"/>'),
+ tech:P('<path d="M8.5 7L3.5 12l5 5M15.5 7l5 5-5 5M13.5 5l-3 14"/>'),
+ grow:P('<path d="M4 18l5.5-5.5 3.5 3.5L20 8.5"/><path d="M14.5 8.5H20V14"/>')
+};
+const TYPES=[['all','All'],['word','Words'],['guide','Guides'],['tool','Tools'],['habit','Habits'],['message','Messages'],['tip','Tips']];
+const TYL={word:'Word',guide:'Guide',tool:'Tool',habit:'Habit',message:'Message',tip:'Tip'};
+const TOPICS=[
+ {id:'join',n:'Joining & people',b:'HR words, onboarding, leave and exits',c:1,cat:'People & HR',guides:['onboarding','leave','exit'],tools:['hrms','learning'],msgs:['leave'],plan:1},
+ {id:'work',n:'Getting work done',b:'Tasks, tickets, blockers and delivery',c:2,cat:'Work',guides:['ticket','escalate'],tools:['tickets','wiki'],msgs:['help','blocker','status'],habits:[1]},
+ {id:'talk',n:'Meetings & email',b:'Jargon, writing and speaking up',c:3,cat:'Meetings & email',guides:[],tools:['email','chat','meet'],msgs:['mom','pushback','feedback'],habits:[0]},
+ {id:'money',n:'Pay & money',b:'CTC, PF, expenses and timesheets',c:4,cat:'Money',guides:['expense','timesheet'],tools:['timesheet'],tips:['ctc']},
+ {id:'tech',n:'Tech & projects',b:'Agile, tickets, code and access',c:5,cat:'Tech & projects',guides:['sprint'],tools:['git','pipeline','security','helpdesk']},
+ {id:'grow',n:'Grow & get noticed',b:'Reviews, skills, levels and wins',c:6,cat:null,guides:['review'],tools:[],tips:['ladder','drivers','slowers','appraisal','skills','oneone','wins','switch'],habits:[2]}
+];
+const TOPIC=Object.fromEntries(TOPICS.map(t=>[t.id,t]));
+const TIPS={
+ ladder:['The career ladder','Levels are about scope, not years','level scope titles promotion trainee senior lead manager'],
+ drivers:['What decides your rating','Eight things managers actually look at','rating delivery communication ownership visibility impact conduct'],
+ slowers:['What slows new joiners down','Seven habits to drop early','mistakes hiding problems documentation feedback fundamentals'],
+ appraisal:['Appraisals in plain words','Rating, increment and promotion are three different things','appraisal rating increment promotion calibration self-review evidence'],
+ skills:['Build skills on three tracks','Craft, domain and people skills','learning courses craft domain people 70 20 10'],
+ oneone:['Make your 1:1 count','Questions and an agenda that get you real feedback','manager one on one agenda feedback questions'],
+ wins:['Win log','One line each time something goes well','achievements brag document appraisal notes'],
+ switch:['Thinking of switching jobs?','Four checks before you resign','job change notice period reference resign offer'],
+ ctc:['Understand your CTC','Estimate your monthly in-hand pay (India)','salary take-home in-hand pf gratuity variable basic hra estimate']
+};
+/* ---------- unified item list ---------- */
+const ITEMS=[];
+const add=(o)=>ITEMS.push(o);
+TERMS.forEach(t=>{const tp=TOPICS.find(x=>x.cat===t[1]);add({key:'w:'+slug(t[0]),type:'word',topic:tp.id,title:t[0],sub:t[2],text:t[2]+' '+t[3],raw:t})});
+TOPICS.forEach(tp=>{
+ (tp.guides||[]).forEach(id=>{const p=PROCS.find(x=>x.id===id);add({key:'g:'+id,type:'guide',topic:tp.id,title:p.title,sub:p.when,text:p.steps.join(' ')+' '+p.slip,raw:p})});
+ if(tp.plan)add({key:'p:plan',type:'guide',topic:tp.id,title:'Your 30-60-90 day plan',sub:'What to do in your first three months',text:PLAN.map(x=>x.items.join(' ')).join(' ')});
+ (tp.tools||[]).forEach(id=>{const t=TOOLS.find(x=>x.id===id);add({key:'t:'+id,type:'tool',topic:tp.id,title:t.name,sub:t.does,text:t.tags.join(' ')+' '+t.setup+' '+t.manners,raw:t})});
+ (tp.msgs||[]).forEach(id=>{const t=TEMPLATES.find(x=>x.id===id);add({key:'m:'+id,type:'message',topic:tp.id,title:t.title,sub:'Fill in and copy a ready-to-send message',text:t.body,raw:t})});
+ (tp.habits||[]).forEach(g=>HABITS[g].items.forEach((h,i)=>add({key:'h:'+g+'-'+i,type:'habit',topic:tp.id,title:h[0],sub:HABITS[g].g+': '+h[1],text:h[1]+' '+h[2],raw:h})));
+ (tp.tips||[]).forEach(id=>add({key:'tip:'+id,type:'tip',topic:tp.id,title:TIPS[id][0],sub:TIPS[id][1],text:TIPS[id][2]}));
+});
+const BYKEY=Object.fromEntries(ITEMS.map(i=>[i.key,i]));
+const STAGES=[
+ {id:'before',l:'Before day 1',h:'Walk in calm',w:'You have the offer. The goal now is to arrive set up, knowing what the first week looks like and who to ask.',k:['g:onboarding','p:plan','t:security','t:email','t:hrms','w:buddy','w:probation','w:reporting-manager']},
+ {id:'first',l:'First 30 days',h:'Learn the ropes',w:'Nobody expects results yet. They expect you to ask good questions, learn the team rhythm and be easy to reach.',k:['p:plan','w:stand-up','w:blocker','m:help','t:chat','t:tickets','t:wiki','h:0-0']},
+ {id:'settle',l:'Days 31 to 90',h:'Start delivering',w:'You now own small pieces of work. Estimating, updating and escalating well matters more than speed.',k:['g:ticket','g:escalate','g:timesheet','m:status','m:blocker','w:eta','w:scope-creep','w:sla']},
+ {id:'beyond',l:'After 3 months',h:'Get noticed and grow',w:'Your first review is coming. Keep evidence, understand how rating and pay work, and plan your next skill.',k:['g:review','tip:wins','tip:appraisal','tip:ladder','tip:ctc','tip:oneone','tip:skills','tip:drivers']}
+];
+STAGES.forEach(s=>s.k=s.k.filter(k=>BYKEY[k]));
+const SITS=[['Day one is coming up','g:onboarding'],['I need to take leave','g:leave'],['I am stuck. Who do I ask?','g:escalate'],['CTC vs in-hand pay','tip:ctc'],['Appraisal season','g:review'],['Write a status update','m:status'],['Disagreeing with a senior','m:pushback'],['Claim travel expenses','g:expense'],['Set up my laptop access','t:security'],['Thinking of resigning','g:exit']].filter(s=>BYKEY[s[1]]);
+/* ---------- state ---------- */
+let seen=store.get('seen',{}),saved=store.get('saved',{}),known=store.get('known',{}),stageId=store.get('stage','before');
+const mark=(k,o,v)=>{if(v)o[k]=1;else delete o[k]};
+const topicOf=i=>TOPIC[i.topic];
+let toastT;const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),1800)};
+const copyText=async(txt,btn)=>{let ok=false;try{await navigator.clipboard.writeText(txt);ok=true}catch(e){try{const ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();ok=document.execCommand('copy');ta.remove()}catch(_){}}toast(ok?'Copied':'Select the text and copy it')};
+/* ---------- rows ---------- */
+function rowHTML(it,showTopic){
+  const tp=topicOf(it),sv=!!saved[it.key];
+  return `<div class="rowwrap"><button class="row ${'t'+tp.c}" data-open="${esc(it.key)}"><span class="seen${seen[it.key]?' y':''}" aria-label="${seen[it.key]?'Viewed':'Not viewed'}">${seen[it.key]?'✓':''}</span><span class="bd"><span class="hd">${esc(it.title)} <span class="ty">${TYL[it.type]}</span>${showTopic?`<span class="ty" style="background:var(--surf2);color:var(--mut)">${esc(tp.n)}</span>`:''}</span><span class="ds">${esc(it.sub)}</span></span></button><button class="bm" data-bm="${esc(it.key)}" aria-pressed="${sv}" aria-label="${sv?'Remove bookmark':'Bookmark'} ${esc(it.title)}">${IC.bm}</button></div>`;
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-bm]');
+  if(b){const k=b.dataset.bm;mark(k,saved,!saved[k]);store.set('saved',saved);$$('[data-bm="'+k+'"]').forEach(x=>{x.setAttribute('aria-pressed',String(!!saved[k]))});toast(saved[k]?'Saved to your list':'Removed');updSaved();if(cur==='me')renderMe();return;}
+  const o=e.target.closest('[data-open]');
+  if(o){openItem(o.dataset.open);return;}
+  const t=e.target.closest('[data-topic]');
+  if(t){goBrowse(t.dataset.topic,'all');return;}
+});
+/* ---------- app-store: rail, tiles ---------- */
+const TIC={
+ guide:P('<rect x="5" y="3.5" width="14" height="17" rx="2.5"/><path d="M9 8.5h6M9 12.5h6M9 16.5h3"/>'),
+ tool:P('<path d="M14.5 6.5a4 4 0 005 5l-8.6 8.6a2.1 2.1 0 11-3-3z"/><path d="M14.5 6.5l3-3"/>'),
+ habit:P('<path d="M20 12a8 8 0 11-2.6-5.9"/><path d="M20 4v4.5h-4.5"/>'),
+ message:P('<rect x="3.5" y="5.5" width="17" height="13" rx="2.5"/><path d="M4 7.5l8 6 8-6"/>'),
+ tip:P('<path d="M12 3l1.9 4.8L19 9l-4 3.3 1.3 5.2L12 14.7 7.7 17.5 9 12.3 5 9l5.1-1.2z"/>')
+};
+const SHORT={join:'People',work:'Work',talk:'Talk',money:'Pay',tech:'Tech',grow:'Grow'};
+const RAIL=[['home','Start']].concat(TOPICS.map(t=>[t.id,SHORT[t.id]])).concat([['practice','Practice']]);
+let tab='home',cur='home';
+const kindOf=id=>id==='home'?'home':TOPIC[id]?'browse':id;
+const MENU=P('<path d="M4 7h16M4 12h16M4 17h16"/>');
+function renderRail(){
+  $('#rail').innerHTML=`<button class="rb tg" aria-label="Menu" aria-expanded="false" title="Menu">${MENU}<span>Menu</span></button>`+RAIL.map(r=>{const tp=TOPIC[r[0]];const cls=tp?'t'+tp.c:'stage0';return `<button class="rb ${cls}" data-tab="${r[0]}" title="${esc(r[1])}"${r[0]===tab?' aria-current="page"':''}>${IC[r[0]]}<span>${esc(r[1])}</span></button>`}).join('');
+  $('#rail .tg').setAttribute('aria-expanded',String($('#rail').classList.contains('open')));
+}
+function setRail(o){const r=$('#rail');r.classList.toggle('open',o);const mb=$('#menuBtn');if(mb)mb.setAttribute('aria-expanded',String(o));const t=$('#rail .tg');if(t)t.setAttribute('aria-expanded',String(o))}
+(function(){
+  const wrap=$('#rail').parentNode,hov=window.matchMedia&&window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  document.addEventListener('click',e=>{
+    if(e.target.closest('#menuBtn')){setRail(!$('#rail').classList.contains('open'));return}
+    if(e.target.closest('#rail [data-tab]')){setRail(false);return}
+    if(!e.target.closest('#rail'))setRail(false);
+  });
+      wrap.addEventListener('focusout',e=>{if(!wrap.contains(e.relatedTarget))setRail(false)});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')setRail(false)});
+})();
+function updSaved(){const n=Object.keys(saved).length,b=$('#savedN');b.textContent='';b.hidden=!n}
+function showTab(id){
+  if(id==='browse')id='home';
+  if(id!==tab)bs.type=null;
+  tab=id;cur=kindOf(id);
+  const vid=cur==='browse'?'topic':cur;
+  $$('.view').forEach(v=>v.classList.toggle('on',v.id==='v-'+vid));
+  if(cur==='home')renderHome();if(cur==='browse')renderBrowse();if(cur==='practice')renderPractice();if(cur==='me')renderMe();
+  document.querySelectorAll('.ph.tbn[data-sc]').forEach(x=>x.style.setProperty('--scene',sceneURL(x.dataset.sc)));renderRail();updSaved();window.scrollTo({top:0,behavior:'instant'});
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(b){closeSheet();showTab(b.dataset.tab)}});
+$('#goHome').addEventListener('click',()=>{closeSheet();showTab('home')});
+$('#srchBtn').addEventListener('click',()=>{const s=$('#sbar'),on=!s.classList.contains('on');s.classList.toggle('on',on);$('#srchBtn').setAttribute('aria-expanded',String(on));if(on)$('#q').focus();else{$('#res').hidden=true}});
+function goBrowse(topic){showTab(topic&&TOPIC[topic]?topic:'home')}
+function wordTile(t){const w=t.split(' / ')[0].split(' and ')[0].split(',')[0];const c=w.length<=5?'':w.length<=8?' s':' l';return `<span class="wd${c}">${esc(w.length>18?w.slice(0,17)+'…':w)}</span>`}
+let tint=0;
+function tileHTML(it,i){
+  const c=((i==null?tint++:i)%6)+1,sv=!!saved[it.key],sn=!!seen[it.key];
+  return `<button class="tl t${c}" data-open="${esc(it.key)}"><span class="ic">${it.type==='word'?wordTile(it.title):TIC[it.type]}${sv?`<i class="sv">${IC.bm}</i>`:''}</span><span class="nm">${esc(it.title)}</span></button>`;
+}
+const cardHTML=tileHTML;
+const TORDER=['guide','tip','tool','message','habit','word'];
+const SHN={guide:'Guides',tip:'Tips',tool:'Tools',message:'Templates',habit:'Habits',word:'Jargon'};
+let bs={type:null};
+function grouped(items){let h='';TORDER.forEach(ty=>{let L=items.filter(i=>i.type===ty);if(!L.length)return;if(ty==='word')L=L.slice().sort((a,b)=>a.title.localeCompare(b.title));h+=`<div class="gh">${SHN[ty]}<em>${L.length}</em></div>`+L.map((it,i)=>tileHTML(it,i)).join('')});return h}
+function renderHome(){
+  $('#pills').innerHTML=STAGES.map(s=>`<button class="chip" data-stage="${s.id}" aria-pressed="${s.id===stageId}">${esc(s.l)}</button>`).join('');
+  const s=STAGES.find(x=>x.id===stageId)||STAGES[0];
+  $('#stageWhy').textContent=s.w;
+  $('#picks').innerHTML=s.k.map((k,i)=>tileHTML(BYKEY[k],i)).join('');
+  const day=Math.floor(Date.now()/864e5),w=TERMS[day%TERMS.length],best=store.get('best',null);
+  $('#homeMore').innerHTML=`<div class="duo"><div class="card"><span class="eyebrow">Word of the day</span><h3 style="font-size:1.4rem;margin-block:4px">${esc(w[0])}</h3><p>${esc(w[2])}</p><div style="margin-top:10px"><button class="btn ghost sm" data-open="w:${slug(w[0])}">See an example</button></div></div><div class="card"><span class="eyebrow">Check yourself</span><h3 style="font-size:1.4rem;margin-block:4px">Real situations, one best move each</h3><p class="note">See how you would handle real moments at work.</p><div style="margin-top:10px"><button class="btn sm" id="goQuiz">Start the quiz</button></div></div></div>`;
+  $('#goQuiz').addEventListener('click',()=>{pmode='quiz';showTab('practice')});
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-stage]');if(b){stageId=b.dataset.stage;store.set('stage',stageId);renderHome()}});
+function renderBrowse(){
+  const tp=TOPIC[tab];if(!tp)return;
+  const inT=ITEMS.filter(i=>i.topic===tp.id);
+  $('#htabs').className='vh t'+tp.c;
+  $('#htabs').removeAttribute('role');
+  $('#htabs').innerHTML=`<h2>${esc(tp.n)}</h2><p>${esc(tp.b)}</p>`;
+  const L=[];TORDER.forEach(ty=>{let g=inT.filter(i=>i.type===ty);if(ty==='word')g=g.slice().sort((a,b)=>a.title.localeCompare(b.title));L.push(...g)});
+  $('#tbody').innerHTML=L.map((it,i)=>tileHTML(it,i)).join('');
+}
+document.addEventListener('click',e=>{const b=e.target.closest('#htabs [data-by]');if(b){bs.type=b.dataset.by;renderBrowse();window.scrollTo({top:0,behavior:'instant'})}});
+/* ---------- sheet ---------- */
+let lastFocus=null;
+function openSheet(tp,label,html){
+  lastFocus=document.activeElement;
+  $('#shL').innerHTML=`<span class="ty ${tp?'t'+tp.c:'tn'}">${esc(label)}</span><strong id="shT" style="font:700 .95rem var(--f-body);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${tp?esc(tp.n):''}</strong>`;
+  $('#shB').className='sb '+(tp?'t'+tp.c:'');$('#shB').innerHTML=html;$('#shB').scrollTop=0;$('#ov').classList.add('on');document.body.style.overflow='hidden';$('#shX').focus();
+}
+function closeSheet(){if(!$('#ov').classList.contains('on'))return;$('#ov').classList.remove('on');document.body.style.overflow='';if(lastFocus&&lastFocus.focus)try{lastFocus.focus()}catch(e){}
+  if(cur==='home')renderHome();if(cur==='browse')renderBrowse();if(cur==='me')renderMe();}
+$('#shX').addEventListener('click',closeSheet);
+$('#ov').addEventListener('click',e=>{if(e.target.id==='ov')closeSheet()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet()});
+const actsHTML=k=>`<div class="acts fix"><button class="btn ghost" data-bm="${esc(k)}" aria-pressed="${!!saved[k]}" id="shBm">${saved[k]?'Saved':'Save for later'}</button><button class="btn ghost" data-gob="${esc(BYKEY[k].topic)}">More in this topic</button></div>`;
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-gob]');if(g){closeSheet();goBrowse(g.dataset.gob,'all');return}
+  const b=e.target.closest('#shBm');if(b)setTimeout(()=>{b.textContent=saved[b.dataset.bm]?'Saved':'Save for later'},0);
+});
+function openItem(k){
+  const it=BYKEY[k];if(!it)return;
+  seen[k]=1;store.set('seen',seen);
+  const tp=topicOf(it);let h=`<div class="hero2 t${tp.c}" style="--scene:${sceneURL(tp.id).replace(/"/g,'&quot;')}"><span class="hic">${it.type==='word'?wordTile(it.title):TIC[it.type]}</span><div class="hx"><h2>${esc(it.title)}</h2><div class="hm"><span>${esc(METAS[it.type](it))}</span><span>${TYL[it.type]}</span></div></div></div>`;
+  const R=RENDER[it.type];h+=R(it);
+  if(it.type!=='tip'||k!=='tip:wins')h+=actsHTML(k);
+  openSheet(tp,TYL[it.type],h);
+  const post=POST[it.type];if(post)post(it);
+}
+const RENDER={
+ word(it){const t=it.raw;const rel=ITEMS.filter(x=>x.type==='word'&&x.topic===it.topic&&x.key!==it.key).slice(0,4);
+  return `<div class="defn"><span class="eyebrow">Meaning</span><p>${esc(t[2])}</p></div><div class="bubble"><span class="eyebrow">Where you will hear it</span><p>${esc(t[3])}</p></div><div><span class="eyebrow">Related words</span><div class="pgrid" style="grid-template-columns:repeat(4,minmax(0,1fr));margin-top:6px">${rel.map((r,i)=>tileHTML(r,i+2)).join('')}</div></div>`},
+ guide(it){
+  if(it.key==='p:plan')return `<p class="lead">Three phases to guide your first three months.</p>`+PLAN.map(ph=>`<div class="card kv"><div><span class="eyebrow">${esc(ph.sub)}</span><h3 style="font-size:1.2rem;margin-top:2px">${esc(ph.title)}</h3></div><ul class="steps" data-plan="${esc(ph.id)}">${ph.items.map((s,i)=>`<li><div class="st"><span class="n"></span><span>${esc(s)}</span></div></li>`).join('')}</ul></div>`).join('');
+  const p=it.raw;
+  return `<p class="lead">${esc(p.when)}.</p><ul class="steps">${p.steps.map((s,i)=>`<li><div class="st"><span class="n"></span><span>${esc(s)}</span></div></li>`).join('')}</ul><div class="pair"><div class="no"><b>Where people slip</b>${esc(p.slip)}</div><div class="yes"><b>Do this instead</b>${esc(p.fix)}</div></div>`},
+ tool(it){const t=it.raw;return `<p class="lead">${esc(t.does)}</p><div class="acts">${t.tags.map(x=>`<span class="ty tn">${esc(x)}</span>`).join('')}</div><div class="card kv2"><div class="kh"><i>${P('<circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/>')}</i><h4>Set up on day one</h4></div><p>${esc(t.setup)}</p></div><div class="card kv2"><div class="kh"><i>${P('<path d="M4 5h16v11H9l-5 4z"/>')}</i><h4>Good manners</h4></div><p>${esc(t.manners)}</p></div>`},
+ habit(it){const h=it.raw;return `<div class="pair"><div class="no"><b>Instead of</b>${esc(h[1])}</div><div class="yes"><b>Try</b>${esc(h[2])}</div></div>`},
+ message(it){const t=it.raw,names=[...new Set([...t.body.matchAll(/\[([^\]]+)\]/g)].map(m=>m[1]))];
+  return `<p class="note">Fill the blanks. The message below updates as you type.</p>${names.map((n,i)=>`<div class="field"><label for="fl${i}">${esc(n)}</label><input id="fl${i}" data-fl="${esc(n)}" autocomplete="off"></div>`).join('')}<div class="prev" id="prev"></div><div class="acts"><button class="btn" id="cpy">Copy message</button></div>`},
+ tip(it){return TIPR[it.key.slice(4)](it)}
+};
+const TIPR={
+ ladder:()=>`<p class="lead">Moving up means a bigger scope of responsibility. Titles differ by company. Tap the level you are at.</p><div class="lad" id="lad">${LADDER.map((l,i)=>`<button data-lad="${i}" aria-pressed="${store.get('lad',0)===i}"><i class="lv"></i><span class="lt"><b>${esc(l[0])}</b><small>${esc(l[1])}</small><span>${esc(l[2])}</span></span></button>`).join('')}</div>`,
+ drivers:()=>`<p class="lead">Few people are rated on effort alone. These are the things that move the rating.</p><div class="dr">${DRIVERS.map((d,i)=>`<div><i class="bx"></i><span><b>${esc(d[0])}</b>${esc(d[1])}</span></div>`).join('')}</div>`,
+ slowers:()=>`<p class="lead">Drop these early and your first year gets much easier.</p><ul class="dl bad">${SLOWERS.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>`,
+ appraisal:()=>`<p class="lead">A <b>rating</b> scores your year. An <b>increment</b> is a pay rise. A <b>promotion</b> is a new level. They are linked, but one does not guarantee the others.</p><div class="card"><b>Calibration.</b> Leaders compare ratings across teams so the scale is fair. That is why your manager may not promise a rating, and why written evidence matters.</div><div class="card"><span class="eyebrow">Write it as</span><p style="margin-top:4px">Problem, what I did, what changed (a number), who benefited.</p></div><div class="pair"><div class="no"><b>Instead of</b>“Worked on many tasks and helped the team.”</div><div class="yes"><b>Try</b>“Cut the nightly job from 4 hours to 50 minutes by fixing two slow queries. Support now has reports by 8 am.”</div></div>`,
+ skills:()=>`<div class="dr"><div><i class="bx">C</i><span><b>Craft</b>SQL, Git, testing, cloud basics, your main tool or language.</span></div><div><i class="bx">D</i><span><b>Domain</b>How the client’s business works: banking, retail, healthcare, telecom.</span></div><div><i class="bx">P</i><span><b>People</b>Clear writing, presenting, estimating, running a meeting, handling conflict.</span></div></div><p class="note">Rule of thumb: about 70% of learning comes from real work, 20% from people and 10% from courses.</p>`,
+ oneone:()=>`<p class="lead">Bring an agenda: wins, blockers, feedback, growth and one ask.</p><ul class="dl"><li>What should I do more of, and less of?</li><li>What does a strong quarter look like at my level?</li><li>Which of my work was most useful to the team?</li><li>What skill would unlock bigger projects for me?</li><li>Who else should I be talking to?</li></ul>`,
+ switch:()=>`<ul class="dl"><li>Stay long enough to have something to show: a delivered project, a skill, a manager who will vouch for you.</li><li>Move for learning and scope first, pay second.</li><li>Check notice period, bonus clawbacks and background-check rules before you resign.</li><li>Leave with the handover done. Reference calls are real.</li></ul>`,
+ wins:()=>`<p class="lead">Add one line whenever something goes well, with a number if you can. You will be glad at appraisal time.</p><div class="field"><label for="winIn">What went well?</label><input id="winIn" placeholder="Cut report time from 3 hours to 20 minutes" autocomplete="off"></div><div class="acts"><button class="btn sm" id="winAdd">Add</button><button class="btn sm ghost" id="winCopy">Copy all</button></div><ul class="wins" id="winList"></ul><p class="note">Stored in this browser only. Copy it somewhere safe now and then.</p>`,
+ ctc:()=>`<div class="ctcbox"><p class="note">CTC is what the company spends on you, not what lands in your account. Your offer letter’s salary annexure has the real split.</p><div class="in"><div class="field"><label for="ctc">Annual CTC (₹)</label><input id="ctc" type="number" inputmode="numeric" value="600000" min="0"></div><div class="field"><label for="ins">Insurance and benefits (₹ a year)</label><input id="ins" type="number" inputmode="numeric" value="15000" min="0"></div></div><div class="range"><label for="varPct">Variable pay: <b id="varPctV"></b> of CTC</label><input id="varPct" type="range" min="0" max="40" value="10"></div><div class="range"><label for="basicPct">Basic: <b id="basicPctV"></b> of fixed pay</label><input id="basicPct" type="range" min="30" max="60" value="40"></div><div class="card"><span class="eyebrow">Estimated monthly in-hand, before income tax</span><div class="big" id="ctcMonthly"></div><div class="bar" id="ctcBar" style="margin-block:10px"></div><ul class="leg" id="ctcLegend"></ul></div><p class="note" id="ctcNote"></p><p class="note">Assumes HRA is 50% of basic, PF is 12% of basic on both sides, gratuity is 4.81% of basic and professional tax is ₹200 a month. Income tax is not included.</p></div>`
+};
+const PLANKEY='plan';let planDone=store.get('plan',{}),procDone=store.get('proc',{});
+const POST={
+ guide(it){},
+ message(it){
+  const t=it.raw,vals={};
+  const draw=()=>{$('#prev').innerHTML=t.body.split(/(\[[^\]]+\])/).map(sg=>{const m=sg.match(/^\[([^\]]+)\]$/);return m?(vals[m[1]]?esc(vals[m[1]]):`<mark>[${esc(m[1])}]</mark>`):esc(sg)}).join('')};
+  $$('[data-fl]').forEach(i=>i.addEventListener('input',()=>{vals[i.dataset.fl]=i.value;draw()}));draw();
+  $('#cpy').addEventListener('click',e=>copyText(t.body.replace(/\[([^\]]+)\]/g,(m,n)=>vals[n]||m),e.currentTarget));
+ },
+ tip(it){const id=it.key.slice(4);
+  if(id==='ladder')$$('[data-lad]').forEach(b=>b.addEventListener('click',()=>{store.set('lad',+b.dataset.lad);$$('[data-lad]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)))}));
+  if(id==='ctc'){['ctc','varPct','basicPct','ins'].forEach(x=>$('#'+x).addEventListener('input',calcCtc));calcCtc()}
+  if(id==='wins')initWins();
+ }
+};
+function updProc(p){const d=procDone[p.id]||{},n=Object.keys(d).length;$('#gm').style.width=n/p.steps.length*100+'%';$('#gt').textContent=n===p.steps.length?'All steps done.':n+' of '+p.steps.length+' steps done';}
+document.addEventListener('click',e=>{
+  const s=e.target.closest('[data-gs]');
+  if(s){const k=$('.sb h2').textContent,it=ITEMS.find(x=>x.type==='guide'&&x.title===k),p=it.raw,d=procDone[p.id]=procDone[p.id]||{};const on=s.getAttribute('aria-pressed')!=='true';if(on)d[s.dataset.gs]=1;else delete d[s.dataset.gs];store.set('proc',procDone);s.setAttribute('aria-pressed',String(on));updProc(p);return}
+  const l=e.target.closest('[data-pl]');
+  if(l){const on=l.getAttribute('aria-pressed')!=='true';mark(l.dataset.pl,planDone,on);store.set('plan',planDone);l.setAttribute('aria-pressed',String(on))}
+});
+function calcCtc(){
+  const ctc=Math.max(0,+$('#ctc').value||0),vp=+$('#varPct').value,bp=+$('#basicPct').value,ins=Math.max(0,+$('#ins').value||0);
+  $('#varPctV').textContent=vp+'%';$('#basicPctV').textContent=bp+'%';
+  const variable=ctc*vp/100,fixed=ctc-variable,basic=fixed*bp/100,hra=basic*.5,erPF=basic*.12,grat=basic*.0481;
+  const raw=fixed-basic-hra-erPF-grat-ins,other=Math.max(0,raw),gross=basic+hra+other,monthly=Math.max(0,(gross-basic*.12-2400)/12);
+  const parts=[['Basic',basic,'--a3'],['HRA',hra,'--a2'],['Other allowances',other,'--a4'],['Employer PF',erPF,'--a5'],['Gratuity and insurance',grat+ins,'--a6'],['Variable pay',variable,'--a1']];
+  const tot=parts.reduce((s,p)=>s+p[1],0)||1;
+  $('#ctcBar').innerHTML=parts.map(p=>`<i style="width:${p[1]/tot*100}%;background:var(${p[2]})"></i>`).join('');
+  $('#ctcLegend').innerHTML=parts.map(p=>`<li><i style="background:var(${p[2]})"></i><span>${esc(p[0])}</span><span>${inr(p[1])}</span></li>`).join('');
+  $('#ctcMonthly').textContent=inr(monthly);
+  $('#ctcNote').textContent=raw<0?'These settings leave no room for other allowances, so the split is approximate. Lower the basic share or the insurance amount.':'Gross paid monthly is '+inr(gross/12)+'. About '+inr(variable)+' a year of variable pay comes separately, if targets are met.';
+}
+let wins=store.get('wins',[]);
+function initWins(){
+  const draw=()=>{$('#winList').innerHTML=wins.length?wins.map((w,i)=>`<li><span>${esc(w)}</span><button data-wd="${i}" aria-label="Delete entry">×</button></li>`).join(''):'<li class="note">No wins yet. Your first one counts.</li>'};
+  const add=()=>{const v=$('#winIn').value.trim();if(!v)return;wins.unshift(v);store.set('wins',wins);$('#winIn').value='';draw()};
+  $('#winAdd').addEventListener('click',add);$('#winIn').addEventListener('keydown',e=>{if(e.key==='Enter')add()});
+  $('#winCopy').addEventListener('click',()=>copyText(wins.map(w=>'• '+w).join('\n')||'No entries'));
+  $('#winList').addEventListener('click',e=>{const b=e.target.closest('[data-wd]');if(b){wins.splice(+b.dataset.wd,1);store.set('wins',wins);draw()}});
+  draw();
+}
+
+const MIN=it=>Math.max(1,Math.round((it.title+' '+it.sub+' '+it.text).split(/\s+/).length/170));
+const METAS={word:it=>'Quick read',guide:it=>'Step by step',tool:it=>it.raw.tags[0],habit:it=>HABITS[+it.key.split(':')[1].split('-')[0]].g,message:it=>'Fill and copy',tip:it=>'Quick read'};
+
+/* ---------- illustrated backgrounds ---------- */
+const SC_COL={join:'#1F4FB8',work:'#0E6F73',talk:'#4B3FA0',money:'#8A5A00',tech:'#38506E',grow:'#9B2F48',home:'#1F4FB8'};
+function skyline(c,x0,w,h,op){let o='',x=x0,k=0;const hs=[.5,.8,.62,.95,.55,.72,.88,.5,.66];while(x<x0+w){const bw=26+((k*13)%22),bh=h*hs[k%hs.length];o+=`<rect x="${x}" y="${h-bh}" width="${bw}" height="${bh}" fill="${c}" fill-opacity="${op}"/>`;for(let wy=h-bh+8;wy<h-8;wy+=12)for(let wx=x+6;wx<x+bw-8;wx+=10)o+=`<rect x="${wx}" y="${wy}" width="4" height="6" fill="${c}" fill-opacity="${op*1.9}"/>`;x+=bw+4;k++}return o}
+const SCN={
+ join:c=>`<g fill="${c}" fill-opacity=".14"><circle cx="210" cy="52" r="18"/><path d="M178 112c0-18 14-30 32-30s32 12 32 30z"/><circle cx="270" cy="60" r="14"/><path d="M246 112c0-14 11-24 24-24s24 10 24 24z"/><circle cx="150" cy="62" r="14"/><path d="M126 112c0-14 11-24 24-24s24 10 24 24z"/></g><rect x="298" y="26" width="46" height="62" rx="8" fill="none" stroke="${c}" stroke-opacity=".4" stroke-width="2"/><circle cx="321" cy="46" r="7" fill="${c}" fill-opacity=".3"/><path d="M306 72h30M306 80h18" stroke="${c}" stroke-opacity=".4" stroke-width="3" stroke-linecap="round"/>`,
+ work:c=>`<g fill="none" stroke="${c}" stroke-opacity=".4" stroke-width="2"><rect x="150" y="24" width="52" height="92" rx="8"/><rect x="212" y="24" width="52" height="92" rx="8"/><rect x="274" y="24" width="52" height="92" rx="8"/></g><g fill="${c}" fill-opacity=".18"><rect x="158" y="34" width="36" height="16" rx="4"/><rect x="158" y="56" width="36" height="16" rx="4"/><rect x="220" y="34" width="36" height="16" rx="4"/><rect x="282" y="34" width="36" height="16" rx="4"/><rect x="282" y="56" width="36" height="16" rx="4"/><rect x="282" y="78" width="36" height="16" rx="4"/></g>`,
+ talk:c=>`<path d="M160 22h96a10 10 0 0110 10v32a10 10 0 01-10 10h-52l-20 16V74h-24a10 10 0 01-10-10V32a10 10 0 0110-10z" fill="${c}" fill-opacity=".14"/><path d="M178 40h62M178 54h38" stroke="${c}" stroke-opacity=".45" stroke-width="3" stroke-linecap="round"/><path d="M236 84h74a10 10 0 0110 10v18a10 10 0 01-10 10h-10v12l-14-12h-50a10 10 0 01-10-10V94a10 10 0 0110-10z" fill="none" stroke="${c}" stroke-opacity=".4" stroke-width="2"/>`,
+ money:c=>`<g fill="${c}" fill-opacity=".16"><rect x="160" y="78" width="24" height="40" rx="4"/><rect x="194" y="58" width="24" height="60" rx="4"/><rect x="228" y="38" width="24" height="80" rx="4"/></g><circle cx="300" cy="60" r="26" fill="none" stroke="${c}" stroke-opacity=".45" stroke-width="3"/><path d="M289 50h22M289 58h22M291 50c15 0 15 19 0 19l17 16" fill="none" stroke="${c}" stroke-opacity=".5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="300" cy="110" rx="26" ry="8" fill="${c}" fill-opacity=".16"/>`,
+ tech:c=>`<rect x="140" y="22" width="150" height="98" rx="10" fill="${c}" fill-opacity=".1" stroke="${c}" stroke-opacity=".4" stroke-width="2"/><path d="M140 42h150" stroke="${c}" stroke-opacity=".35" stroke-width="2"/><g fill="${c}" fill-opacity=".4"><circle cx="154" cy="32" r="3.5"/><circle cx="166" cy="32" r="3.5"/><circle cx="178" cy="32" r="3.5"/></g><path d="M156 62h40M156 76h66M170 90h48M156 104h30" stroke="${c}" stroke-opacity=".45" stroke-width="4" stroke-linecap="round"/><path d="M310 56l-14 16 14 16M332 56l14 16-14 16" fill="none" stroke="${c}" stroke-opacity=".5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`,
+ grow:c=>`<g fill="${c}" fill-opacity=".15"><rect x="160" y="88" width="30" height="30" rx="4"/><rect x="198" y="70" width="30" height="48" rx="4"/><rect x="236" y="50" width="30" height="68" rx="4"/><rect x="274" y="30" width="30" height="88" rx="4"/></g><path d="M160 76l44-24 36-6 54-26" fill="none" stroke="${c}" stroke-opacity=".55" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M286 22h12v12" fill="none" stroke="${c}" stroke-opacity=".55" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`,
+ home:c=>skyline(c,120,240,130,.12)
+};
+const sceneURL=id=>{const c=SC_COL[id]||SC_COL.home,f=SCN[id]||SCN.home;return 'url("data:image/svg+xml,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 140" preserveAspectRatio="xMaxYMid meet">${f(c)}</svg>`)+'")'};
+(function(){
+  const sky=encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="720" height="160" viewBox="0 0 720 160">${skyline('#0B1F3F',0,720,160,.06)}</svg>`);
+  document.documentElement.style.setProperty('--sky','url("data:image/svg+xml,'+sky+'")');
+  const bar=encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="420" height="80" viewBox="0 0 420 80" preserveAspectRatio="xMaxYMax slice">${skyline('#FFFFFF',0,420,80,.1)}</svg>`);
+  document.documentElement.style.setProperty('--barsky','url("data:image/svg+xml,'+bar+'")');
+})();
+
+/* ---------- richer, interactive inner pages ---------- */
+const tips2=t=>(t.match(/[^.!?]+[.!?]+["”]?/g)||[t]).map(x=>x.trim()).filter(Boolean);
+const ARW=P('<path d="M5 12h14M13 6l6 6-6 6"/>');
+const IT=(id,label,html)=>({id,label,html});
+function itabs(list){return `<div class="itw"><div class="itabs" role="tablist">${list.map((t,i)=>`<button role="tab" data-itab="${t.id}" aria-selected="${i===0}">${esc(t.label)}</button>`).join('')}</div>${list.map((t,i)=>`<div class="ipane" data-ipane="${t.id}"${i?' hidden':''}>${t.html}</div>`).join('')}</div>`}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){const w=g.closest('.itw');const t=w&&w.querySelector('[data-itab="'+g.dataset.go+'"]');if(t)t.click();return}
+  const b=e.target.closest('[data-itab]');if(b){const w=b.closest('.itw');w.querySelectorAll('[data-itab]').forEach(x=>x.setAttribute('aria-selected',String(x===b)));w.querySelectorAll('[data-ipane]').forEach(p=>{p.hidden=p.dataset.ipane!==b.dataset.itab});return}
+  const c=e.target.closest('[data-copy]');if(c){copyText(c.dataset.copy);return}
+  const s=e.target.closest('[data-sb]');if(s){sbsI=Math.max(0,Math.min(sbsSteps.length-1,sbsI+ +s.dataset.sb));if(s.dataset.sb==='1'&&sbsI===sbsSteps.length-1&&s.dataset.last==='1')sbsI=0;drawSbs();return}
+  const wn=e.target.closest('[data-wnext]');if(wn){const all=ITEMS.filter(x=>x.type==='word'&&x.key!==wqCur);wordQ(all[Math.floor(Math.random()*all.length)]);return}
+  const wo=e.target.closest('[data-wo]');if(wo&&!wo.closest('#wq').dataset.done){answerWord(wo);return}
+  const dr=e.target.closest('[data-dr]');if(dr){const [i,v]=dr.dataset.dr.split(':');drv[i]=v;store.set('drv',drv);drawDrv();return}
+});
+const timeline=a=>`<ol class="tlv">${a.map(s=>`<li class="tli"><span>${esc(s)}</span></li>`).join('')}</ol>`;
+/* words */
+let wqCur=null;
+RENDER.word=it=>{const t=it.raw,rel=ITEMS.filter(x=>x.type==='word'&&x.topic===it.topic&&x.key!==it.key).slice(0,4);
+  return itabs([
+   IT('m','Meaning',`<div class="defn big"><span class="eyebrow">In plain words</span><p>${esc(t[2])}</p></div><div><span class="eyebrow">Related words</span><div class="pgrid" style="grid-template-columns:repeat(4,minmax(0,1fr));margin-top:6px">${rel.map((r,i)=>tileHTML(r,i+2)).join('')}</div></div>`),
+   IT('u','Hear it',`<div class="bubble"><span class="eyebrow">Where you will hear it</span><p>${esc(t[3])}</p></div><div class="acts"><button class="btn ghost" data-copy="${esc(t[3])}">Copy this line</button><button class="btn ghost" data-go="t">Test myself</button></div>`),
+   IT('t','Test me','<div id="wq"></div>')]);};
+function wordQ(it){wqCur=it.key;const box=$('#wq');if(!box)return;box.dataset.done='';
+  const others=shuffle(ITEMS.filter(x=>x.type==='word'&&x.key!==it.key)).slice(0,2),opts=shuffle([it].concat(others));
+  box.innerHTML=`<div class="card"><span class="eyebrow">Pick the right meaning</span><h3 style="font-size:1.5rem;margin:6px 0 12px">${esc(it.title)}</h3><div class="opts">${opts.map(o=>`<button class="opt" data-wo="${esc(o.key)}">${esc(o.raw[2])}</button>`).join('')}</div><div id="wfb"></div></div>`}
+function answerWord(b){const box=$('#wq');box.dataset.done='1';const ok=b.dataset.wo===wqCur;
+  $$('#wq .opt').forEach(o=>{o.disabled=true;if(o.dataset.wo===wqCur)o.classList.add('ok');else if(o===b)o.classList.add('no')});
+  $('#wfb').innerHTML=`<div class="why"><b>${ok?'Right.':'Not quite.'}</b> ${ok?'Nice. Try another one.':'The highlighted meaning is the one that fits.'}</div><div class="acts" style="margin-top:12px"><button class="btn sm" data-wnext>Another word</button></div>`}
+POST.word=it=>wordQ(it);
+
+const FI=[P('<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>'),P('<path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.400 9.300l6-.7z"/>'),P('<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>'),P('<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>'),P('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),P('<path d="M3 11l18-8-8 18-2-8z"/>')];
+const flow=a=>`<div class="flow">${a.map((s,i)=>`<div class="fl"><i>${FI[i%FI.length]}</i><span>${esc(s)}</span></div>`).join('')}</div>`;
+const tplCards=it=>{const L=ITEMS.filter(x=>x.type==='message'&&x.topic===it.topic);if(!L.length)return '';
+  return `<div class="kh2"><i>${P('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>')}</i><span>Ready to use</span></div><div class="tpls">${L.map(m=>`<div class="tpl"><b>${esc(m.title)}</b><p>${esc(m.raw.body.replace(/\n+/g,' ').slice(0,120))}${m.raw.body.length>120?'…':''}</p><div class="acts"><button class="btn sm" data-open="${esc(m.key)}">Fill in</button><button class="btn sm ghost" data-copy="${esc(m.raw.body)}">Copy</button></div></div>`).join('')}</div>`};
+const tplTab=it=>{const h=tplCards(it);return h?[IT('tp','Templates',h)]:[]};
+/* guides */
+let sbsI=0,sbsSteps=[];
+function drawSbs(){const b=$('#sbs');if(!b)return;const last=sbsI===sbsSteps.length-1;b.innerHTML=`<div class="sbs"><p class="sbsT">${esc(sbsSteps[sbsI])}</p><div class="dots">${sbsSteps.map((_,i)=>`<i class="${i===sbsI?'on':''}"></i>`).join('')}</div><div class="acts"><button class="btn ghost" data-sb="-1"${sbsI===0?' disabled':''}>Back</button><button class="btn" data-sb="${last?'-99':'1'}">${last?'Start again':'Next step'}</button></div></div>`}
+RENDER.guide=it=>{
+  if(it.key==='p:plan')return `<p class="lead">Three phases to guide your first three months.</p>`+itabs(PLAN.map(ph=>IT(ph.id,ph.sub,`<div><span class="eyebrow">${esc(ph.title)}</span></div>${flow(ph.items)}`)));
+  const p=it.raw;return `<p class="lead">${esc(p.when)}.</p>`+itabs([IT('tl','Flow',flow(p.steps)),IT('one','One at a time','<div id="sbs"></div>'),IT('pit','Pitfall',`<div class="pair"><div class="no"><b>Where people slip</b>${esc(p.slip)}</div><div class="yes"><b>Do this instead</b>${esc(p.fix)}</div></div>`)].concat(tplTab(it)))};
+POST.guide=it=>{if(it.key==='p:plan')return;sbsSteps=it.raw.steps;sbsI=0;drawSbs()};
+/* tools */
+const tipCards=t=>`<div class="tips2">${tips2(t).map(x=>`<button class="tip2" data-copy="${esc(x)}" aria-label="Copy tip"><i>${ARW}</i><span>${esc(x)}</span></button>`).join('')}</div><p class="note">Tap any tip to copy it.</p>`;
+RENDER.tool=it=>{const t=it.raw;return itabs([
+  IT('o','Overview',`<div class="defn"><span class="eyebrow">What it is for</span><p>${esc(t.does)}</p></div><div class="acts">${t.tags.map(x=>`<span class="ty tn">${esc(x)}</span>`).join('')}</div><div class="acts"><button class="btn ghost" data-go="s">Set it up</button><button class="btn ghost" data-go="m">Good manners</button></div>`),
+  IT('s','Set up',`<div class="kh2"><i>${P('<circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/>')}</i><span>Do these on day one</span></div>${tipCards(t.setup)}`),
+  IT('m','Good manners',`<div class="kh2"><i>${P('<path d="M4 5h16v11H9l-5 4z"/>')}</i><span>How people expect you to use it</span></div>${tipCards(t.manners)}`)].concat(tplTab(it)))};
+/* habits */
+RENDER.habit=it=>{const h=it.raw;return `<div class="rv"><div class="pair"><div class="no"><b>Instead of</b>${esc(h[1])}</div></div><div class="acts"><button class="btn" id="rvBtn">Show a better way</button></div><div class="pair rvY" id="rvYes" hidden><div class="yes"><b>Try</b>${esc(h[2])}</div></div><div class="acts" id="rvAct" hidden><button class="btn ghost" data-copy="${esc(h[2])}">Copy it</button></div>${tplCards(it)}</div>`};
+POST.habit=it=>{const b=$('#rvBtn');b.addEventListener('click',()=>{const y=$('#rvYes'),open=y.hidden;y.hidden=!open;$('#rvAct').hidden=!open;b.textContent=open?'Hide it':'Show a better way';b.classList.toggle('ghost',open)})};
+/* messages */
+RENDER.message=it=>{const t=it.raw,names=[...new Set([...t.body.matchAll(/\[([^\]]+)\]/g)].map(m=>m[1]))];
+  return `<div class="seg" id="chSeg"><button data-ch="chat" aria-pressed="true">Chat</button><button data-ch="email" aria-pressed="false">Email</button></div><p class="note">Fill the blanks. The message updates as you type.</p><div class="fgrid">${names.map((n,i)=>`<div class="field"><label for="fl${i}">${esc(n)}</label><input id="fl${i}" data-fl="${esc(n)}" autocomplete="off" placeholder="Type here"></div>`).join('')}</div><div class="prev" id="prev"></div><div class="acts"><button class="btn" id="cpy">Copy message</button></div>`};
+POST.message=it=>{
+  const t=it.raw,vals={};let ch='chat';
+  const fill=(raw)=>raw.split(/(\[[^\]]+\])/).map(sg=>{const m=sg.match(/^\[([^\]]+)\]$/);return m?(vals[m[1]]?esc(vals[m[1]]):`<mark>[${esc(m[1])}]</mark>`):esc(sg)}).join('');
+  const plain=()=>{const b=t.body.replace(/\[([^\]]+)\]/g,(m,n)=>vals[n]||m);return ch==='email'?'Subject: '+t.title+'\n\n'+b+'\n\nThanks and regards,\n[Your name]':b};
+  const draw=()=>{$('#prev').innerHTML=(ch==='email'?`<div class="subj">Subject: ${esc(t.title)}</div>`:'')+fill(t.body)+(ch==='email'?'<div class="sig">Thanks and regards,<br><mark>[Your name]</mark></div>':'');$('#prev').classList.toggle('mail',ch==='email')};
+  $$('[data-fl]').forEach(i=>i.addEventListener('input',()=>{vals[i.dataset.fl]=i.value;draw()}));
+  $('#chSeg').addEventListener('click',e=>{const b=e.target.closest('[data-ch]');if(!b)return;ch=b.dataset.ch;$$('#chSeg [data-ch]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw()});
+  draw();$('#cpy').addEventListener('click',()=>copyText(plain()));
+};
+/* tips: drivers self-check, appraisal builder, 1:1 copy */
+const drv=store.get('drv',{});const DRS=['Building','Solid','Strong'];
+function drawDrv(){
+  $$('[data-dr]').forEach(b=>{const [i,v]=b.dataset.dr.split(':');b.setAttribute('aria-pressed',String(drv[i]===v))});
+  const rated=Object.keys(drv).length,low=DRIVERS.filter((d,i)=>drv[i]==='Building').map(d=>d[0]),hi=DRIVERS.filter((d,i)=>drv[i]==='Strong').map(d=>d[0]);
+  const box=$('#drvSum');if(!box)return;
+  box.innerHTML=!rated?'<b>Rate yourself honestly.</b> Only you see this. Your focus areas will appear here.':(low.length?`<b>Your focus for now</b><div class="acts" style="margin-top:8px">${low.map(x=>`<span class="ty">${esc(x)}</span>`).join('')}</div>`:'<b>Nothing marked as building.</b> Keep your evidence current and aim for one stretch area.')+(hi.length?`<p class="note" style="margin-top:8px">Your strengths: ${esc(hi.join(', '))}.</p>`:'');
+}
+TIPR.drivers=()=>`<p class="lead">Few people are rated on effort alone. Rate yourself on each and see where to focus.</p><div class="dr">${DRIVERS.map((d,i)=>`<div class="dv"><i class="bx"></i><span><b>${esc(d[0])}</b>${esc(d[1])}<span class="rate">${DRS.map(v=>`<button data-dr="${i}:${v}" aria-pressed="false">${v}</button>`).join('')}</span></span></div>`).join('')}</div><div class="focus" id="drvSum"></div>`;
+const _ap=TIPR.appraisal;
+TIPR.appraisal=()=>_ap()+`<div class="card kv2"><div class="kh2"><i>${P('<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>')}</i><span>Build a self-review line</span></div><div class="fgrid"><div class="field"><label for="ap1">The problem</label><input id="ap1" placeholder="Weekly report took 3 hours" autocomplete="off"></div><div class="field"><label for="ap2">What you did</label><input id="ap2" placeholder="Automated it with a script" autocomplete="off"></div><div class="field"><label for="ap3">What changed</label><input id="ap3" placeholder="Now ready in 20 minutes" autocomplete="off"></div><div class="field"><label for="ap4">Who benefited</label><input id="ap4" placeholder="Four people on the team" autocomplete="off"></div></div><div class="prev" id="apPrev"></div><div class="acts"><button class="btn" id="apCopy">Copy line</button></div></div>`;
+const _oo=TIPR.oneone;
+TIPR.oneone=()=>_oo()+`<div class="acts"><button class="btn ghost" data-copy="${esc('1:1 agenda\nWins\nBlockers\nFeedback\nGrowth\nOne ask\n\nQuestions\n- What should I do more of, and less of?\n- What does a strong quarter look like at my level?\n- Which of my work was most useful to the team?\n- What skill would unlock bigger projects for me?\n- Who else should I be talking to?')}">Copy this agenda</button></div>`;
+const _pt=POST.tip;
+POST.tip=it=>{_pt(it);const id=it.key.slice(4);
+  if(id==='drivers')drawDrv();
+  if(id==='appraisal'){const g=()=>[1,2,3,4].map(n=>$('#ap'+n).value.trim());const line=()=>{const [a,b,c,d]=g();return [a&&('Problem: '+a+'.'),b&&('Action: '+b+'.'),c&&('Result: '+c+'.'),d&&('Who benefited: '+d+'.')].filter(Boolean).join(' ')};
+    const draw=()=>{const l=line();$('#apPrev').innerHTML=l?esc(l):'<span class="note">Your line appears here as you type.</span>'};
+    [1,2,3,4].forEach(n=>$('#ap'+n).addEventListener('input',draw));draw();$('#apCopy').addEventListener('click',()=>{const l=line();if(l)copyText(l);else toast('Fill at least one box')})}
+};
+
+/* ---------- right-hand help button ---------- */
+(function(){
+ const w=document.createElement('div');w.className='ask';
+ w.innerHTML=`<div class="askp" id="askP" hidden role="dialog" aria-label="Need help right now?"><div class="askh"><b>Need help right now?</b><button class="askx" id="askX" aria-label="Close">${P('<path d="M6 6l12 12M18 6L6 18"/>')}</button></div><p class="note">Pick what you are facing.</p><div class="sits">${SITS.map(x=>`<button data-open="${esc(x[1])}">${esc(x[0])}</button>`).join('')}</div></div><button class="askb" id="askB" aria-expanded="false" aria-label="Need help right now?">${P('<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.6 2.2c-.7.4-1.1 1-1.1 1.8"/><path d="M12 17h.01"/>')}<span>Need help?</span></button>`;
+ document.body.appendChild(w);
+ const pnl=$('#askP'),btn=$('#askB');
+ const set=o=>{pnl.hidden=!o;btn.setAttribute('aria-expanded',String(o))};
+ btn.addEventListener('click',e=>{e.stopPropagation();set(pnl.hidden)});
+ $('#askX').addEventListener('click',()=>set(false));
+ pnl.addEventListener('click',e=>{if(e.target.closest('[data-open]'))set(false)});
+ document.addEventListener('click',e=>{if(!w.contains(e.target))set(false)});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')set(false)});
+})();
+/* ---------- practice ---------- */
+let pmode='cards',ptopic='all',deck=[],flip=false,qi=0,qs=0,qans=null,qdone=false,qorder=[];
+function renderPractice(){
+  $$('#pseg [data-p]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.p===pmode)));
+  if(pmode==='cards'){buildDeck();drawCard()}else{if(!qorder.length||qdone)startQuiz();drawQ()}
+}
+$('#pseg').addEventListener('click',e=>{const b=e.target.closest('[data-p]');if(b){pmode=b.dataset.p;renderPractice()}});
+const words=()=>ITEMS.filter(i=>i.type==='word'&&(ptopic==='all'||i.topic===ptopic));
+function buildDeck(){deck=shuffle(words());flip=false}
+function drawCard(){
+  const chips=`<div class="chips" style="margin-bottom:14px">${[['all','All topics']].concat(TOPICS.map(t=>[t.id,t.n])).map(t=>`<button class="chip" data-pt="${t[0]}" aria-pressed="${ptopic===t[0]}">${esc(t[1])}</button>`).join('')}</div>`;
+  const it=deck[0],t=it.raw,tp=topicOf(it);
+  $('#pbody').innerHTML=chips+`<div class="fc${flip?' flip':''}" id="fc"><button class="fci" id="fci" aria-label="Flip card"><div class="face f t${tp.c}"><span class="ty">${esc(tp.n)}</span><h3>${esc(t[0])}</h3><span class="hint">Tap to flip</span></div><div class="face b"><p style="font-size:1.1rem">${esc(t[2])}</p><p class="eg">${esc(t[3])}</p></div></button></div><div class="fa"><button class="btn ghost" id="fcShuf">Shuffle</button><button class="btn" id="fcNext">Next card</button></div>`;
+  $('#fci').addEventListener('click',()=>{flip=!flip;$('#fc').classList.toggle('flip',flip)});
+  $('#fcShuf').addEventListener('click',()=>{buildDeck();drawCard()});
+  $('#fcNext').addEventListener('click',()=>{deck.push(deck.shift());flip=false;drawCard()});
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-pt]');if(b){ptopic=b.dataset.pt;buildDeck();drawCard()}});
+function startQuiz(){qorder=shuffle(QUIZ.map((_,i)=>i));qi=0;qs=0;qans=null;qdone=false}
+function drawQ(){
+  if(qdone){const best=Math.max(qs,store.get('best',0));store.set('best',best);
+    $('#pbody').innerHTML=`<div class="card" style="display:grid;gap:12px"><span class="eyebrow">Result</span><h3 style="font-size:1.5rem">${qs>=10?'Strong instincts':qs>=7?'Solid judgement':'A good start'}</h3><p>${qs>=10?'You read workplace situations well.':qs>=7?'Solid. The explanations below each answer are worth a second look.':'A good start. Browse the guides, then try again.'}</p><div class="acts"><button class="btn" id="qAgain">Try again</button><button class="btn ghost" data-tab="home">Explore guides</button></div></div>`;
+    $('#qAgain').addEventListener('click',()=>{startQuiz();drawQ()});return}
+  const q=QUIZ[qorder[qi]];
+  $('#pbody').innerHTML=`<div class="card q"><div class="meter"><i style="width:${qi/QUIZ.length*100}%;background:var(--accent)"></i></div><span class="eyebrow" style="display:block;margin-top:10px">Situation</span><h3>${esc(q.q)}</h3><div class="opts">${q.o.map((o,i)=>`<button class="opt${qans!=null?(i===q.a?' ok':i===qans?' no':''):''}" data-qo="${i}" ${qans!=null?'disabled':''}>${esc(o)}</button>`).join('')}</div>${qans!=null?`<div class="why"><b>${qans===q.a?'Right.':'Not quite.'}</b> ${esc(q.why)}</div><div class="acts" style="margin-top:12px"><button class="btn" id="qNext">${qi+1<QUIZ.length?'Next question':'See result'}</button></div>`:''}</div>`;
+  const nx=$('#qNext');if(nx)nx.addEventListener('click',()=>{qans=null;qi++;if(qi>=QUIZ.length)qdone=true;drawQ()});
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-qo]');if(b&&qans==null){qans=+b.dataset.qo;if(qans===QUIZ[qorder[qi]].a)qs++;drawQ()}});
+/* ---------- saved / progress ---------- */
+function renderMe(){
+  const sv=ITEMS.filter(i=>saved[i.key]);
+  $('#mebody').innerHTML=`<div class="pgrid">${sv.length?sv.map((i,n)=>cardHTML(i,n)).join(''):'<p class="empty card" style="grid-column:1/-1">Tap Save for later inside any page and it will show up here.</p>'}</div>`;
+}
+/* ---------- search ---------- */
+const qEl=$('#q'),resEl=$('#res');
+function runSearch(){
+  const q=qEl.value.trim().toLowerCase();
+  if(!q){resEl.hidden=true;return}
+  const sc=ITEMS.map(i=>{const t=i.title.toLowerCase();let s=0;if(t===q)s=100;else if(t.startsWith(q))s=80;else if(t.includes(q))s=60;else if(i.sub.toLowerCase().includes(q))s=30;else if(i.text.toLowerCase().includes(q))s=15;return[i,s]}).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  resEl.hidden=false;
+  resEl.innerHTML=sc.length?sc.map(([i])=>`<button data-sr="${esc(i.key)}" class="t${topicOf(i).c}"><span class="ty">${TYL[i.type]}</span><span style="min-width:0"><b style="display:block">${esc(i.title)}</b><span class="note" style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(i.sub)}</span></span></button>`).join(''):`<div class="nores">No match for “${esc(qEl.value)}”. Try a shorter word.</div>`;
+}
+qEl.addEventListener('input',runSearch);
+qEl.addEventListener('keydown',e=>{if(e.key==='Escape'){resEl.hidden=true;qEl.blur()}if(e.key==='Enter'){const f=$('[data-sr]',resEl);if(f)f.click()}});
+document.addEventListener('click',e=>{const b=e.target.closest('[data-sr]');if(b){resEl.hidden=true;qEl.value='';$('#sbar').classList.remove('on');openItem(b.dataset.sr);return}if(!e.target.closest('.sbox'))resEl.hidden=true});
+/* ---------- start ---------- */
+showTab('home');
+</script></body></html>
