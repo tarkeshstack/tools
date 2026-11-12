@@ -37,11 +37,11 @@ h1{font-size:22px;font-weight:700;letter-spacing:.01em}
 .case button{border:0;background:none;padding:4px 11px;font-weight:600;font-size:16px;font-family:var(--read)}
 .case button+button{border-left:3px solid var(--ink)}
 .case button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .step{background:var(--paper);border:3px solid var(--ink);border-radius:14px;padding:6px 4px 7px;
   display:flex;flex-direction:column;align-items:center;gap:1px;line-height:1.15}
-.step b{font-size:15px;font-weight:600}
-.step span{font-size:13px;font-weight:500;font-variant-numeric:tabular-nums;opacity:.75}
+.step b{font-size:14px;font-weight:600}
+.step span{font-size:12px;font-weight:500;font-variant-numeric:tabular-nums;opacity:.75}
 .step[aria-current="true"]{background:var(--ink);color:var(--paper)}
 .step[aria-current="true"] span{opacity:1;color:var(--sun)}
 
@@ -86,6 +86,15 @@ h1{font-size:22px;font-weight:700;letter-spacing:.01em}
   font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;white-space:nowrap;transition:transform .08s}
 .tile.two{font-size:clamp(30px,10.5vw,54px);letter-spacing:.02em}
 .tile:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--ink)}
+.tile.selfbtn{grid-column:1/-1;aspect-ratio:auto;font:600 26px var(--ui);padding:18px}
+.edit{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:10px}
+.edit h2{font-size:22px;font-weight:700}
+.edit p{font-size:16px;line-height:1.4}
+.edit textarea{width:100%;flex:1;min-height:120px;border:3px solid var(--ink);border-radius:14px;padding:10px 12px;
+  font:600 20px/1.4 var(--read);background:#fff;color:var(--ink);resize:none}
+.edit textarea:focus-visible{outline:4px solid var(--coral);outline-offset:2px}
+.edit .row{display:flex;gap:12px;flex-wrap:wrap}
+.err{color:#B3261E;font-weight:600}
 .tile.right{background:var(--good);animation:pop .45s}
 .tile.wrong{opacity:.35;box-shadow:none;animation:shake .35s}
 .tile:disabled{cursor:default}
@@ -190,11 +199,59 @@ const shuffle = a => { a = a.slice(); for (let i=a.length-1;i>0;i--){ const j=Ma
 
 let s; // {lv, queue:[{i, opts}], pos, results:[1|0], missed, best:[..], locked}
 
-function loadBest(){ try{ const b = JSON.parse(localStorage.getItem("readtap-best")); if(Array.isArray(b)&&b.length===3) return b; }catch(e){} return [0,0,0]; }
+function loadBest(){ try{ const b = JSON.parse(localStorage.getItem("readtap-best")); if(Array.isArray(b)){ while(b.length<4) b.push(0); return b.slice(0,4); } }catch(e){} return [0,0,0,0]; }
+
+/* ---------- level 4: the child's or teacher's own words ---------- */
+LEVELS.push({ name:"My words", unit:"words", hint:"Read the word. Tap the picture.", items:[] });
+const DICT = {};   // known words that get a picture automatically
+LEVELS[0].items.forEach(x=>{ DICT[x.t] = x.p; });
+Object.assign(DICT,{ball:"⚽",fish:"🐟",mango:"🥭",banana:"🍌",milk:"🥛",tree:"🌳",moon:"🌙",star:"⭐",house:"🏠",bird:"🐦",
+  cake:"🎂",rain:"🌧️",bike:"🚲",shoe:"👟",boat:"⛵",duck:"🦆",frog:"🐸",lion:"🦁",ship:"🚢",kite:"🪁",drum:"🥁",bell:"🔔",
+  door:"🚪",flag:"🚩",clock:"🕐",train:"🚆",plane:"✈️",rose:"🌹",tea:"🍵",rice:"🍚",goat:"🐐",sheep:"🐑",horse:"🐴",
+  mouse:"🐭",bear:"🐻",lamp:"💡",fire:"🔥",water:"💧",heart:"❤️",flower:"🌸",apple:"🍎",elephant:"🐘",monkey:"🐒",
+  tiger:"🐯",parrot:"🦜",snake:"🐍",orange:"🍊",grapes:"🍇",chair:"🪑",phone:"📱",book:"📘",bread:"🍞"});
+const POOL = [...new Set(Object.values(DICT))];
+
+/* one word or sentence per line (commas also split); an emoji after it is its picture */
+function parseMine(raw){
+  const out = [], seen = new Set();
+  String(raw||"").split("\n").forEach(line=>{
+    line.split(",").forEach(piece=>{
+      let text = piece, pic = null;
+      const m = piece.match(/\p{Extended_Pictographic}/u);
+      if(m){
+        const k = piece.indexOf(m[0]);
+        text = piece.slice(0,k);
+        pic = Array.from(piece.slice(k).replace(/\s+/g,"")).slice(0,8).join("").replace(/[\x00-\x7F]/g,"");
+      }
+      text = text.replace(/[’‘]/g,"'").replace(/[^A-Za-z' .!?-]/g,"").replace(/\s+/g," ").trim().slice(0,40);
+      if(!/[a-z]/i.test(text)) return;
+      const key = text.toLowerCase();
+      if(seen.has(key)) return;
+      seen.add(key);
+      if(!pic) pic = DICT[key.replace(/[.!?]/g,"")] || null;
+      out.push(pic ? {t:text, p:pic} : {t:text});
+    });
+  });
+  return out.slice(0,60);
+}
+function loadMine(){ let raw = ""; try{ raw = localStorage.getItem("readtap-mine") || ""; }catch(e){} return parseMine(raw); }
+function saveMine(){
+  const raw = $("mine").value, list = parseMine(raw), err = $("mineerr");
+  if(!list.length){ err.textContent = "Type at least one word first."; err.hidden = false; return; }
+  try{ localStorage.setItem("readtap-mine", raw); }catch(e){}
+  LEVELS[3].items = list;
+  newGame(3);
+}
 function saveBest(){ try{ localStorage.setItem("readtap-best", JSON.stringify(s.best)); }catch(e){} }
 
 function optionsFor(lv, i){
   const items = LEVELS[lv].items, it = items[i];
+  if(lv===3){
+    if(!it.p) return null;   // no picture: the child taps "I read it" instead
+    const mix = shuffle(POOL.filter(p=>p!==it.p));
+    return shuffle([it.p, mix[0], mix[1]]);
+  }
   let wrong = it.w;
   if(!wrong){
     // one look-alike that starts with the same letter, so the whole word must be read
@@ -210,8 +267,10 @@ function optionsFor(lv, i){
 function newGame(lv, avoid){
   // a new set prefers words that were not in the set just played
   const all = LEVELS[lv].items.map((_,i)=>i), old = avoid || [];
-  const idx = shuffle(all.filter(i=>!old.includes(i))).concat(shuffle(all.filter(i=>old.includes(i)))).slice(0,ROUNDS);
-  s = { lv, queue: idx.map(i=>({i, opts: optionsFor(lv,i)})), pos:0, results:[], missed:false, best: s ? s.best : loadBest() };
+  let idx = shuffle(all.filter(i=>!old.includes(i))).concat(shuffle(all.filter(i=>old.includes(i))));
+  while(idx.length && idx.length<ROUNDS) idx = idx.concat(shuffle(all));   // short custom lists repeat
+  idx = idx.slice(0,ROUNDS);
+  s = { lv, queue: idx.map(i=>({i, opts: optionsFor(lv,i)})), pos:0, results:[], missed:false, editing: !idx.length, best: s ? s.best : loadBest() };
   render();
 }
 
@@ -319,7 +378,7 @@ async function spellAll(){
 /* ---------- drawing ---------- */
 function renderSteps(){
   $("steps").innerHTML = LEVELS.map((L,k)=>
-    `<button class="step" data-lv="${k}" aria-current="${k===s.lv}"><b>${k+1}. ${L.name}</b><span>★ ${s.best[k]} of ${ROUNDS}</span></button>`).join("");
+    `<button class="step" data-lv="${k}" aria-current="${k===s.lv}"><b>${L.name}</b><span>★ ${s.best[k]} of ${ROUNDS}</span></button>`).join("");
 }
 function renderDots(){
   let h="";
@@ -331,22 +390,42 @@ function renderDots(){
 }
 function render(){
   stopSpelling();
-  renderSteps(); renderDots();
+  renderSteps();
+  if(s.editing){ return renderEditor(); }
+  renderDots();
   const card=$("card"), tiles=$("tiles");
   if(s.pos>=ROUNDS){ return renderEnd(); }
   tiles.hidden=false; $("dots").hidden=false;
   const L=LEVELS[s.lv], q=s.queue[s.pos], it=L.items[q.i];
   const orig = it.t.split(" "), shown = applyCase(it.t).split(" ");
+  // own words vary in length, so pick a text size that fits
+  let sz = s.lv;
+  if(s.lv===3){ const n = it.t.length; sz = it.t.includes(" ") ? (n<=10?1:2) : (n<=4?0:n<=10?1:2); }
+  const hint = q.opts ? L.hint : "Read the word out loud. Then tap the button.";
+  const second = s.lv===3
+    ? `<button class="hear" data-edit="1" aria-label="Edit my words"><span aria-hidden="true">✎</span>Edit list</button>`
+    : `<button class="hear" id="newset" aria-label="Get a new set of words"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 11-2.4-5.7"/><path d="M20 4v5h-5"/></svg>New words</button>`;
   const words = shown.map((w,k)=>{
-    const clean = orig[k].replace(/[^a-z]/gi,"");   // spoken form keeps normal case, so ABC is not read as an acronym
+    const clean = orig[k].replace(/[^a-z']/gi,"");   // spoken form keeps normal case, so ABC is not read as an acronym
     const inner = Array.from(w).map(c=>/[a-z]/i.test(c) ? `<span class="ch">${c}</span>` : c).join("");
     return `<button class="w" data-say="${clean}">${inner}</button>`;
   }).join(" ");
   card.innerHTML =
-    `<div class="cardtop"><p class="hint">${L.hint}</p><div class="btns">`+
-    `<button class="hear" id="newset" aria-label="Get a new set of words"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 11-2.4-5.7"/><path d="M20 4v5h-5"/></svg>New words</button>`+
-    `<button class="hear spell" id="spell" aria-label="Spell it out"><span aria-hidden="true">a·b</span><span id="spelllbl">Spell</span></button></div></div><div class="readwrap"><p class="read l${s.lv}" id="read">${words}</p></div><div class="praise" id="praise" hidden></div>`;
-  tiles.innerHTML = q.opts.map(o=>`<button class="tile${Array.from(o.replace(/️/g,"")).length>1?" two":""}" data-p="${o}" aria-label="Picture ${o}">${o}</button>`).join("");
+    `<div class="cardtop"><p class="hint">${hint}</p><div class="btns">`+ second +
+    `<button class="hear spell" id="spell" aria-label="Spell it out"><span aria-hidden="true">a·b</span><span id="spelllbl">Spell</span></button></div></div><div class="readwrap"><p class="read l${sz}" id="read">${words}</p></div><div class="praise" id="praise" hidden></div>`;
+  tiles.innerHTML = q.opts
+    ? q.opts.map(o=>`<button class="tile${Array.from(o.replace(/️/g,"")).length>1?" two":""}" data-p="${o}" aria-label="Picture ${o}">${o}</button>`).join("")
+    : `<button class="tile selfbtn" data-self="1">I read it ✓</button>`;
+}
+function renderEditor(){
+  $("tiles").hidden=true; $("tiles").innerHTML=""; $("dots").hidden=true;
+  const cur = LEVELS[3].items.map(x=>x.p ? x.t+" "+x.p : x.t).join("\n");
+  $("card").innerHTML =
+    `<div class="edit"><h2>Add your own words</h2>`+
+    `<p>Type one word or sentence on each line. Put a picture after it if you like, for example <b>mango 🥭</b>. Common words such as fish or ball get a picture on their own. A word with no picture gets an <b>I read it</b> button.</p>`+
+    `<textarea id="mine" rows="7" spellcheck="false" autocapitalize="off" placeholder="mango 🥭&#10;fish&#10;I like my dog 🐶" aria-label="Your words">${cur}</textarea>`+
+    `<p class="err" id="mineerr" hidden></p>`+
+    `<div class="row"><button class="btn main" id="savemine">Save and play</button><button class="btn" id="cancelmine">Back</button></div></div>`;
 }
 function renderEnd(){
   const n = s.results.filter(Boolean).length, L=LEVELS[s.lv], next = s.lv<LEVELS.length-1;
@@ -356,14 +435,15 @@ function renderEnd(){
     `<div class="end"><h2>You read ${ROUNDS} ${L.unit}!</h2><div class="starsrow">${stars}</div>`+
     `<p class="big">${n} of ${ROUNDS} right on the first try</p><div class="row">`+
     (next?`<button class="btn main" data-go="${s.lv+1}">Next: ${LEVELS[s.lv+1].name}</button>`:"")+
-    `<button class="btn${next?"":" main"}" data-go="${s.lv}">Play again</button></div></div>`;
+    `<button class="btn${next?"":" main"}" data-go="${s.lv}">Play again</button>`+
+    (s.lv===3?`<button class="btn" data-edit="1">Edit my words</button>`:"")+`</div></div>`;
 }
 
 /* ---------- play ---------- */
 function pick(btn){
   if(s.locked || s.pos>=ROUNDS) return;
   const q=s.queue[s.pos], it=LEVELS[s.lv].items[q.i];
-  if(btn.dataset.p===it.p){
+  if(btn.dataset.self!==undefined || btn.dataset.p===it.p){
     s.locked=true;
     btn.classList.add("right");
     document.querySelectorAll(".tile").forEach(b=>b.disabled=true);
@@ -393,6 +473,9 @@ document.addEventListener("click", e=>{
   if(t.classList.contains("w")){ t.classList.add("say"); setTimeout(()=>t.classList.remove("say"),600); return say(t.dataset.say); }
   if(t.dataset.case) return setCase(t.dataset.case);
   if(t.id==="spell") return spellAll();
+  if(t.id==="savemine") return saveMine();
+  if(t.id==="cancelmine"){ if(LEVELS[3].items.length){ s.editing=false; return render(); } return newGame(0); }
+  if(t.dataset.edit!==undefined){ s.editing=true; return render(); }
   if(t.id==="newset"){ if(s.locked) return; return newGame(s.lv, s.queue.map(q=>q.i)); }
   if(t.dataset.lv!==undefined) return newGame(+t.dataset.lv);
   if(t.dataset.go!==undefined) return newGame(+t.dataset.go);
@@ -401,8 +484,9 @@ document.addEventListener("click", e=>{
 function start(saved){
   try{ const c = localStorage.getItem("readtap-case"); if(c==="upper"||c==="mixed"||c==="lower") caseMode = c; }catch(e){}
   updateCaseBtns();
-  if(saved && saved.queue && saved.queue.length===ROUNDS && LEVELS[saved.lv]){
-    s = saved; s.locked=false; s.best = s.best || loadBest(); render();
+  LEVELS[3].items = loadMine();
+  if(saved && saved.queue && saved.queue.length===ROUNDS && LEVELS[saved.lv] && saved.queue.every(q=>LEVELS[saved.lv].items[q.i])){
+    s = saved; s.locked=false; s.editing=false; s.best = (s.best && s.best.length===4) ? s.best : loadBest(); render();
   }else{
     s = null; newGame(0);
   }
