@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Read and Tap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: one phone screen, sticker-style. Level steps on top, a ruled
+   handwriting card with the text to read, three big picture tiles below. */
+:root{
+  color-scheme: light;
+  --sun:#FFD84D;        /* page background */
+  --paper:#FFFDF6;      /* cards and tiles */
+  --ink:#1D2547;        /* text, borders, hard shadows */
+  --coral:#FF6B4A;      /* accent: hear button, current step */
+  --good:#2FA86A;       /* correct answer */
+  --rule:#9CC7EA;       /* handwriting guide lines */
+  --rule-soft:#F3B8AC;  /* midline of the guide */
+  --read:"Andika","Comic Sans MS","Trebuchet MS",sans-serif;
+  --ui:"Fredoka","Trebuchet MS","Verdana",sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:var(--sun);color:var(--ink);font-family:var(--ui);-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation}
+button:focus-visible{outline:4px solid var(--coral);outline-offset:3px}
+
+.app{height:100%;max-width:540px;margin:0 auto;padding:14px 16px 16px;display:flex;flex-direction:column;gap:14px}
+
+header{display:flex;flex-direction:column;gap:10px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+h1{font-size:22px;font-weight:700;letter-spacing:.01em}
+.case{display:flex;border:3px solid var(--ink);border-radius:12px;overflow:hidden;background:var(--paper)}
+.case button{border:0;background:none;padding:4px 11px;font-weight:600;font-size:16px;font-family:var(--read)}
+.case button+button{border-left:3px solid var(--ink)}
+.case button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.step{background:var(--paper);border:3px solid var(--ink);border-radius:14px;padding:6px 4px 7px;
+  display:flex;flex-direction:column;align-items:center;gap:1px;line-height:1.15}
+.step b{font-size:15px;font-weight:600}
+.step span{font-size:13px;font-weight:500;font-variant-numeric:tabular-nums;opacity:.75}
+.step[aria-current="true"]{background:var(--ink);color:var(--paper)}
+.step[aria-current="true"] span{opacity:1;color:var(--sun)}
+
+.card{flex:1 1 auto;min-height:150px;background:var(--paper);border:3px solid var(--ink);border-radius:22px;
+  box-shadow:6px 6px 0 var(--ink);padding:14px 14px 12px;display:flex;flex-direction:column;gap:8px;position:relative}
+.cardtop{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 10px}
+.btns{display:flex;gap:8px;margin-left:auto}
+.hint{font-size:16px;font-weight:500}
+.hear{flex:none;display:flex;align-items:center;gap:6px;background:var(--coral);color:#fff;border:3px solid var(--ink);
+  border-radius:999px;padding:6px 14px 6px 10px;font-weight:600;font-size:16px;box-shadow:3px 3px 0 var(--ink)}
+.hear:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.hear svg{width:22px;height:22px}
+.spell{background:var(--ink);color:var(--paper);padding:6px 14px;box-shadow:3px 3px 0 var(--coral)}
+.spell span:first-child{color:var(--sun);letter-spacing:.08em}
+.spell:active{box-shadow:1px 1px 0 var(--coral)}
+/* each letter lights up while it is spelled */
+.ch{display:inline-block;line-height:1.25;border-radius:.14em;padding:0 .03em;transition:transform .1s}
+.ch.on{background:var(--coral);color:#fff;transform:scale(1.2)}
+.readwrap{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden}
+/* Three-line primary handwriting guide repeated on every text line */
+.read{font-family:var(--read);font-weight:700;text-align:center;line-height:1.6em;width:100%;
+  background-image:repeating-linear-gradient(to bottom,
+    transparent 0, transparent .36em, var(--rule) .36em, var(--rule) calc(.36em + 2px),
+    transparent calc(.36em + 2px), transparent .62em, var(--rule-soft) .62em, var(--rule-soft) calc(.62em + 2px),
+    transparent calc(.62em + 2px), transparent 1.12em, var(--rule) 1.12em, var(--rule) calc(1.12em + 2px),
+    transparent calc(1.12em + 2px), transparent 1.6em)}
+.read.l0{font-size:clamp(64px,24vw,124px);letter-spacing:.04em}
+.read.l1{font-size:clamp(40px,13vw,70px)}
+.read.l2{font-size:clamp(30px,9vw,46px)}
+.w{background:none;border:0;padding:0 .12em;font-weight:700;border-radius:.2em}
+.w:active,.w.say{color:var(--coral)}
+
+.dots{display:flex;gap:6px;justify-content:center}
+.dots i{width:14px;height:14px;border-radius:50%;border:2.5px solid var(--ink);background:transparent}
+.dots i.star{background:var(--good)}
+.dots i.miss{background:var(--ink);opacity:.35}
+.dots i.now{background:var(--coral)}
+
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding-right:6px}
+.tile{aspect-ratio:1;background:var(--paper);border:3px solid var(--ink);border-radius:20px;box-shadow:5px 5px 0 var(--ink);
+  font-size:clamp(46px,17vw,84px);line-height:1;display:flex;align-items:center;justify-content:center;padding:0;
+  font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;white-space:nowrap;transition:transform .08s}
+.tile.two{font-size:clamp(30px,10.5vw,54px);letter-spacing:.02em}
+.tile:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--ink)}
+.tile.right{background:var(--good);animation:pop .45s}
+.tile.wrong{opacity:.35;box-shadow:none;animation:shake .35s}
+.tile:disabled{cursor:default}
+@keyframes pop{40%{transform:scale(1.12) rotate(-3deg)}}
+@keyframes shake{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+
+.praise{position:absolute;left:50%;bottom:-16px;transform:translateX(-50%);background:var(--good);color:#fff;
+  border:3px solid var(--ink);border-radius:999px;padding:3px 16px;font-weight:700;font-size:18px;white-space:nowrap}
+.praise[hidden]{display:none}
+
+.end{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center}
+.end h2{font-size:30px;font-weight:700;text-wrap:balance}
+.end .big{font-size:22px;font-weight:600}
+.end .row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.btn{background:var(--paper);border:3px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);
+  padding:12px 20px;font-size:19px;font-weight:600}
+.btn.main{background:var(--coral);color:#fff}
+.btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+.starsrow{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}
+.starsrow svg{width:34px;height:34px}
+
+@media (max-height:600px){ h1{display:none} .card{min-height:120px} }
+@media (prefers-reduced-motion:reduce){ *{animation:none!important;transition:none!important} }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="top">
+      <h1>Read and Tap</h1>
+      <div class="case" id="case" role="group" aria-label="Letter style">
+        <button data-case="upper" aria-pressed="false">ABC</button>
+        <button data-case="mixed" aria-pressed="true">Abc</button>
+        <button data-case="lower" aria-pressed="false">abc</button>
+      </div>
+    </div>
+    <nav class="steps" id="steps" aria-label="Levels"></nav>
+  </header>
+  <main class="card" id="card"></main>
+  <div class="dots" id="dots" aria-hidden="true"></div>
+  <div class="tiles" id="tiles"></div>
+</div>
+
+<script>
+const ROUNDS = 8;
+const LEVELS = [
+  { name:"Words", unit:"words", hint:"Read the word. Tap the picture.", items:[
+    {t:"cat",p:"🐱"},{t:"car",p:"🚗"},{t:"cow",p:"🐮"},{t:"cup",p:"☕"},
+    {t:"dog",p:"🐶"},{t:"sun",p:"☀️"},{t:"bus",p:"🚌"},{t:"bed",p:"🛏️"},
+    {t:"bee",p:"🐝"},{t:"box",p:"📦"},{t:"bat",p:"🦇"},{t:"bug",p:"🐞"},
+    {t:"pig",p:"🐷"},{t:"pen",p:"🖊️"},{t:"hat",p:"🎩"},{t:"hen",p:"🐔"},
+    {t:"egg",p:"🥚"},{t:"fox",p:"🦊"},{t:"ant",p:"🐜"},{t:"key",p:"🔑"},
+    {t:"owl",p:"🦉"},{t:"map",p:"🗺️"},{t:"van",p:"🚐"},
+    {t:"cap",p:"🧢"},{t:"rat",p:"🐀"},{t:"jet",p:"✈️"},{t:"log",p:"🪵"},
+    {t:"web",p:"🕸️"},{t:"gem",p:"💎"},{t:"ice",p:"🧊"},{t:"leg",p:"🦵"},
+    {t:"nut",p:"🥜"},{t:"pie",p:"🥧"},{t:"tub",p:"🛁"},{t:"toy",p:"🧸"},
+    {t:"bag",p:"👜"},{t:"kid",p:"🧒"},{t:"lip",p:"👄"}
+  ]},
+  { name:"Two words", unit:"word pairs", hint:"Read both words. Tap the picture.", items:[
+    {t:"red car",p:"🚗",w:["🚙","🍎"]},
+    {t:"blue car",p:"🚙",w:["🚗","📘"]},
+    {t:"red apple",p:"🍎",w:["🍏","🚗"]},
+    {t:"green apple",p:"🍏",w:["🍎","📗"]},
+    {t:"blue book",p:"📘",w:["📗","🚙"]},
+    {t:"green book",p:"📗",w:["📕","🍏"]},
+    {t:"red book",p:"📕",w:["📘","🍎"]},
+    {t:"red heart",p:"❤️",w:["💙","📕"]},
+    {t:"blue heart",p:"💙",w:["💚","📘"]},
+    {t:"green heart",p:"💚",w:["❤️","🐸"]},
+    {t:"yellow star",p:"⭐",w:["💛","🌙"]},
+    {t:"yellow heart",p:"💛",w:["⭐","❤️"]},
+    {t:"green frog",p:"🐸",w:["💚","🐷"]},
+    {t:"pink pig",p:"🐷",w:["🌸","🐸"]},
+    {t:"pink flower",p:"🌸",w:["🌻","🐷"]},
+    {t:"happy face",p:"😀",w:["😢","😴"]},
+    {t:"sad face",p:"😢",w:["😀","😡"]}
+  ]},
+  { name:"Sentences", unit:"sentences", hint:"Read it all. Tap the picture.", items:[
+    {t:"The dog is in the box.",p:"🐶📦",w:["🐱📦","🐶🚌"]},
+    {t:"The cat is on the bed.",p:"🐱🛏️",w:["🐶🛏️","🐱📦"]},
+    {t:"The pig is in the bed.",p:"🐷🛏️",w:["🐷📦","🐱🛏️"]},
+    {t:"The cow is in the bus.",p:"🐮🚌",w:["🐮📦","🐷🚌"]},
+    {t:"I see a red car.",p:"🚗",w:["🚙","🍎"]},
+    {t:"I see a blue book.",p:"📘",w:["📕","💙"]},
+    {t:"I see the sun.",p:"☀️",w:["🌙","⭐"]},
+    {t:"The frog is sad.",p:"🐸😢",w:["🐸😀","🐷😢"]},
+    {t:"The cow is happy.",p:"🐮😀",w:["🐮😢","🐶😀"]},
+    {t:"The bee is on the flower.",p:"🐝🌸",w:["🐞🌸","🐝🍎"]},
+    {t:"The hen has an egg.",p:"🐔🥚",w:["🐔🔑","🦉🥚"]},
+    {t:"The fox has a key.",p:"🦊🔑",w:["🦊🥚","🐶🔑"]},
+    {t:"The dog has a hat.",p:"🐶🎩",w:["🐱🎩","🐶🔑"]},
+    {t:"I see a bus and a dog.",p:"🚌🐶",w:["🚌🐱","🚗🐶"]},
+    {t:"The owl is in the tree.",p:"🦉🌳",w:["🐔🌳","🦉📦"]},
+    {t:"The ant is on the apple.",p:"🐜🍎",w:["🐝🍎","🐜🥚"]}
+  ]}
+];
+const PRAISE = ["Yes!","Good reading!","You got it!","Well done!","Super!"];
+const STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z" fill="FILL" stroke="#1D2547" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+
+const $ = id => document.getElementById(id);
+const shuffle = a => { a = a.slice(); for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+
+let s; // {lv, queue:[{i, opts}], pos, results:[1|0], missed, best:[..], locked}
+
+function loadBest(){ try{ const b = JSON.parse(localStorage.getItem("readtap-best")); if(Array.isArray(b)&&b.length===3) return b; }catch(e){} return [0,0,0]; }
+function saveBest(){ try{ localStorage.setItem("readtap-best", JSON.stringify(s.best)); }catch(e){} }
+
+function optionsFor(lv, i){
+  const items = LEVELS[lv].items, it = items[i];
+  let wrong = it.w;
+  if(!wrong){
+    // one look-alike that starts with the same letter, so the whole word must be read
+    const others = shuffle(items.filter((_,k)=>k!==i));
+    const same = others.find(o=>o.t[0]===it.t[0]);
+    const pick = same ? [same] : [];
+    for(const o of others){ if(pick.length>=2) break; if(!pick.includes(o)) pick.push(o); }
+    wrong = pick.map(o=>o.p);
+  }
+  return shuffle([it.p, ...wrong]);
+}
+
+function newGame(lv, avoid){
+  // a new set prefers words that were not in the set just played
+  const all = LEVELS[lv].items.map((_,i)=>i), old = avoid || [];
+  const idx = shuffle(all.filter(i=>!old.includes(i))).concat(shuffle(all.filter(i=>old.includes(i)))).slice(0,ROUNDS);
+  s = { lv, queue: idx.map(i=>({i, opts: optionsFor(lv,i)})), pos:0, results:[], missed:false, best: s ? s.best : loadBest() };
+  render();
+}
+
+/* ---------- sound ---------- */
+let ac;
+function tone(freqs){
+  try{
+    ac = ac || new (window.AudioContext||window.webkitAudioContext)();
+    freqs.forEach((f,k)=>{
+      const o=ac.createOscillator(), g=ac.createGain(), t=ac.currentTime+k*0.11;
+      o.type="triangle"; o.frequency.value=f;
+      g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.18,t+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t+0.22);
+      o.connect(g).connect(ac.destination); o.start(t); o.stop(t+0.25);
+    });
+  }catch(e){}
+}
+const canSpeak = "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
+
+/* Indian English voice: use an en-IN voice when the device has one */
+let voice = null;
+function pickVoice(){
+  if(!canSpeak) return;
+  try{
+    const vs = speechSynthesis.getVoices();
+    voice = vs.find(v=>/^en[-_]IN$/i.test(v.lang)) || vs.find(v=>/india|rishi|heera|ravi/i.test(v.name)) || null;
+  }catch(e){}
+}
+if(canSpeak){ pickVoice(); try{ speechSynthesis.addEventListener("voiceschanged", pickVoice); }catch(e){} }
+
+function speak(text, rate){
+  return new Promise(res=>{
+    try{
+      const u = new SpeechSynthesisUtterance(text);
+      if(voice) u.voice = voice;
+      u.lang = voice ? voice.lang : "en-IN";
+      u.rate = rate || 0.8; u.pitch = 1.05;
+      let done = false;
+      const fin = ()=>{ if(!done){ done = true; clearTimeout(tm); res(); } };
+      const tm = setTimeout(fin, 1500 + text.length*160);
+      u.onend = fin; u.onerror = fin;
+      speechSynthesis.speak(u);
+    }catch(e){ res(); }
+  });
+}
+const wait = ms => new Promise(r=>setTimeout(r,ms));
+
+/* ---------- letter style: ABC / Abc / abc ---------- */
+let caseMode = "mixed";
+function applyCase(t){
+  return caseMode==="upper" ? t.toUpperCase() : caseMode==="lower" ? t.toLowerCase() : t.charAt(0).toUpperCase()+t.slice(1);
+}
+function updateCaseBtns(){
+  document.querySelectorAll("#case button").forEach(b=>b.setAttribute("aria-pressed", String(b.dataset.case===caseMode)));
+}
+function setCase(m){
+  caseMode = m;
+  try{ localStorage.setItem("readtap-case", m); }catch(e){}
+  updateCaseBtns();
+  if(s && !s.locked) render();
+}
+
+function say(text){
+  stopSpelling();
+  if(!canSpeak) return;
+  speak(text.replace(/[.,!?]/g,""), 0.75);
+}
+
+/* ---------- spelling: b e e, bee ---------- */
+const NAMES = {a:"ay",b:"bee",c:"see",d:"dee",e:"ee",f:"eff",g:"jee",h:"aitch",i:"eye",j:"jay",k:"kay",l:"el",m:"em",
+  n:"en",o:"oh",p:"pee",q:"queue",r:"are",s:"ess",t:"tee",u:"you",v:"vee",w:"double you",x:"ex",y:"why",z:"zed"};
+let tok = 0, spelling = false;
+function clearHi(){ document.querySelectorAll(".ch.on,.w.say").forEach(e=>e.classList.remove("on","say")); }
+function setSpellBtn(on){ const l = $("spelllbl"); if(l) l.textContent = on ? "Stop" : "Spell"; }
+function stopSpelling(){
+  tok++; spelling = false; clearHi(); setSpellBtn(false);
+  if(canSpeak){ try{ speechSynthesis.cancel(); }catch(e){} }
+}
+async function spellAll(){
+  if(spelling){ stopSpelling(); return; }
+  const my = ++tok; spelling = true; setSpellBtn(true);
+  const ws = [...document.querySelectorAll("#read .w")];
+  for(const w of ws){
+    for(const ch of w.querySelectorAll(".ch")){
+      if(my !== tok) return;
+      ch.classList.add("on");
+      await (canSpeak ? speak(NAMES[ch.textContent.toLowerCase()], 0.8) : wait(650));
+      if(my !== tok) return;
+      ch.classList.remove("on");
+      await wait(120);
+    }
+    if(my !== tok) return;
+    w.classList.add("say");
+    await (canSpeak ? speak(w.dataset.say, 0.8) : wait(700));
+    if(my !== tok) return;
+    w.classList.remove("say");
+    await wait(300);
+  }
+  if(ws.length > 1 && my === tok){
+    ws.forEach(w=>w.classList.add("say"));
+    await (canSpeak ? speak(ws.map(w=>w.dataset.say).join(" "), 0.75) : wait(900));
+  }
+  if(my === tok){ spelling = false; clearHi(); setSpellBtn(false); }
+}
+
+/* ---------- drawing ---------- */
+function renderSteps(){
+  $("steps").innerHTML = LEVELS.map((L,k)=>
+    `<button class="step" data-lv="${k}" aria-current="${k===s.lv}"><b>${k+1}. ${L.name}</b><span>★ ${s.best[k]} of ${ROUNDS}</span></button>`).join("");
+}
+function renderDots(){
+  let h="";
+  for(let k=0;k<ROUNDS;k++){
+    const c = k<s.results.length ? (s.results[k]?"star":"miss") : (k===s.pos?"now":"");
+    h += `<i class="${c}"></i>`;
+  }
+  $("dots").innerHTML = h;
+}
+function render(){
+  stopSpelling();
+  renderSteps(); renderDots();
+  const card=$("card"), tiles=$("tiles");
+  if(s.pos>=ROUNDS){ return renderEnd(); }
+  tiles.hidden=false; $("dots").hidden=false;
+  const L=LEVELS[s.lv], q=s.queue[s.pos], it=L.items[q.i];
+  const orig = it.t.split(" "), shown = applyCase(it.t).split(" ");
+  const words = shown.map((w,k)=>{
+    const clean = orig[k].replace(/[^a-z]/gi,"");   // spoken form keeps normal case, so ABC is not read as an acronym
+    const inner = Array.from(w).map(c=>/[a-z]/i.test(c) ? `<span class="ch">${c}</span>` : c).join("");
+    return `<button class="w" data-say="${clean}">${inner}</button>`;
+  }).join(" ");
+  card.innerHTML =
+    `<div class="cardtop"><p class="hint">${L.hint}</p><div class="btns">`+
+    `<button class="hear" id="newset" aria-label="Get a new set of words"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 11-2.4-5.7"/><path d="M20 4v5h-5"/></svg>New words</button>`+
+    `<button class="hear spell" id="spell" aria-label="Spell it out"><span aria-hidden="true">a·b</span><span id="spelllbl">Spell</span></button></div></div><div class="readwrap"><p class="read l${s.lv}" id="read">${words}</p></div><div class="praise" id="praise" hidden></div>`;
+  tiles.innerHTML = q.opts.map(o=>`<button class="tile${Array.from(o.replace(/️/g,"")).length>1?" two":""}" data-p="${o}" aria-label="Picture ${o}">${o}</button>`).join("");
+}
+function renderEnd(){
+  const n = s.results.filter(Boolean).length, L=LEVELS[s.lv], next = s.lv<LEVELS.length-1;
+  $("tiles").hidden=true; $("tiles").innerHTML=""; $("dots").hidden=true;
+  let stars=""; for(let k=0;k<ROUNDS;k++) stars += STAR.replace("FILL", k<n?"#FFD84D":"#FFFDF6");
+  $("card").innerHTML =
+    `<div class="end"><h2>You read ${ROUNDS} ${L.unit}!</h2><div class="starsrow">${stars}</div>`+
+    `<p class="big">${n} of ${ROUNDS} right on the first try</p><div class="row">`+
+    (next?`<button class="btn main" data-go="${s.lv+1}">Next: ${LEVELS[s.lv+1].name}</button>`:"")+
+    `<button class="btn${next?"":" main"}" data-go="${s.lv}">Play again</button></div></div>`;
+}
+
+/* ---------- play ---------- */
+function pick(btn){
+  if(s.locked || s.pos>=ROUNDS) return;
+  const q=s.queue[s.pos], it=LEVELS[s.lv].items[q.i];
+  if(btn.dataset.p===it.p){
+    s.locked=true;
+    btn.classList.add("right");
+    document.querySelectorAll(".tile").forEach(b=>b.disabled=true);
+    s.results.push(s.missed?0:1);
+    const pr=$("praise"); pr.textContent = PRAISE[Math.floor(Math.random()*PRAISE.length)]; pr.hidden=false;
+    tone([660,880]);
+    renderDots();
+    setTimeout(()=>{
+      s.locked=false; s.missed=false; s.pos++;
+      if(s.pos>=ROUNDS){
+        const n=s.results.filter(Boolean).length;
+        if(n>s.best[s.lv]){ s.best[s.lv]=n; saveBest(); }
+        tone([523,659,784,1047]);
+      }
+      render();
+    }, 1100);
+  }else{
+    s.missed=true;
+    btn.classList.add("wrong"); btn.disabled=true;
+    tone([220]);
+  }
+}
+
+document.addEventListener("click", e=>{
+  const t = e.target.closest("button"); if(!t) return;
+  if(t.classList.contains("tile")) return pick(t);
+  if(t.classList.contains("w")){ t.classList.add("say"); setTimeout(()=>t.classList.remove("say"),600); return say(t.dataset.say); }
+  if(t.dataset.case) return setCase(t.dataset.case);
+  if(t.id==="spell") return spellAll();
+  if(t.id==="newset"){ if(s.locked) return; return newGame(s.lv, s.queue.map(q=>q.i)); }
+  if(t.dataset.lv!==undefined) return newGame(+t.dataset.lv);
+  if(t.dataset.go!==undefined) return newGame(+t.dataset.go);
+});
+
+function start(saved){
+  try{ const c = localStorage.getItem("readtap-case"); if(c==="upper"||c==="mixed"||c==="lower") caseMode = c; }catch(e){}
+  updateCaseBtns();
+  if(saved && saved.queue && saved.queue.length===ROUNDS && LEVELS[saved.lv]){
+    s = saved; s.locked=false; s.best = s.best || loadBest(); render();
+  }else{
+    s = null; newGame(0);
+  }
+}
+const hot = window.claude && window.claude.hot;
+if(hot && hot.snapshot) hot.snapshot(()=>({lv:s.lv,queue:s.queue,pos:s.pos,results:s.results,missed:s.missed,best:s.best}));
+if(hot && hot.ready) hot.ready(start); else start((hot && hot.data) || {});
+</script>
+</body>
+</html>
