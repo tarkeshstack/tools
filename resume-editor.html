@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resume Editor - Tarkeshwar Kumar</title>
+<style>
+  :root { --navy:#1F3864; --blue:#5B9BD5; --lblue:#DDEBF7; --grey:#F2F2F2; --ui:Calibri, "Segoe UI", Arial, sans-serif; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:#e6e8eb; font-family:var(--ui); color:#111; }
+  button { font-family:var(--ui); cursor:pointer; }
+
+  /* ---------- top bar + tabs ---------- */
+  #top { position:sticky; top:0; z-index:20; background:#2b3a55; box-shadow:0 2px 6px rgba(0,0,0,.25); }
+  .bar { display:flex; align-items:center; gap:6px; padding:8px 10px; flex-wrap:wrap; }
+  .seg { display:inline-flex; border:1px solid #8fa0bf; border-radius:6px; overflow:hidden; }
+  .seg button { background:transparent; color:#dbe4f5; border:0; padding:7px 14px; font-size:14px; }
+  body.view .seg .bv, body.edit .seg .be { background:#fff; color:#1F3864; font-weight:700; }
+  .abtn { background:#1F6FEB; color:#fff; border:0; border-radius:6px; padding:8px 12px; font-size:14px; font-weight:600; }
+  #saved { color:#b9c6dd; font-size:12px; margin-left:auto; }
+  details.more { position:relative; }
+  details.more summary { list-style:none; background:#fff; border-radius:6px; padding:7px 10px; font-size:14px; cursor:pointer; }
+  details.more summary::-webkit-details-marker { display:none; }
+  details.more .menu { position:absolute; right:0; top:36px; background:#fff; border:1px solid #c9ced6; border-radius:8px; padding:6px; display:flex; flex-direction:column; gap:4px; min-width:190px; box-shadow:0 6px 18px rgba(0,0,0,.2); }
+  details.more .menu button { text-align:left; background:#f2f5fa; border:0; border-radius:5px; padding:9px 10px; font-size:14px; }
+  .tabs { display:flex; gap:4px; flex-wrap:wrap; padding:0 8px 8px; }
+  .tab { flex:0 0 auto; background:#3a4b6b; color:#dbe4f5; border:0; border-radius:16px; padding:7px 14px; font-size:14px; white-space:nowrap; }
+  .tab.active { background:#fff; color:#1F3864; font-weight:700; }
+  .tab .s { display:none; }
+  #tabsBottom { display:none; }
+
+  /* mobile: 5 tabs on top, 5 at the bottom */
+  @media (max-width:700px) {
+    .tabs { flex-wrap:nowrap; gap:3px; padding:0 6px 8px; }
+    .tabs .tab { flex:1 1 0; min-width:0; padding:8px 2px; font-size:12.5px; border-radius:10px; text-align:center; overflow:hidden; text-overflow:ellipsis; }
+    .tab .l { display:none; } .tab .s { display:inline; }
+    .tabs .tab.late { display:none; }
+    #tabsBottom { display:flex; position:fixed; left:0; right:0; bottom:0; z-index:20; background:#2b3a55; padding:8px 6px calc(8px + env(safe-area-inset-bottom)); gap:3px; box-shadow:0 -2px 6px rgba(0,0,0,.25); }
+    #tabsBottom .tab { flex:1 1 0; min-width:0; padding:8px 2px; font-size:12.5px; border-radius:10px; text-align:center; overflow:hidden; text-overflow:ellipsis; }
+    #viewPane { padding-bottom:90px; }
+    #editPane { padding-bottom:100px; }
+    .bar { gap:5px; }
+    #saved { display:none; }
+  }
+
+  /* ---------- panes ---------- */
+  body.view #editPane { display:none; }
+  body.edit #viewPane { display:none; }
+  #viewPane { padding:12px 6px 40px; }
+
+  /* ---------- Word-style document ---------- */
+  #doc { width:210mm; min-height:297mm; margin:0 auto; background:#fff; padding:16mm 18mm; box-shadow:0 2px 12px rgba(0,0,0,.25); font-family:Cambria, Georgia, "Times New Roman", serif; font-size:11pt; line-height:1.35; color:#000; transform-origin:top center; }
+  #doc h1 { font-size:24pt; color:var(--navy); margin:0; line-height:1.1; }
+  #doc .sub { font-size:13pt; margin:2px 0 0; }
+  #doc .roles { font-size:10.5pt; font-style:italic; margin:2px 0 10px; }
+  #doc h2 { font-size:14pt; color:var(--navy); margin:0 0 6px; font-weight:bold; }
+  #doc .sec { margin:0 0 16px; scroll-margin-top:120px; }
+  #doc ul { margin:4px 0; padding-left:22px; }
+  #doc li { margin:2px 0; }
+  #doc table { border-collapse:collapse; width:100%; }
+  #doc td, #doc th { padding:4px 8px; vertical-align:top; font-size:11pt; }
+  table.prog th { background:var(--blue); color:#fff; text-align:center; font-size:10.5pt; padding:8px; border:1px solid var(--blue); }
+  table.prog td { background:var(--lblue); text-align:center; border:1px solid var(--blue); }
+  table.skills td, table.skills th { border:1px solid #000; text-align:center; font-size:10.5pt; }
+  table.skills th { font-family:Calibri, Arial, sans-serif; font-size:12pt; padding:8px; }
+  .job { margin:8px 0 10px; }
+  table.jobrow td { padding:0 !important; }
+  .org { font-weight:bold; font-size:12pt; }
+  .when { text-align:right; white-space:nowrap; }
+  .job p { margin:6px 0 0 24px; }
+  .proj { margin:0 0 14px; break-inside:avoid; }
+  .proj table { border-top:1px solid #444; }
+  .proj td:first-child { width:30%; font-weight:bold; text-align:center; }
+  .proj tr:nth-child(even) td { background:var(--grey); }
+  .proj tr:first-child td:last-child { font-weight:bold; text-transform:uppercase; }
+  .center { text-align:center; font-weight:bold; text-decoration:underline; margin-top:24px; }
+
+  /* ---------- form editor ---------- */
+  #editPane { max-width:780px; margin:0 auto; padding:12px 10px 60px; }
+  #editPane h3 { margin:6px 2px 6px; font-size:20px; color:#1F3864; }
+  .hide { display:flex; align-items:center; gap:8px; margin:0 2px 12px; font-size:14px; color:#44506a; }
+  .card { background:#fff; border:1px solid #d9dee7; border-radius:10px; padding:12px; margin:0 0 12px; }
+  .ch { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:10px; }
+  .ch b { font-size:15px; color:#1F3864; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .f { display:block; margin:0 0 10px; }
+  .f span { display:block; font-size:13px; font-weight:600; color:#44506a; margin-bottom:3px; }
+  .f small { display:block; color:#7a869c; margin-top:2px; font-size:12px; }
+  input[type=text], textarea { width:100%; padding:9px 10px; border:1px solid #c5ccd8; border-radius:6px; font:16px var(--ui); background:#fff; resize:vertical; }
+  input[type=text]:focus, textarea:focus { outline:2px solid #9ec1f7; border-color:#5b9bd5; }
+  .list { background:#fff; border:1px solid #d9dee7; border-radius:10px; padding:12px; margin:0 0 12px; }
+  .card .list { border:0; padding:0; margin:0 0 6px; }
+  .lh { font-size:13px; font-weight:600; color:#44506a; margin-bottom:6px; }
+  .li { display:flex; gap:6px; align-items:flex-start; margin-bottom:6px; }
+  .li textarea { flex:1; }
+  .mv { display:inline-flex; gap:3px; flex:0 0 auto; }
+  .mv button { background:#eef2f8; border:1px solid #d3dbe8; border-radius:5px; padding:6px 9px; font-size:13px; }
+  .mv button.x { color:#b42318; }
+  .add { background:#fff; border:1px dashed #6b7c99; color:#1F3864; border-radius:6px; padding:9px 14px; font-size:14px; width:100%; margin:2px 0 8px; }
+
+  @media print {
+    @page { size:A4; margin:14mm 15mm; }
+    body { background:#fff; }
+    #top, #editPane, #tabsBottom { display:none !important; }
+    #viewPane { display:block !important; padding:0; }
+    #doc { zoom:1 !important; box-shadow:none; width:auto; min-height:0; padding:0; }
+    * { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  }
+</style>
+</head>
+<body class="view">
+
+<div id="top">
+  <div class="bar">
+    <div class="seg"><button class="bv" id="bView">👁 View</button><button class="be" id="bEdit">✎ Edit</button></div>
+    <button class="abtn" id="bPdf">PDF</button>
+    <button class="abtn" id="bWord">Word</button>
+    <details class="more"><summary>⋮ More</summary>
+      <div class="menu">
+        <button id="bBackup">Backup data (.json)</button>
+        <button id="bRestore">Restore from backup</button>
+        <button id="bReset">Reset to original</button>
+      </div>
+    </details>
+    <span id="saved"></span>
+  </div>
+  <div class="tabs" id="tabs"></div>
+</div>
+
+<nav class="tabs" id="tabsBottom"></nav>
+
+<div id="viewPane"><div id="doc"></div></div>
+<div id="editPane"></div>
+<input type="file" id="fileIn" accept=".json,application/json" hidden>
+
+<script>
+(function () {
+  /* ================= data ================= */
+  var SEED = {
+    name: "Tarkeshwar Kumar",
+    title: "Service Delivery Manager, Bangalore",
+    roles: "(Highly Confident roles: Project Manager / Delivery Manager / BI Solution Architect)",
+    footer: "Thank You for Visiting",
+    hidden: {},
+    summary: [
+      "A detail oriented, tech savvy and self motivated Project Manager with strong experience in various Delivery, Sales and Technical positions.",
+      "A Data Analytics domain expert with 18 years of vast experience involving end to end data warehousing implementation for customers among Fortune 500 companies.",
+      "Onsite experience of 3 years in a customer facing role, coordinating with the offshore team for project deliveries and business requirement gathering with business users.",
+      "12+ years of Project Management experience including customer management, team management and leadership management.",
+      "8 years of experience closely working with the Pre-Sales team on activities like writing SoW, responding to RFPs, proposals and meeting customers.",
+      "3 years of CXO engagement experience as Location Innovation Head, leading the innovation lab and demonstrating emerging tech prototypes to leadership.",
+      "Managed a team size of 20-25 at peak across different locations and age groups.",
+      "Managed 10+ stakeholders across 3 geographies (India, US, UK and Europe).",
+      "Led and demonstrated various proofs of concept to customer leadership, utilizing the resources within the team.",
+      "Experienced in Digital Transformation, Generative AI, Prompt Engineering, Agile, Scrum, Python, Teradata, PL/SQL, Data Warehousing, Informatica, IICS, P360, AVOS, PowerBI and Big Data concepts, staying on top of emerging technologies to provide better solutions and services to customers."
+    ],
+    career: [
+      { period: "2007-2010", role: "Software Engineer" },
+      { period: "2010-2013", role: "Onsite Co-ordinator (US)" },
+      { period: "2013-onwards", role: "**Project Management**" }
+    ],
+    jobs: [
+      { org: "Tata Consultancy Services", when: "May 2021 Onwards", role: "Service Delivery Manager",
+        intro: "Managing Service Delivery for a leading US based company which includes responsibilities like Team Management, Customer Management, and co-ordination with internal teams like the resource management group, competencies and pre sales for business deliveries and growth.",
+        bullets: [], closing: "", extra: "" },
+      { org: "TechMahindra Limited", when: "Jan 2007 – May 2021", role: "Technical Project Manager",
+        intro: "Have played various roles during the tenure in TechMahindra including:",
+        bullets: ["Software Developer", "Onsite Co-ordinator", "Pre Sales Activities - Involvement in SoW", "Customer Management", "Project Management"],
+        closing: "Have progressed in career through all the stages delivering projects successfully and winning accolades from internal leadership and customers.",
+        extra: "Total Projects Executed - **21+ Projects:** 5 as Developer, 5 as Project Lead, 2 as Onsite Coordinator, 9 as Project Manager" }
+    ],
+    skills: {
+      h: ["Management Skills", "Technical Skills", "Tools Knowhow"],
+      c: [
+        ["Service Delivery Management", "Project Management", "Presales - SoW/RFP", "Resource Management", "Quality Assurance", "Mentorship and Coaching", "POC and Demonstrations"],
+        ["Business Intelligence", "Data Visualization", "Data Modelling", "Databases - Oracle, Teradata", "MSSQL, PL/SQL", "Data Engineering - ETL", "Scripting"],
+        ["Informatica, Talend", "Erwin", "Spotfire, Tableau, PowerBI", "Confluence, JIRA, Rally", "Microsoft Excel, PowerPoint, Word, Power Automate", "ALM, qTEST, ServiceNow", "IICS, P360, AVOS"]
+      ]
+    },
+    certs: [
+      "PMP Trained and Enrolled", "Advanced Teradata Certified Professional", "Python for Everybody by Coursera",
+      "Big Data and Hadoop Foundation Course", "Six Sigma and QMS Certified - TechMahindra Certified",
+      "Agile and Scrum - TechMahindra Certification", "Silver and Gold Mentoring and Coaching - TCS Certified",
+      "Generative AI Lead - TCS Certified"
+    ],
+    edu: [
+      { degree: "MBA in Business Analytics", school: "BITS Pilani", detail: "June 2021 – June 2023 - WILP (Work Integrated Learning Program)" },
+      { degree: "BE in Information Technology", school: "BIT Sindri", detail: "June 2002 – June 2006, Information Technology" }
+    ],
+    keyProjects: [
+      "End to End Implementation of Data Warehouse for an Aviation Industry",
+      "- Implemented MLDM Teradata",
+      "- Established Data Flow, ETL with Informatica",
+      "Data Services design and development for major applications",
+      "Managed various development, SDLC and Support ITIL projects",
+      "Project Management for Fixed bid, Time and Material Data Analytics and ERP Projects",
+      "Exposure to Manufacturing (MRO) and CPG domain",
+      "Implementation of an organizational proprietary tool for the customer and spreading the footprint"
+    ],
+    projects: [
+      { name: "Generative AI Usecase Implementation", org: "Tata Consultancy Services Limited", duration: "Oct 2023 Onwards",
+        desc: "Brainstorming with the team to deep dive into business functionalities and map Generative AI use cases to function areas. Work in co-ordination with the competency team and customer leadership for implementation.",
+        tools: "Generative AI tools", location: "Bangalore", role: "Generative AI Champion",
+        resp: ["POC and Implementation", "Technical Brainstorming", "Team Co-ordination", "Solutioning & Pitching for POCs", "Account mining and Business Opportunities identification"] },
+      { name: "Data Analytics TCS In-House Tool Implementation and Quality", org: "Tata Consultancy Services Limited", duration: "June 2021 Onwards",
+        desc: "Implementing TCS tools in the customer environment and increasing footprints in the customer portfolio. Managing the Data testing and Quality Assurance team to ensure smoother application releases and customer experiences.",
+        tools: "TCS tool, TOSCA, Neoload, qTEST", location: "Bangalore", role: "Service Delivery Manager",
+        resp: ["POC and Implementation", "Service Delivery", "Team Management", "Customer Interactions", "Solutioning & Pitching for POCs", "Account mining and Business Opportunities identification"] },
+      { name: "DataLake Data Ingestions", org: "Tech Mahindra Limited", duration: "Jan 2017 – Feb 2020",
+        desc: "DataLake Data Ingestions involves moving different source systems into a DataLake in Postgres. Various heterogeneous sources are replicated into GreenPlum and loaded via the ETL tool Talend. Visualization is done on Spotfire to track the load monitoring.",
+        tools: "Informatica, Shell Scripts, Talend, Spotfire, GreenPlum, Postgres, HVR, UiPath", location: "Bhubaneshwar, India", role: "Technical Project Manager",
+        resp: ["Project governance", "Team Management", "Customer Interactions", "Solutioning & Pitching for POCs", "Account mining and Business Opportunities identification"] },
+      { name: "Cost Analytics", org: "Tech Mahindra Limited", duration: "October 2013 – Nov 2014",
+        desc: "Cost Analytics is an initiative to automate an analytical application which provides a vision on contract cost performance of overhaul invoice data flow (actuals), overhaul target data flow (CMR forecast), and variance to target by various levels of granularity.",
+        tools: "Informatica, Teradata, Oracle", location: "Bhubaneshwar, India", role: "Technical Project Manager",
+        resp: ["Understanding and gathering requirements from users", "Creating High Level design document to accomplish requirements", "Analysis of the different source systems and their associations", "Backward engineering of required report attributes to the current PLM system", "Understanding the Logical data model and its integration with different sources"] },
+      { name: "My Engines (Onsite)", org: "Tech Mahindra Limited", duration: "Jan 2012 – September 2013",
+        desc: "My Engine is a project to provide day to day analysis of cost occurring in services and maintenance of engines visiting different Overhaul shops. Once an Engine is inducted in Overhaul shop, [complete this sentence]",
+        tools: "Informatica", location: "Cincinnati, USA", role: "Technical Onsite Coordinator",
+        resp: ["Requirement gathering and analysis of different source systems involved", "Creating ETL Design document to integrate Shop Data to WIP mLDM", "Coordination with offshore team for development and execution of Data design", "Development of Informatica maps to pull data from different shops and integrate with WIP solutions", "QA migration and facilitating UAT testing, feedback from users and bug fixes"] },
+      { name: "PLM Reporting (Onsite)", org: "Tech Mahindra Limited", duration: "April 2010 – Jan 2011",
+        desc: "PLM Reporting is an initiative to provide Engineering users with business critical reports and scorecards containing information from different applications. The scope also provides features to build data integrations between Oracle ODS and Teradata EEDW systems and its continuous periodic data feed.",
+        tools: "Informatica, Oracle, Teradata", location: "Greenville, USA", role: "Onsite Co-ordinator",
+        resp: ["Reverse engineering of legacy data attributes to the current PLM system", "Designing ETL integrations for data mappings from Oracle ODS to EEDW Teradata", "Coordination with offshore team for development and execution of Data design", "Designing the load run schedule considering the entity dependencies in the warehouse"] },
+      { name: "Services Enterprise Data Warehouse", org: "Tech Mahindra Limited", duration: "September 2008 – March 2010",
+        desc: "Services Enterprise Data Warehouse is a conversion project where data is extracted from the old legacy system and mapped to the Teradata mLDM. A 3-way mapping was done to replicate the data elements in SAP and the Legacy system.",
+        tools: "Informatica, Teradata, Shell Scripts, Oracle", location: "Bhubaneshwar, India", role: "Team Lead",
+        resp: ["Writing Oracle PL/SQL and Teradata BTEQ queries, configuring MLOAD and FLOAD connections for Informatica", "Performing data validation by comparing upstream and downstream data", "Co-ordination with other teams to define business rules and design the database structure", "Performing Unit Testing, Integration Testing and supporting UAT for the users"] }
+    ],
+    contact: {
+      address: "Bangalore, Karnataka, India, Pin-560067", phone: "+91 7735734061",
+      email: "star007.tarkesh@gmail.com", location: "Bangalore", linkedin: "https://www.linkedin.com/in/tarkeshwarkumar/"
+    },
+    recs: [
+      "Delivery Manager (BI/DWH) at Tech Mahindra", "Vice President - NA region, TechMahindra",
+      "Technical Architect at Tech Mahindra", "From Now A Chief Technology Officer"
+    ]
+  };
+
+  var NEW = {
+    career: function () { return { period: "", role: "" }; },
+    jobs: function () { return { org: "", when: "", role: "", intro: "", bullets: [], closing: "", extra: "" }; },
+    edu: function () { return { degree: "", school: "", detail: "" }; },
+    projects: function () { return { name: "", org: "", duration: "", desc: "", tools: "", location: "", role: "", resp: [] }; }
+  };
+
+  var TABS = [
+    ["profile", "Profile", "Profile"], ["summary", "Summary", "Summary"], ["career", "Career", "Career"],
+    ["exp", "Experience", "Work"], ["skills", "Skills", "Skills"],
+    ["certs", "Certifications", "Certs"], ["edu", "Education", "Edu"], ["key", "Key Projects", "Key"],
+    ["proj", "Projects", "Projects"], ["contact", "Contact & Recs", "Contact"]
+  ];
+  var TITLES = { summary: "Professional Summary", career: "Career Progressions:", exp: "Work Experience:", skills: "Skills:",
+    certs: "Courses and Certifications:", edu: "Education:", key: "Key Projects:", proj: "Detailed Major Projects:",
+    contact: "Contacts:", recs: "Recommendations:" };
+
+  var KEY = "tarkeshwar-resume-form-v1";
+  var clone = function (o) { return JSON.parse(JSON.stringify(o)); };
+  var D = clone(SEED);
+  try {
+    var saved = localStorage.getItem(KEY);
+    if (saved) { var p = JSON.parse(saved); D = Object.assign(clone(SEED), p); }
+  } catch (e) {}
+  if (!D.hidden) D.hidden = {};
+
+  var cur = "profile";
+  var $ = function (id) { return document.getElementById(id); };
+  var doc = $("doc"), editPane = $("editPane"), tabsEl = $("tabs"), savedEl = $("saved");
+
+  /* ================= helpers ================= */
+  function esc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function fmt(s) { return esc(s).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/\n/g, "<br>"); }
+  function clean(arr) { return (arr || []).filter(function (x) { return x && String(x).trim(); }); }
+  function ref(path) { var k = path.split("."), o = D; for (var i = 0; i < k.length - 1; i++) o = o[k[i]]; return [o, k[k.length - 1]]; }
+  function get(path) { var r = ref(path); return r[0][r[1]]; }
+  function set(path, v) { var r = ref(path); r[0][r[1]] = v; }
+  function newItem(path) { var last = path.split(".").pop(); return NEW[last] ? NEW[last]() : ""; }
+
+  var tmr;
+  function changed() {
+    clearTimeout(tmr); savedEl.textContent = "Saving…";
+    tmr = setTimeout(function () {
+      try { localStorage.setItem(KEY, JSON.stringify(D)); savedEl.textContent = "Saved ✓"; }
+      catch (e) { savedEl.textContent = "Use Backup to keep data"; }
+    }, 500);
+  }
+
+  /* ================= Word-style render ================= */
+  function ul(arr) { arr = clean(arr); return arr.length ? "<ul>" + arr.map(function (x) { return "<li>" + fmt(x) + "</li>"; }).join("") + "</ul>" : ""; }
+  function nestedUl(lines) {
+    var items = [];
+    clean(lines).forEach(function (l) {
+      if (l.indexOf("- ") === 0 && items.length) items[items.length - 1].sub.push(l.slice(2));
+      else items.push({ t: l, sub: [] });
+    });
+    if (!items.length) return "";
+    return "<ul>" + items.map(function (it) {
+      return "<li>" + fmt(it.t) + (it.sub.length ? "<ul>" + it.sub.map(function (s) { return "<li>" + fmt(s) + "</li>"; }).join("") + "</ul>" : "") + "</li>";
+    }).join("") + "</ul>";
+  }
+  function sec(id, body) {
+    if (D.hidden[id] || !body) return "";
+    return '<div class="sec" id="sec-' + id + '"><h2>' + TITLES[id] + "</h2>" + body + "</div>";
+  }
+  function row(label, val, isList) {
+    if (isList) { var l = ul(val); return l ? "<tr><td>" + label + "</td><td>" + l + "</td></tr>" : ""; }
+    return val && String(val).trim() ? "<tr><td>" + label + "</td><td>" + fmt(val) + "</td></tr>" : "";
+  }
+
+  function renderDoc() {
+    var o = '<div class="sec" id="sec-profile"><h1>' + esc(D.name) + "</h1>" +
+      (D.title ? '<p class="sub">' + esc(D.title) + "</p>" : "") +
+      (D.roles ? '<p class="roles">' + esc(D.roles) + "</p>" : "") + "</div>";
+
+    o += sec("summary", ul(D.summary));
+
+    if (D.career.length) {
+      o += sec("career", '<table class="prog"><tr>' + D.career.map(function (c) { return "<th>" + esc(c.period) + "</th>"; }).join("") +
+        "</tr><tr>" + D.career.map(function (c) { return "<td>" + fmt(c.role) + "</td>"; }).join("") + "</tr></table>");
+    }
+
+    o += sec("exp", D.jobs.map(function (j) {
+      return '<div class="job"><table class="jobrow"><tr><td class="org">' + esc(j.org) + '</td><td class="when">' + esc(j.when) + "</td></tr></table>" +
+        "<div>" + esc(j.role) + "</div>" +
+        (j.intro ? "<p>" + fmt(j.intro) + "</p>" : "") + ul(j.bullets) +
+        (j.closing ? "<p>" + fmt(j.closing) + "</p>" : "") + (j.extra ? "<p>" + fmt(j.extra) + "</p>" : "") + "</div>";
+    }).join(""));
+
+    var cols = D.skills.c.map(clean), n = Math.max.apply(null, cols.map(function (c) { return c.length; }));
+    if (n > 0) {
+      var t = '<table class="skills"><tr>' + D.skills.h.map(function (h) { return "<th>" + esc(h) + "</th>"; }).join("") + "</tr>";
+      for (var i = 0; i < n; i++) t += "<tr>" + cols.map(function (c) { return "<td>" + (c[i] ? fmt(c[i]) : "") + "</td>"; }).join("") + "</tr>";
+      o += sec("skills", t + "</table>");
+    }
+
+    o += sec("certs", ul(D.certs));
+    o += sec("edu", ul(D.edu.map(function (e) {
+      return "**" + e.degree + "**" + (e.school ? " from **" + e.school + "**" : "") + (e.detail ? ", " + e.detail : "");
+    })));
+    o += sec("key", nestedUl(D.keyProjects));
+
+    o += sec("proj", D.projects.map(function (p) {
+      return '<div class="proj"><table>' +
+        "<tr><td>PROJECT NAME</td><td>" + fmt(p.name) + "</td></tr>" +
+        row("ORGANIZATION", p.org) + row("DURATION", p.duration) + row("DESCRIPTION", p.desc) +
+        row("TOOLS", p.tools) + row("LOCATION", p.location) + row("ROLE", p.role) +
+        row("KEY RESPONSIBILITIES", p.resp, true) + "</table></div>";
+    }).join(""));
+
+    var c = D.contact, cl = [];
+    [["Address", c.address], ["Mobile Phone", c.phone], ["Email", c.email], ["Location", c.location], ["LinkedIn", c.linkedin]].forEach(function (x) {
+      if (x[1] && String(x[1]).trim()) cl.push(x[0] + ": " + x[1]);
+    });
+    o += sec("contact", ul(cl));
+    o += sec("recs", ul(D.recs));
+    if (D.footer) o += '<p class="center">' + esc(D.footer) + "</p>";
+    return o;
+  }
+
+  function applyZoom() {
+    var z = Math.min(1, (window.innerWidth - 12) / 794);
+    doc.style.zoom = z;
+  }
+  function renderView() { doc.innerHTML = renderDoc(); applyZoom(); }
+
+  /* ================= form render ================= */
+  function fld(label, path, o) {
+    o = o || {};
+    var v = get(path), lines = o.lines;
+    var val = lines ? clean(v).join("\n") : v;
+    var attr = 'data-p="' + path + '"' + (lines ? ' data-lines="1"' : "");
+    var input = (o.area || lines)
+      ? '<textarea ' + attr + ' rows="' + (o.rows || 2) + '">' + esc(val) + "</textarea>"
+      : '<input type="text" ' + attr + ' value="' + esc(val) + '">';
+    return '<label class="f"><span>' + label + "</span>" + input + (o.hint ? "<small>" + o.hint + "</small>" : "") + "</label>";
+  }
+  function mv(path, i, dup) {
+    return '<span class="mv"><button data-act="up" data-p="' + path + '" data-i="' + i + '">↑</button>' +
+      '<button data-act="down" data-p="' + path + '" data-i="' + i + '">↓</button>' +
+      (dup ? '<button data-act="dup" data-p="' + path + '" data-i="' + i + '">⧉</button>' : "") +
+      '<button class="x" data-act="del" data-p="' + path + '" data-i="' + i + '">✕</button></span>';
+  }
+  function strList(path, label, noun, hint) {
+    var arr = get(path);
+    return '<div class="list"><div class="lh">' + label + "</div>" +
+      arr.map(function (v, i) {
+        return '<div class="li"><textarea data-p="' + path + "." + i + '" rows="1">' + esc(v) + "</textarea>" + mv(path, i) + "</div>";
+      }).join("") +
+      '<button class="add" data-act="add" data-p="' + path + '">+ Add ' + noun + "</button>" +
+      (hint ? '<div class="f"><small>' + hint + "</small></div>" : "") + "</div>";
+  }
+  function cards(path, titleFn, bodyFn, noun, dup) {
+    return get(path).map(function (it, i) {
+      return '<div class="card"><div class="ch"><b>' + esc(titleFn(it) || noun + " " + (i + 1)) + "</b>" + mv(path, i, dup) + "</div>" + bodyFn(it, path + "." + i) + "</div>";
+    }).join("") + '<button class="add" data-act="add" data-p="' + path + '">+ Add ' + noun + "</button>";
+  }
+
+  function tabForm(id) {
+    var h = "<h3>" + (TABS.filter(function (t) { return t[0] === id; })[0][1]) + "</h3>";
+    if (id !== "profile") {
+      h += '<label class="hide"><input type="checkbox" data-hide="' + id + '"' + (D.hidden[id] ? "" : " checked") + "> Show " + (id === "contact" ? "Contacts" : "this section") + " in the resume</label>";
+      if (id === "contact") h += '<label class="hide"><input type="checkbox" data-hide="recs"' + (D.hidden.recs ? "" : " checked") + "> Show Recommendations in the resume</label>";
+    }
+    var b = "";
+    if (id === "profile") {
+      b = '<div class="card">' + fld("Full name", "name") + fld("Headline", "title") + fld("Target roles line", "roles", { area: true }) +
+        fld("Closing line (bottom of resume)", "footer", { hint: "Leave empty to hide" }) + "</div>" +
+        '<p style="font-size:13px;color:#667;margin:0 2px">Tip: in any text box, wrap words in **double stars** to make them bold.</p>';
+    } else if (id === "summary") {
+      b = strList("summary", "Summary points", "point");
+    } else if (id === "career") {
+      b = cards("career", function (c) { return c.period; }, function (c, p) { return fld("Period", p + ".period") + fld("Role", p + ".role"); }, "stage");
+    } else if (id === "exp") {
+      b = cards("jobs", function (j) { return j.org; }, function (j, p) {
+        return fld("Company", p + ".org") + fld("Dates", p + ".when") + fld("Designation", p + ".role") +
+          fld("Intro text", p + ".intro", { area: true, rows: 3 }) +
+          strList(p + ".bullets", "Roles / bullet points", "bullet") +
+          fld("Closing text", p + ".closing", { area: true }) + fld("Extra line (e.g. projects executed)", p + ".extra", { area: true });
+      }, "job");
+    } else if (id === "skills") {
+      b = '<div class="card">' + [0, 1, 2].map(function (i) {
+        return fld("Column " + (i + 1) + " heading", "skills.h." + i) +
+          fld("Column " + (i + 1) + " items", "skills.c." + i, { lines: true, rows: 7, hint: "One item per line" });
+      }).join("") + "</div>";
+    } else if (id === "certs") {
+      b = strList("certs", "Certifications and courses", "certification");
+    } else if (id === "edu") {
+      b = cards("edu", function (e) { return e.degree; }, function (e, p) {
+        return fld("Degree", p + ".degree") + fld("Institute", p + ".school") + fld("Dates / details", p + ".detail", { area: true });
+      }, "qualification");
+    } else if (id === "key") {
+      b = strList("keyProjects", "Key project points", "point", "Start a line with “- ” (dash and space) to make it a sub-point of the line above.");
+    } else if (id === "proj") {
+      b = cards("projects", function (p) { return p.name; }, function (p, q) {
+        return fld("Project name", q + ".name") + fld("Organization", q + ".org") + fld("Duration", q + ".duration") +
+          fld("Description", q + ".desc", { area: true, rows: 4 }) + fld("Tools", q + ".tools") +
+          fld("Location", q + ".location") + fld("Role", q + ".role") +
+          strList(q + ".resp", "Key responsibilities", "responsibility");
+      }, "project", true);
+    } else if (id === "contact") {
+      b = '<div class="card">' + fld("Address", "contact.address") + fld("Mobile phone", "contact.phone") + fld("Email", "contact.email") +
+        fld("Location", "contact.location") + fld("LinkedIn", "contact.linkedin") + "</div>" +
+        strList("recs", "Recommendations", "recommendation");
+    }
+    return h + b;
+  }
+
+  function autosize(t) { t.style.height = "auto"; t.style.height = (t.scrollHeight + 2) + "px"; }
+  function renderEdit(keep) {
+    var y = window.scrollY;
+    editPane.innerHTML = tabForm(cur);
+    editPane.querySelectorAll("textarea").forEach(autosize);
+    window.scrollTo(0, keep ? y : 0);
+  }
+
+  /* ================= events ================= */
+  editPane.addEventListener("input", function (e) {
+    var t = e.target, p = t.getAttribute("data-p");
+    if (!p) return;
+    set(p, t.hasAttribute("data-lines") ? t.value.split("\n") : t.value);
+    if (t.tagName === "TEXTAREA") autosize(t);
+    changed();
+  });
+  editPane.addEventListener("change", function (e) {
+    var id = e.target.getAttribute("data-hide");
+    if (id) { D.hidden[id] = !e.target.checked; changed(); }
+  });
+  editPane.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-act]");
+    if (!b) return;
+    var act = b.dataset.act, p = b.dataset.p, i = +b.dataset.i, arr = get(p);
+    if (act === "add") arr.push(newItem(p));
+    else if (act === "del") { if (!confirm("Delete this?")) return; arr.splice(i, 1); }
+    else if (act === "up") { if (i < 1) return; var a = arr[i - 1]; arr[i - 1] = arr[i]; arr[i] = a; }
+    else if (act === "down") { if (i > arr.length - 2) return; var c = arr[i + 1]; arr[i + 1] = arr[i]; arr[i] = c; }
+    else if (act === "dup") arr.splice(i + 1, 0, clone(arr[i]));
+    changed(); renderEdit(true);
+  });
+
+  function tabBtn(t, i) {
+    return '<button class="tab' + (i >= 5 ? " late" : "") + (t[0] === cur ? " active" : "") + '" data-t="' + t[0] + '"><span class="l">' + t[1] + '</span><span class="s">' + t[2] + "</span></button>";
+  }
+  var tabsBottom = $("tabsBottom");
+  function buildTabs() {
+    tabsEl.innerHTML = TABS.map(tabBtn).join("");
+    tabsBottom.innerHTML = TABS.slice(5).map(function (t, i) { return tabBtn(t, 0); }).join("");
+  }
+  function sectionEl(id) { return $("sec-" + id) || (id === "contact" ? $("sec-recs") : null); }
+  function onTab(e) {
+    var b = e.target.closest("[data-t]");
+    if (!b) return;
+    cur = b.dataset.t; buildTabs();
+    if (document.body.classList.contains("edit")) renderEdit(false);
+    else {
+      var el = sectionEl(cur);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+  tabsEl.addEventListener("click", onTab);
+  tabsBottom.addEventListener("click", onTab);
+
+  function setMode(m) {
+    document.body.className = m;
+    if (m === "view") { renderView(); var el = sectionEl(cur); window.scrollTo(0, 0); if (el && cur !== "profile") setTimeout(function () { el.scrollIntoView({ block: "start" }); }, 30); }
+    else renderEdit(false);
+  }
+  $("bView").onclick = function () { setMode("view"); };
+  $("bEdit").onclick = function () { setMode("edit"); };
+  window.addEventListener("resize", applyZoom);
+
+  /* ================= downloads ================= */
+  function download(name, mime, content) {
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([content], { type: mime })); a.download = name;
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 600);
+  }
+  $("bPdf").onclick = function () {
+    renderView();
+    var old = document.title; document.title = (D.name || "Resume").replace(/\s+/g, "_") + "_Resume";
+    setTimeout(function () { window.print(); document.title = old; }, 50);
+  };
+  $("bWord").onclick = function () {
+    var css = "body{font-family:Cambria,serif;font-size:11pt}h1{font-size:24pt;color:#1F3864;margin:0}h2{font-size:14pt;color:#1F3864;margin:10pt 0 4pt}" +
+      ".sub{font-size:13pt;margin:0}.roles{font-size:10.5pt;font-style:italic}table{border-collapse:collapse;width:100%}" +
+      "td,th{padding:4pt 6pt;vertical-align:top;font-size:11pt}" +
+      "table.prog th{background:#5B9BD5;color:#fff;text-align:center;border:1px solid #5B9BD5}table.prog td{background:#DDEBF7;text-align:center;border:1px solid #5B9BD5}" +
+      "table.skills td,table.skills th{border:1px solid #000;text-align:center}" +
+      "table.jobrow td{padding:0}.org{font-weight:bold;font-size:12pt}.when{text-align:right}" +
+      ".proj{margin-bottom:12pt}.proj table{border-top:1px solid #444}.proj td:first-child{width:30%;font-weight:bold;text-align:center}" +
+      ".proj tr:nth-child(even) td{background:#F2F2F2}.center{text-align:center;font-weight:bold;text-decoration:underline}";
+    var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">' +
+      '<head><meta charset="utf-8"><title>' + esc(D.name) + "</title>" +
+      '<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->' +
+      "<style>@page{size:21cm 29.7cm;margin:1.8cm}" + css + "</style></head><body>" + renderDoc() + "</body></html>";
+    download((D.name || "Resume").replace(/\s+/g, "_") + "_Resume.doc", "application/msword", "\ufeff" + html);
+    savedEl.textContent = "Word file downloaded";
+  };
+  $("bBackup").onclick = function () { download("resume-data.json", "application/json", JSON.stringify(D, null, 2)); };
+  $("bRestore").onclick = function () { $("fileIn").click(); };
+  $("fileIn").onchange = function (e) {
+    var f = e.target.files[0]; if (!f) return;
+    var r = new FileReader();
+    r.onload = function () {
+      try {
+        var p = JSON.parse(r.result);
+        if (!p || !p.name || !p.jobs) throw 0;
+        D = Object.assign(clone(SEED), p); if (!D.hidden) D.hidden = {};
+        changed(); setMode(document.body.className);
+      } catch (x) { alert("That file is not a resume backup."); }
+    };
+    r.readAsText(f); e.target.value = "";
+  };
+  $("bReset").onclick = function () {
+    if (!confirm("Reset to the original resume? Your edits on this device will be lost.")) return;
+    D = clone(SEED); try { localStorage.removeItem(KEY); } catch (e) {}
+    setMode(document.body.className); savedEl.textContent = "Reset done";
+  };
+
+  /* ================= start ================= */
+  buildTabs();
+  setMode("view");
+})();
+</script>
+</body>
+</html>
