@@ -143,8 +143,10 @@
     <button class="abtn" id="bSave" style="background:#2e9d5b">💾<span class="mt"> Save</span></button>
     <details class="more"><summary>⋮<span class="mt"> More</span></summary>
       <div class="menu">
+        <button id="bSharePdf">Share PDF…</button>
         <button id="bShareWord">Share Word file…</button>
         <button id="bShareHtml">Share editable copy…</button>
+        <button id="bPrint">Print / Save as PDF (text)</button>
         <button id="bCopy">Copy my data (to paste)</button>
         <button id="bBackup">Backup data (.json)</button>
         <button id="bRestore">Open saved file (.html / .json)</button>
@@ -453,8 +455,8 @@
 
   function isCompact() { return window.innerWidth <= 900; }
   function barH() { return $("top").offsetHeight; }
-  function paginate() {
-    var compact = isCompact(), W, H, padCss;
+  function layout(compact) {
+    var W, H, padCss;
     if (compact) {
       W = window.innerWidth - 52 - 8; padCss = "14px 12px 22px";
       H = Math.max(360, window.innerHeight - barH() - 8);
@@ -473,12 +475,16 @@
       if (first === null) first = a.sec;
     });
     flush(); document.body.removeChild(meas);
-    pagesEl.innerHTML = pages.map(function (p, i) {
-      return '<div class="' + cls + '" data-sec="' + p.sec + '" style="width:' + W + "px;height:" + H + "px;padding:" + padCss + '">' + p.html + '<span class="pn">' + (i + 1) + " / " + pages.length + "</span></div>";
-    }).join("");
+    return { pages: pages, W: W, H: H, padCss: padCss, cls: cls };
+  }
+  function pageHtml(L, p, i, n) {
+    return '<div class="' + L.cls + '" data-sec="' + p.sec + '" style="width:' + L.W + "px;height:" + L.H + "px;padding:" + L.padCss + '">' + p.html + '<span class="pn">' + (i + 1) + " / " + n + "</span></div>";
+  }
+  function paginate() {
+    var compact = isCompact(), L = layout(compact);
+    pagesEl.innerHTML = L.pages.map(function (p, i) { return pageHtml(L, p, i, L.pages.length); }).join("");
     document.documentElement.style.scrollPaddingTop = barH() + "px";
     document.documentElement.style.scrollSnapType = compact && document.body.classList.contains("view") ? "y mandatory" : "";
-    document.querySelectorAll(".pg .pn").forEach(function () {});
   }
   function renderView() { paginate(); }
 
@@ -644,11 +650,74 @@
     document.body.appendChild(a); a.click();
     setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 600);
   }
-  $("bPdf").onclick = function () {
+  function pdfName() { return (D.name || "Resume").replace(/\s+/g, "_") + "_Resume.pdf"; }
+  $("bPrint").onclick = function () {
     printDoc.innerHTML = renderDoc();
     var old = document.title; document.title = (D.name || "Resume").replace(/\s+/g, "_") + "_Resume";
     setTimeout(function () { window.print(); document.title = old; }, 50);
   };
+
+  /* ---- real PDF file (A4 pages) built in the browser: no print dialog needed ---- */
+  function makePdf(jpgs, W, H) {
+    var enc = new TextEncoder(), parts = [], offs = [], len = 0, n = jpgs.length, pw = 595.28, ph = 841.89;
+    function add(x) { var b = typeof x === "string" ? enc.encode(x) : x; parts.push(b); len += b.length; }
+    function obj(k, head, stream) {
+      offs[k] = len; add(k + " 0 obj\n" + head);
+      if (stream !== undefined) { add("\nstream\n"); add(stream); add("\nendstream"); }
+      add("\nendobj\n");
+    }
+    add("%PDF-1.4\n");
+    obj(1, "<< /Type /Catalog /Pages 2 0 R >>");
+    var kids = []; for (var i = 0; i < n; i++) kids.push((3 + 3 * i) + " 0 R");
+    obj(2, "<< /Type /Pages /Kids [" + kids.join(" ") + "] /Count " + n + " >>");
+    for (i = 0; i < n; i++) {
+      var cs = "q " + pw + " 0 0 " + ph + " 0 0 cm /Im0 Do Q";
+      obj(3 + 3 * i, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 " + pw + " " + ph + "] /Resources << /XObject << /Im0 " + (5 + 3 * i) + " 0 R >> >> /Contents " + (4 + 3 * i) + " 0 R >>");
+      obj(4 + 3 * i, "<< /Length " + cs.length + " >>", cs);
+      obj(5 + 3 * i, "<< /Type /XObject /Subtype /Image /Width " + (W * 2) + " /Height " + (H * 2) + " /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length " + jpgs[i].length + " >>", jpgs[i]);
+    }
+    var total = 3 + 3 * n, xo = len, x = "xref\n0 " + total + "\n0000000000 65535 f \n";
+    for (var k = 1; k < total; k++) x += ("0000000000" + offs[k]).slice(-10) + " 00000 n \n";
+    add(x + "trailer\n<< /Size " + total + " /Root 1 0 R >>\nstartxref\n" + xo + "\n%%EOF");
+    return new Blob(parts, { type: "application/pdf" });
+  }
+  function buildPdf(cb) {
+    var L, css = "", jpgs = [], i = 0;
+    try { L = layout(false); css = document.querySelector("style").textContent; } catch (e) { return cb(null); }
+    var total = L.pages.length;
+    function next() {
+      if (i >= total) return cb(makePdf(jpgs, L.W, L.H));
+      try {
+        var host = document.createElement("div"); host.innerHTML = pageHtml(L, L.pages[i], i, total);
+        var pg = host.firstChild; pg.style.margin = "0"; pg.style.boxShadow = "none"; var pn = pg.querySelector(".pn"); if (pn) pn.remove();
+        var X = "http://www.w3.org/1999/xhtml", wrap = document.createElementNS(X, "div"), st = document.createElementNS(X, "style");
+        st.textContent = css; wrap.appendChild(st); wrap.appendChild(pg);
+        var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + L.W + '" height="' + L.H + '"><foreignObject x="0" y="0" width="' + L.W + '" height="' + L.H + '">' + new XMLSerializer().serializeToString(wrap) + "</foreignObject></svg>";
+        var img = new Image();
+        img.onload = function () {
+          try {
+            var c = document.createElement("canvas"); c.width = L.W * 2; c.height = L.H * 2;
+            var g = c.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, 0, 0, c.width, c.height);
+            c.toBlob(function (b) {
+              if (!b) return cb(null);
+              b.arrayBuffer().then(function (ab) { jpgs.push(new Uint8Array(ab)); i++; next(); }, function () { cb(null); });
+            }, "image/jpeg", 0.9);
+          } catch (e) { cb(null); }
+        };
+        img.onerror = function () { cb(null); };
+        img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+      } catch (e) { cb(null); }
+    }
+    next();
+  }
+  function withPdf(fn) {
+    say("Making PDF…", true);
+    buildPdf(function (blob) {
+      if (!blob) { say("Could not make a PDF here - try More → Print / Save as PDF, or the Word file", true); return; }
+      fn(blob);
+    });
+  }
+  $("bPdf").onclick = function () { withPdf(function (blob) { download(pdfName(), "application/pdf", blob); say("PDF ready - confirm the download", true); }); };
   function wordHtml() {
     var css = "body{font-family:Cambria,serif;font-size:11pt}h1{font-size:24pt;color:#1F3864;margin:0}h2{font-size:14pt;color:#1F3864;margin:10pt 0 4pt}" +
       ".sub{font-size:13pt;margin:0}.roles{font-size:10.5pt;font-style:italic}table{border-collapse:collapse;width:100%}" +
@@ -683,12 +752,13 @@
     var f; try { f = new File([content], name, { type: mime }); } catch (e) { f = null; }
     if (f && navigator.canShare && navigator.canShare({ files: [f] })) {
       navigator.share({ files: [f], title: name }).catch(function () {});
-    } else { download(name, mime, content); say("Sharing not available - downloaded instead", true); alert("Sharing is not available here, so I tried a normal download. If nothing downloads, open this page in Chrome."); }
+    } else { download(name, mime, content); say("Sharing isn't available in this view - downloaded instead", true); }
   }
   $("bSave").onclick = function () {
     download("resume-editor.html", "text/html", sourceHtml());
     say("Saved copy downloaded - find resume-editor.html in your Downloads", true);
   };
+  $("bSharePdf").onclick = function () { withPdf(function (blob) { shareFile(pdfName(), "application/pdf", blob); }); };
   $("bShareWord").onclick = function () { shareFile(wordName(), "application/msword", wordHtml()); };
   $("bShareHtml").onclick = function () { shareFile("resume-editor.html", "text/html", sourceHtml()); };
   $("bCopy").onclick = function () {
