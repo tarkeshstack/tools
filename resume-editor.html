@@ -25,36 +25,58 @@
   details.more .menu button { text-align:left; background:#f2f5fa; border:0; border-radius:5px; padding:9px 10px; font-size:14px; }
   /* ---------- left tab rail ---------- */
   :root { --side:160px; }
-  #tabs { position:fixed; left:0; top:0; bottom:0; width:var(--side); z-index:30; background:#24324d; display:flex; flex-direction:column; gap:4px; padding:10px 8px; overflow-y:auto; box-shadow:2px 0 6px rgba(0,0,0,.2); }
-  .tab { background:#3a4b6b; color:#dbe4f5; border:0; border-radius:8px; padding:11px 12px; font-size:14px; text-align:left; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  #tabs { position:fixed; left:0; top:0; bottom:0; width:var(--side); z-index:30; background:#24324d; display:flex; flex-direction:column; gap:4px; padding:8px; box-shadow:2px 0 6px rgba(0,0,0,.2); }
+  .tab { flex:1 1 0; min-height:0; max-height:76px; background:#3a4b6b; color:#dbe4f5; border:0; border-radius:8px; padding:0 12px; font-size:14px; text-align:left; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .tab.active { background:#fff; color:#1F3864; font-weight:700; }
   .tab .s { display:none; }
   #top, #viewPane, #editPane { margin-left:var(--side); }
-  @media (max-width:700px) {
-    :root { --side:56px; }
-    #tabs { padding:8px 4px; gap:3px; }
-    .tab { padding:12px 0; font-size:11px; text-align:center; border-radius:8px; }
+  @media (max-width:900px) {
+    :root { --side:52px; }
+    #tabs { padding:6px 4px; gap:3px; }
+    .tab { max-height:none; padding:0; font-size:10.5px; text-align:center; border-radius:8px; }
     .tab .l { display:none; } .tab .s { display:inline; }
-    #viewPane { padding:12px 2px 40px; }
+    .bar { gap:4px; padding:6px 6px; flex-wrap:nowrap; }
+    .seg button { padding:7px 9px; font-size:13px; }
+    .abtn { padding:7px 9px; font-size:13px; }
+    details.more summary { padding:6px 9px; font-size:14px; }
+    .mt { display:none; }
     #saved { display:none; }
+    #editPane { padding:10px 8px 60px; }
+    .mv { gap:2px; } .mv button { padding:6px 7px; font-size:12px; }
+    .card, .list { padding:10px; }
   }
 
   /* ---------- panes ---------- */
   body.view #editPane { display:none; }
   body.edit #viewPane { display:none; }
-  #viewPane { padding:12px 6px 40px; }
+  #viewPane { padding:12px 0 24px; }
 
   /* ---------- Word-style document ---------- */
-  #doc { width:210mm; min-height:297mm; margin:0 auto; background:#fff; padding:16mm 18mm; box-shadow:0 2px 12px rgba(0,0,0,.25); font-family:Cambria, Georgia, "Times New Roman", serif; font-size:11pt; line-height:1.35; color:#000; transform-origin:top center; }
-  #doc h1 { font-size:24pt; color:var(--navy); margin:0; line-height:1.1; }
-  #doc .sub { font-size:13pt; margin:2px 0 0; }
-  #doc .roles { font-size:10.5pt; font-style:italic; margin:2px 0 10px; }
-  #doc h2 { font-size:14pt; color:var(--navy); margin:0 0 6px; font-weight:bold; }
-  #doc .sec { margin:0 0 16px; scroll-margin-top:120px; }
-  #doc ul { margin:4px 0; padding-left:22px; }
-  #doc li { margin:2px 0; }
-  #doc table { border-collapse:collapse; width:100%; }
-  #doc td, #doc th { padding:4px 8px; vertical-align:top; font-size:11pt; }
+  .doc, .pg { font-family:Cambria, Georgia, "Times New Roman", serif; font-size:11pt; line-height:1.35; color:#000; }
+  #printDoc { display:none; }
+  .pg { box-sizing:border-box; position:relative; background:#fff; margin:0 auto 14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,.25); }
+  .pg .pn { position:absolute; right:10px; bottom:6px; font:10px Calibri, Arial, sans-serif; color:#8a94a6; }
+  .pg .at.first { margin-top:12px; }
+  .pg .at.first:first-of-type { margin-top:0; }
+  .pg ul.c { margin:0; }
+  .pg.m { margin:0 auto 8px; box-shadow:0 1px 6px rgba(0,0,0,.25); font-size:9.5pt; overflow-y:auto; overscroll-behavior:contain; }
+  .pg.m h1 { font-size:19pt; } .pg.m h2 { font-size:12pt; }
+  .pg.m .sub { font-size:11pt; } .pg.m .roles { font-size:9pt; margin-bottom:6px; }
+  .pg.m td, .pg.m th { font-size:9.5pt; padding:3px 5px; }
+  .pg.m table.skills td { font-size:9pt; } .pg.m table.skills th { font-size:10pt; padding:5px; }
+  .pg.m table.prog th { font-size:9.5pt; padding:5px; }
+  .pg.m .org { font-size:10.5pt; } .pg.m .job p { margin-left:12px; }
+  .pg.m ul { padding-left:18px; }
+  .pg.m .proj td:first-child { width:27%; font-size:8.5pt; }
+  .doc h1, .pg h1 { font-size:24pt; color:var(--navy); margin:0; line-height:1.1; }
+  .doc .sub, .pg .sub { font-size:13pt; margin:2px 0 0; }
+  .doc .roles, .pg .roles { font-size:10.5pt; font-style:italic; margin:2px 0 10px; }
+  .doc h2, .pg h2 { font-size:14pt; color:var(--navy); margin:0 0 6px; font-weight:bold; }
+  .doc .sec { margin:0 0 16px; scroll-margin-top:120px; }
+  .doc ul, .pg ul { margin:4px 0; padding-left:22px; }
+  .doc li, .pg li { margin:2px 0; }
+  .doc table, .pg table { border-collapse:collapse; width:100%; }
+  .doc td, .doc th, .pg td, .pg th { padding:4px 8px; vertical-align:top; font-size:11pt; }
   table.prog th { background:var(--blue); color:#fff; text-align:center; font-size:10.5pt; padding:8px; border:1px solid var(--blue); }
   table.prog td { background:var(--lblue); text-align:center; border:1px solid var(--blue); }
   table.skills td, table.skills th { border:1px solid #000; text-align:center; font-size:10.5pt; }
@@ -72,7 +94,7 @@
   .center { text-align:center; font-weight:bold; text-decoration:underline; margin-top:24px; }
 
   /* ---------- form editor ---------- */
-  #editPane { max-width:780px; margin:0 auto; padding:12px 10px 60px; }
+  #editPane { max-width:780px; margin:0 auto 0 var(--side); padding:12px 10px 60px; box-sizing:border-box; min-width:0; }
   #editPane h3 { margin:6px 2px 6px; font-size:20px; color:#1F3864; }
   .hide { display:flex; align-items:center; gap:8px; margin:0 2px 12px; font-size:14px; color:#44506a; }
   .card { background:#fff; border:1px solid #d9dee7; border-radius:10px; padding:12px; margin:0 0 12px; }
@@ -87,19 +109,26 @@
   .card .list { border:0; padding:0; margin:0 0 6px; }
   .lh { font-size:13px; font-weight:600; color:#44506a; margin-bottom:6px; }
   .li { display:flex; gap:6px; align-items:flex-start; margin-bottom:6px; }
-  .li textarea { flex:1; }
+  .li textarea { flex:1 1 0; min-width:0; width:auto; }
+  .li { min-width:0; }
+  .ch b { min-width:0; }
   .mv { display:inline-flex; gap:3px; flex:0 0 auto; }
   .mv button { background:#eef2f8; border:1px solid #d3dbe8; border-radius:5px; padding:6px 9px; font-size:13px; }
   .mv button.x { color:#b42318; }
   .add { background:#fff; border:1px dashed #6b7c99; color:#1F3864; border-radius:6px; padding:9px 14px; font-size:14px; width:100%; margin:2px 0 8px; }
 
+  #toast { position:fixed; left:50%; bottom:18px; transform:translateX(-50%); background:#1d2b44; color:#fff; padding:9px 14px; border-radius:20px; font:14px Calibri, Arial, sans-serif; z-index:200; opacity:0; pointer-events:none; transition:opacity .2s; max-width:80vw; text-align:center; box-shadow:0 4px 14px rgba(0,0,0,.3); }
+  #toast.on { opacity:1; }
+  #banner { display:flex; align-items:flex-start; gap:8px; background:#fff4d6; color:#5c4200; padding:6px 10px; font:12.5px/1.35 Calibri, Arial, sans-serif; }
+  #banner[hidden] { display:none; }
+  #banner button { margin-left:auto; border:0; background:transparent; font-size:16px; color:#5c4200; padding:0 4px; }
+
   @media print {
     @page { size:A4; margin:14mm 15mm; }
     body { background:#fff; }
-    #top, #editPane, #tabs { display:none !important; }
-    #viewPane { margin-left:0 !important; }
-    #viewPane { display:block !important; padding:0; }
-    #doc { zoom:1 !important; box-shadow:none; width:auto; min-height:0; padding:0; }
+    #top, #editPane, #tabs, #toast { display:none !important; }
+    #viewPane { display:none !important; }
+    #printDoc { display:block !important; margin:0 !important; }
     * { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
   }
 </style>
@@ -111,22 +140,29 @@
     <div class="seg"><button class="bv" id="bView">👁 View</button><button class="be" id="bEdit">✎ Edit</button></div>
     <button class="abtn" id="bPdf">PDF</button>
     <button class="abtn" id="bWord">Word</button>
-    <details class="more"><summary>⋮ More</summary>
+    <button class="abtn" id="bSave" style="background:#2e9d5b">💾<span class="mt"> Save</span></button>
+    <details class="more"><summary>⋮<span class="mt"> More</span></summary>
       <div class="menu">
+        <button id="bShareWord">Share Word file…</button>
+        <button id="bShareHtml">Share editable copy…</button>
+        <button id="bCopy">Copy my data (to paste)</button>
         <button id="bBackup">Backup data (.json)</button>
-        <button id="bRestore">Restore from backup</button>
+        <button id="bRestore">Open saved file (.html / .json)</button>
         <button id="bReset">Reset to original</button>
       </div>
     </details>
     <span id="saved"></span>
   </div>
+  <div id="banner" hidden><span id="bannerTxt"></span><button id="bannerX" aria-label="Dismiss">✕</button></div>
 </div>
+<div id="toast"></div>
 
 <nav id="tabs"></nav>
 
-<div id="viewPane"><div id="doc"></div></div>
+<div id="viewPane"><div id="pages"></div></div>
+<div id="printDoc" class="doc"></div>
 <div id="editPane"></div>
-<input type="file" id="fileIn" accept=".json,application/json" hidden>
+<input type="file" id="fileIn" accept=".json,.html,.htm,application/json,text/html" hidden>
 
 <script>
 (function () {
@@ -252,15 +288,17 @@
   var KEY = "tarkeshwar-resume-form-v1";
   var clone = function (o) { return JSON.parse(JSON.stringify(o)); };
   var D = clone(SEED);
-  try {
-    var saved = localStorage.getItem(KEY);
-    if (saved) { var p = JSON.parse(saved); D = Object.assign(clone(SEED), p); }
-  } catch (e) {}
+  var fromLS = null, fromFile = null;
+  try { var raw = localStorage.getItem(KEY); if (raw) fromLS = JSON.parse(raw); } catch (e) {}
+  try { var emb = document.getElementById("saved-data"); if (emb && emb.textContent.trim()) fromFile = JSON.parse(emb.textContent); } catch (e) {}
+  // the newer of (browser storage, data saved inside this file) wins; ties go to the file
+  var pick = (fromLS && fromFile) ? ((fromLS._ts || 0) > (fromFile._ts || 0) ? fromLS : fromFile) : (fromLS || fromFile);
+  if (pick) D = Object.assign(clone(SEED), pick);
   if (!D.hidden) D.hidden = {};
 
   var cur = "profile";
   var $ = function (id) { return document.getElementById(id); };
-  var doc = $("doc"), editPane = $("editPane"), tabsEl = $("tabs"), savedEl = $("saved");
+  var pagesEl = $("pages"), printDoc = $("printDoc"), editPane = $("editPane"), tabsEl = $("tabs"), savedEl = $("saved");
 
   /* ================= helpers ================= */
   function esc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
@@ -271,14 +309,31 @@
   function set(path, v) { var r = ref(path); r[0][r[1]] = v; }
   function newItem(path) { var last = path.split(".").pop(); return NEW[last] ? NEW[last]() : ""; }
 
+  var toastEl = $("toast"), toastT;
+  function say(t, long) {
+    savedEl.textContent = t;
+    toastEl.textContent = t; toastEl.classList.add("on");
+    clearTimeout(toastT); toastT = setTimeout(function () { toastEl.classList.remove("on"); }, long ? 3500 : 1300);
+  }
   var tmr;
   function changed() {
     clearTimeout(tmr); savedEl.textContent = "Saving…";
+    D._ts = Date.now();
     tmr = setTimeout(function () {
-      try { localStorage.setItem(KEY, JSON.stringify(D)); savedEl.textContent = "Saved ✓"; }
-      catch (e) { savedEl.textContent = "Use Backup to keep data"; }
+      try { localStorage.setItem(KEY, JSON.stringify(D)); say("Auto-saved on this device ✓"); }
+      catch (e) { say("Auto-save is not available here - tap 💾 Save", true); }
     }, 500);
   }
+  // warn when browser storage may not last (app preview / blocked storage)
+  (function () {
+    var ok = true; try { localStorage.setItem("__rt", "1"); ok = localStorage.getItem("__rt") === "1"; localStorage.removeItem("__rt"); } catch (e) { ok = false; }
+    var framed = false; try { framed = window.self !== window.top; } catch (e) { framed = true; }
+    if (ok && !framed) return;
+    $("bannerTxt").textContent = ok ? "Tip: in this preview, auto-save may not last. After editing, tap the green 💾 Save button (keep the file), or open this page in Chrome."
+                                    : "Auto-save is not available here. After editing, tap the green 💾 Save button and keep the file.";
+    $("banner").hidden = false;
+    $("bannerX").onclick = function () { $("banner").hidden = true; if (document.body.classList.contains("view")) paginate(); };
+  })();
 
   /* ================= Word-style render ================= */
   function ul(arr) { arr = clean(arr); return arr.length ? "<ul>" + arr.map(function (x) { return "<li>" + fmt(x) + "</li>"; }).join("") + "</ul>" : ""; }
@@ -352,12 +407,93 @@
     return o;
   }
 
-  function applyZoom() {
-    var side = window.innerWidth <= 700 ? 56 : 160;
-    var z = Math.min(1, (window.innerWidth - side - 12) / 794);
-    doc.style.zoom = z;
+  /* ---------- paged view: pages fit the screen ---------- */
+  function jobH(j) {
+    return '<div class="job"><table class="jobrow"><tr><td class="org">' + esc(j.org) + '</td><td class="when">' + esc(j.when) + "</td></tr></table>" +
+      "<div>" + esc(j.role) + "</div>" + (j.intro ? "<p>" + fmt(j.intro) + "</p>" : "") + ul(j.bullets) +
+      (j.closing ? "<p>" + fmt(j.closing) + "</p>" : "") + (j.extra ? "<p>" + fmt(j.extra) + "</p>" : "") + "</div>";
   }
-  function renderView() { doc.innerHTML = renderDoc(); applyZoom(); }
+  function projH(p) {
+    return '<div class="proj"><table><tr><td>PROJECT NAME</td><td>' + fmt(p.name) + "</td></tr>" +
+      row("ORGANIZATION", p.org) + row("DURATION", p.duration) + row("DESCRIPTION", p.desc) + row("TOOLS", p.tools) +
+      row("LOCATION", p.location) + row("ROLE", p.role) + row("KEY RESPONSIBILITIES", p.resp, true) + "</table></div>";
+  }
+  function liA(arr) { return clean(arr).map(function (x) { return '<ul class="c"><li>' + fmt(x) + "</li></ul>"; }); }
+  function atoms() {
+    var A = [], c = D.contact;
+    A.push({ sec: "profile", html: '<h1 id="sec-profile">' + esc(D.name) + "</h1>" + (D.title ? '<p class="sub">' + esc(D.title) + "</p>" : "") + (D.roles ? '<p class="roles">' + esc(D.roles) + "</p>" : "") });
+    function add(id, items) {
+      if (D.hidden[id] || !items.length) return;
+      items.forEach(function (h, i) { A.push({ sec: id, first: i === 0, html: (i === 0 ? '<h2 id="sec-' + id + '">' + TITLES[id] + "</h2>" : "") + h }); });
+    }
+    add("summary", liA(D.summary));
+    if (D.career.length) add("career", ['<table class="prog"><tr>' + D.career.map(function (x) { return "<th>" + esc(x.period) + "</th>"; }).join("") + "</tr><tr>" + D.career.map(function (x) { return "<td>" + fmt(x.role) + "</td>"; }).join("") + "</tr></table>"]);
+    add("exp", D.jobs.map(jobH));
+    var cols = D.skills.c.map(clean), n = Math.max.apply(null, cols.map(function (x) { return x.length; }));
+    if (n > 0) {
+      var t = '<table class="skills"><tr>' + D.skills.h.map(function (h) { return "<th>" + esc(h) + "</th>"; }).join("") + "</tr>";
+      for (var i = 0; i < n; i++) t += "<tr>" + cols.map(function (x) { return "<td>" + (x[i] ? fmt(x[i]) : "") + "</td>"; }).join("") + "</tr>";
+      add("skills", [t + "</table>"]);
+    }
+    add("certs", liA(D.certs));
+    add("edu", liA(D.edu.map(function (e) { return "**" + e.degree + "**" + (e.school ? " from **" + e.school + "**" : "") + (e.detail ? ", " + e.detail : ""); })));
+    var keys = [];
+    clean(D.keyProjects).forEach(function (l) {
+      if (l.indexOf("- ") === 0 && keys.length) keys[keys.length - 1].sub.push(l.slice(2)); else keys.push({ t: l, sub: [] });
+    });
+    add("key", keys.map(function (k) { return '<ul class="c"><li>' + fmt(k.t) + (k.sub.length ? "<ul>" + k.sub.map(function (x) { return "<li>" + fmt(x) + "</li>"; }).join("") + "</ul>" : "") + "</li></ul>"; }));
+    add("proj", D.projects.map(projH));
+    var cl = [];
+    [["Address", c.address], ["Mobile Phone", c.phone], ["Email", c.email], ["Location", c.location], ["LinkedIn", c.linkedin]].forEach(function (x) { if (x[1] && String(x[1]).trim()) cl.push(x[0] + ": " + x[1]); });
+    add("contact", liA(cl));
+    add("recs", liA(D.recs));
+    if (D.footer) A.push({ sec: "recs", html: '<p class="center">' + esc(D.footer) + "</p>" });
+    return A;
+  }
+
+  function isCompact() { return window.innerWidth <= 900; }
+  function barH() { return $("top").offsetHeight; }
+  function paginate() {
+    var compact = isCompact(), W, H, padCss;
+    if (compact) {
+      W = window.innerWidth - 52 - 8; padCss = "14px 12px 22px";
+      H = Math.max(360, window.innerHeight - barH() - 8);
+    } else { W = 794; H = 1123; padCss = "60px 68px"; }
+    var cls = "pg" + (compact ? " m" : "");
+    var meas = document.createElement("div");
+    meas.className = cls; meas.style.cssText = "position:absolute;left:-99999px;top:0;visibility:hidden;margin:0;width:" + W + "px;padding:" + padCss;
+    document.body.appendChild(meas);
+    var pages = [], first = null;
+    function flush() { if (meas.children.length) pages.push({ html: meas.innerHTML, sec: first }); meas.innerHTML = ""; first = null; }
+    atoms().forEach(function (a) {
+      var d = document.createElement("div");
+      d.className = "at" + (a.first ? " first" : ""); d.innerHTML = a.html;
+      meas.appendChild(d);
+      if (meas.offsetHeight > H && meas.children.length > 1) { meas.removeChild(d); flush(); meas.appendChild(d); }
+      if (first === null) first = a.sec;
+    });
+    flush(); document.body.removeChild(meas);
+    pagesEl.innerHTML = pages.map(function (p, i) {
+      return '<div class="' + cls + '" data-sec="' + p.sec + '" style="width:' + W + "px;height:" + H + "px;padding:" + padCss + '">' + p.html + '<span class="pn">' + (i + 1) + " / " + pages.length + "</span></div>";
+    }).join("");
+    document.documentElement.style.scrollPaddingTop = barH() + "px";
+    document.documentElement.style.scrollSnapType = compact && document.body.classList.contains("view") ? "y mandatory" : "";
+    document.querySelectorAll(".pg .pn").forEach(function () {});
+  }
+  function renderView() { paginate(); }
+
+  var lock = 0, tick = false;
+  function tabOf(sec) { return sec === "recs" ? "contact" : sec; }
+  window.addEventListener("scroll", function () {
+    if (tick || Date.now() < lock || !document.body.classList.contains("view")) return;
+    tick = true;
+    requestAnimationFrame(function () {
+      tick = false;
+      var top = barH() + 30, pgs = pagesEl.children, hit = null;
+      for (var i = 0; i < pgs.length; i++) { if (pgs[i].getBoundingClientRect().bottom > top) { hit = pgs[i]; break; } }
+      if (hit) { var t = tabOf(hit.dataset.sec); if (t !== cur) { cur = t; buildTabs(); } }
+    });
+  }, { passive: true });
 
   /* ================= form render ================= */
   function fld(label, path, o) {
@@ -477,7 +613,7 @@
     return '<button class="tab' + (t[0] === cur ? " active" : "") + '" data-t="' + t[0] + '"><span class="l">' + t[1] + '</span><span class="s">' + t[2] + "</span></button>";
   }
   function buildTabs() { tabsEl.innerHTML = TABS.map(tabBtn).join(""); }
-  function sectionEl(id) { return $("sec-" + id) || (id === "contact" ? $("sec-recs") : null); }
+  function sectionEl(id) { var e = $("sec-" + id) || (id === "contact" ? $("sec-recs") : null); return e ? (isCompact() ? e.closest(".pg") : e) : null; }
   function onTab(e) {
     var b = e.target.closest("[data-t]");
     if (!b) return;
@@ -485,6 +621,7 @@
     if (document.body.classList.contains("edit")) renderEdit(false);
     else {
       var el = sectionEl(cur);
+      lock = Date.now() + 900;
       if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }
@@ -492,12 +629,13 @@
 
   function setMode(m) {
     document.body.className = m;
-    if (m === "view") { renderView(); var el = sectionEl(cur); window.scrollTo(0, 0); if (el && cur !== "profile") setTimeout(function () { el.scrollIntoView({ block: "start" }); }, 30); }
-    else renderEdit(false);
+    if (m === "view") { renderView(); var el = sectionEl(cur); window.scrollTo(0, 0); lock = Date.now() + 600; if (el && cur !== "profile") setTimeout(function () { el.scrollIntoView({ block: "start" }); }, 30); }
+    else { document.documentElement.style.scrollSnapType = ""; renderEdit(false); }
   }
   $("bView").onclick = function () { setMode("view"); };
   $("bEdit").onclick = function () { setMode("edit"); };
-  window.addEventListener("resize", applyZoom);
+  var rz;
+  window.addEventListener("resize", function () { clearTimeout(rz); rz = setTimeout(function () { if (document.body.classList.contains("view")) paginate(); }, 200); });
 
   /* ================= downloads ================= */
   function download(name, mime, content) {
@@ -507,11 +645,11 @@
     setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 600);
   }
   $("bPdf").onclick = function () {
-    renderView();
+    printDoc.innerHTML = renderDoc();
     var old = document.title; document.title = (D.name || "Resume").replace(/\s+/g, "_") + "_Resume";
     setTimeout(function () { window.print(); document.title = old; }, 50);
   };
-  $("bWord").onclick = function () {
+  function wordHtml() {
     var css = "body{font-family:Cambria,serif;font-size:11pt}h1{font-size:24pt;color:#1F3864;margin:0}h2{font-size:14pt;color:#1F3864;margin:10pt 0 4pt}" +
       ".sub{font-size:13pt;margin:0}.roles{font-size:10.5pt;font-style:italic}table{border-collapse:collapse;width:100%}" +
       "td,th{padding:4pt 6pt;vertical-align:top;font-size:11pt}" +
@@ -524,8 +662,47 @@
       '<head><meta charset="utf-8"><title>' + esc(D.name) + "</title>" +
       '<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->' +
       "<style>@page{size:21cm 29.7cm;margin:1.8cm}" + css + "</style></head><body>" + renderDoc() + "</body></html>";
-    download((D.name || "Resume").replace(/\s+/g, "_") + "_Resume.doc", "application/msword", "\ufeff" + html);
-    savedEl.textContent = "Word file downloaded";
+    return "\ufeff" + html;
+  }
+  function wordName() { return (D.name || "Resume").replace(/\s+/g, "_") + "_Resume.doc"; }
+  $("bWord").onclick = function () { download(wordName(), "application/msword", wordHtml()); say("Word file ready - confirm the download", true); };
+
+  /* ---------- save / share ---------- */
+  function sourceHtml() {
+    D._ts = Date.now(); try { localStorage.setItem(KEY, JSON.stringify(D)); } catch (e) {}
+    var c = document.documentElement.cloneNode(true);
+    ["pages", "editPane", "printDoc", "tabs"].forEach(function (id) { var e = c.querySelector("#" + id); if (e) e.innerHTML = ""; });
+    var old = c.querySelector("#saved-data"); if (old) old.remove();
+    c.removeAttribute("style"); c.querySelector("body").className = "view";
+    var sv = c.querySelector("#saved"); if (sv) sv.textContent = "";
+    var tag = '<script id="saved-data" type="application/json">' + JSON.stringify(D).replace(/</g, "\\u003c") + "<\/script>\n";
+    var out = "<!doctype html>\n" + c.outerHTML;
+    return out.replace(/<script>\s*\(function/, tag + "<script>(function");
+  }
+  function shareFile(name, mime, content) {
+    var f; try { f = new File([content], name, { type: mime }); } catch (e) { f = null; }
+    if (f && navigator.canShare && navigator.canShare({ files: [f] })) {
+      navigator.share({ files: [f], title: name }).catch(function () {});
+    } else { download(name, mime, content); say("Sharing not available - downloaded instead", true); alert("Sharing is not available here, so I tried a normal download. If nothing downloads, open this page in Chrome."); }
+  }
+  $("bSave").onclick = function () {
+    download("resume-editor.html", "text/html", sourceHtml());
+    say("Saved copy downloaded - find resume-editor.html in your Downloads", true);
+  };
+  $("bShareWord").onclick = function () { shareFile(wordName(), "application/msword", wordHtml()); };
+  $("bShareHtml").onclick = function () { shareFile("resume-editor.html", "text/html", sourceHtml()); };
+  $("bCopy").onclick = function () {
+    var txt = JSON.stringify(D);
+    function manual() {
+      var ov = document.createElement("div");
+      ov.style.cssText = "position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:16px";
+      ov.innerHTML = '<div style="background:#fff;border-radius:10px;padding:12px;width:100%;max-width:520px;font-family:Calibri,Arial,sans-serif"><b>Select all and copy</b><textarea readonly style="width:100%;height:220px;margin:8px 0;font:12px monospace"></textarea><button class="abtn" style="width:100%">Close</button></div>';
+      ov.querySelector("textarea").value = txt;
+      ov.querySelector("button").onclick = function () { ov.remove(); };
+      document.body.appendChild(ov); var ta = ov.querySelector("textarea"); ta.focus(); ta.select();
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(function () { say("Data copied", true); alert("Copied. Paste it into the chat."); }, manual);
+    else manual();
   };
   $("bBackup").onclick = function () { download("resume-data.json", "application/json", JSON.stringify(D, null, 2)); };
   $("bRestore").onclick = function () { $("fileIn").click(); };
@@ -534,18 +711,23 @@
     var r = new FileReader();
     r.onload = function () {
       try {
-        var p = JSON.parse(r.result);
+        var txt = String(r.result), p;
+        try { p = JSON.parse(txt); }
+        catch (e1) {
+          var el = new DOMParser().parseFromString(txt, "text/html").getElementById("saved-data");
+          p = el ? JSON.parse(el.textContent) : null;
+        }
         if (!p || !p.name || !p.jobs) throw 0;
         D = Object.assign(clone(SEED), p); if (!D.hidden) D.hidden = {};
-        changed(); setMode(document.body.className);
-      } catch (x) { alert("That file is not a resume backup."); }
+        changed(); setMode(document.body.className); say("Loaded your saved resume ✓", true);
+      } catch (x) { alert("That file has no saved resume data. Use a file made by the 💾 Save button or Backup."); }
     };
     r.readAsText(f); e.target.value = "";
   };
   $("bReset").onclick = function () {
     if (!confirm("Reset to the original resume? Your edits on this device will be lost.")) return;
     D = clone(SEED); try { localStorage.removeItem(KEY); } catch (e) {}
-    setMode(document.body.className); savedEl.textContent = "Reset done";
+    setMode(document.body.className); say("Reset done");
   };
 
   /* ================= start ================= */
