@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tarkesh — Projects &amp; Chats Hub</title>
+<style>
+:root{--bg:#0b1020;--card:#131b36;--line:rgba(255,255,255,.09);--text:#e8ecf8;--muted:#97a0c0;--a1:#6366f1;--a2:#22d3ee;--a3:#f472b6}
+:root.light{--bg:#f5f7fc;--card:#fff;--line:rgba(15,23,42,.11);--text:#0f172a;--muted:#5b6585}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(700px 400px at 90% -5%,rgba(99,102,241,.25),transparent 60%),radial-gradient(600px 380px at 0% 15%,rgba(34,211,238,.12),transparent 60%)}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+nav{position:sticky;top:0;z-index:10;backdrop-filter:blur(14px);background:color-mix(in srgb,var(--bg) 80%,transparent);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;justify-content:space-between;align-items:center;height:60px}
+.brand{font-weight:800;display:flex;gap:10px;align-items:center}
+.logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--a1),var(--a2));display:grid;place-items:center;color:#fff;font-size:14px}
+.btn{padding:8px 15px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--text);font:600 13.5px inherit;font-family:inherit;cursor:pointer}
+.btn:hover{border-color:var(--a1)}
+.btn.p{background:var(--a1);border-color:var(--a1);color:#fff}
+header{text-align:center;padding:60px 0 22px}
+h1{font-size:clamp(30px,5.5vw,50px);letter-spacing:-.03em;line-height:1.1;font-weight:800}
+h1 span{background:linear-gradient(120deg,var(--a2),var(--a1),var(--a3));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--muted);max-width:560px;margin:14px auto 0}
+.stats{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 22px;min-width:120px}
+.stat b{display:block;font-size:26px;font-weight:800}.stat small{color:var(--muted);font-size:12px}
+.tabs{display:flex;gap:6px;margin:34px 0 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tab{padding:11px 18px;border:0;background:none;color:var(--muted);font:600 14.5px inherit;font-family:inherit;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab.on{color:var(--text);border-color:var(--a1)}
+.tab i{font-style:normal;font-size:11.5px;background:rgba(99,102,241,.18);color:#a5b4fc;padding:2px 8px;border-radius:99px;margin-left:6px}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;align-items:center}
+.chip{padding:7px 14px;border-radius:99px;border:1px solid var(--line);background:var(--card);color:var(--muted);font:500 13px inherit;font-family:inherit;cursor:pointer}
+.chip.on{background:var(--a1);border-color:var(--a1);color:#fff}
+.tools input{margin-left:auto;min-width:220px;padding:9px 14px;border-radius:11px;border:1px solid var(--line);background:var(--card);color:var(--text);font:14px inherit;font-family:inherit;outline:none}
+.tools input:focus{border-color:var(--a1)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden;transition:.2s}
+.card::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,var(--a1),var(--a2))}
+.card:hover{transform:translateY(-4px);border-color:var(--a1)}
+.card h3{font-size:16.5px;letter-spacing:-.01em}
+.card p{color:var(--muted);font-size:13.8px;flex:1}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.pill{font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;background:rgba(52,211,153,.14);color:#34d399}
+.pill.soon{background:rgba(251,191,36,.14);color:#fbbf24}
+.pill.b{background:rgba(99,102,241,.16);color:#a5b4fc}
+.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--muted)}
+.foot{display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--line)}
+.foot a{flex:1;text-align:center;padding:8px;border-radius:9px;border:1px solid var(--line);font-size:13px;font-weight:600}
+.foot a.l{background:var(--a1);border-color:var(--a1);color:#fff}
+.foot a:hover{border-color:var(--a2)}
+.empty{display:none;text-align:center;color:var(--muted);padding:40px}
+.note{margin:26px 0 0;font-size:12.5px;color:var(--muted);text-align:center}
+#viewer{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column}#viewer[hidden]{display:none}.vbar{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--line)}.vbar b{font-size:15px;text-align:center;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#vframe{flex:1;border:0;width:100%;background:#fff}
+footer{margin:60px 0 30px;text-align:center;color:var(--muted);font-size:13px}
+@media(max-width:640px){.tools input{margin-left:0;width:100%}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav><div class="wrap"><a class="brand" href="#"><span class="logo">T</span> Tarkesh</a>
+<div style="display:flex;gap:8px"><button class="btn" id="th">◐</button><a class="btn p" href="https://github.com/tarkeshstack" target="_blank" rel="noopener">GitHub</a></div></div></nav>
+
+<header><div class="wrap">
+<h1>All my <span>projects, files &amp; chats</span> in one place</h1>
+<p class="sub">Live sites, every standalone app from the tools repo, and the Claude chats where each one was built.</p>
+<div class="stats">
+<div class="stat"><b id="n1">0</b><small>Live sites</small></div>
+<div class="stat"><b id="n2">0</b><small>Standalone apps</small></div>
+<div class="stat"><b id="n3">0</b><small>Chats</small></div>
+</div></div></header>
+
+<main class="wrap">
+<div class="tabs" id="tabs">
+<button class="tab on" data-t="sites">Live sites <i id="c1"></i></button>
+<button class="tab" data-t="apps">Apps <i id="c2"></i></button>
+<button class="tab" data-t="chats">Chats <i id="c3"></i></button>
+</div>
+<div class="tools"><div id="chips" style="display:flex;gap:8px;flex-wrap:wrap"></div><input id="q" type="search" placeholder="Search…" aria-label="Search"></div>
+<div class="grid" id="grid"></div>
+<p class="empty" id="empty">Nothing matches your search.</p>
+<p class="note">Chat links open in your Claude account. Apps marked “Not in tools repo yet” need their HTML file pushed first. The tools-repo files go live at tarkeshstack.github.io/tools/&lt;file&gt; once GitHub Pages is on for that repo.</p>
+</main>
+<div id="viewer" hidden>
+ <div class="vbar"><button class="btn" id="vback">← Back to hub</button><b id="vname"></b><a class="btn p" id="vtab" target="_blank" rel="noopener">Open in new tab ↗</a></div>
+ <iframe id="vframe" title="App" loading="lazy"></iframe>
+</div>
+<footer>© <span id="yr"></span> Tarkesh · <a href="https://github.com/tarkeshstack" target="_blank" rel="noopener" style="color:var(--a2)">@tarkeshstack</a></footer>
+
+<script>
+const GH="https://github.com/tarkeshstack/", PAGES="https://tarkeshstack.github.io/tools/";
+const CHAT="https://claude.ai/chat/";
+
+/* ---- edit these lists to add things ---- */
+const SITES=[
+ {name:"Web Store (Appzy Digital)",repo:"webstore",live:"https://webstore.solutions",cat:"Platform",desc:"Play-Store-style hub of 21+ free browser tools with search, categories and dark mode."},
+ {name:"Heart to Heart — Read · Write · Speak",repo:"readwritespeak",live:"https://readwritespeak.online",cat:"Communication",desc:"Communication coach with 36 personas, occasion guides and a Letter Hub. English and Hinglish."},
+ {name:"College to Corporate",repo:"dutybeauty",live:"https://dutybeauty.work",cat:"Career",desc:"Guide for freshers: do's and don'ts, workplace vocabulary, chat/email templates, career tips."},
+ {name:"MoveIn",repo:"onboarding",live:"https://movein.website",cat:"Platform",desc:"Settle-in onboarding site on GitHub Pages with a custom domain."},
+ {name:"Name Mixer",repo:"names",live:"https://babynames.website",cat:"Utility",desc:"Single-page baby-name mixer tool."},
+ {name:"Farm Visit Report",repo:"farmvisit",live:"https://tarkeshstack.github.io/farmvisit/visit-report/",cat:"Business",desc:"Web form replicating a poultry farm-visit paper report."},
+ {name:"My Work (this hub)",repo:"tkrcreations",live:"",cat:"Portfolio",desc:"Portfolio landing page for TKR Creations."}
+];
+const APPS=[
+ ["Backlog Builder", "backlog-builder.html", "Splits a business need into user stories automatically.", "Business"],
+ ["College to Corporate", "college-to-corporate.html", "Guide for freshers: do's, don'ts, vocabulary, ready-to-use messages.", "Career"],
+ ["LearnWithMe Courses", "course-site.html", "Udemy-style site for Informatica, Spoken English and Hindi.", "Learning"],
+ ["Life & Beyond Videos", "learnwithme-videos.html", "Free video lessons page.", "Learning"],
+ ["Digital Product Marketplaces", "digital-product-marketplaces.html", "Platforms for selling digital products, compared.", "Business"],
+ ["GitHub Projects", "github-projects.html", "Showcase of GitHub projects and live sites.", "Portfolio"],
+ ["Heart to Heart (English)", "heart-to-heart.html", "Talk to anyone with empathy: personas and occasions.", "Communication"],
+ ["Heart to Heart (Hinglish)", "heart-to-heart-hinglish.html", "Hinglish version in Devanagari script.", "Communication"],
+ ["JobSwipe", "jobswipe.html", "Tinder-style job discovery with match percentages.", "Career"],
+ ["Letter Hub", "letter-hub.html", "Ready-made letters, edit and save as Word or PDF.", "Documents"],
+ ["Read and Tap", "read-and-tap.html", "Kids reading game with levels and spelling mode.", "Kids"],
+ ["Rental Agreement Generator", "rental-agreement-generator.html", "House and flat lease in PDF or Word, for India.", "Documents"],
+ ["Resume Editor", "resume-editor.html", "Editable resume with View/Edit and PDF/Word export.", "Career"],
+ ["Test Studio", "test-studio.html", "LLM-assisted website testing and defect writing.", "Business"],
+ ["UI Hardware Store", "ui-hardware-store.html", "Software component marketplace concept.", "Business"],
+ ["Resume to Video", "resume-to-video.html", "Turns a resume into a short first-person video with an AI presenter.", "Career"],
+ ["Wordly Translator", "wordly-translator.html", "English to Indian languages translator.", "Utility"],
+ ["SOS Emergency Card", "sos-emergency-card.html", "Printable emergency-numbers card with QR tel: codes per country.", "Utility"],
+ ["Maths & Stats Tools", "maths-stats-tools.html", "Maths and statistics calculators in one page.", "Utility"],
+ ["Name Mixer", "name-mixer.html", "Baby-name mixer tool.", "Utility"],
+ ["PDF to Word (Wordy)", "pdf-to-word.html", "Turn a PDF back into editable Word text, in your browser.", "Documents"],
+ ["Password Generator", "password-generator.html", "Generate strong passwords.", "Utility"],
+ ["Birthday Invitation Maker", "birthday-invitation-maker.html", "Themed birthday invitations saved as JPG.", "Kids"],
+ ["VarIT Store", "varit-store.html", "App store page by Tarkesh.", "Portfolio"],
+ ["Website Builder", "website-builder.html", "Simple website builder.", "Utility"],
+ ["Website Ideas To-Do", "website-ideas-todo.html", "Checklist of website ideas.", "Business"],
+ ["Word PIN Lock", "word-pin-lock.html", "Kids' game: spell the word to unlock.", "Kids"],
+ ["Portfolio", "portfolio.html", "Personal portfolio page.", "Portfolio"],
+ ["Portfolio (Swipe)", "portfolio-swipe.html", "Swipe version of the portfolio.", "Portfolio"],
+ ["Tarkeshwar Profile", "tarkeshwar-profile.html", "Profile page built from my resume.", "Portfolio"],
+ ["Appley", "appley.html", "Small app launcher page.", "Utility"],
+ ["Measurely", "measurely.html", "Measuring guide and converter for everything measurable.", "Utility"],
+ ["Measuring Studies Suite", "measuring-studies-suite.html", "Measuring study tools suite.", "Learning"],
+ ["Measure Anywhere", "measure-anywhere.html", "AR tape measure and on-screen ruler.", "Utility"],
+ ["Medicine Finder", "medicine-finder.html", "Medicine information in English and Hindi, with pack scan.", "Health"],
+ ["Medical Report Reader", "medical-report-reader.html", "Plain-language reader for medical reports.", "Health"],
+ ["Samvidhan Sahayak", "constitution-qa.html", "Ask the Constitution of India in plain words.", "Learning"],
+ ["Meter & Bill", "electricity-tracker.html", "Log electricity readings and track the bill.", "Utility"],
+ ["Waypoint", "waypoint.html", "Chart the route, guide the climb.", "Career"],
+ ["BundleIt", "bundleit-occasion-shopper.html", "Occasion shopping bundles across Amazon, Flipkart, Myntra, Meesho.", "Shopping"],
+ ["AI Apps Directory", "ai-apps-directory.html", "AI apps by role, with store links.", "Learning"],
+ ["Relocation Reference", "relocation-reference.html", "Guide to moving and settling abroad.", "Platform"],
+ ["Kya Kahenge Chaar Log", "chaar-log.html", "Chaar Log fun page.", "Utility"]
+].map(a=>({name:a[0],file:a[1],desc:a[2],cat:a[3]}));
+
+/* Apps built in other chats whose HTML file isn't in the tools repo yet. Once a file is pushed there, move it into APPS. */
+const MORE=[
+ ["Python Script Builder","Drag-and-drop tool that generates Python scripts for non-coders.","Utility","725cfe30-ee41-4cbe-9e7b-c4e13996ba9a",""],
+ ["Image to Editable PPT","Turns a screenshot, slide image or PDF into editable PowerPoint slides.","Utility","536063c9-ac75-41dd-bbd8-24b4b07aaeba",""],
+ ["Poultry Farm Manager","Record keeping, cost-per-egg calculator, vaccinations and farm visit reports.","Business","6bbd6ab2-70b1-4dfb-bab4-8050f99d32ed",""],
+ ["Farm Visit Report","Web form replicating a poultry farm-visit paper report.","Business","6bbd6ab2-70b1-4dfb-bab4-8050f99d32ed","https://tarkeshstack.github.io/farmvisit/visit-report/"],
+ ["Resume Builder (A Resume For Everyone)","Create a resume for yourself or family by voice or typing.","Career","",""],
+ ["TripFinder","Skyscanner-style flight search comparison prototype.","Travel","f3237fe7-156d-4e47-be24-c7ea66c43d14",""],
+ ["Talk It Out (Workplace Coach)","Communication coaching for IT employees.","Communication","d609b8df-a04e-4698-a6ea-85f35eb6ec3f",""],
+ ["SplitCart","Split bulk-buy offers with neighbours.","Community","",""],
+ ["QA Agent","LLM testing agent for my single-file web apps.","Business","",""]
+].map(a=>({name:a[0],desc:a[1],cat:a[2],chat:a[3],live:a[4],more:true}));
+const CHATS=[{"date": "2026-11-17", "id": "0b0a9fb1-fa52-4f87-bc18-b8c86afd8398", "title": "HTML resume with incremental updates", "cat": "Build", "file": "resume-editor.html"}, {"date": "2026-11-12", "id": "fbe78097-b51c-43bc-96ce-53840878eb3f", "title": "Kids reading game HTML", "cat": "Build", "file": "read-and-tap.html"}, {"date": "2026-11-11", "id": "725cfe30-ee41-4cbe-9e7b-c4e13996ba9a", "title": "Python script generator tool", "cat": "Build", "file": ""}, {"date": "2026-11-11", "id": "536063c9-ac75-41dd-bbd8-24b4b07aaeba", "title": "Image to PPT", "cat": "Build", "file": ""}, {"date": "2026-11-11", "id": "fd8a2b4f-0bc7-417f-b567-bd0751db40a9", "title": "Digital smell sharing", "cat": "Idea", "file": ""}, {"date": "2026-11-06", "id": "0ca7a21d-2d57-432c-996c-808d7ba6f5c8", "title": "Bollywood-style movie poster", "cat": "Design", "file": ""}, {"date": "2026-11-05", "id": "f3237fe7-156d-4e47-be24-c7ea66c43d14", "title": "Flight search comparison webpage", "cat": "Build", "file": ""}, {"date": "2026-11-05", "id": "d609b8df-a04e-4698-a6ea-85f35eb6ec3f", "title": "Communication coach web app", "cat": "Build", "file": "heart-to-heart.html"}, {"date": "2026-10-31", "id": "06647712-e84d-4946-b346-bc9ab8dbeac5", "title": "Etsy listing upload automation", "cat": "Business", "file": ""}, {"date": "2026-10-30", "id": "d40aacd8-f7fe-467e-ae37-b5d3f76d1f90", "title": "Automatic user story generation", "cat": "Build", "file": "backlog-builder.html"}, {"date": "2026-10-29", "id": "5dcb7b32-2006-426b-a771-0cfff4728b07", "title": "Website testing and Jira defect", "cat": "Build", "file": "test-studio.html"}, {"date": "2026-10-27", "id": "6bbd6ab2-70b1-4dfb-bab4-8050f99d32ed", "title": "Poultry farm business ideas page", "cat": "Build", "file": ""}, {"date": "2026-10-26", "id": "dbe0df72-6eca-4169-8169-ebef09c66ac9", "title": "Tinder-style job discovery app", "cat": "Build", "file": "jobswipe.html"}, {"date": "2026-10-26", "id": "a1c40149-51bf-47c6-a6ac-e227fe5387a1", "title": "Software component marketplace", "cat": "Idea", "file": "ui-hardware-store.html"}, {"date": "2026-10-26", "id": "bff8d9ab-4141-45c9-ac58-a8df9feae3b7", "title": "Corporate career guide web app", "cat": "Build", "file": "college-to-corporate.html"}, {"date": "2026-10-25", "id": "c5bebeba-e8ff-4eb0-9b68-7712ddc0303c", "title": "Digital product selling platforms", "cat": "Business", "file": "digital-product-marketplaces.html"}, {"date": "2026-10-25", "id": "24de6a7a-8d3e-491b-b413-953295e83638", "title": "Letter templates web app", "cat": "Build", "file": "letter-hub.html"}, {"date": "2026-10-24", "id": "a09dd64f-5599-49ad-9cb2-ddd268410f69", "title": "Rental agreement document generator", "cat": "Build", "file": "rental-agreement-generator.html"}, {"date": "2026-10-23", "id": "024a9ec0-ed5e-4717-8ef3-1a19655de6f6", "title": "Consolidated Google Analytics view", "cat": "Business", "file": ""}, {"date": "2026-10-21", "id": "ec9700fc-0d64-423a-b7e7-ba5255b9372e", "title": "Making money from popular apps", "cat": "Business", "file": ""}, {"date": "2026-10-21", "id": "8ac30460-85d4-4b42-ae7b-c06d085b0fb1", "title": "Instant money ideas", "cat": "Business", "file": ""}, {"date": "2026-10-20", "id": "b4e7a160-b544-401e-8772-aa3a670db5fc", "title": "Website ideas to-do list", "cat": "Idea", "file": ""}, {"date": "2026-10-20", "id": "8921f0d5-8371-4368-968d-c65d37673259", "title": "Tutor site", "cat": "Build", "file": "course-site.html"}, {"date": "2026-10-17", "id": "c0204f74-ad72-49eb-9873-3d8d212fc5f5", "title": "Time-saving app opportunities by user type", "cat": "Idea", "file": ""}, {"date": "2026-10-16", "id": "4f52e04a-c09e-48b5-be30-057146f3b43f", "title": "Getting started", "cat": "Other", "file": ""}, {"date": "2026-10-16", "id": "66ea4f90-9456-4caf-bf0a-40ba6a78d663", "title": "Baby name combiner", "cat": "Build", "file": ""}, {"date": "2026-10-14", "id": "ea638bf4-dba4-434e-bf41-03e8045d0222", "title": "Travel booking app with affiliates", "cat": "Idea", "file": ""}, {"date": "2026-10-12", "id": "3b7927ad-8a5e-4aad-a2f5-f2e995b34b7b", "title": "Windows language to Hindi", "cat": "Other", "file": ""}, {"date": "2026-10-12", "id": "1e573f8f-0e7e-49f6-b826-002b9df99f6d", "title": "Marketplace business ideas India", "cat": "Business", "file": ""}, {"date": "2026-10-11", "id": "8e186c4b-cf86-4eae-8107-052068b1d31f", "title": "Paid app ideas from Sensor Tower", "cat": "Idea", "file": ""}, {"date": "2026-10-10", "id": "a455bd70-8b4a-4aee-94d3-3ab7eb0feee8", "title": "Resume to video web app", "cat": "Build", "file": ""}];
+/* ------------------------------------- */
+
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let tab="sites",cat="All",q="";
+const fileOf=Object.fromEntries(APPS.map(a=>[a.file,a]));
+
+function data(){
+ if(tab==="sites")return SITES.map(s=>({cat:s.cat,hay:s.name+s.desc+s.repo,html:`
+  <div class="row"><span class="pill ${s.live?'':'soon'}">${s.live?'● Live':'Repo only'}</span><span class="pill b">${esc(s.cat)}</span></div>
+  <h3>${esc(s.name)}</h3><div class="mono">⎇ tarkeshstack/${esc(s.repo)}</div><p>${esc(s.desc)}</p>
+  <div class="foot">${s.live?`<a class="l" href="${esc(s.live)}" target="_blank" rel="noopener">Open site ↗</a>`:""}<a href="${GH+s.repo}" target="_blank" rel="noopener">Source</a></div>`}));
+ if(tab==="apps")return APPS.concat(MORE).map(a=>a.more?({cat:a.cat,hay:a.name+a.desc,html:`
+  <div class="row"><span class="pill b">${esc(a.cat)}</span><span class="pill soon">${a.live?'● Live elsewhere':'Not in tools repo yet'}</span></div>
+  <h3>${esc(a.name)}</h3><p>${esc(a.desc)}</p>
+  <div class="foot">${a.live?`<a class="l" href="${esc(a.live)}" target="_blank" rel="noopener">Open site ↗</a>`:""}${a.chat?`<a ${a.live?'':'class="l"'} href="${CHAT+a.chat}" target="_blank" rel="noopener">Open chat ↗</a>`:""}${!a.live&&!a.chat?'<a style="opacity:.6;pointer-events:none">File needs upload</a>':""}</div>`}):({cat:a.cat,hay:a.name+a.desc+a.file,html:`
+  <div class="row"><span class="pill b">${esc(a.cat)}</span><span class="pill">● Standalone app</span></div>
+  <h3>${esc(a.name)}</h3><div class="mono">${esc(a.file)}</div><p>${esc(a.desc)}</p>
+  <div class="foot"><a class="l" href="#" data-open="${esc(a.file)}" data-name="${esc(a.name)}">Open here</a><a href="${PAGES+a.file}" target="_blank" rel="noopener">New tab ↗</a><a href="${GH}tools/blob/main/${a.file}" target="_blank" rel="noopener">Source</a></div>`}));
+ return CHATS.map(c=>({cat:c.cat,hay:c.title+c.file+c.cat,html:`
+  <div class="row"><span class="pill b">${esc(c.cat)}</span><span class="mono">${c.date}</span></div>
+  <h3>${esc(c.title)}</h3>${c.file?`<div class="mono">Latest file: ${esc(c.file)}</div>`:`<div class="mono">No file linked yet</div>`}
+  <div class="foot"><a class="l" href="${CHAT+c.id}" target="_blank" rel="noopener">Open chat ↗</a>${c.file?`<a href="${PAGES+c.file}" target="_blank" rel="noopener">Open file</a>`:""}</div>`}));
+}
+function render(){
+ const all=data(),cats=["All",...new Set(all.map(x=>x.cat))];
+ $("#chips").innerHTML=cats.map(c=>`<button class="chip ${c===cat?'on':''}" data-c="${esc(c)}">${esc(c)}</button>`).join("");
+ document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{cat=b.dataset.c;render()});
+ const l=all.filter(x=>(cat==="All"||x.cat===cat)&&(!q||x.hay.toLowerCase().includes(q)));
+ $("#grid").innerHTML=l.map(x=>`<article class="card">${x.html}</article>`).join("");
+ $("#empty").style.display=l.length?"none":"block";
+}
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
+ document.querySelectorAll(".tab").forEach(t=>t.classList.remove("on"));b.classList.add("on");tab=b.dataset.t;cat="All";render()});
+$("#q").oninput=e=>{q=e.target.value.toLowerCase();render()};
+$("#n1").textContent=SITES.filter(s=>s.live).length;$("#n2").textContent=APPS.length+MORE.length;$("#n3").textContent=CHATS.length;
+$("#c1").textContent=SITES.length;$("#c2").textContent=APPS.length+MORE.length;$("#c3").textContent=CHATS.length;
+$("#yr").textContent=new Date().getFullYear();
+try{if(localStorage.th==="light")document.documentElement.classList.add("light")}catch(e){}
+$("#th").onclick=()=>{document.documentElement.classList.toggle("light");try{localStorage.th=document.documentElement.classList.contains("light")?"light":"dark"}catch(e){}};
+document.addEventListener("click",e=>{
+ const a=e.target.closest("[data-open]");if(!a)return;e.preventDefault();
+ const u=PAGES+a.dataset.open;$("#vframe").src=u;$("#vname").textContent=a.dataset.name;$("#vtab").href=u;$("#viewer").hidden=false;document.body.style.overflow="hidden";
+});
+function closeV(){$("#viewer").hidden=true;$("#vframe").src="about:blank";document.body.style.overflow=""}
+$("#vback").onclick=closeV;document.addEventListener("keydown",e=>{if(e.key==="Escape")closeV()});
+render();
+</script>
+</body>
+</html>
