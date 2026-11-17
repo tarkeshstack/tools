@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resume Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F5F6F8; --surface:#FFFFFF; --ink:#1C2430; --ink-soft:#667085;
+    --primary:#1D4ED8; --primary-dark:#1734A3; --border:#E3E6EB; --accent-bg:#EEF2FF;
+    --danger:#B42318;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:720px;margin:0 auto;padding:0 24px;}
+  .hidden{display:none !important;}
+
+  header.top{padding:20px 0;border-bottom:1px solid var(--border);background:var(--surface);}
+  .brand-row{max-width:720px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;}
+  .brand-title{font-weight:700;font-size:16px;}
+  .brand-sub{font-size:12.5px;color:var(--ink-soft);}
+
+  /* ---------- INTRO ---------- */
+  .intro{padding:48px 0 32px;}
+  .intro h1{font-size:26px;font-weight:700;margin:0 0 8px;}
+  .intro p{color:var(--ink-soft);font-size:14.5px;margin:0 0 26px;max-width:56ch;}
+  .cta-row{display:flex;gap:12px;flex-wrap:wrap;}
+
+  button.primary{
+    font-family:'Inter',sans-serif;font-weight:600;font-size:14.5px;color:#fff;background:var(--primary);
+    border:none;padding:12px 22px;border-radius:6px;cursor:pointer;transition:background .12s ease;
+  }
+  button.primary:hover{background:var(--primary-dark);}
+  button.primary:disabled{opacity:0.5;cursor:not-allowed;}
+  button.secondary{
+    font-family:'Inter',sans-serif;font-weight:600;font-size:14.5px;color:var(--ink);background:var(--surface);
+    border:1px solid var(--border);padding:11px 20px;border-radius:6px;cursor:pointer;
+  }
+  button.secondary:hover{border-color:#C7CBD3;}
+
+  /* ---------- INTERVIEW ---------- */
+  .interview{padding:36px 0 70px;}
+  .progress-track{height:4px;background:var(--border);border-radius:2px;margin-bottom:8px;overflow:hidden;}
+  .progress-fill{height:100%;background:var(--primary);border-radius:2px;transition:width .2s ease;}
+  .progress-label{font-size:12.5px;color:var(--ink-soft);margin-bottom:24px;}
+
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:28px;}
+  .card .q-title{font-size:19px;font-weight:700;margin:0 0 6px;}
+  .card .q-help{color:var(--ink-soft);font-size:13.5px;margin:0 0 20px;}
+  .q-optional{color:#98A2B3;font-size:11.5px;font-weight:600;margin-left:6px;}
+
+  .field{margin-bottom:16px;}
+  .field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:6px;}
+  .field select, .field input[type="text"]{
+    width:100%;font-family:'Inter',sans-serif;font-size:15px;color:var(--ink);
+    background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 12px;
+  }
+  .field select:focus, .field input[type="text"]:focus, textarea.answer:focus{
+    outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--accent-bg);
+  }
+  .field-error{color:var(--danger);font-size:12.5px;margin-top:-8px;margin-bottom:14px;display:none;}
+  .field-error.show{display:block;}
+
+  .mic-row{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+  .mic-btn{
+    width:44px;height:44px;border-radius:50%;background:var(--primary);border:none;color:#fff;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;position:relative;
+  }
+  .mic-btn:hover{background:var(--primary-dark);}
+  .mic-btn.listening{background:var(--primary-dark);}
+  .mic-btn.listening::after{
+    content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--primary);
+    animation:pulse 1.4s ease-out infinite;
+  }
+  @keyframes pulse{0%{transform:scale(0.9);opacity:0.9;}100%{transform:scale(1.45);opacity:0;}}
+  .mic-status{font-size:13px;color:var(--ink-soft);}
+  .mic-status b{color:var(--primary);font-weight:600;}
+
+  textarea.answer{
+    width:100%;min-height:100px;font-family:'Inter',sans-serif;font-size:15px;color:var(--ink);
+    background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px;resize:vertical;
+  }
+  textarea.answer::placeholder{color:#98A2B3;}
+
+  .q-nav{display:flex;justify-content:space-between;align-items:center;margin-top:22px;}
+  button.text-btn{background:none;border:none;color:var(--ink-soft);font-family:'Inter',sans-serif;font-weight:600;font-size:13.5px;cursor:pointer;padding:8px 2px;}
+  button.text-btn:hover{color:var(--ink);}
+  .unsupported-note{font-size:13px;color:var(--ink-soft);background:var(--accent-bg);border:1px solid var(--border);border-radius:6px;padding:9px 12px;margin-bottom:16px;}
+
+  /* ---------- PREVIEW TOOLBAR ---------- */
+  .preview-wrap{padding:36px 0 90px;}
+  .preview-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:10px;max-width:800px;margin-left:auto;margin-right:auto;padding:0 4px;}
+  .preview-toolbar h2{font-size:18px;font-weight:700;margin:0;}
+  .preview-toolbar .actions{display:flex;gap:8px;flex-wrap:wrap;}
+  .preview-sub{max-width:800px;margin:0 auto 22px;padding:0 4px;color:var(--ink-soft);font-size:12.5px;}
+  .export-note{max-width:800px;margin:-8px auto 20px;padding:0 4px;color:var(--danger);font-size:12px;display:none;}
+  .export-note.show{display:block;}
+
+  /* ---------- RESUME DOCUMENT ---------- */
+  .resume-doc{width:800px;max-width:100%;background:var(--surface);margin:0 auto;padding:56px 52px 60px;border:1px solid var(--border);border-radius:4px;}
+  .r-name{font-size:30px;font-weight:800;margin:0 0 3px;outline:none;letter-spacing:-0.01em;}
+  .r-role{font-size:14.5px;color:var(--primary);font-weight:600;margin:0 0 8px;outline:none;}
+  .r-meta{font-size:13px;color:var(--ink-soft);margin:0 0 26px;outline:none;}
+  .r-meta[data-empty="true"]{color:#98A2B3;font-style:italic;}
+  hr.rule{border:none;border-top:1px solid var(--border);margin:24px 0;}
+  .r-section-label{font-size:11.5px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--primary);margin:0 0 12px;border-bottom:1px solid var(--border);padding-bottom:6px;}
+  .r-body{font-size:14.5px;color:var(--ink);outline:none;}
+  .r-body p{margin:0 0 10px;}
+  .r-comp-line{font-size:13.5px;color:var(--ink-soft);margin:-2px 0 16px;outline:none;}
+
+  .r-highlights{display:flex;gap:10px;margin:22px 0 4px;flex-wrap:wrap;page-break-inside:avoid;}
+  .r-highlight{flex:1 1 140px;background:var(--accent-bg);border:1px solid var(--border);border-radius:6px;padding:12px 14px;}
+  .r-highlight .h-word{font-size:14px;font-weight:600;color:var(--primary);outline:none;}
+
+  .r-tag-groups{display:flex;flex-direction:column;gap:14px;}
+  .r-tag-group{page-break-inside:avoid;}
+  .r-tag-group-label{font-size:13px;font-weight:600;color:var(--ink);margin:0 0 7px;outline:none;}
+  .r-tags{display:flex;flex-wrap:wrap;gap:7px;}
+  .r-tags span{font-size:13px;padding:4px 10px;border-radius:4px;background:#F1F3F6;border:1px solid var(--border);color:var(--ink);outline:none;}
+
+  .r-exp-block{margin-bottom:22px;page-break-inside:avoid;}
+  .r-exp-title{font-size:16px;font-weight:700;margin:0 0 2px;outline:none;}
+  .r-exp-period{font-size:12px;color:var(--ink-soft);margin:0 0 10px;outline:none;}
+  ul.r-list{margin:0;padding-left:19px;font-size:14.5px;}
+  ul.r-list li{margin-bottom:7px;outline:none;}
+
+  .r-testimonial{border-left:3px solid var(--primary);padding:2px 0 2px 16px;margin-bottom:16px;page-break-inside:avoid;}
+  .r-testimonial-quote{font-style:italic;font-size:14.5px;margin:0 0 4px;outline:none;color:var(--ink);}
+  .r-testimonial-attr{font-size:12px;color:var(--ink-soft);outline:none;}
+
+  .r-note{font-size:13.5px;color:var(--ink-soft);font-style:italic;margin:24px 0 0;outline:none;border-top:1px solid var(--border);padding-top:16px;}
+  .r-footer-sig{text-align:center;font-size:12px;color:#98A2B3;margin-top:30px;outline:none;}
+  .edit-hint{max-width:800px;margin:14px auto 0;text-align:center;font-size:12px;color:var(--ink-soft);}
+
+  .page-divider{display:flex;align-items:center;gap:12px;margin:40px 0 36px;color:#98A2B3;font-size:11px;font-weight:600;letter-spacing:0.03em;}
+  .page-divider::before,.page-divider::after{content:"";flex:1;height:1px;background:var(--border);}
+
+  footer.site-footer{text-align:center;padding:28px 0 46px;color:var(--ink-soft);font-size:12.5px;}
+
+  .history-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 18px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;}
+  .history-card .hc-info{min-width:0;}
+  .history-card .hc-name{font-weight:700;font-size:15px;margin:0;}
+  .history-card .hc-meta{font-size:12.5px;color:var(--ink-soft);margin:2px 0 0;}
+  .history-card .hc-actions{display:flex;gap:8px;flex:none;}
+  .history-empty{color:var(--ink-soft);font-size:14px;padding:40px 0;text-align:center;}
+
+  @media print{
+    header.top,.intro,.interview,.preview-toolbar,.preview-sub,.export-note,footer.site-footer,.edit-hint,.page-divider{display:none !important;}
+    body{background:#fff;}
+    .resume-doc{border:none;padding:0.35in 0.1in;margin:0;width:auto;}
+    .print-break{page-break-before:always;}
+    .wrap,.preview-wrap{max-width:100%;padding:0;}
+  }
+  @media (max-width:820px){ .resume-doc{padding:36px 24px;} }
+  @media (max-width:480px){ .card{padding:20px;} .r-highlights{flex-direction:column;} }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand-row">
+    <span class="brand-title">Resume Builder</span>
+    <button class="text-btn" id="historyNavBtn">History</button>
+  </div>
+</header>
+
+<!-- ================= INTRO ================= -->
+<section class="intro" id="hero">
+  <div class="wrap">
+    <h1>Build a resume for someone you know.</h1>
+    <p>Answer a few questions about a parent, sibling, or friend — by voice or by typing. We'll write it up as a full resume you can edit, print, or download as a Word document.</p>
+    <div class="cta-row">
+      <button class="primary" id="startBtn">Get started</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= INTERVIEW ================= -->
+<section class="interview hidden" id="interview">
+  <div class="wrap">
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:14%"></div></div>
+    <p class="progress-label" id="progressLabel">Step 1 of 7</p>
+
+    <div class="card">
+      <p class="q-title" id="qTitle">Who is this resume for?</p>
+      <p class="q-help" id="qHelp">Select their relation to you and enter their name.</p>
+
+      <!-- Step 1: structured form -->
+      <div id="formStep">
+        <div class="field">
+          <label for="relationSelect">Relation to you</label>
+          <select id="relationSelect">
+            <option value="">Select a relation…</option>
+            <option value="self">Myself</option>
+            <option value="papa">Papa / Father</option>
+            <option value="mummy">Mummy / Mother</option>
+            <option value="didi">Didi / Elder Sister</option>
+            <option value="bhaiya">Bhaiya / Elder Brother</option>
+            <option value="dadi">Dadi / Nani / Grandmother</option>
+            <option value="dada">Dada / Nana / Grandfather</option>
+            <option value="wife">Wife</option>
+            <option value="husband">Husband</option>
+            <option value="friend">Best Friend</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="field hidden" id="otherRelationField">
+          <label for="otherRelationInput">Specify relation</label>
+          <input type="text" id="otherRelationInput" placeholder="e.g. Aunt, Mentor, Neighbour">
+        </div>
+        <div class="field">
+          <label for="nameInput">Name</label>
+          <input type="text" id="nameInput" placeholder="e.g. Sunita Sharma">
+        </div>
+        <p class="field-error" id="formError">Please select a relation and enter a name.</p>
+      </div>
+
+      <!-- Steps 2-7: voice / text -->
+      <div id="voiceStep" class="hidden">
+        <div class="unsupported-note hidden" id="unsupportedNote">Voice input isn't available in this browser — just type your answer below.</div>
+        <div class="mic-row">
+          <button class="mic-btn" id="micBtn" aria-label="Start speaking">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="9" y="2" width="6" height="12" rx="3" fill="currentColor"/>
+              <path d="M5 11a7 7 0 0 0 14 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M12 18v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <p class="mic-status" id="micStatus">Tap the microphone and speak, or type below.</p>
+        </div>
+        <textarea class="answer" id="answerBox" placeholder="Your answer will appear here — or just start typing."></textarea>
+      </div>
+
+      <div class="q-nav">
+        <button class="text-btn hidden" id="backBtn">← Back</button>
+        <button class="primary" id="nextBtn">Continue</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= RESUME PREVIEW ================= -->
+<section class="preview-wrap hidden" id="previewSection">
+  <div class="preview-toolbar">
+    <h2>Resume ready</h2>
+    <div class="actions">
+      <button class="secondary" id="startOverBtn">Start over</button>
+      <button class="secondary" id="regenBtn">Rewrite</button>
+      <button class="secondary" id="saveBtn">Save</button>
+      <button class="secondary" id="wordBtn">Download .docx</button>
+      <button class="primary" id="printBtn">Print / Save as PDF</button>
+    </div>
+  </div>
+  <p class="preview-sub">Click any line to edit before printing or downloading — both use what's on screen.</p>
+  <p class="export-note" id="exportNote"></p>
+
+  <div class="resume-doc" id="resumeDoc">
+    <h1 class="r-name" contenteditable="true" id="rName">Name</h1>
+    <p class="r-role" contenteditable="true" id="rRole">Role</p>
+    <p class="r-meta" contenteditable="true" id="rMeta">Add phone, email, or address (optional)</p>
+
+    <p class="r-section-label">Summary</p>
+    <div class="r-body" contenteditable="true" id="rSummary"></div>
+
+    <div class="r-highlights" id="rHighlights"></div>
+
+    <hr class="rule">
+    <p class="r-section-label">Core Skills</p>
+    <p class="r-comp-line" contenteditable="true" id="rCompLine"></p>
+    <div class="r-tag-groups" id="rTagGroups"></div>
+
+    <div class="page-divider"><span>Page 2</span></div>
+    <div class="print-break">
+      <p class="r-section-label">Experience</p>
+      <div id="rExperience"></div>
+
+      <hr class="rule">
+      <p class="r-section-label">Achievements</p>
+      <ul class="r-list" id="rAchievements"></ul>
+    </div>
+
+    <div class="page-divider"><span>Page 3</span></div>
+    <div class="print-break">
+      <p class="r-section-label">Background</p>
+      <div class="r-body" contenteditable="true" id="rJourney"></div>
+
+      <hr class="rule">
+      <p class="r-section-label">Testimonials</p>
+      <div id="rTestimonials"></div>
+
+      <hr class="rule">
+      <p class="r-section-label">Languages &amp; Interests</p>
+      <div class="r-body" contenteditable="true" id="rExtra"></div>
+
+      <p class="r-note" contenteditable="true" id="rPhilosophy"></p>
+      <p class="r-footer-sig" contenteditable="true" id="rFooterSig">Prepared with care, by someone who knows them well.</p>
+    </div>
+  </div>
+  <p class="edit-hint">Everything above is editable.</p>
+</section>
+
+<section class="preview-wrap hidden" id="historySection">
+  <div class="preview-toolbar">
+    <h2>Your resumes</h2>
+    <div class="actions">
+      <button class="primary" id="newFromHistoryBtn">Create new</button>
+    </div>
+  </div>
+  <p class="preview-sub" id="historySub">Resumes you've created, saved on this device.</p>
+  <div class="wrap" id="historyList"></div>
+</section>
+
+<footer class="site-footer">Made for the people who made everything else possible.</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
+
+<script>
+(function(){
+  const relationTitles = {
+    self:'Dedicated Professional & Individual Contributor',
+    papa:'Head of Household & Family Operations',
+    mummy:'Household & Family Operations Lead',
+    didi:'Family Coordinator & Confidante',
+    bhaiya:'Problem-Solver-in-Chief',
+    dadi:'Family Matriarch & Household Historian',
+    dada:'Family Patriarch & Household Historian',
+    wife:'Partner in Everything, Household Lead',
+    husband:'Partner in Everything, Steady Hand',
+    friend:'Trusted Confidante & Go-To Person'
+  };
+  const relationLabels = {
+    self:'Myself', papa:'Papa / Father', mummy:'Mummy / Mother', didi:'Didi / Elder Sister', bhaiya:'Bhaiya / Elder Brother',
+    dadi:'Dadi / Nani / Grandmother', dada:'Dada / Nana / Grandfather', wife:'Wife', husband:'Husband', friend:'Best Friend'
+  };
+
+  const questions = [
+    { type:'form', title:"Who is this resume for?", help:"Select their relation to you and enter their name." },
+    { type:'voice', title:"What do they actually do, day to day?",
+      help:"Describe a typical day or their role. This becomes the summary and experience section." },
+    { type:'voice', title:"What are they really good at?",
+      help:'List their skills, separated by commas — e.g. "cooking, patience, managing money, fixing things."' },
+    { type:'voice', title:"What is something they're known for?",
+      help:"One or two things people always say about them, or moments you're proud of." },
+    { type:'voice', title:"What do people always say about them?",
+      help:"Any lines you remember, even rough. These become testimonials.", optional:true },
+    { type:'voice', title:"What's their background or journey?",
+      help:"Milestones worth mentioning — where they grew up, how their role has changed, even roughly how long they've done this.", optional:true },
+    { type:'voice', title:"Anything else? Languages, hobbies, a favourite saying?",
+      help:"Languages spoken, hobbies, or quirks that round them out." }
+  ];
+
+  const answers = new Array(questions.length).fill("");
+  let current = 0;
+  let relationValue = "";
+  let relationCustom = "";
+  let currentId = null;
+  let currentRelationLabel = "";
+  let historyListMemory = [];
+  const hasStorage = (typeof window.storage !== 'undefined');
+
+  const hero = document.getElementById('hero');
+  const interview = document.getElementById('interview');
+  const previewSection = document.getElementById('previewSection');
+  const startBtn = document.getElementById('startBtn');
+  const progressFill = document.getElementById('progressFill');
+  const progressLabel = document.getElementById('progressLabel');
+  const qTitle = document.getElementById('qTitle');
+  const qHelp = document.getElementById('qHelp');
+  const formStep = document.getElementById('formStep');
+  const voiceStep = document.getElementById('voiceStep');
+  const relationSelect = document.getElementById('relationSelect');
+  const otherRelationField = document.getElementById('otherRelationField');
+  const otherRelationInput = document.getElementById('otherRelationInput');
+  const nameInput = document.getElementById('nameInput');
+  const formError = document.getElementById('formError');
+  const answerBox = document.getElementById('answerBox');
+  const micBtn = document.getElementById('micBtn');
+  const micStatus = document.getElementById('micStatus');
+  const backBtn = document.getElementById('backBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const unsupportedNote = document.getElementById('unsupportedNote');
+
+  relationSelect.addEventListener('change', () => {
+    otherRelationField.classList.toggle('hidden', relationSelect.value !== 'other');
+  });
+
+  function renderQuestion(){
+    const q = questions[current];
+    qTitle.textContent = q.title + (q.optional ? '' : '');
+    qHelp.textContent = q.help;
+    progressLabel.textContent = 'Step ' + (current+1) + ' of ' + questions.length + (q.optional ? ' (optional)' : '');
+    progressFill.style.width = Math.round(((current+1)/questions.length)*100) + '%';
+    backBtn.classList.toggle('hidden', current === 0);
+    nextBtn.textContent = current === questions.length - 1 ? "Create resume" : "Continue";
+    formError.classList.remove('show');
+
+    if (q.type === 'form'){
+      formStep.classList.remove('hidden');
+      voiceStep.classList.add('hidden');
+      relationSelect.value = relationValue;
+      otherRelationField.classList.toggle('hidden', relationValue !== 'other');
+      otherRelationInput.value = relationCustom;
+      nameInput.value = answers[0];
+    } else {
+      formStep.classList.add('hidden');
+      voiceStep.classList.remove('hidden');
+      answerBox.value = answers[current];
+      stopListening();
+      micStatus.textContent = "Tap the microphone and speak, or type below.";
+      answerBox.focus();
+    }
+  }
+
+  const historySection = document.getElementById('historySection');
+  function goto(section){
+    [hero, interview, previewSection, historySection].forEach(s => s.classList.add('hidden'));
+    section.classList.remove('hidden');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  startBtn.addEventListener('click', () => { current = 0; goto(interview); renderQuestion(); });
+
+  backBtn.addEventListener('click', () => {
+    if (questions[current].type === 'voice') answers[current] = answerBox.value;
+    if (current > 0){ current--; renderQuestion(); }
+  });
+
+  nextBtn.addEventListener('click', () => {
+    const q = questions[current];
+    if (q.type === 'form'){
+      const rel = relationSelect.value;
+      const name = nameInput.value.trim();
+      const customOk = rel !== 'other' || otherRelationInput.value.trim().length > 0;
+      if (!rel || !name || !customOk){
+        formError.classList.add('show');
+        return;
+      }
+      relationValue = rel;
+      relationCustom = otherRelationInput.value.trim();
+      answers[0] = name;
+    } else {
+      answers[current] = answerBox.value.trim();
+    }
+    if (current < questions.length - 1){ current++; renderQuestion(); }
+    else {
+      currentId = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('id-' + Date.now() + '-' + Math.random().toString(36).slice(2));
+      currentRelationLabel = relationValue === 'other' ? (relationCustom || 'Other') : (relationLabels[relationValue] || relationValue);
+      renderResume(generateResume(answers, relationValue, relationCustom));
+      goto(previewSection);
+      upsertHistoryEntry();
+    }
+  });
+
+  /* ---------- Speech recognition ---------- */
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recognition = null, listening = false;
+  if (SR){
+    recognition = new SR();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-IN';
+    let baseText = "";
+    recognition.onstart = () => {
+      listening = true;
+      micBtn.classList.add('listening');
+      micStatus.innerHTML = '<b>Listening…</b> tap again to stop.';
+      baseText = answerBox.value ? (answerBox.value.trim() + " ") : "";
+    };
+    recognition.onresult = (event) => {
+      let interim = "", final = "";
+      for (let i = event.resultIndex; i < event.results.length; i++){
+        const t = event.results[i][0].transcript;
+        if (event.results[i].isFinal) final += t + " "; else interim += t;
+      }
+      if (final) baseText += final;
+      answerBox.value = (baseText + interim).trim();
+    };
+    recognition.onerror = () => {
+      micStatus.textContent = "Didn't catch that — tap the microphone to try again, or type instead.";
+      stopListening();
+    };
+    recognition.onend = () => {
+      if (listening){ listening = false; micBtn.classList.remove('listening'); micStatus.textContent = "Tap the microphone and speak, or type below."; }
+    };
+  } else {
+    unsupportedNote.classList.remove('hidden');
+    micBtn.style.opacity = '0.4'; micBtn.style.cursor = 'not-allowed';
+  }
+  function stopListening(){
+    if (recognition && listening){ listening = false; micBtn.classList.remove('listening'); try { recognition.stop(); } catch(e){} }
+  }
+  micBtn.addEventListener('click', () => {
+    if (!recognition) return;
+    if (listening) stopListening(); else { try { recognition.start(); } catch(e){} }
+  });
+
+  /* =========================================================
+     LOCAL TEXT ENGINE — no network, fully offline
+     ========================================================= */
+
+  function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+  function clean(s){ return (s||"").replace(/\s+/g,' ').trim().replace(/^[.,;\-\s]+|[.,;\-\s]+$/g,''); }
+  function endsPunct(s){ return /[.!?]$/.test(s); }
+  function sentence(s){ s = clean(s); if(!s) return ""; s = s.charAt(0).toUpperCase() + s.slice(1); return endsPunct(s) ? s : s + "."; }
+  function lowerFirst(s){ s = clean(s); if(!s) return s; return s.charAt(0).toLowerCase() + s.slice(1); }
+  function titleCase(s){ return clean(s).replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1)); }
+  function splitFragments(text){ return clean(text).split(/,| and | & |\n|;|\.\s+/gi).map(clean).filter(s => s.length > 1); }
+  function shortPhrase(s, maxWords){ const words = clean(s).split(' '); return titleCase(words.slice(0, maxWords).join(' ')); }
+  function articleFor(word){ return /^[aeiou]/i.test(word) ? 'an' : 'a'; }
+  function joinWithAnd(list){
+    if (list.length === 0) return "";
+    if (list.length === 1) return list[0];
+    if (list.length === 2) return list[0] + " and " + list[1];
+    return list.slice(0,-1).join(', ') + ', and ' + list[list.length-1];
+  }
+  function extractYears(text){
+    const m = clean(text).match(/(\d{1,2})\+?\s*(years|yrs|year)\b/i);
+    return m ? m[1] : null;
+  }
+
+  const verbBank = [
+    { kw:['cook','food','meal','kitchen','dinner','lunch','breakfast'], verb:'Prepares' },
+    { kw:['clean','tidy','laundry','wash','iron'], verb:'Maintains' },
+    { kw:['money','budget','finance','bill','account','expense'], verb:'Manages' },
+    { kw:['kid','child','school','homework','study'], verb:'Guides' },
+    { kw:['fix','repair','broken','maintenance'], verb:'Repairs' },
+    { kw:['garden','plant'], verb:'Tends to' },
+    { kw:['drive','driving','pickup','drop'], verb:'Handles' },
+    { kw:['listen','talk','comfort','support','calm','emotional'], verb:'Offers steady' },
+    { kw:['plan','organi','schedule','coordinat'], verb:'Coordinates' },
+    { kw:['teach','taught','lesson'], verb:'Teaches' },
+    { kw:['shop','grocer','market'], verb:'Sources' },
+    { kw:['health','medicine','doctor','care for'], verb:'Oversees' },
+    { kw:['work','job','office','business'], verb:'Takes charge of' }
+  ];
+  function verbFor(fragment){
+    const low = fragment.toLowerCase();
+    for (const v of verbBank){ if (v.kw.some(k => low.includes(k))) return v.verb; }
+    return pick(['Takes care of','Handles','Looks after','Manages']);
+  }
+  function bulletFromFragment(fragment){ return sentence(verbFor(fragment) + " " + lowerFirst(fragment)); }
+
+  const skillCategories = [
+    { label:'Care & relationships', kws:['patien','care','caring','kind','listen','comfort','calm','love','nurtur','emotion','support','gentle','warm'] },
+    { label:'Household & organisation', kws:['cook','clean','budget','manage','organi','plan','schedul','shop','grocer','money','financ','household','time'] },
+    { label:'Practical & hands-on', kws:['fix','repair','garden','drive','build','technical','technolog','sew','tools','handy','computer'] },
+    { label:'Character & values', kws:['honest','discipline','hardworking','fun','humor','humour','generous','storytell','wisdom','strong','brave','loyal','patient'] }
+  ];
+  function groupSkills(list){
+    const groups = {};
+    list.forEach(item => {
+      const low = item.toLowerCase();
+      let label = null;
+      for (const cat of skillCategories){ if (cat.kws.some(k => low.includes(k))){ label = cat.label; break; } }
+      if (!label) label = 'Core strengths';
+      groups[label] = groups[label] || [];
+      groups[label].push(titleCase(item));
+    });
+    return Object.keys(groups).map(l => ({ label: titleCase(l), items: groups[l] }));
+  }
+
+  function roleTitleFromRelation(relVal, customText){
+    if (relVal && relVal !== 'other' && relationTitles[relVal]) return relationTitles[relVal];
+    return customText ? titleCase(customText) : 'A person who deserves this';
+  }
+
+  const attributionBank = ['Family','A close friend','Someone who knows them well','Their neighbour','Their child','Someone they\u2019ve helped more than once'];
+  function genericTestimonials(name){
+    return [
+      `You always know where to find ${name} when something needs to get done.`,
+      `${name} has a way of making hard days feel manageable.`,
+      `Ask anyone — ${name} is the one who holds everything together.`,
+      `There's a calm that comes over the room when ${name}'s around.`,
+      `${name} notices what everyone else misses, and quietly fixes it.`
+    ];
+  }
+  const achFillerTemplates = [
+    s => `Widely regarded for ${s}`,
+    s => `Consistently praised for ${s}`,
+    s => `Has built a quiet reputation around ${s}`
+  ];
+
+  function generateResume(a, relVal, relCustom){
+    const name = titleCase(clean(a[0]) || "Someone Wonderful");
+    const role = roleTitleFromRelation(relVal, relCustom);
+    const dayRaw = clean(a[1]);
+    const skillsRaw = clean(a[2]);
+    const achieveRaw = clean(a[3]);
+    const testimonialRaw = clean(a[4]);
+    const journeyRaw = clean(a[5]);
+    const extraRaw = clean(a[6]);
+    const allRaw = a.join(' ');
+
+    const skills = splitFragments(skillsRaw).length ? splitFragments(skillsRaw) : ['endlessly capable','deeply reliable'];
+    const achievements = splitFragments(achieveRaw);
+    const dayFragments = splitFragments(dayRaw);
+    const journeyFragments = splitFragments(journeyRaw);
+    const years = extractYears(allRaw);
+
+    const openers = [
+      `${name} brings a steady, hands-on approach to the role of ${role}.`,
+      `As ${articleFor(role)} ${role.toLowerCase()}, ${name} has built a quiet reputation for consistency and care.`,
+      `${name} has spent years mastering the everyday craft of being ${role.toLowerCase()}.`,
+      `Few people understand the role of ${role.toLowerCase()} as thoroughly as ${name} does.`,
+      `${name} approaches the responsibilities of ${role.toLowerCase()} with a rare mix of patience and precision.`
+    ];
+    const opener = pick(openers);
+    const middle = dayRaw ? sentence("The days are built around " + lowerFirst(dayRaw)) : "Every day looks a little different, and every one of those days counts.";
+    const skillsPhrase = skills.slice(0,2).map(s => s.toLowerCase()).join(' and ');
+    const closers = skills.length ? [
+      sentence(`Known especially for ${skillsPhrase}, this is work approached with real seriousness \u2014 because it is real work`),
+      sentence(`${titleCase(skillsPhrase)} stand out as defining strengths, sharpened through years of practice`),
+      sentence(`What sets this apart is ${skillsPhrase} \u2014 qualities that rarely show up on a resume, but should`)
+    ] : [];
+    const closer = closers.length ? pick(closers) : "";
+    const summary = [opener, middle, closer].filter(Boolean).join(' ');
+
+    const highlightPool = achievements.concat(skills);
+    const highlights = [];
+    if (years) highlights.push(`${years}+ Years of Dedication`);
+    for (let i = 0; i < highlightPool.length && highlights.length < 3; i++){
+      const h = shortPhrase(highlightPool[i], 4);
+      if (h && !highlights.includes(h)) highlights.push(h);
+    }
+    while (highlights.length < 3){ highlights.push(pick(['Deeply dependable','Always shows up','Quietly exceptional'])); }
+
+    const skillGroups = groupSkills(skills);
+    const compLine = skillGroups.length > 1
+      ? sentence(`Core strengths span ${joinWithAnd(skillGroups.slice(0,3).map(g => g.label.toLowerCase()))}`)
+      : "";
+
+    let bullets = dayFragments.map(bulletFromFragment);
+    let fillerIdx = 0;
+    while (bullets.length < 5 && fillerIdx < skills.length){
+      bullets.push(sentence(`Draws on real strength in ${skills[fillerIdx].toLowerCase()} to get things done`));
+      fillerIdx++;
+    }
+    if (bullets.length === 0) bullets = [sentence(`Manages the responsibilities of ${role.toLowerCase()} with consistency and care`)];
+    const experience = [{ title: role, period: years ? (years + '+ years \u2014 ongoing') : 'Ongoing \u2014 no end date in sight', bullets }];
+    if (journeyFragments.length){
+      experience.push({ title: 'Formative Years & Background', period: 'Earlier chapters', bullets: journeyFragments.map(bulletFromFragment) });
+    }
+
+    let achList = achievements.map(sentence);
+    let skillFillerIdx = 0;
+    while (achList.length < 4 && skillFillerIdx < skills.length){
+      achList.push(sentence(pick(achFillerTemplates)(skills[skillFillerIdx].toLowerCase())));
+      skillFillerIdx++;
+    }
+    if (achList.length === 0) achList = [sentence('Shows up, every single day, for the people who need them')];
+
+    let testFragments = splitFragments(testimonialRaw);
+    let testimonials = testFragments.map(f => ({ quote: sentence(f), attribution: pick(attributionBank) }));
+    const generic = genericTestimonials(name);
+    let gi = 0;
+    while (testimonials.length < 2 && gi < generic.length){
+      testimonials.push({ quote: generic[gi], attribution: pick(attributionBank) });
+      gi++;
+    }
+
+    const journeyOpeners = [
+      `Long before the title of ${role.toLowerCase()} meant anything official, ${name} was already living it.`,
+      `${name}'s path here was never written down anywhere \u2014 it was built one day at a time.`,
+      `There was no training manual for this. ${name} figured it out the way most people do: by doing it.`
+    ];
+    const journey = journeyRaw
+      ? pick(journeyOpeners) + ' ' + sentence(journeyRaw) + ' That background still shapes how they show up today.'
+      : `${name}'s story didn't come with a job description, but it shows in everything they do today.`;
+
+    const extra = extraRaw ? sentence(extraRaw) : `${name} keeps life full outside of all this too \u2014 always finding time for the things they enjoy.`;
+
+    const topSkill = skills[0] ? skills[0].toLowerCase() : 'getting things right';
+    const philosophyTemplates = [
+      `I just do what needs to be done, and I try to do it with ${topSkill}.`,
+      `Nothing gets done without a little ${topSkill} \u2014 that's the whole secret.`,
+      `I never really thought of it as work. It's just what you do for the people you love.`,
+      `If it matters to someone I love, it matters to me.`
+    ];
+    const philosophy = pick(philosophyTemplates);
+
+    return { name, role, summary, highlights, compLine, skillGroups, experience, achievements: achList, testimonials, journey, extra, philosophy };
+  }
+
+  /* ---------- Render ---------- */
+  function setText(id, value){ document.getElementById(id).textContent = value; }
+
+  function renderResume(d){
+    setText('rName', d.name || "Name");
+    setText('rRole', d.role || "Role");
+    const meta = document.getElementById('rMeta');
+    meta.textContent = "Add phone, email, or address (optional)";
+    meta.setAttribute('data-empty', 'true');
+    meta.addEventListener('focus', function once(){
+      if (meta.getAttribute('data-empty') === 'true'){ meta.textContent = ""; meta.removeAttribute('data-empty'); }
+    }, { once:true });
+
+    setText('rSummary', d.summary || "");
+
+    const hEl = document.getElementById('rHighlights');
+    hEl.innerHTML = "";
+    (d.highlights||[]).forEach(h => {
+      const card = document.createElement('div'); card.className = 'r-highlight';
+      const p = document.createElement('p'); p.className = 'h-word'; p.contentEditable = 'true'; p.textContent = h;
+      card.appendChild(p); hEl.appendChild(card);
+    });
+
+    setText('rCompLine', d.compLine || "");
+
+    const groupsEl = document.getElementById('rTagGroups');
+    groupsEl.innerHTML = "";
+    (d.skillGroups||[]).forEach(g => {
+      const wrap = document.createElement('div'); wrap.className = 'r-tag-group';
+      const label = document.createElement('p'); label.className = 'r-tag-group-label'; label.contentEditable='true'; label.textContent = g.label;
+      const tags = document.createElement('div'); tags.className = 'r-tags';
+      (g.items||[]).forEach(item => { const span = document.createElement('span'); span.contentEditable='true'; span.textContent = item; tags.appendChild(span); });
+      wrap.appendChild(label); wrap.appendChild(tags); groupsEl.appendChild(wrap);
+    });
+
+    const expEl = document.getElementById('rExperience');
+    expEl.innerHTML = "";
+    (d.experience||[]).forEach(e => {
+      const block = document.createElement('div'); block.className = 'r-exp-block';
+      const title = document.createElement('p'); title.className='r-exp-title'; title.contentEditable='true'; title.textContent = e.title;
+      const period = document.createElement('p'); period.className='r-exp-period'; period.contentEditable='true'; period.textContent = e.period||"";
+      const ul = document.createElement('ul'); ul.className='r-list';
+      (e.bullets||[]).forEach(b => { const li = document.createElement('li'); li.contentEditable='true'; li.textContent = b; ul.appendChild(li); });
+      block.appendChild(title); block.appendChild(period); block.appendChild(ul); expEl.appendChild(block);
+    });
+
+    const achEl = document.getElementById('rAchievements');
+    achEl.innerHTML = "";
+    (d.achievements||[]).forEach(a => { const li = document.createElement('li'); li.contentEditable='true'; li.textContent = a; achEl.appendChild(li); });
+
+    setText('rJourney', d.journey || "");
+
+    const testEl = document.getElementById('rTestimonials');
+    testEl.innerHTML = "";
+    (d.testimonials||[]).forEach(t => {
+      const block = document.createElement('div'); block.className='r-testimonial';
+      const q = document.createElement('p'); q.className='r-testimonial-quote'; q.contentEditable='true'; q.textContent = '\u201C' + t.quote + '\u201D';
+      const attr = document.createElement('p'); attr.className='r-testimonial-attr'; attr.contentEditable='true'; attr.textContent = '\u2014 ' + (t.attribution||"");
+      block.appendChild(q); block.appendChild(attr); testEl.appendChild(block);
+    });
+
+    setText('rExtra', d.extra || "");
+    setText('rPhilosophy', d.philosophy ? ('\u201C' + d.philosophy + '\u201D') : "");
+    setText('rFooterSig', "Prepared with care, by someone who knows them well.");
+  }
+
+  document.getElementById('startOverBtn').addEventListener('click', () => {
+    for (let i=0;i<answers.length;i++) answers[i] = "";
+    relationValue = ""; relationCustom = ""; currentId = null; currentRelationLabel = "";
+    current = 0; goto(hero);
+  });
+  document.getElementById('regenBtn').addEventListener('click', () => {
+    renderResume(generateResume(answers, relationValue, relationCustom));
+    document.getElementById('resumeDoc').scrollIntoView({behavior:'smooth'});
+    upsertHistoryEntry();
+  });
+  document.getElementById('printBtn').addEventListener('click', () => { window.print(); });
+
+  /* ---------- Word (.docx) export ---------- */
+  function textOf(id){ const el = document.getElementById(id); return el ? el.textContent.trim() : ""; }
+
+  function readResumeFromDom(){
+    const name = textOf('rName');
+    const role = textOf('rRole');
+    const metaEl = document.getElementById('rMeta');
+    const meta = metaEl.getAttribute('data-empty') === 'true' ? '' : metaEl.textContent.trim();
+    const summary = textOf('rSummary');
+    const compLine = textOf('rCompLine');
+    const highlights = Array.from(document.querySelectorAll('#rHighlights .h-word')).map(el => el.textContent.trim());
+    const skillGroups = Array.from(document.querySelectorAll('#rTagGroups .r-tag-group')).map(g => ({
+      label: g.querySelector('.r-tag-group-label').textContent.trim(),
+      items: Array.from(g.querySelectorAll('.r-tags span')).map(s => s.textContent.trim())
+    }));
+    const experience = Array.from(document.querySelectorAll('#rExperience .r-exp-block')).map(b => ({
+      title: b.querySelector('.r-exp-title').textContent.trim(),
+      period: b.querySelector('.r-exp-period').textContent.trim(),
+      bullets: Array.from(b.querySelectorAll('ul.r-list li')).map(li => li.textContent.trim())
+    }));
+    const achievements = Array.from(document.querySelectorAll('#rAchievements li')).map(li => li.textContent.trim());
+    const testimonials = Array.from(document.querySelectorAll('#rTestimonials .r-testimonial')).map(t => ({
+      quote: t.querySelector('.r-testimonial-quote').textContent.trim().replace(/^[\u201C"]|[\u201D"]$/g,''),
+      attribution: t.querySelector('.r-testimonial-attr').textContent.trim().replace(/^[\u2014\-]\s*/,'')
+    }));
+    const journey = textOf('rJourney');
+    const extra = textOf('rExtra');
+    const philosophy = textOf('rPhilosophy').replace(/^[\u201C"]|[\u201D"]$/g,'');
+    const footerSig = textOf('rFooterSig');
+    return { name, role, meta, summary, compLine, highlights, skillGroups, experience, achievements, testimonials, journey, extra, philosophy, footerSig };
+  }
+
+  /* ---------- History (persisted via artifact storage when available) ---------- */
+  async function loadHistory(){
+    if (!hasStorage) return historyListMemory;
+    try {
+      const res = await window.storage.get('resume-history', false);
+      historyListMemory = (res && res.value) ? JSON.parse(res.value) : [];
+    } catch(e){ historyListMemory = []; }
+    return historyListMemory;
+  }
+  async function saveHistoryList(list){
+    historyListMemory = list;
+    if (!hasStorage) return;
+    try { await window.storage.set('resume-history', JSON.stringify(list), false); } catch(e){}
+  }
+  async function upsertHistoryEntry(){
+    if (!currentId) return;
+    const d = readResumeFromDom();
+    const list = await loadHistory();
+    const idx = list.findIndex(x => x.id === currentId);
+    const now = new Date().toISOString();
+    const entry = { id: currentId, createdAt: idx >= 0 ? list[idx].createdAt : now, updatedAt: now, relationLabel: currentRelationLabel, data: d };
+    if (idx >= 0) list[idx] = entry; else list.unshift(entry);
+    await saveHistoryList(list);
+  }
+  function formatDate(iso){
+    try { return new Date(iso).toLocaleDateString(undefined, { day:'numeric', month:'short', year:'numeric' }); } catch(e){ return ""; }
+  }
+  async function renderHistoryList(){
+    const list = await loadHistory();
+    const listEl = document.getElementById('historyList');
+    const sub = document.getElementById('historySub');
+    listEl.innerHTML = "";
+    sub.textContent = hasStorage
+      ? "Resumes you've created, saved on this device."
+      : "History isn't available right now — it needs the persistent storage this page loads inside Claude, and won't carry over once downloaded and reopened elsewhere.";
+    if (list.length === 0){
+      const empty = document.createElement('p');
+      empty.className = 'history-empty';
+      empty.textContent = "No resumes yet.";
+      listEl.appendChild(empty);
+      return;
+    }
+    list.forEach(entry => {
+      const card = document.createElement('div'); card.className = 'history-card';
+      const info = document.createElement('div'); info.className = 'hc-info';
+      const nameEl = document.createElement('p'); nameEl.className = 'hc-name'; nameEl.textContent = (entry.data && entry.data.name) || 'Untitled resume';
+      const metaEl = document.createElement('p'); metaEl.className = 'hc-meta';
+      metaEl.textContent = (entry.relationLabel ? entry.relationLabel + ' \u2022 ' : '') + ((entry.data && entry.data.role) || '') + ' \u2022 ' + formatDate(entry.updatedAt || entry.createdAt);
+      info.appendChild(nameEl); info.appendChild(metaEl);
+      const actions = document.createElement('div'); actions.className = 'hc-actions';
+      const openBtn = document.createElement('button'); openBtn.className = 'secondary'; openBtn.textContent = 'Open';
+      openBtn.addEventListener('click', () => {
+        currentId = entry.id;
+        currentRelationLabel = entry.relationLabel || '';
+        renderResume(entry.data);
+        goto(previewSection);
+      });
+      const delBtn = document.createElement('button'); delBtn.className = 'text-btn'; delBtn.textContent = 'Delete';
+      delBtn.addEventListener('click', async () => {
+        const newList = (await loadHistory()).filter(x => x.id !== entry.id);
+        await saveHistoryList(newList);
+        renderHistoryList();
+      });
+      actions.appendChild(openBtn); actions.appendChild(delBtn);
+      card.appendChild(info); card.appendChild(actions);
+      listEl.appendChild(card);
+    });
+  }
+  document.getElementById('historyNavBtn').addEventListener('click', () => { renderHistoryList(); goto(historySection); });
+  document.getElementById('newFromHistoryBtn').addEventListener('click', () => {
+    for (let i=0;i<answers.length;i++) answers[i] = "";
+    relationValue = ""; relationCustom = ""; currentId = null; currentRelationLabel = "";
+    current = 0; goto(hero);
+  });
+  document.getElementById('saveBtn').addEventListener('click', async () => {
+    if (!currentId){
+      currentId = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('id-' + Date.now() + '-' + Math.random().toString(36).slice(2));
+    }
+    await upsertHistoryEntry();
+    const exportNote = document.getElementById('exportNote');
+    exportNote.style.color = '#1D4ED8';
+    exportNote.textContent = hasStorage ? "Saved." : "Saved for this session only (history won't persist once this page is closed or reopened outside Claude).";
+    exportNote.classList.add('show');
+    setTimeout(() => { exportNote.classList.remove('show'); exportNote.style.color = ''; }, 3500);
+  });
+
+  async function downloadDocx(){
+    const exportNote = document.getElementById('exportNote');
+    if (typeof window.docx === 'undefined' || typeof window.saveAs === 'undefined'){
+      exportNote.textContent = "The Word export tool couldn't load — it needs internet the first time. Print / Save as PDF still works offline.";
+      exportNote.classList.add('show');
+      return;
+    }
+    exportNote.classList.remove('show');
+    const d = readResumeFromDom();
+    const { Document, Paragraph, TextRun, HeadingLevel, AlignmentType, Table, TableRow, TableCell, WidthType, ShadingType, Packer } = window.docx;
+    const children = [];
+
+    children.push(new Paragraph({ heading: HeadingLevel.TITLE, children:[ new TextRun({ text: d.name || "Name" }) ] }));
+    children.push(new Paragraph({ children:[ new TextRun({ text: d.role || "Role", bold:true, color:"1D4ED8" }) ], spacing:{after:80} }));
+    if (d.meta) children.push(new Paragraph({ children:[ new TextRun({ text: d.meta, color:"667085", size:20 }) ], spacing:{after:200} }));
+
+    children.push(new Paragraph({ heading: HeadingLevel.HEADING_1, children:[ new TextRun({text:"Summary", color:"1D4ED8"}) ] }));
+    children.push(new Paragraph({ text: d.summary || "", spacing:{after:200} }));
+
+    if (d.highlights && d.highlights.length){
+      children.push(new Table({
+        width:{size:100, type:WidthType.PERCENTAGE},
+        rows:[ new TableRow({ children: d.highlights.map(h => new TableCell({
+          width:{size: Math.floor(100/d.highlights.length), type:WidthType.PERCENTAGE},
+          shading:{ fill:"EEF2FF", type: ShadingType.CLEAR, color:"auto" },
+          children:[ new Paragraph({ alignment: AlignmentType.CENTER, children:[ new TextRun({text:h, bold:true, color:"1D4ED8"}) ] }) ]
+        })) }) ]
+      }));
+      children.push(new Paragraph({ text:"", spacing:{after:200} }));
+    }
+
+    children.push(new Paragraph({ heading: HeadingLevel.HEADING_1, children:[ new TextRun({text:"Core Skills", color:"1D4ED8"}) ] }));
+    if (d.compLine) children.push(new Paragraph({ children:[ new TextRun({text:d.compLine, italics:true, color:"667085"}) ], spacing:{after:120} }));
+    (d.skillGroups||[]).forEach(g => {
+      children.push(new Paragraph({ children:[ new TextRun({text:g.label, bold:true}) ], spacing:{before:120} }));
+      (g.items||[]).forEach(item => children.push(new Paragraph({ text: item, bullet:{level:0} })));
+    });
+
+    children.push(new Paragraph({ heading: HeadingLevel.HEADING_1, pageBreakBefore:true, children:[ new TextRun({text:"Experience", color:"1D4ED8"}) ] }));
+    (d.experience||[]).forEach(e => {
+      children.push(new Paragraph({ heading: HeadingLevel.HEADING_2, text: e.title, spacing:{before:160} }));
+      children.push(new Paragraph({ children:[ new TextRun({text:e.period||"", italics:true, color:"667085", size:20}) ] }));
+      (e.bullets||[]).forEach(b => children.push(new Paragraph({ text:b, bullet:{level:0} })));
+    });
+
+    children.push(new Paragraph({ heading: HeadingLevel.HEADING_1, children:[ new TextRun({text:"Achievements", color:"1D4ED8"}) ], spacing:{before:200} }));
+    (d.achievements||[]).forEach(a => children.push(new Paragraph({ text:a, bullet:{level:0} })));
+
+    children.push(new Paragraph({ heading: HeadingLevel.HEADING_1, pageBreakBefore:true, children:[ new TextRun({text:"Background", color:"1D4ED8"}) ] }));
+    children.push(new Paragraph({ text: d.journey || "", spacing:{after:200} }));
+
+    children.push(new Paragraph({ heading: HeadingLevel.HEADING_1, children:[ new TextRun({text:"Testimonials", color:"1D4ED8"}) ] }));
+    (d.testimonials||[]).forEach(t => {
+      children.push(new Paragraph({ children:[ new TextRun({text:'\u201C'+t.quote+'\u201D', italics:true}) ], spacing:{before:120} }));
+      children.push(new Paragraph({ children:[ new TextRun({text:'\u2014 '+t.attribution, color:"667085", size:20}) ], spacing:{after:80} }));
+    });
+
+    children.push(new Paragraph({ heading: HeadingLevel.HEADING_1, children:[ new TextRun({text:"Languages & Interests", color:"1D4ED8"}) ], spacing:{before:200} }));
+    children.push(new Paragraph({ text: d.extra || "", spacing:{after:200} }));
+
+    if (d.philosophy){
+      children.push(new Paragraph({ spacing:{before:200, after:200}, children:[ new TextRun({text:'\u201C'+d.philosophy+'\u201D', italics:true, color:"667085"}) ] }));
+    }
+    children.push(new Paragraph({ alignment:AlignmentType.CENTER, children:[ new TextRun({text:d.footerSig||"", color:"98A2B3", size:18}) ] }));
+
+    try {
+      const doc = new Document({ sections:[{ children }] });
+      const blob = await Packer.toBlob(doc);
+      const filename = (d.name || "resume").trim().replace(/\s+/g,'-').replace(/[^\w\-]/g,'') + "-Resume.docx";
+      window.saveAs(blob, filename);
+    } catch(err){
+      exportNote.textContent = "Something went wrong building the Word file. Print / Save as PDF still works as a backup.";
+      exportNote.classList.add('show');
+    }
+  }
+  document.getElementById('wordBtn').addEventListener('click', downloadDocx);
+
+})();
+</script>
+
+</body>
+</html>

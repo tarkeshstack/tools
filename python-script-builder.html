@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Python Script Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: an IDE. Ribbon on top, toolbox left, drag-and-drop workspace centre, live code right or bottom. Phones get one pane at a time with a bottom tab bar. */
+:root{
+  --bg:#eef1f6; --surface:#ffffff; --sunken:#e7ecf3; --ink:#16202e; --muted:#5b6778; --line:#d3dae5;
+  --accent:#2c6aa8; --accent-ink:#ffffff; --sun:#f0bf2c; --danger:#b8352e; --ok:#2e7d52;
+  --bar:#142238; --bar-ink:#eef3fa; --ribbon:#f8fafd; --work:#e9eef5; --dot:#c4cedc;
+  --code-bg:#0f1826; --code-bar:#0a111c; --code-ink:#e4eaf4; --code-muted:#8493a8; --code-str:#f3cf63; --code-key:#7fb7ee; --code-num:#f09a7c;
+  --c-basics:#3b7dd8; --c-logic:#cf8a1c; --c-files:#3a9460; --c-text:#8562c6; --c-tables:#1c949a; --c-web:#d45d4b; --c-auto:#66768c;
+  --c-data:#0e8f9c; --c-ui_win:#b83c8e; --c-ui_in:#a64bc9; --c-ui_act:#e0457b; --c-ui_out:#7a56d6;
+  --display:"Bricolage Grotesque","IBM Plex Sans",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0b1119; --surface:#151e2c; --sunken:#0e1520; --ink:#e7ecf4; --muted:#9aa6b8; --line:#2a3547;
+    --accent:#6dabe8; --accent-ink:#0b1119; --danger:#ef7d76; --ok:#6cc596;
+    --bar:#070b12; --ribbon:#111926; --work:#0d141e; --dot:#243044; --code-bg:#090e16; --code-bar:#05080d;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0b1119; --surface:#151e2c; --sunken:#0e1520; --ink:#e7ecf4; --muted:#9aa6b8; --line:#2a3547;
+  --accent:#6dabe8; --accent-ink:#0b1119; --danger:#ef7d76; --ok:#6cc596;
+  --bar:#070b12; --ribbon:#111926; --work:#0d141e; --dot:#243044; --code-bg:#090e16; --code-bar:#05080d;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.45;-webkit-text-size-adjust:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h2{margin:0;font-size:16px;font-family:var(--display)}
+p{margin:0}
+a{color:var(--accent)}
+[hidden]{display:none!important}
+.ic{width:20px;height:20px;flex:none}
+i.ic{display:inline-grid;place-items:center;font-style:normal;font-size:12px;font-weight:600}
+i.ic::before{content:attr(data-fb)}
+.app{height:100%;display:flex;flex-direction:column;min-height:0}
+
+/* menu bar + ribbon */
+.menubar{flex:none;display:flex;align-items:flex-end;gap:6px;background:var(--bar);color:var(--bar-ink);padding:6px 8px 0 10px}
+.brand{display:flex;align-items:center;gap:8px;font-family:var(--display);font-weight:700;font-size:15px;padding:0 12px 9px 0;white-space:nowrap}
+.logo{width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,var(--accent) 50%,var(--sun) 50%)}
+.tabs{display:flex;gap:2px;overflow-x:auto;flex:1;scrollbar-width:none}
+.tab{flex:none;background:transparent;border:0;color:var(--bar-ink);opacity:.8;padding:8px 14px;border-radius:8px 8px 0 0;font-weight:500;cursor:pointer;min-height:38px}
+.tab:hover{opacity:1}
+.tab[aria-selected="true"]{background:var(--ribbon);color:var(--ink);opacity:1}
+.rt{flex:none;background:transparent;border:0;color:var(--bar-ink);width:38px;height:38px;cursor:pointer;border-radius:6px}
+.rt[aria-expanded="false"] .ic{transform:rotate(180deg)}
+.ribbon{flex:none;background:var(--ribbon);border-bottom:1px solid var(--line);display:flex;overflow-x:auto;padding:6px 6px}
+.ribbon.closed{display:none}
+.grp{flex:none;display:flex;flex-direction:column;padding:0 8px;border-right:1px solid var(--line)}
+.grp:last-child{border-right:0}
+.items{display:flex;gap:2px}
+.gname{font-size:11px;color:var(--muted);text-align:center;margin-top:3px}
+.rb{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:60px;min-height:58px;padding:6px;border:1px solid transparent;border-radius:8px;background:transparent;cursor:pointer;font-size:12px;color:var(--ink);text-decoration:none}
+.rb .ic{width:22px;height:22px;color:var(--accent)}
+.rb:hover{background:var(--sunken)}
+.rb[aria-pressed="true"]{background:color-mix(in srgb,var(--accent) 16%,transparent);border-color:var(--accent)}
+.rb[disabled]{opacity:.4;cursor:default}
+.rb.primary{background:var(--accent);color:var(--accent-ink)}
+.rb.primary .ic{color:var(--accent-ink)}
+
+/* panes */
+.main{flex:1;min-height:0}
+.pane{min-width:0;min-height:0}
+.tool{background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column}
+.tool-head{padding:8px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--sunken);border-radius:10px;padding:3px}
+.seg button{border:0;background:transparent;border-radius:8px;padding:7px 6px;cursor:pointer;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px;min-height:38px;color:var(--muted)}
+.seg button .ic{width:16px;height:16px}
+.seg button small{font-weight:500;font-size:11px;opacity:.8}
+.seg button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.seg button[data-side="front"][aria-selected="true"] .ic{color:var(--c-ui_win)}
+.seg button[data-side="back"][aria-selected="true"] .ic{color:var(--c-basics)}
+.head-row{display:flex;align-items:center;gap:6px}
+.head-row .search{flex:1}
+#drawerX{display:none}
+.tag{flex:none;font-size:10.5px;font-weight:700;letter-spacing:.04em;color:var(--cat);border:1px solid var(--cat);border-radius:4px;padding:0 5px;line-height:1.5}
+.rail,.scrim{display:none}
+.search{position:relative}
+.search .ic{position:absolute;left:9px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--muted)}
+input[type=search],input[type=text],input[type=number],select,textarea{width:100%;background:var(--sunken);border:1px solid var(--line);border-radius:8px;padding:7px 10px;min-height:36px}
+.search input{padding-left:32px}
+textarea{resize:vertical;min-height:84px}
+.tool-body{flex:1;overflow-y:auto;padding:2px 8px 14px}
+.none{color:var(--muted);padding:16px 4px}
+.cat .ch{display:flex;align-items:center;gap:8px;width:100%;padding:10px 4px;background:none;border:0;border-bottom:1px solid var(--line);font-weight:600;cursor:pointer;text-align:left}
+.cat .dot{width:10px;height:10px;border-radius:3px;background:var(--cat)}
+.cat .n{margin-left:auto;color:var(--muted);font-weight:400;font-size:12px}
+.cat .ch .ic{width:16px;height:16px;color:var(--muted)}
+.cat.closed .ch .ic{transform:rotate(-90deg)}
+.cat.closed .grid{display:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:6px;padding:8px 0 10px}
+.comp{display:flex;flex-direction:column;align-items:center;gap:5px;padding:9px 3px 7px;min-height:68px;border:1px solid var(--line);border-radius:8px;background:var(--surface);cursor:grab;font-size:11.5px;line-height:1.2;text-align:center;user-select:none;-webkit-user-select:none}
+.comp .ic{width:22px;height:22px;color:var(--cat)}
+.comp:hover{border-color:var(--cat);box-shadow:0 1px 6px color-mix(in srgb,var(--cat) 25%,transparent)}
+
+.work{position:relative;display:flex;flex-direction:column;background-color:var(--work);background-image:radial-gradient(var(--dot) 1px,transparent 1px);background-size:18px 18px}
+.work.over{outline:2px dashed var(--accent);outline-offset:-6px}
+.work-scroll{flex:1;overflow:auto;padding:18px 14px 60px;display:flex;flex-direction:column;align-items:center}
+.flow{width:100%;max-width:780px;display:flex;flex-direction:column;gap:14px}
+.steps{display:flex;flex-direction:column;gap:14px}
+.term{position:relative;align-self:flex-start;background:var(--ink);color:var(--surface);border-radius:999px;padding:3px 14px;font-size:12px;font-weight:600}
+.term.start::after,.step::after{content:"";position:absolute;left:28px;top:100%;height:14px;width:2px;background:var(--muted);opacity:.5}
+.empty{margin:auto;max-width:360px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px;color:var(--muted);border:2px dashed var(--line);border-radius:14px;padding:30px 22px;background:var(--surface)}
+.empty .ic{width:36px;height:36px;color:var(--accent)}
+.empty b{color:var(--ink);font-size:16px}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 14px;min-height:38px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn[disabled]{opacity:.55;cursor:default}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+.step{position:relative;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--cat);border-radius:10px;margin-left:calc(var(--depth,0)*20px)}
+.step.sel{border-color:var(--cat);box-shadow:0 0 0 2px color-mix(in srgb,var(--cat) 30%,transparent)}
+.step.bad{border-color:var(--danger)}
+.step.flash{animation:flash 1s ease-out}
+@keyframes flash{from{box-shadow:0 0 0 4px var(--sun)}to{box-shadow:0 0 0 0 transparent}}
+@media (prefers-reduced-motion:reduce){.step.flash{animation:none}}
+.sh{display:flex;align-items:center;gap:8px;padding:5px 6px 5px 2px;min-height:46px}
+.grip{flex:none;width:28px;height:36px;display:grid;place-items:center;color:var(--muted);touch-action:none;cursor:grab}
+.grip .ic{width:16px;height:16px}
+.tile{flex:none;width:28px;height:28px;border-radius:7px;display:grid;place-items:center;background:color-mix(in srgb,var(--cat) 16%,transparent);color:var(--cat)}
+.tile .ic{width:17px;height:17px}
+.ttl{font-weight:600;white-space:nowrap}
+.sum{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);font-size:13px}
+.tools{display:flex;opacity:0}
+.step:hover .tools,.step.sel .tools,.step:focus-within .tools{opacity:1}
+@media (hover:none){.tools{opacity:1}}
+.icon{border:0;background:transparent;width:32px;height:32px;border-radius:6px;cursor:pointer;color:var(--muted);display:grid;place-items:center;flex:none}
+.icon .ic{width:16px;height:16px}
+.icon:hover{background:var(--sunken);color:var(--ink)}
+.icon[disabled]{opacity:.3;cursor:default}
+.icon.del:hover{color:var(--danger)}
+.step.col .fold .ic{transform:rotate(-90deg)}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;padding:0 12px 12px}
+.field{display:flex;flex-direction:column;gap:3px;min-width:0}
+.field.wide{grid-column:1/-1}
+.field label{font-size:11.5px;color:var(--muted);font-weight:500}
+.field input,.field select,.field textarea{min-height:34px;padding:5px 9px}
+.field textarea{min-height:64px}
+.warn{margin:0 12px 10px;padding:5px 9px;font-size:13px;color:var(--danger);background:color-mix(in srgb,var(--danger) 10%,transparent);border-radius:6px}
+.warn:empty{display:none}
+.hint{margin:0 12px 10px;font-size:12.5px;color:var(--muted)}
+.ins{display:none;flex-wrap:wrap;gap:6px;align-items:center;padding:0 12px 10px;font-size:12px;color:var(--muted)}
+.step:focus-within .ins:not(:empty){display:flex}
+.vchip{border:1px solid var(--line);background:var(--sunken);border-radius:999px;padding:2px 10px;font-family:var(--mono);font-size:12px;cursor:pointer;min-height:28px}
+.vchip:hover{border-color:var(--accent);color:var(--accent)}
+.step.col .fields,.step.col .ins,.step.col .warn,.step.col .hint{display:none}
+.dropline{height:4px;border-radius:2px;background:var(--sun);margin:-8px 0}
+.ghost{position:fixed;z-index:80;pointer-events:none;padding:8px 12px;border-radius:8px;background:var(--ink);color:var(--surface);font-weight:600;font-size:13px;transform:translate(10px,10px);max-width:220px}
+body.dragging{user-select:none;-webkit-user-select:none;cursor:grabbing}
+
+/* code pane */
+.code{position:relative;display:flex;flex-direction:column;background:var(--code-bg);color:var(--code-ink)}
+.split{position:absolute;z-index:5;background:transparent}
+.ed-bar{flex:none;display:flex;align-items:flex-end;gap:4px;background:var(--code-bar);padding:0 8px;min-height:42px;color:#c7d0de}
+.ftab{display:flex;gap:8px;align-items:center;padding:7px 12px;background:var(--code-bg);border-radius:6px 6px 0 0;font:12.5px var(--mono)}
+.ftab i{width:8px;height:8px;border-radius:50%;background:var(--code-key)}
+.sp{flex:1}
+.ed-bar .icon{color:#c7d0de;align-self:center}
+.ed-bar .icon:hover{background:rgba(255,255,255,.1);color:#fff}
+.ed-bar .icon .ic{width:18px;height:18px}
+.editor{flex:1;min-height:0;overflow:auto;display:grid;grid-template-columns:auto minmax(max-content,1fr);align-content:start;font:13px/1.65 var(--mono);tab-size:4}
+.gut,.src{margin:0;padding:12px 0;font:inherit;white-space:pre}
+.gut{position:sticky;left:0;background:var(--code-bg);color:var(--code-muted);text-align:right;user-select:none;-webkit-user-select:none;border-right:1px solid rgba(255,255,255,.07)}
+.gut span{display:block;padding:0 10px}
+.src span.l{display:block;padding:0 16px;width:max-content;min-width:100%}
+.src span.l.hl{background:rgba(240,191,44,.13);box-shadow:inset 3px 0 0 var(--sun)}
+.src .c{color:var(--code-muted)} .src .s{color:var(--code-str)} .src .k{color:var(--code-key)} .src .n{color:var(--code-num)}
+
+.status{flex:none;display:flex;align-items:center;gap:14px;background:var(--bar);color:var(--bar-ink);padding:0 10px;min-height:28px;font-size:12px}
+.sb{background:none;border:0;color:inherit;display:flex;align-items:center;gap:6px;cursor:pointer;padding:3px 6px;border-radius:4px}
+.sb:hover{background:rgba(255,255,255,.12)}
+.sb .ic{width:14px;height:14px}
+.sb.bad{color:#ffb3ad}
+.pill{border:1px solid currentColor;border-radius:999px;padding:0 8px;opacity:.9}
+.bnav{display:none}
+
+/* dialogs and toast */
+.ov{position:fixed;inset:0;z-index:70;background:rgba(8,14,24,.55);display:grid;place-items:center;padding:16px}
+.dlg{background:var(--surface);border-radius:14px;width:min(560px,100%);max-height:calc(100% - 20px);overflow:auto;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.dlg-h{display:flex;align-items:center;justify-content:space-between;padding:12px 12px 4px 18px}
+.dlg-b{padding:8px 18px 18px;display:flex;flex-direction:column;gap:12px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.eg{border:1px dashed var(--line);background:transparent;border-radius:999px;padding:6px 12px;min-height:34px;cursor:pointer;font-size:13px;text-align:left}
+.eg:hover{border-color:var(--accent);color:var(--accent)}
+.status-msg{font-size:13px;color:var(--muted);min-height:1.3em}
+.status-msg.warn2{color:var(--danger)}
+.help{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.help li{display:flex;gap:12px;align-items:flex-start}
+.help .ic{color:var(--accent);margin-top:2px}
+.help code,.kbd{font-family:var(--mono);font-size:12.5px;background:var(--sunken);border:1px solid var(--line);border-radius:5px;padding:1px 6px;overflow-wrap:anywhere}
+.plist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.plist li{display:flex;gap:8px;align-items:flex-start;color:var(--danger)}
+.plist button{border:0;background:var(--sunken);border-radius:6px;padding:3px 9px;cursor:pointer;font-weight:600;color:var(--ink);flex:none}
+.ok-msg{color:var(--ok);display:flex;gap:8px;align-items:center}
+.toast{position:fixed;left:50%;bottom:44px;transform:translateX(-50%);background:var(--ink);color:var(--surface);padding:9px 14px;border-radius:8px;font-weight:500;z-index:90;max-width:calc(100% - 32px);opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.on{opacity:1}
+
+/* wide: three panes */
+@media (min-width:900px){
+  .main{display:grid;grid-template-columns:var(--tw,264px) minmax(0,1fr) var(--cw,420px);grid-template-rows:minmax(0,1fr);grid-template-areas:"tool work code"}
+  .app[data-code="bottom"] .main{grid-template-columns:var(--tw,264px) minmax(0,1fr);grid-template-rows:minmax(0,1fr) var(--ch,280px);grid-template-areas:"tool work" "tool code"}
+  .app[data-code="hidden"] .main{grid-template-columns:var(--tw,264px) minmax(0,1fr);grid-template-areas:"tool work"}
+  .app[data-code="hidden"] .code{display:none}
+  .app[data-tool="off"] .main{--tw:0px}
+  .app[data-tool="off"] .tool{display:none}
+  .tool{grid-area:tool}.work{grid-area:work}.code{grid-area:code}
+  .app[data-code="right"] .split{left:-4px;top:0;bottom:0;width:8px;cursor:col-resize}
+  .app[data-code="bottom"] .split{left:0;right:0;top:-4px;height:8px;cursor:row-resize}
+}
+/* narrow: one pane at a time */
+@media (max-width:899px){
+  .main{position:relative}
+  .pane{position:absolute;inset:0}
+  .work,.code{left:48px}
+  .app[data-view="work"] .code,.app[data-view="code"] .work{display:none}
+  .rail{display:flex;position:absolute;left:0;top:0;bottom:0;width:48px;z-index:12;flex-direction:column;align-items:center;gap:6px;padding:8px 0;background:var(--surface);border-right:1px solid var(--line)}
+  .rail button{width:40px;min-height:52px;border:1px solid transparent;border-radius:10px;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10px;cursor:pointer;padding:4px 0}
+  .rail button .ic{width:20px;height:20px}
+  .rail button[aria-pressed="true"]{background:color-mix(in srgb,var(--accent) 16%,transparent);border-color:var(--accent);color:var(--ink)}
+  .rail .rf .ic{color:var(--c-ui_win)} .rail .rb2 .ic{color:var(--c-basics)}
+  .rail .rt2{margin-bottom:6px}
+  .tool{inset:auto;top:0;bottom:0;left:48px;width:min(290px,calc(100% - 120px));z-index:11;transform:translateX(calc(-100% - 48px));transition:transform .2s ease;box-shadow:6px 0 24px rgba(0,0,0,.25)}
+  .app[data-drawer="open"] .tool{transform:none}
+  .scrim{position:absolute;left:48px;top:0;right:0;bottom:0;z-index:10;background:rgba(8,14,24,.45)}
+  .app[data-drawer="open"] .scrim{display:block}
+  #drawerX{display:grid}
+  .status,.split{display:none}
+  .bnav{display:flex;flex:none;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+  .bnav button{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 4px;min-height:54px;background:none;border:0;color:var(--muted);font-size:12px;cursor:pointer}
+  .bnav button[aria-selected="true"]{color:var(--accent);font-weight:600}
+  .badge{position:absolute;top:4px;left:calc(50% + 8px);background:var(--accent);color:var(--accent-ink);border-radius:999px;font-size:11px;font-style:normal;min-width:18px;padding:0 5px;text-align:center}
+  .badge.bad{background:var(--danger);color:#fff}
+  .badge:empty{display:none}
+  .toast{bottom:70px}
+  @media (prefers-reduced-motion:reduce){.tool{transition:none}}
+  .sum{display:none}
+  .ttl{flex:1}
+  .sh{flex-wrap:wrap}
+  .step:not(.sel) .tools{display:none}
+  .step.sel .tools{opacity:1;order:5;margin-left:auto;width:100%;justify-content:flex-end;border-top:1px solid var(--line)}
+  .step.sel .fold{order:4}
+}
+@media (max-width:520px){.brand b{display:none}}
+
+button.ftab{border:0;color:inherit;cursor:pointer;font-family:var(--mono)}
+.ftab.off{background:transparent;opacity:.65}.ftab.off:hover{opacity:1}
+.runb{align-self:center;display:flex;gap:6px;align-items:center;border:0;border-radius:7px;padding:6px 12px;font:600 13px var(--sans,inherit);background:#1f9d55;color:#fff;cursor:pointer;margin-right:4px}
+.runb:hover{background:#188a49}.runb:disabled{opacity:.6;cursor:wait}.runb .ic{width:16px;height:16px}
+.outp{flex:1;min-height:0;overflow:auto;background:var(--code-bg);color:#e6edf7;display:none;flex-direction:column;gap:10px;padding:10px 12px;font:13px/1.55 var(--mono)}
+#codePane[data-pane="out"] .editor{display:none}#codePane[data-pane="out"] .outp{display:flex}
+.otools{display:flex;flex-wrap:wrap;gap:6px}
+.ob{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.07);color:#e6edf7;border-radius:7px;padding:5px 10px;font:12.5px var(--sans,inherit);cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.ob:hover{background:rgba(255,255,255,.16)}.ob .ic{width:15px;height:15px}
+.olog{white-space:pre-wrap;word-break:break-word;margin:0;min-height:48px;background:rgba(0,0,0,.25);border-radius:8px;padding:8px 10px;font:12.5px/1.55 var(--mono)}
+.olog .e{color:#ff9b9b}.olog .i{color:#8fb4ff}.olog .g{color:#7fe3a5}
+.oans{width:100%;min-height:54px;border-radius:8px;border:1px solid rgba(255,255,255,.22);background:rgba(0,0,0,.25);color:#e6edf7;font:12.5px var(--mono);padding:6px 8px;box-sizing:border-box}
+.olab{font:600 11.5px var(--sans,inherit);text-transform:uppercase;letter-spacing:.05em;color:#9fb0c6}
+.ofiles{display:flex;flex-direction:column;gap:4px}
+.ofile{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border-radius:7px;padding:4px 8px}
+.ofile span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ofile small{opacity:.6}
+.app{background:#f4f5f8;color:#1c2330;border-radius:10px;overflow:hidden;font:14px var(--sans,system-ui);border:1px solid rgba(255,255,255,.2)}
+.app-t{background:#dfe3ea;padding:6px 10px;font-weight:600;font-size:13px}
+.app-tabs{display:flex;gap:2px;background:#e9ecf1;padding:6px 8px 0}
+.app-tabs button{border:0;background:#d7dce5;padding:6px 14px;border-radius:7px 7px 0 0;cursor:pointer;font:inherit;color:#33405a}
+.app-tabs button.on{background:#fff;font-weight:600}
+.app-pg{background:#fff;padding:10px 14px 14px;display:none;flex-direction:column;gap:6px}.app-pg.on{display:flex}
+.app-pg.solo{display:flex}.app-pg input[type=text],.app-pg select{border:1px solid #b9c1cf;border-radius:6px;padding:6px 8px;font:inherit;width:100%;box-sizing:border-box}
+.app-pg label{font-size:13px;color:#33405a}.app-pg .al{font:700 16px var(--sans,system-ui);margin-top:6px}
+.app-pg .ab{align-self:center;background:#2f6fed;color:#fff;border:0;border-radius:7px;padding:7px 18px;font:600 14px inherit;cursor:pointer;margin-top:6px}
+.app-pg pre.abox{margin:6px 0 0;background:#fff;border:1px solid #b9c1cf;border-radius:6px;padding:6px 8px;min-height:90px;white-space:pre-wrap;font:12.5px var(--mono);color:#1c2330}
+.app-note{font-size:12px;color:#6a7690}
+.tdt{width:100%;border-collapse:collapse;font-size:12.5px}.tdt th,.tdt td{border-bottom:1px solid var(--line,#d9dde5);padding:4px 8px;text-align:left;white-space:nowrap}
+.tdw{overflow:auto;max-height:230px;border:1px solid var(--line,#d9dde5);border-radius:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chips button{border:1px solid var(--line,#d9dde5);background:var(--surface);color:inherit;border-radius:999px;padding:3px 10px;font:12.5px inherit;cursor:pointer}
+.chips button:hover{background:var(--hover,#eef1f6)}
+.tdf{display:flex;flex-direction:column;gap:4px;font-size:13px}.tdf textarea,.tdf input{font:13px var(--mono);padding:6px 8px;border:1px solid var(--line,#b9c1cf);border-radius:7px;background:var(--surface);color:inherit;box-sizing:border-box;width:100%}
+.tdrow{display:flex;gap:10px}.tdrow>*{flex:1}
+</style>
+</head>
+<body>
+<div class="app" id="app" data-view="work" data-code="right" data-tool="on">
+  <header class="menubar">
+    <div class="brand"><span class="logo"></span><b>Script Builder</b></div>
+    <nav class="tabs" id="tabs" role="tablist" aria-label="Menu"></nav>
+    <button class="rt" id="rt" type="button" aria-expanded="true" aria-label="Show or hide the ribbon"><i class="ic" data-lucide="chevron-up" data-fb="^"></i></button>
+  </header>
+  <div class="ribbon" id="ribbon" role="toolbar" aria-label="Commands"></div>
+
+  <div class="main" id="main">
+    <nav class="rail" id="rail" aria-label="Toolbox menu">
+      <button class="rt2" type="button" data-rail="toggle" aria-pressed="false" aria-label="Open or close the toolbox"><i class="ic" data-lucide="panel-left" data-fb="☰"></i></button>
+      <button class="rf" type="button" data-rail="front" aria-pressed="false" aria-label="Front end components"><i class="ic" data-lucide="layout-template" data-fb="UI"></i>Front</button>
+      <button class="rb2" type="button" data-rail="back" aria-pressed="false" aria-label="Back end components"><i class="ic" data-lucide="server" data-fb="&lt;/&gt;"></i>Back</button>
+    </nav>
+    <div class="scrim" id="scrim"></div>
+    <aside class="tool pane" id="tool" aria-label="Toolbox">
+      <div class="tool-head">
+        <div class="seg" id="seg" role="tablist" aria-label="Component group">
+          <button type="button" role="tab" data-side="front" aria-selected="false"><i class="ic" data-lucide="layout-template" data-fb="UI"></i>Front end</button>
+          <button type="button" role="tab" data-side="back" aria-selected="true"><i class="ic" data-lucide="server" data-fb="&lt;/&gt;"></i>Back end</button>
+        </div>
+        <div class="head-row">
+          <div class="search"><i class="ic" data-lucide="search" data-fb="?"></i><input id="q" type="search" placeholder="Search components" aria-label="Search components" autocomplete="off"></div>
+          <button class="icon" id="drawerX" type="button" aria-label="Close toolbox"><i class="ic" data-lucide="chevron-left" data-fb="&lt;"></i></button>
+        </div>
+      </div>
+      <div class="tool-body" id="toolBody"></div>
+    </aside>
+
+    <main class="work pane" id="work" aria-label="Workspace">
+      <div class="work-scroll" id="workScroll">
+        <div class="empty" id="empty">
+          <i class="ic" data-lucide="mouse-pointer-click" data-fb="+"></i>
+          <b>Drag components here</b>
+          <div class="row" style="justify-content:center">
+            <button class="btn primary" type="button" data-r="ask"><i class="ic" data-lucide="sparkles" data-fb="*"></i>Ask in English</button>
+            <button class="btn" type="button" data-r="recipes"><i class="ic" data-lucide="book-open" data-fb="R"></i>Recipes</button>
+          </div>
+        </div>
+        <div class="flow" id="flow" hidden>
+          <div class="term start">Start</div>
+          <div class="steps" id="steps"></div>
+          <div class="term">End</div>
+        </div>
+      </div>
+    </main>
+
+    <section class="code pane" id="codePane" aria-label="Generated code">
+      <div class="split" id="split"></div>
+      <div class="ed-bar">
+        <button class="ftab" type="button" data-pane="code"><i></i>my_script.py</button><button class="ftab off" type="button" data-pane="out"><i></i>Output</button>
+        <span class="sp"></span>
+        <button class="runb" type="button" id="runb" data-r="run" title="Run this script"><i class="ic" data-lucide="play" data-fb="&#9654;"></i>Run</button>
+        <button class="icon" type="button" data-r="copy" title="Copy code" aria-label="Copy code"><i class="ic" data-lucide="copy" data-fb="C"></i></button>
+        <button class="icon" type="button" data-r="save" title="Save" aria-label="Save script"><i class="ic" data-lucide="download" data-fb="S"></i></button>
+      </div>
+      <div class="outp" id="outp"></div>
+      <div class="editor" id="editor"><pre class="gut" id="gut" aria-hidden="true"></pre><pre class="src" id="src" tabindex="0" aria-label="Python code"></pre></div>
+    </section>
+  </div>
+
+  <footer class="status" id="status">
+    <button class="sb" id="stProb" type="button"></button>
+    <span id="stSteps"></span>
+    <span class="sp"></span>
+    <span class="pill" id="stDry" hidden>Preview on</span>
+    <span>Python 3</span>
+  </footer>
+
+  <nav class="bnav" aria-label="Panels">
+    <button type="button" data-v="work" aria-selected="true"><i class="ic" data-lucide="list-ordered" data-fb="≡"></i><span>Steps</span><em class="badge" id="bnW"></em></button>
+    <button type="button" data-v="code" aria-selected="false"><i class="ic" data-lucide="code" data-fb="&lt;/&gt;"></i><span>Code</span><em class="badge" id="bnC"></em></button>
+  </nav>
+</div>
+
+<div class="ov" id="ov" hidden>
+  <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="dlgT">
+    <div class="dlg-h"><h2 id="dlgT"></h2><button class="icon" id="dlgX" type="button" aria-label="Close"><i class="ic" data-lucide="x" data-fb="x"></i></button></div>
+    <div class="dlg-b" id="dlgB"></div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<script>
+//<core>
+const CATS = [["ui_win","Window","app-window","front"],["ui_in","Inputs","text-cursor-input","front"],["ui_act","Actions","mouse-pointer-click","front"],["ui_out","Output","monitor","front"],
+  ["basics","Basics","box","back"],["logic","Logic","git-branch","back"],["files","Files","folder","back"],["text","Text","type","back"],["tables","Sheets","table","back"],["data","Data","database","back"],["web","Web","globe","back"],["auto","System","settings","back"]];
+const CATSIDE = Object.fromEntries(CATS.map(c => [c[0], c[3]]));
+
+const hasVar = v => /\{[^{}]+\}/.test(v);
+const S = v => { v = String(v ?? ""); return (hasVar(v) ? "f" : "") + JSON.stringify(v); };
+const N = (v, d) => { v = String(v ?? "").trim().replace(/[^A-Za-z0-9_]+/g, "_").replace(/^_+|_+$/g, ""); if (!v) v = d || "value"; if (/^\d/.test(v)) v = "_" + v; return v; };
+const one = v => { const m = String(v ?? "").trim().match(/^\{([^{}]+)\}$/); return m ? m[1].trim() : null; };
+const V = v => { v = String(v ?? "").trim(); if (/^-?\d+(\.\d+)?$/.test(v)) return v; const o = one(v); return o || S(v); };
+const E = v => String(v ?? "").trim() || "None";
+const NUM = (v, d = 0) => { const n = parseFloat(v); return isFinite(n) ? String(n) : String(d); };
+const INT = (v, d = 0) => { const n = parseInt(v); return isFinite(n) ? String(n) : String(d); };
+const P = v => { const o = one(v); return o ? `Path(${o})` : `Path(${S(v)})`; };
+const STR = v => { const o = one(v); return o ? `str(${o})` : S(v); };
+const isXl = v => /\.xls[xm]?$/i.test(String(v).trim());
+const PATH = "from pathlib import Path";
+const pd = c => { c.imp.add("import pandas as pd"); c.pip.add("pandas"); };
+const F = (key, label, def, extra) => Object.assign({ key, label, def }, extra || {});
+
+const BLOCKS = {
+  say: { cat: "basics", label: "Show message", fields: [F("text", "Message", "Hello!", { wide: 1 })],
+    gen: p => [`print(${S(p.text)})`] },
+  ask: { cat: "basics", label: "Ask a question", fields: [F("q", "Question", "What is your name?"), F("name", "Remember as", "name"), F("type", "Answer is", "text", { opts: ["text", "number"] })],
+    gen: p => [`${N(p.name, "answer")} = ${p.type === "number" ? "float(" : ""}input(${S(String(p.q).trim() + " ")})${p.type === "number" ? ")" : ""}`] },
+  setvar: { cat: "basics", label: "Remember value", fields: [F("name", "Name", "city"), F("value", "Value", "Pune")],
+    gen: p => [`${N(p.name)} = ${V(p.value)}`] },
+  calc: { cat: "basics", label: "Calculate", fields: [F("name", "Save as", "total"), F("expr", "Calculation", "price * quantity")], hint: "Use + - * / and names you remembered earlier.",
+    gen: p => [`${N(p.name, "result")} = ${E(p.expr)}`] },
+  random: { cat: "basics", label: "Random number", fields: [F("name", "Save as", "number"), F("min", "From", "1", { num: 1 }), F("max", "To", "100", { num: 1 })],
+    gen: (p, c) => { c.imp.add("import random"); return [`${N(p.name, "number")} = random.randint(${INT(p.min, 1)}, ${INT(p.max, 100)})`]; } },
+  wait: { cat: "basics", label: "Wait", fields: [F("sec", "Seconds", "2", { num: 1 })],
+    gen: (p, c) => { c.imp.add("import time"); return [`time.sleep(${NUM(p.sec, 1)})`]; } },
+  note: { cat: "basics", label: "Note", fields: [F("text", "Note", "Remember to check the folder name", { wide: 1 })],
+    gen: p => String(p.text).split("\n").map(l => "# " + l) },
+
+  repeat: { cat: "logic", label: "Repeat", open: 1, fields: [F("n", "How many times", "5", { num: 1 })], hint: "Steps below repeat until the End block. {count} is the round number.",
+    gen: p => [`for count in range(1, ${Math.max(0, parseInt(p.n) || 0) + 1}):`] },
+  if: { cat: "logic", label: "If", open: 1, fields: [F("left", "Check", "age"), F("op", "Is", "greater than", { opts: ["equal to", "not equal to", "greater than", "less than", "containing", "starting with", "ending with"] }), F("right", "This", "17")], hint: "Steps below run only when the check passes, until Otherwise or End.",
+    gen: p => { const L = E(p.left), R = V(p.right); const m = { "equal to": `${L} == ${R}`, "not equal to": `${L} != ${R}`, "greater than": `${L} > ${R}`, "less than": `${L} < ${R}`, "containing": `str(${R}) in str(${L})`, "starting with": `str(${L}).startswith(str(${R}))`, "ending with": `str(${L}).endswith(str(${R}))` }; return [`if ${m[p.op] || m["equal to"]}:`]; } },
+  else: { cat: "logic", label: "Otherwise", kind: "else", fields: [], gen: () => ["else:"] },
+  end: { cat: "logic", label: "End", kind: "end", fields: [], gen: () => [] },
+  stop: { cat: "logic", label: "Stop", fields: [], gen: () => [`raise SystemExit("Stopped.")`] },
+
+  foreach_file: { cat: "files", label: "For each file", open: 1, fields: [F("folder", "Folder", "C:/Users/me/Documents/Reports"), F("pattern", "Which files", "*.pdf")], hint: "Use *.* for every file. Inside this group, {file} is the current file.",
+    gen: (p, c) => { c.imp.add(PATH); return [`for file in sorted(Path(${S(p.folder)}).glob(${S(p.pattern || "*")})):`, `    if not file.is_file():`, `        continue`]; } },
+  list_files: { cat: "files", label: "List files", fields: [F("folder", "Folder", "C:/Users/me/Downloads")],
+    gen: (p, c) => { c.imp.add(PATH); return [`for item in sorted(Path(${S(p.folder)}).iterdir()):`, `    print(item.name)`]; } },
+  rename_file: { cat: "files", label: "Rename file", fields: [F("file", "File", "{file}"), F("mode", "How", "replace text", { opts: ["replace text", "add to start", "add to end"] }), F("a", "Text", "IMG_"), F("b", "Replace with", "Holiday_")], hint: "Replace with is only used by replace text.",
+    gen: (p, c) => { c.imp.add(PATH); c.dry = true; const nn = p.mode === "add to start" ? `${STR(p.a)} + old.name` : p.mode === "add to end" ? `old.stem + ${STR(p.a)} + old.suffix` : `old.name.replace(${STR(p.a)}, ${STR(p.b)})`; return [`old = ${P(p.file)}`, `new_name = ${nn}`, `if DRY_RUN:`, `    print("Would rename", old.name, "to", new_name)`, `else:`, `    old.rename(old.with_name(new_name))`, `    print("Renamed", old.name, "to", new_name)`]; } },
+  copy_file: { cat: "files", label: "Copy file", fields: [F("file", "File", "{file}"), F("dest", "To folder", "C:/Users/me/Backup")],
+    gen: (p, c) => { c.imp.add(PATH); c.imp.add("import shutil"); c.dry = true; return [`if DRY_RUN:`, `    print("Would copy", ${P(p.file)}.name, "to", ${S(p.dest)})`, `else:`, `    Path(${S(p.dest)}).mkdir(parents=True, exist_ok=True)`, `    shutil.copy2(${P(p.file)}, ${S(p.dest)})`]; } },
+  move_file: { cat: "files", label: "Move file", fields: [F("file", "File", "{file}"), F("dest", "To folder", "C:/Users/me/Archive")],
+    gen: (p, c) => { c.imp.add(PATH); c.imp.add("import shutil"); c.dry = true; return [`if DRY_RUN:`, `    print("Would move", ${P(p.file)}.name, "to", ${S(p.dest)})`, `else:`, `    Path(${S(p.dest)}).mkdir(parents=True, exist_ok=True)`, `    shutil.move(str(${P(p.file)}), ${S(p.dest)})`]; } },
+  delete_file: { cat: "files", label: "Delete file", fields: [F("file", "File", "{file}")], hint: "Deleted files do not go to the recycle bin. Keep Preview on until the output looks right.",
+    gen: (p, c) => { c.imp.add(PATH); c.dry = true; return [`if DRY_RUN:`, `    print("Would delete", ${P(p.file)}.name)`, `else:`, `    ${P(p.file)}.unlink(missing_ok=True)`]; } },
+  make_folder: { cat: "files", label: "New folder", fields: [F("folder", "Folder", "C:/Users/me/Documents/New Folder")],
+    gen: (p, c) => { c.imp.add(PATH); return [`Path(${S(p.folder)}).mkdir(parents=True, exist_ok=True)`]; } },
+  sort_by_type: { cat: "files", label: "Tidy folder", fields: [F("folder", "Folder", "C:/Users/me/Downloads")], hint: "Makes one subfolder per type (pdf, jpg, xlsx) and moves files in.",
+    gen: (p, c) => { c.imp.add(PATH); c.imp.add("import shutil"); c.dry = true; return [`folder = Path(${S(p.folder)})`, `for item in list(folder.iterdir()):`, `    if item.is_file():`, `        kind = item.suffix.lower().lstrip(".") or "other"`, `        if DRY_RUN:`, `            print("Would move", item.name, "to", kind)`, `        else:`, `            (folder / kind).mkdir(exist_ok=True)`, `            shutil.move(str(item), str(folder / kind / item.name))`, `            print("Moved", item.name, "to", kind)`]; } },
+  zipdir: { cat: "files", label: "Zip folder", fields: [F("folder", "Folder", "C:/Users/me/Documents/Work"), F("path", "Zip file", "work_backup.zip")],
+    gen: (p, c) => { c.imp.add("import shutil"); return [`shutil.make_archive(${S(String(p.path).replace(/\.zip$/i, ""))}, "zip", ${S(p.folder)})`, `print("Created", ${S(p.path)})`]; } },
+
+  read_text: { cat: "text", label: "Read text", fields: [F("path", "File", "notes.txt"), F("name", "Remember as", "text")],
+    gen: (p, c) => { c.imp.add(PATH); return [`${N(p.name, "text")} = ${P(p.path)}.read_text(encoding="utf-8")`]; } },
+  write_text: { cat: "text", label: "Write text", fields: [F("path", "File", "output.txt"), F("mode", "If the file exists", "replace it", { opts: ["replace it", "add to the end"] }), F("content", "Text to write", "{text}", { wide: 1 })],
+    gen: (p, c) => { c.imp.add(PATH); return p.mode === "add to the end" ? [`with open(${P(p.path)}, "a", encoding="utf-8") as out:`, `    out.write(${STR(p.content)} + "\\n")`] : [`${P(p.path)}.write_text(${STR(p.content)}, encoding="utf-8")`]; } },
+  replace_text: { cat: "text", label: "Find & replace", fields: [F("name", "In", "text"), F("a", "Find", "colour"), F("b", "Replace with", "color")],
+    gen: p => [`${N(p.name, "text")} = str(${N(p.name, "text")}).replace(${STR(p.a)}, ${STR(p.b)})`] },
+  change_case: { cat: "text", label: "Change case", fields: [F("name", "In", "text"), F("mode", "Make it", "UPPER CASE", { opts: ["UPPER CASE", "lower case", "Title Case"] })],
+    gen: p => { const n = N(p.name, "text"), f = { "UPPER CASE": "upper", "lower case": "lower", "Title Case": "title" }[p.mode] || "upper"; return [`${n} = str(${n}).${f}()`]; } },
+  trim_text: { cat: "text", label: "Trim spaces", fields: [F("name", "In", "text")],
+    gen: p => { const n = N(p.name, "text"); return [`${n} = " ".join(str(${n}).split())`]; } },
+  count_words: { cat: "text", label: "Count words", fields: [F("name", "In", "text")],
+    gen: p => [`word_count = len(str(${N(p.name, "text")}).split())`, `print("Words:", word_count)`] },
+  find_lines: { cat: "text", label: "Keep lines", fields: [F("name", "In", "text"), F("word", "Containing", "error")],
+    gen: p => { const n = N(p.name, "text"); return [`${n} = "\\n".join(line for line in str(${n}).splitlines() if ${STR(p.word)}.lower() in line.lower())`]; } },
+
+  load_table: { cat: "tables", label: "Open sheet", fields: [F("path", "File", "sales.xlsx")], hint: "The sheet is remembered as data. Sheet components below all work on it.",
+    gen: (p, c) => { pd(c); const o = one(p.path); if (o) { c.pip.add("openpyxl"); return [`data = pd.read_excel(${o}) if str(${o}).lower().endswith((".xlsx", ".xls")) else pd.read_csv(${o})`]; } if (isXl(p.path)) c.pip.add("openpyxl"); return [`data = pd.${isXl(p.path) ? "read_excel" : "read_csv"}(${S(p.path)})`]; } },
+  merge_tables: { cat: "tables", label: "Combine files", fields: [F("folder", "Folder", "C:/Users/me/Documents/Monthly"), F("kind", "File type", "csv", { opts: ["csv", "xlsx"] })], hint: "Stacks every file into one sheet. They should share the same columns.",
+    gen: (p, c) => { pd(c); c.imp.add(PATH); const x = p.kind === "xlsx"; if (x) c.pip.add("openpyxl"); return [`files = sorted(Path(${S(p.folder)}).glob("*.${x ? "xlsx" : "csv"}"))`, `data = pd.concat([pd.${x ? "read_excel" : "read_csv"}(f) for f in files], ignore_index=True)`, `print("Combined", len(files), "files into", len(data), "rows")`]; } },
+  filter_rows: { cat: "tables", label: "Filter rows", fields: [F("col", "Column", "Amount"), F("op", "Is", "greater than", { opts: ["equal to", "not equal to", "greater than", "less than", "containing"] }), F("val", "Value", "1000")],
+    gen: (p, c) => { pd(c); const col = `data[${S(p.col)}]`; if (p.op === "containing") return [`data = data[${col}.astype(str).str.contains(${STR(p.val)}, case=False, na=False, regex=False)]`]; const o = { "equal to": "==", "not equal to": "!=", "greater than": ">", "less than": "<" }[p.op] || "=="; return [`data = data[${col} ${o} ${V(p.val)}]`]; } },
+  sort_table: { cat: "tables", label: "Sort rows", fields: [F("col", "By column", "Amount"), F("dir", "Order", "largest first", { opts: ["smallest first", "largest first"] })],
+    gen: (p, c) => { pd(c); return [`data = data.sort_values(${S(p.col)}, ascending=${p.dir === "largest first" ? "False" : "True"})`]; } },
+  keep_columns: { cat: "tables", label: "Keep columns", fields: [F("cols", "Columns, separated by commas", "Name, City, Amount", { wide: 1 })],
+    gen: (p, c) => { pd(c); return [`data = data[[${String(p.cols).split(",").map(s => s.trim()).filter(Boolean).map(S).join(", ")}]]`]; } },
+  rename_col: { cat: "tables", label: "Rename column", fields: [F("old", "Old name", "Amt"), F("new", "New name", "Amount")],
+    gen: (p, c) => { pd(c); return [`data = data.rename(columns={${S(p.old)}: ${S(p.new)}})`]; } },
+  drop_dupes: { cat: "tables", label: "Remove duplicates", fields: [], gen: (p, c) => { pd(c); return [`data = data.drop_duplicates()`]; } },
+  fill_blanks: { cat: "tables", label: "Fill blanks", fields: [F("val", "Fill with", "0")], gen: (p, c) => { pd(c); return [`data = data.fillna(${V(p.val)})`]; } },
+  add_column: { cat: "tables", label: "New column", fields: [F("name", "Column name", "Total"), F("expr", "Formula", "Price * Quantity")], hint: "Use column names in the formula. Names with spaces go in `backticks`.",
+    gen: (p, c) => { pd(c); return [`data[${S(p.name)}] = data.eval(${S(p.expr)})`]; } },
+  summarize: { cat: "tables", label: "Group & total", fields: [F("group", "Group by column", "City"), F("col", "Number column", "Amount"), F("how", "Show the", "total", { opts: ["total", "average", "count", "highest", "lowest"] })],
+    gen: (p, c) => { pd(c); const f = { total: "sum", average: "mean", count: "count", highest: "max", lowest: "min" }[p.how] || "sum"; return [`data = data.groupby(${S(p.group)}, as_index=False)[${S(p.col)}].${f}()`]; } },
+  count_rows: { cat: "tables", label: "Count rows", fields: [], gen: (p, c) => { pd(c); return [`print("Rows:", len(data))`]; } },
+  show_table: { cat: "tables", label: "Show rows", fields: [F("n", "How many rows", "10", { num: 1 })], gen: (p, c) => { pd(c); return [`print(data.head(${Math.max(1, parseInt(p.n) || 10)}).to_string(index=False))`]; } },
+  save_table: { cat: "tables", label: "Save sheet", fields: [F("path", "File name", "result.xlsx")],
+    gen: (p, c) => { pd(c); if (isXl(p.path)) c.pip.add("openpyxl"); return [`data.${isXl(p.path) ? "to_excel" : "to_csv"}(${S(p.path)}, index=False)`, `print("Saved", len(data), "rows to", ${S(p.path)})`]; } },
+  foreach_row: { cat: "tables", label: "For each row", open: 1, fields: [], hint: "Inside this group use {row['Column name']} for a cell in the current row.",
+    gen: (p, c) => { pd(c); return [`for index, row in data.iterrows():`]; } },
+
+  get_page: { cat: "web", label: "Read web page", fields: [F("url", "Web address", "https://example.com"), F("name", "Remember as", "page")],
+    gen: (p, c) => { c.imp.add("import requests"); c.pip.add("requests"); return [`response = requests.get(${S(p.url)}, timeout=30)`, `response.raise_for_status()`, `${N(p.name, "page")} = response.text`]; } },
+  download_file: { cat: "web", label: "Download file", fields: [F("url", "Web address", "https://example.com/report.pdf"), F("path", "Save as", "report.pdf")],
+    gen: (p, c) => { c.imp.add("import requests"); c.imp.add(PATH); c.pip.add("requests"); return [`response = requests.get(${S(p.url)}, timeout=60)`, `response.raise_for_status()`, `${P(p.path)}.write_bytes(response.content)`, `print("Downloaded", ${S(p.path)})`]; } },
+  get_json: { cat: "web", label: "Web data", fields: [F("url", "Web address", "https://api.github.com/repos/python/cpython"), F("name", "Remember as", "info")], hint: "Read a value with {info['stargazers_count']}.",
+    gen: (p, c) => { c.imp.add("import requests"); c.pip.add("requests"); return [`${N(p.name, "info")} = requests.get(${S(p.url)}, timeout=30).json()`]; } },
+  open_browser: { cat: "web", label: "Open browser", fields: [F("url", "Web address", "https://www.python.org")],
+    gen: (p, c) => { c.imp.add("import webbrowser"); return [`webbrowser.open(${S(p.url)})`]; } },
+
+  timestamp: { cat: "auto", label: "Today's date", fields: [F("name", "Remember as", "today"), F("fmt", "Format", "2026-11-11", { opts: ["2026-11-11", "11-11-2026", "2026-11-11 14-30", "11 November 2026"] })],
+    gen: (p, c) => { c.imp.add("from datetime import datetime"); const f = { "2026-11-11": "%Y-%m-%d", "11-11-2026": "%d-%m-%Y", "2026-11-11 14-30": "%Y-%m-%d %H-%M", "11 November 2026": "%d %B %Y" }[p.fmt] || "%Y-%m-%d"; return [`${N(p.name, "today")} = datetime.now().strftime("${f}")`]; } },
+  send_email: { cat: "auto", label: "Send email", fields: [F("from", "Your email", "you@gmail.com"), F("to", "Send to", "friend@example.com"), F("server", "Mail server", "smtp.gmail.com"), F("subject", "Subject", "Report ready", { wide: 1 }), F("body", "Message", "Hi, the report is ready.", { wide: 1, area: 1 })], hint: "The script asks for your password when it runs, so it is never saved in the file. Gmail needs an app password.",
+    gen: (p, c) => { c.imp.add("import smtplib"); c.imp.add("import getpass"); c.imp.add("from email.message import EmailMessage"); return [`message = EmailMessage()`, `message["From"] = ${S(p.from)}`, `message["To"] = ${STR(p.to)}`, `message["Subject"] = ${S(p.subject)}`, `message.set_content(${S(p.body)})`, `password = getpass.getpass("Email password: ")`, `with smtplib.SMTP_SSL(${S(p.server)}, 465) as mail:`, `    mail.login(${S(p.from)}, password)`, `    mail.send_message(message)`, `print("Email sent to", ${STR(p.to)})`]; } },
+  screenshot: { cat: "auto", label: "Screenshot", fields: [F("path", "Save as", "screen.png")],
+    gen: (p, c) => { c.imp.add("import pyautogui"); c.pip.add("pyautogui"); return [`pyautogui.screenshot(${S(p.path)})`, `print("Saved", ${S(p.path)})`]; } },
+  run_program: { cat: "auto", label: "Run program", fields: [F("cmd", "Command", "notepad.exe", { wide: 1 })],
+    gen: (p, c) => { c.imp.add("import subprocess"); return [`subprocess.run(${S(p.cmd)}, shell=True)`]; } },
+  custom: { cat: "auto", label: "Custom Python", fields: [F("code", "Python code", "print('anything you like')", { wide: 1, area: 1, mono: 1 })], hint: "For anything the components do not cover.",
+    gen: p => String(p.code).replace(/\t/g, "    ").split("\n") }
+};
+
+const META = {
+  say: ["message-square", "Print a message"], ask: ["keyboard", "Ask the user to type something"], setvar: ["variable", "Remember a value"], calc: ["calculator", "Do a calculation"], random: ["dices", "Pick a random number"], wait: ["timer", "Pause for a few seconds"], note: ["sticky-note", "Leave a note for yourself"],
+  repeat: ["repeat", "Do the steps below several times"], if: ["git-branch", "Run the steps below only if something is true"], else: ["corner-down-right", "Steps for when the If is false"], end: ["corner-down-left", "Close a group"], stop: ["ban", "Stop the script here"],
+  foreach_file: ["files", "Do the steps below for every file in a folder"], list_files: ["list", "Print the names in a folder"], rename_file: ["pencil", "Rename a file"], copy_file: ["copy", "Copy a file"], move_file: ["folder-input", "Move a file"], delete_file: ["trash-2", "Delete a file"], make_folder: ["folder-plus", "Create a folder"], sort_by_type: ["folder-tree", "Sort a folder into subfolders by type"], zipdir: ["file-archive", "Zip a folder"],
+  read_text: ["file-text", "Read a text file"], write_text: ["pen-line", "Write to a text file"], replace_text: ["replace", "Find and replace text"], change_case: ["case-sensitive", "Change capital letters"], trim_text: ["scissors", "Remove extra spaces"], count_words: ["hash", "Count the words"], find_lines: ["search", "Keep lines with a word"],
+  load_table: ["table", "Open an Excel or CSV file"], merge_tables: ["combine", "Join all files in a folder"], filter_rows: ["filter", "Keep only some rows"], sort_table: ["arrow-up-down", "Sort the rows"], keep_columns: ["columns-3", "Keep only some columns"], rename_col: ["pencil-line", "Rename a column"], drop_dupes: ["eraser", "Remove duplicate rows"], fill_blanks: ["paint-bucket", "Fill empty cells"], add_column: ["plus", "Add a calculated column"], summarize: ["sigma", "Total up by a column"], count_rows: ["hash", "Count the rows"], show_table: ["eye", "Show the first rows"], save_table: ["save", "Save as Excel or CSV"], foreach_row: ["list-ordered", "Do the steps below for every row"],
+  get_page: ["globe", "Read a web page"], download_file: ["download", "Download a file"], get_json: ["braces", "Get data from a web service"], open_browser: ["external-link", "Open a page in the browser"],
+  timestamp: ["calendar", "Get today's date"], send_email: ["mail", "Send an email"], screenshot: ["camera", "Take a screenshot"], run_program: ["terminal", "Run another program"], custom: ["code", "Write your own Python"]
+};
+Object.entries(META).forEach(([k, [icon, tip]]) => { BLOCKS[k].icon = icon; BLOCKS[k].tip = tip; });
+
+/* ---------- front end (window and widgets, built with tkinter) ---------- */
+const UIIMP = c => { c.ui = true; c.imp.add("import tkinter as tk"); c.imp.add("from tkinter import ttk, filedialog, messagebox"); };
+const UIROOT = c => { if (c.root) return []; c.root = true; UIIMP(c); return [`root = tk.Tk()`, `root.title("My app")`, `root.geometry("480x420")`]; };
+const PR = c => c.parent || "root";
+const LBL = (t, c) => `ttk.Label(${PR(c)}, text=${S(t)}).pack(anchor="w", padx=12, pady=(10, 2))`;
+Object.assign(BLOCKS, {
+  ui_window: { cat: "ui_win", label: "Window", fields: [F("title", "Title", "My App"), F("w", "Width", "480", { num: 1 }), F("h", "Height", "420", { num: 1 })], hint: "Put this first. It is the window your app opens in.",
+    gen: (p, c) => { UIIMP(c); c.root = true; return [`root = tk.Tk()`, `root.title(${S(p.title)})`, `root.geometry("${INT(p.w, 480)}x${INT(p.h, 420)}")`]; } },
+  ui_label: { cat: "ui_win", label: "Label", fields: [F("text", "Text", "Welcome", { wide: 1 })],
+    gen: (p, c) => [...UIROOT(c), `ttk.Label(${PR(c)}, text=${S(p.text)}, font=("Segoe UI", 13, "bold")).pack(anchor="w", padx=12, pady=(12, 4))`] },
+  ui_input: { cat: "ui_in", label: "Text box", fields: [F("label", "Label", "Name"), F("name", "Remember as", "name"), F("default", "Starts with", "")], hint: "Inside a Button group, the typed text is available as {name}.",
+    gen: (p, c) => { const pre = UIROOT(c), n = N(p.name, "text_value"); c.inputs.push([n, `${n}_var`]); return [...pre, `${n}_var = tk.StringVar(value=${S(p.default)})`, LBL(p.label, c), `ttk.Entry(${PR(c)}, textvariable=${n}_var).pack(fill="x", padx=12)`]; } },
+  ui_dropdown: { cat: "ui_in", label: "Dropdown", fields: [F("label", "Label", "City"), F("name", "Remember as", "city"), F("options", "Options, separated by commas", "Pune, Delhi, Mumbai", { wide: 1 })],
+    gen: (p, c) => { const pre = UIROOT(c), n = N(p.name, "choice"); const o = String(p.options).split(",").map(s => s.trim()).filter(Boolean); c.inputs.push([n, `${n}_var`]); return [...pre, `${n}_var = tk.StringVar(value=${S(o[0] || "")})`, LBL(p.label, c), `ttk.Combobox(${PR(c)}, textvariable=${n}_var, values=[${o.map(S).join(", ")}], state="readonly").pack(fill="x", padx=12)`]; } },
+  ui_check: { cat: "ui_in", label: "Checkbox", fields: [F("label", "Label", "Include subfolders"), F("name", "Remember as", "subfolders")], hint: "The answer is True or False.",
+    gen: (p, c) => { const pre = UIROOT(c), n = N(p.name, "checked"); c.inputs.push([n, `${n}_var`]); return [...pre, `${n}_var = tk.BooleanVar(value=False)`, `ttk.Checkbutton(${PR(c)}, text=${S(p.label)}, variable=${n}_var).pack(anchor="w", padx=12, pady=6)`]; } },
+  ui_file: { cat: "ui_in", label: "File picker", fields: [F("label", "Label", "Choose a folder"), F("name", "Remember as", "folder"), F("kind", "Pick a", "folder", { opts: ["file", "folder", "save as"] })], hint: "The chosen path is available inside a Button group as {name}.",
+    gen: (p, c) => { const pre = UIROOT(c), n = N(p.name, "picked"); c.inputs.push([n, `${n}_var`]); const fn = { file: "askopenfilename", folder: "askdirectory", "save as": "asksaveasfilename" }[p.kind] || "askopenfilename";
+      return [...pre, `${n}_var = tk.StringVar()`, `def pick_${n}():`, `    choice = filedialog.${fn}()`, `    if choice:`, `        ${n}_var.set(choice)`, LBL(p.label, c), `row = ttk.Frame(${PR(c)})`, `row.pack(fill="x", padx=12)`, `ttk.Entry(row, textvariable=${n}_var).pack(side="left", fill="x", expand=True)`, `ttk.Button(row, text="Browse...", command=pick_${n}).pack(side="left", padx=(6, 0))`]; } },
+  ui_button: { cat: "ui_act", label: "Button", open: 1, fields: [F("text", "Button text", "Run")], hint: "Steps inside this group run when the button is clicked, until End. Text boxes and pickers above are available as {name}.",
+    gen: (p, c) => { const pre = UIROOT(c), id = `click_${++c.n}`; const lines = [...pre, `def ${id}():`]; c.inputs.forEach(([n, v]) => lines.push(`    ${n} = ${v}.get()`)); c.after = [`ttk.Button(${PR(c)}, text=${S(p.text)}, command=${id}).pack(pady=10)`]; return lines; } },
+  ui_popup: { cat: "ui_act", label: "Pop-up", fields: [F("title", "Title", "Done"), F("message", "Message", "All finished.", { wide: 1 })],
+    gen: (p, c) => { c.imp.add("from tkinter import messagebox"); return [`messagebox.showinfo(${S(p.title)}, ${S(p.message)})`]; } },
+  ui_out: { cat: "ui_out", label: "Result box", fields: [F("name", "Remember as", "result"), F("h", "Height (lines)", "8", { num: 1 })],
+    gen: (p, c) => { const pre = UIROOT(c), n = N(p.name, "result"); return [...pre, `${n} = tk.Text(${PR(c)}, height=${INT(p.h, 8)}, wrap="word")`, `${n}.pack(fill="both", expand=True, padx=12, pady=(8, 12))`]; } },
+  ui_write: { cat: "ui_out", label: "Show in box", fields: [F("name", "Box", "result"), F("text", "Text", "Done: {name}", { wide: 1 }), F("mode", "Mode", "add a line", { opts: ["add a line", "replace"] })],
+    gen: p => { const n = N(p.name, "result"); return [...(p.mode === "replace" ? [`${n}.delete("1.0", "end")`] : []), `${n}.insert("end", ${STR(p.text)} + "\\n")`, `${n}.see("end")`]; } }
+});
+Object.entries({ ui_window: ["app-window", "The window your app opens in"], ui_label: ["type", "A line of text"], ui_input: ["text-cursor-input", "A box the user types in"], ui_dropdown: ["chevrons-up-down", "A list to choose from"], ui_check: ["check", "A tick box"], ui_file: ["folder-open", "Let the user pick a file or folder"], ui_button: ["play", "A button that runs the steps inside it"], ui_popup: ["bell", "Show a pop-up message"], ui_out: ["align-left", "A box to show results in"], ui_write: ["send", "Write text into a result box"] })
+  .forEach(([k, [icon, tip]]) => { BLOCKS[k].icon = icon; BLOCKS[k].tip = tip; });
+/* ---------- data connectors, test data, UI pages ---------- */
+const PWASK = (c, v, prompt) => { c.imp.add("import getpass"); const o = String(v ?? "").trim(); return o ? (one(o) ? one(o) : S(o)) : `getpass.getpass(${S(prompt)})`; };
+const TD_TYPES = { id: "Number 1, 2, 3", name: "Full name", "first name": "First name", "last name": "Last name", email: "Email", phone: "Phone", city: "City", country: "Country", company: "Company", amount: "Money amount", number: "Number 1-100", age: "Age", date: "Date", status: "Status", "yes/no": "Yes or No", text: "Short text" };
+const TD_PARSE = spec => String(spec || "").split(",").map(s => s.trim()).filter(Boolean).map(s => { const m = s.split("="); const t = (m[1] || m[0]).trim().toLowerCase(); const l = (m[1] ? m[0] : m[0]).trim(); return [l.replace(/^./, x => x.toUpperCase()), t]; });
+const TD_LISTS = { first: ["Aarav", "Priya", "Rohan", "Sneha", "Vikram", "Ananya", "Karan", "Meera", "Arjun", "Isha", "Liam", "Emma", "Noah", "Olivia", "Mateo", "Sofia"], last: ["Sharma", "Patel", "Singh", "Gupta", "Rao", "Iyer", "Khan", "Das", "Smith", "Brown", "Garcia", "Lopez", "Kim", "Nguyen"], city: ["Pune", "Delhi", "Mumbai", "Chennai", "Kolkata", "Jaipur", "London", "Dubai", "Toronto", "Sydney"], country: ["India", "UK", "UAE", "Canada", "Australia", "USA"], company: ["Acme Ltd", "Bright Co", "Nova Works", "Blue Ocean", "Orbit Labs", "Pixel & Co"], status: ["New", "Active", "Paused", "Closed"], text: ["Looks good", "Needs a call", "Follow up soon", "All done", "Waiting for reply"] };
+function TESTGEN(spec, rows, seed) {
+  let a = (parseInt(seed) || 42) >>> 0; const rnd = () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  const pick = l => l[Math.floor(rnd() * l.length)], ri = (x, y) => x + Math.floor(rnd() * (y - x + 1)), L = TD_LISTS;
+  const g = {
+    id: i => i + 1, name: () => pick(L.first) + " " + pick(L.last), "first name": () => pick(L.first), "last name": () => pick(L.last),
+    email: () => pick(L.first).toLowerCase() + "." + pick(L.last).toLowerCase() + "@example.com", phone: () => "9" + String(ri(100000000, 999999999)),
+    city: () => pick(L.city), country: () => pick(L.country), company: () => pick(L.company), amount: () => (ri(500, 500000) / 100).toFixed(2), number: () => ri(1, 100), age: () => ri(18, 70),
+    date: () => { const d = new Date(Date.UTC(2025, 0, 1) + ri(0, 700) * 864e5); return d.toISOString().slice(0, 10); }, status: () => pick(L.status), "yes/no": () => pick(["Yes", "No"]), text: () => pick(L.text)
+  };
+  const cols = TD_PARSE(spec).filter(c => g[c[1]]); const n = Math.max(1, Math.min(5000, parseInt(rows) || 20)); const out = [];
+  for (let i = 0; i < n; i++) { const r = {}; cols.forEach(([l, t]) => { r[l] = g[t](i); }); out.push(r); }
+  return { cols: cols.map(c => c[0]), rows: out };
+}
+Object.assign(BLOCKS, {
+  test_data: { cat: "data", makes: 1, label: "Test data", fields: [F("cols", "Columns (name, email, city...)", "id, name, email, city, amount, date", { wide: 1 }), F("rows", "How many rows", "50", { num: 1 }), F("seed", "Seed (same seed = same data)", "42", { num: 1 })],
+    hint: "Makes fake rows to try your script on. Types: id, name, first name, last name, email, phone, city, country, company, amount, number, age, date, status, yes/no, text. Use Label=type to rename, like Customer=name.",
+    gen: (p, c) => { pd(c); c.imp.add("import random"); c.imp.add("from datetime import date, timedelta"); const cols = TD_PARSE(p.cols).filter(x => TD_TYPES[x[1]]);
+      return [`random.seed(${INT(p.seed, 42)})`, `_first = ${JSON.stringify(TD_LISTS.first)}`, `_last = ${JSON.stringify(TD_LISTS.last)}`, `_city = ${JSON.stringify(TD_LISTS.city)}`, `_country = ${JSON.stringify(TD_LISTS.country)}`, `_company = ${JSON.stringify(TD_LISTS.company)}`, `_status = ${JSON.stringify(TD_LISTS.status)}`, `_text = ${JSON.stringify(TD_LISTS.text)}`,
+        `_make = {`, `    "id": lambda i: i + 1,`, `    "name": lambda i: random.choice(_first) + " " + random.choice(_last),`, `    "first name": lambda i: random.choice(_first),`, `    "last name": lambda i: random.choice(_last),`,
+        `    "email": lambda i: random.choice(_first).lower() + "." + random.choice(_last).lower() + "@example.com",`, `    "phone": lambda i: "9" + str(random.randint(100000000, 999999999)),`, `    "city": lambda i: random.choice(_city),`, `    "country": lambda i: random.choice(_country),`, `    "company": lambda i: random.choice(_company),`,
+        `    "amount": lambda i: round(random.randint(500, 500000) / 100, 2),`, `    "number": lambda i: random.randint(1, 100),`, `    "age": lambda i: random.randint(18, 70),`, `    "date": lambda i: (date(2025, 1, 1) + timedelta(days=random.randint(0, 700))).isoformat(),`, `    "status": lambda i: random.choice(_status),`, `    "yes/no": lambda i: random.choice(["Yes", "No"]),`, `    "text": lambda i: random.choice(_text),`, `}`,
+        `columns = ${JSON.stringify(cols)}`, `data = pd.DataFrame([{label: _make[kind](i) for label, kind in columns} for i in range(${INT(p.rows, 50)})])`, `print("Made", len(data), "test rows")`]; } },
+  db_sqlite: { cat: "data", makes: 1, label: "SQLite file", fields: [F("path", "Database file", "shop.db"), F("query", "What to read (SQL)", "SELECT * FROM customers", { wide: 1 })], hint: "Reads a table from a .db file into a sheet called data.",
+    gen: (p, c) => { pd(c); c.imp.add("import sqlite3"); return [`conn = sqlite3.connect(${S(p.path)})`, `data = pd.read_sql_query(${S(p.query)}, conn)`, `conn.close()`, `print("Read", len(data), "rows")`]; } },
+  db_sql: { cat: "data", makes: 1, label: "MySQL / PostgreSQL", fields: [F("kind", "Database", "MySQL", { opts: ["MySQL", "PostgreSQL"] }), F("host", "Server", "localhost"), F("port", "Port", "3306"), F("db", "Database name", "shop"), F("user", "User", "root"), F("password", "Password (leave blank to be asked)", "", { opt: 1 }), F("query", "What to read (SQL)", "SELECT * FROM orders", { wide: 1 })],
+    hint: "Reads rows from a database server into a sheet called data. If you leave the password blank, the script asks for it when it runs, so it is never saved in the file.",
+    gen: (p, c) => { pd(c); const my = p.kind === "MySQL"; c.pip.add("sqlalchemy"); c.pip.add(my ? "pymysql" : "psycopg2-binary"); c.imp.add("from sqlalchemy import create_engine, text"); c.imp.add("from urllib.parse import quote_plus");
+      return [`db_user = ${S(p.user)}`, `db_password = ${PWASK(c, p.password, "Database password: ")}`, `db_host = ${S(p.host)}`, `db_name = ${S(p.db)}`, `engine = create_engine(f"${my ? "mysql+pymysql" : "postgresql+psycopg2"}://{db_user}:{quote_plus(db_password)}@{db_host}:${INT(p.port, my ? 3306 : 5432)}/{db_name}")`, `with engine.connect() as conn:`, `    data = pd.read_sql_query(text(${S(p.query)}), conn)`, `print("Read", len(data), "rows")`]; } },
+  db_mongo: { cat: "data", makes: 1, label: "MongoDB", fields: [F("uri", "Address", "mongodb://localhost:27017", { wide: 1 }), F("db", "Database", "shop"), F("coll", "Collection", "customers")], hint: "Reads documents from MongoDB into a sheet called data.",
+    gen: (p, c) => { pd(c); c.pip.add("pymongo"); c.imp.add("from pymongo import MongoClient"); return [`client = MongoClient(${S(p.uri)})`, `data = pd.DataFrame(list(client[${S(p.db)}][${S(p.coll)}].find({}, {"_id": 0})))`, `print("Read", len(data), "documents")`]; } },
+  api_table: { cat: "data", makes: 1, label: "Web service to sheet", fields: [F("url", "Web address (API)", "https://api.example.com/items", { wide: 1 }), F("auth", "Sign in with", "nothing", { opts: ["nothing", "bearer token", "API key header"] }), F("token", "Token or key (blank = ask me)", "", { opt: 1 }), F("path", "Where the list is in the answer (optional)", "", { opt: 1 })],
+    hint: "Reads a JSON web service and turns it into a sheet called data. Example for the list location: results.items",
+    gen: (p, c) => { pd(c); c.imp.add("import requests"); c.pip.add("requests"); const l = [];
+      if (p.auth !== "nothing") l.push(`api_key = ${PWASK(c, p.token, "API token or key: ")}`);
+      l.push(`headers = ${p.auth === "bearer token" ? `{"Authorization": "Bearer " + api_key}` : p.auth === "API key header" ? `{"X-API-Key": api_key}` : "{}"}`, `reply = requests.get(${S(p.url)}, headers=headers, timeout=30)`, `reply.raise_for_status()`, `found = reply.json()`);
+      String(p.path || "").split(".").map(s => s.trim()).filter(Boolean).forEach(k => l.push(`found = found[${/^\d+$/.test(k) ? k : JSON.stringify(k)}]`));
+      l.push(`data = pd.json_normalize(found)`, `print("Got", len(data), "rows")`); return l; } },
+  gsheet: { cat: "data", makes: 1, label: "Google Sheet", fields: [F("sheet", "Sheet name or link", "My Sales Sheet", { wide: 1 }), F("tab", "Tab", "Sheet1"), F("key", "Key file (service account .json)", "service-account.json")], hint: "Reads a Google Sheet into a sheet called data. Share the Google Sheet with the email inside your key file first.",
+    gen: (p, c) => { pd(c); c.pip.add("gspread"); c.imp.add("import gspread"); const u = /^https?:/.test(String(p.sheet).trim());
+      return [`gc = gspread.service_account(filename=${S(p.key)})`, `book = gc.${u ? "open_by_url" : "open"}(${S(String(p.sheet).trim())})`, `data = pd.DataFrame(book.worksheet(${S(p.tab)}).get_all_records())`, `print("Read", len(data), "rows")`]; } },
+  json_file: { cat: "data", makes: 1, label: "JSON file", fields: [F("path", "File", "items.json")], hint: "Opens a JSON file as a sheet called data.",
+    gen: (p, c) => { pd(c); c.imp.add("import json"); return [`with open(${S(p.path)}, encoding="utf-8") as f:`, `    raw = json.load(f)`, `data = pd.json_normalize(raw)`, `print("Read", len(data), "rows")`]; } },
+  save_sqlite: { cat: "data", needs: 1, label: "Save to SQLite", fields: [F("path", "Database file", "shop.db"), F("table", "Table name", "results"), F("mode", "If it exists", "replace", { opts: ["replace", "append"] })], hint: "Writes the sheet into a .db file. Creates the file if needed.",
+    gen: (p, c) => { pd(c); c.imp.add("import sqlite3"); return [`conn = sqlite3.connect(${S(p.path)})`, `data.to_sql(${S(N(p.table, "results"))}, conn, if_exists=${S(p.mode)}, index=False)`, `conn.close()`, `print("Saved", len(data), "rows")`]; } },
+  ui_page: { cat: "ui_win", label: "Page", fields: [F("title", "Page name", "Home")], hint: "Starts a new page (a tab). Everything you add below goes on this page until the next Page.",
+    gen: (p, c) => { const pre = UIROOT(c); const id = "page_" + N(p.title, "page").toLowerCase(); c.pages = c.pages || {}; const l = [...pre];
+      if (!c.nb) { c.nb = true; l.push(`notebook = ttk.Notebook(root)`, `notebook.pack(fill="both", expand=True)`); }
+      c.pages[N(p.title, "page").toLowerCase()] = id; c.parent = id; l.push(`${id} = ttk.Frame(notebook)`, `notebook.add(${id}, text=${S(p.title)})`); return l; } },
+  ui_goto: { cat: "ui_act", label: "Go to page", fields: [F("title", "Page name", "Results")], hint: "Switches to another page. Use it inside a Button group.",
+    gen: p => [`notebook.select(page_${N(p.title, "page").toLowerCase()})`] }
+});
+Object.entries({ test_data: ["flask-conical", "Make fake rows to try things on"], db_sqlite: ["database", "Read from a SQLite file"], db_sql: ["server", "Read from MySQL or PostgreSQL"], db_mongo: ["leaf", "Read from MongoDB"], api_table: ["cloud-download", "Web service to sheet"], gsheet: ["sheet", "Read a Google Sheet"], json_file: ["braces", "Open a JSON file"], save_sqlite: ["database-backup", "Save the sheet to SQLite"], ui_page: ["layers", "Add a page (tab) to the app"], ui_goto: ["arrow-right-to-line", "Switch to another page"] })
+  .forEach(([k, [icon, tip]]) => { BLOCKS[k].icon = icon; BLOCKS[k].tip = tip; });
+
+const B = (type, params) => ({ type, params: params || {} });
+const RECIPES = [
+  { id: "rename", short: "Rename", icon: "pencil", steps: [B("say", { text: "Renaming your photos..." }), B("foreach_file", { folder: "C:/Users/me/Pictures/Trip", pattern: "*.jpg" }), B("rename_file", { file: "{file}", mode: "replace text", a: "IMG_", b: "Goa_" }), B("end"), B("say", { text: "All done." })] },
+  { id: "clean", short: "Clean sheet", icon: "eraser", steps: [B("load_table", { path: "sales.xlsx" }), B("drop_dupes"), B("fill_blanks", { val: "0" }), B("filter_rows", { col: "Amount", op: "greater than", val: "0" }), B("sort_table", { col: "Amount", dir: "largest first" }), B("show_table", { n: "10" }), B("save_table", { path: "sales_clean.xlsx" })] },
+  { id: "merge", short: "Merge CSV", icon: "combine", steps: [B("merge_tables", { folder: "C:/Users/me/Documents/Monthly", kind: "csv" }), B("drop_dupes"), B("save_table", { path: "all_months.csv" })] },
+  { id: "summary", short: "Totals", icon: "sigma", steps: [B("load_table", { path: "sales.xlsx" }), B("summarize", { group: "City", col: "Amount", how: "total" }), B("sort_table", { col: "Amount", dir: "largest first" }), B("show_table", { n: "20" }), B("save_table", { path: "sales_by_city.xlsx" })] },
+  { id: "tidy", short: "Tidy", icon: "folder-tree", steps: [B("sort_by_type", { folder: "C:/Users/me/Downloads" }), B("say", { text: "Downloads folder is tidy." })] },
+  { id: "backup", short: "Backup", icon: "copy", steps: [B("timestamp", { name: "today", fmt: "2026-11-11" }), B("foreach_file", { folder: "C:/Users/me/Documents/Work", pattern: "*.*" }), B("copy_file", { file: "{file}", dest: "D:/Backup/Work {today}" }), B("end"), B("say", { text: "Backup for {today} finished." })] },
+  { id: "download", short: "Download", icon: "download", steps: [B("download_file", { url: "https://example.com/report.pdf", path: "report.pdf" })] },
+  { id: "words", short: "Word count", icon: "hash", steps: [B("read_text", { path: "essay.txt", name: "text" }), B("count_words", { name: "text" })] },
+  { id: "quiz", short: "Quiz", icon: "keyboard", steps: [B("ask", { q: "What is your name?", name: "name", type: "text" }), B("ask", { q: "How old are you?", name: "age", type: "number" }), B("if", { left: "age", op: "greater than", right: "17" }), B("say", { text: "Welcome, {name}. You can vote." }), B("else"), B("say", { text: "Sorry {name}, not yet." }), B("end")] },
+  { id: "ui_rename", ui: 1, short: "Rename app", icon: "app-window", steps: [B("ui_window", { title: "Batch Renamer", w: "480", h: "420" }), B("ui_file", { label: "Folder with the files", name: "folder", kind: "folder" }), B("ui_input", { label: "Text to find", name: "find", default: "IMG_" }), B("ui_input", { label: "Replace with", name: "replace", default: "Holiday_" }), B("ui_button", { text: "Rename files" }), B("foreach_file", { folder: "{folder}", pattern: "*.*" }), B("rename_file", { file: "{file}", mode: "replace text", a: "{find}", b: "{replace}" }), B("end"), B("ui_popup", { title: "Done", message: "Finished renaming files in {folder}." }), B("end")] },
+  { id: "ui_pages", ui: 1, short: "2-page app", icon: "layers", steps: [B("ui_window", { title: "Two-page app", w: "480", h: "420" }), B("ui_page", { title: "Home" }), B("ui_label", { text: "Tell us about you" }), B("ui_input", { label: "Name", name: "name", default: "" }), B("ui_dropdown", { label: "City", name: "city", options: "Pune, Delhi, Mumbai" }), B("ui_page", { title: "Results" }), B("ui_out", { name: "result", h: "8" }), B("ui_button", { text: "Show my answer" }), B("ui_write", { name: "result", text: "Hello {name} from {city}!", mode: "replace" }), B("end", {})] },
+  { id: "ui_words", ui: 1, short: "Word app", icon: "hash", steps: [B("ui_window", { title: "Word Counter", w: "480", h: "420" }), B("ui_label", { text: "Paste your text below" }), B("ui_input", { label: "Text", name: "text", default: "" }), B("ui_out", { name: "result", h: "6" }), B("ui_button", { text: "Count words" }), B("count_words", { name: "text" }), B("ui_write", { name: "result", text: "Words: {word_count}", mode: "add a line" }), B("end")] }
+];
+const EXAMPLES = ["Rename all .jpg files in my Trip folder", "Combine all CSV files in a folder into one file", "Keep rows where Amount is above 1000 in sales.xlsx and sort them", "Download a file from a web address"];
+
+function fill(step) {
+  const def = BLOCKS[step.type]; const params = {};
+  def.fields.forEach(f => { let v = step.params && step.params[f.key]; v = v == null ? f.def : String(v); if (f.opts && !f.opts.includes(v)) v = f.def; params[f.key] = v; });
+  return { type: step.type, params };
+}
+function depths(steps) {
+  let d = 0; return steps.map(s => { const def = BLOCKS[s.type]; let mine = d;
+    if (def.kind === "end") { d = Math.max(0, d - 1); mine = d; }
+    else if (def.kind === "else") { mine = Math.max(0, d - 1); }
+    else if (def.open) d++;
+    return mine; });
+}
+
+const PATHKEYS = ["folder", "path", "file", "dest"];
+function generate(steps, explain, opts) {
+  opts = opts || {}; const dry = opts.dry !== false;
+  const ctx = { imp: new Set(), pip: new Set(), dry: false, ui: false, root: false, inputs: [], n: 0, after: null }; const out = [], map = steps.map(() => null), stk = []; let depth = 0, needBody = false;
+  const push = (l, d) => out.push("    ".repeat(d) + l);
+  const closeOne = i => { if (needBody) push("pass", depth); depth--; needBody = false; const e = stk.pop(); const st = out.length; if (e && e.after) e.after.forEach(l => push(l, depth)); if (i != null && e && e.after) map[i] = [st, out.length - 1]; out.push(""); };
+  steps.forEach((s, i) => {
+    const def = BLOCKS[s.type]; if (!def) return;
+    if (def.kind === "end") { if (depth > 0) closeOne(i); return; }
+    if (def.kind === "else") { if (depth > 0) { if (needBody) push("pass", depth); push("else:", depth - 1); map[i] = [out.length - 1, out.length - 1]; needBody = true; } return; }
+    const p = Object.assign({}, s.params);
+    PATHKEYS.forEach(k => { if (p[k] != null) p[k] = String(p[k]).trim().replace(/^["']+|["']+$/g, ""); });
+    const lines = def.gen(p, ctx);
+    if (explain && s.type !== "note" && depth === 0 && out.length && out[out.length - 1] !== "") out.push("");
+    const start = out.length;
+    if (explain && s.type !== "note") push(`# Step ${i + 1}: ${def.label}`, depth);
+    lines.forEach(l => push(l, depth));
+    map[i] = [start, out.length - 1];
+    needBody = false;
+    if (def.open) { depth++; needBody = /:\s*$/.test(lines[lines.length - 1]); stk.push({ after: ctx.after }); ctx.after = null; }
+  });
+  while (depth > 0) closeOne(null);
+  while (out.length && out[out.length - 1] === "") out.pop();
+  if (ctx.ui) out.push("", "root.mainloop()");
+  const imports = [...ctx.imp].sort((a, b) => a.replace(/^from /, "import ").localeCompare(b.replace(/^from /, "import ")));
+  const parts = ["# Made with Python Script Builder"];
+  if (imports.length) parts.push("", ...imports);
+  if (ctx.dry) parts.push("", `DRY_RUN = ${dry ? "True" : "False"}  # True only shows what would happen. Set to False to do it for real.`);
+  parts.push(""); const offset = parts.length;
+  parts.push(...(out.length ? out : ["# Add a component to get started"]));
+  return { code: parts.join("\n") + "\n", pip: [...ctx.pip].sort(), dry: ctx.dry, ui: ctx.ui, map: map.map(m => m && [m[0] + offset, m[1] + offset]) };
+}
+
+const OPTIONAL = new Set(["b", "default"]);
+function problems(steps) {
+  const by = steps.map(() => []), list = [], stack = [], boxes = new Set(); let hasTable = false, uiSeen = false; const pagesSeen = new Set();
+  const add = (i, m) => { by[i].push(m); list.push({ i, m }); };
+  steps.forEach((s, i) => {
+    const d = BLOCKS[s.type]; if (!d) return;
+    if (CATSIDE[d.cat] === "front" && s.type !== "ui_popup" && s.type !== "ui_write") { if (s.type === "ui_window" && uiSeen) add(i, "Put the Window first. It sets up the app."); uiSeen = true; }
+    if (s.type === "ui_out") boxes.add(N(s.params.name, "result"));
+    if (s.type === "ui_write" && !boxes.has(N(s.params.name, "result"))) add(i, `No Result box named "${N(s.params.name, "result")}" above this step.`);
+    if (s.type === "ui_label" && hasVar(s.params.text)) add(i, "A Label cannot use remembered values. Use Show in box instead.");
+    d.fields.forEach(f => { if (!f.opts && !OPTIONAL.has(f.key) && !f.opt && !String(s.params[f.key] ?? "").trim()) add(i, `"${f.label}" is empty.`); });
+    if (s.type !== "custom") {
+      const all = d.fields.map(f => s.params[f.key]).join("\n"); const top = new Set(stack.map(x => x.t));
+      if (/\{file\}/.test(all) && !top.has("foreach_file")) add(i, "{file} only works inside a \"For each file\" group.");
+      if (/\{count\}/.test(all) && !top.has("repeat")) add(i, "{count} only works inside a \"Repeat\" group.");
+      if (/\{row\[/.test(all) && !top.has("foreach_row")) add(i, "{row[...]} only works inside a \"For each row\" group.");
+    }
+    if ((d.cat === "tables" || d.needs) && !["load_table", "merge_tables"].includes(s.type) && !d.makes && !hasTable) add(i, "Open or combine a file in an earlier step first.");
+    if (s.type === "load_table" || s.type === "merge_tables" || d.makes) hasTable = true;
+    if (s.type === "test_data" && TD_PARSE(s.params.cols).some(x => !TD_TYPES[x[1]])) add(i, "Unknown column type. Use: " + Object.keys(TD_TYPES).join(", ") + ".");
+    if (s.type === "ui_page") { const k = N(s.params.title, "page").toLowerCase(); if (pagesSeen.has(k)) add(i, "Another Page already has this name."); pagesSeen.add(k); }
+    if (s.type === "ui_goto" && !steps.some(x => x.type === "ui_page" && N(x.params.title, "page").toLowerCase() === N(s.params.title, "page").toLowerCase())) add(i, `No Page named "${s.params.title}". Add a Page component with that name.`);
+    if (d.kind === "end") { if (!stack.length) add(i, "There is no group to close here."); else stack.pop(); }
+    else if (d.kind === "else") { if (!stack.length || stack[stack.length - 1].t !== "if") add(i, "\"Otherwise\" must come inside an \"If\" group."); }
+    else if (d.open) stack.push({ t: s.type, i });
+  });
+  stack.forEach(x => add(x.i, "This group is never closed. Add an \"End\" component after its steps."));
+  list.sort((a, b) => a.i - b.i);
+  return { by, list };
+}
+
+function keywordPlan(text) {
+  const t = text.toLowerCase(); const urls = text.match(/https?:\/\/\S+/g) || []; const quoted = [...text.matchAll(/["“']([^"”']{1,80})["”']/g)].map(m => m[1]);
+  const file = (text.match(/[\w\-./\\: ]*\w\.(xlsx|xls|csv|txt)\b/i) || [])[0];
+  const R = id => RECIPES.find(r => r.id === id).steps.map(fill);
+  let steps = [];
+  const gui = /(\bapp\b|window|\bgui\b|button|\bform\b|desktop)/.test(t);
+  if (gui && /renam/.test(t)) steps = R("ui_rename");
+  else if (gui && /word/.test(t)) steps = R("ui_words");
+  else if (/renam/.test(t)) { steps = R("rename"); if (quoted[0]) steps[2].params.a = quoted[0]; if (quoted[1]) steps[2].params.b = quoted[1]; }
+  else if (/(merge|combine|join|append).*(csv|excel|file|sheet)/.test(t)) steps = R("merge");
+  else if (/(tidy|organi[sz]e|sort).*(folder|download|file)/.test(t)) steps = R("tidy");
+  else if (/back ?up/.test(t)) steps = R("backup");
+  else if (/download/.test(t)) { steps = R("download"); if (urls[0]) { steps[0].params.url = urls[0]; steps[0].params.path = urls[0].split("/").pop() || "download.bin"; } }
+  else if (/(count|how many).*word/.test(t)) steps = R("words");
+  else if (/e-?mail/.test(t)) steps = [fill(B("send_email"))];
+  else if (/(total|sum|average|group).*(by|per)/.test(t)) steps = R("summary");
+  else if (/(excel|csv|spreadsheet|sheet|column|row|duplicate)/.test(t)) {
+    steps = [fill(B("load_table"))];
+    if (/duplicate/.test(t)) steps.push(fill(B("drop_dupes")));
+    if (/(blank|empty|missing)/.test(t)) steps.push(fill(B("fill_blanks")));
+    if (/(filter|only|where|above|below|greater|less)/.test(t)) steps.push(fill(B("filter_rows")));
+    if (/sort/.test(t)) steps.push(fill(B("sort_table")));
+    steps.push(fill(B("show_table")), fill(B("save_table")));
+  }
+  else if (/(web ?page|website|url)/.test(t) || urls[0]) { steps = [fill(B("get_page", urls[0] ? { url: urls[0] } : {})), fill(B("say", { text: "{page}" }))]; }
+  else if (/ask|question|input/.test(t)) steps = R("quiz");
+  if (file && steps.length) { const s = steps.find(s => s.type === "load_table" || s.type === "read_text"); if (s) s.params.path = file.trim(); }
+  return steps;
+}
+function catalogText() {
+  return Object.entries(BLOCKS).map(([id, d]) => `${id} = ${d.label}${d.open ? " [opens a group, close it with end]" : ""}${d.fields.length ? " | " + d.fields.map(f => `${f.key}${f.opts ? " (one of: " + f.opts.join(" / ") + ")" : ` (e.g. ${JSON.stringify(f.def)})`}`).join(", ") : ""}`).join("\n");
+}
+//</core>
+
+/* ================= page ================= */
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const wide = () => matchMedia("(min-width:900px)").matches;
+const reduce = () => matchMedia("(prefers-reduced-motion:reduce)").matches;
+const ic = (n, fb) => `<i class="ic" data-lucide="${n}" data-fb="${esc(fb || "•")}"></i>`;
+const paintIcons = () => { try { window.lucide && lucide.createIcons(); } catch (e) {} };
+const app = $("app");
+let uid = 1; const mk = s => Object.assign(fill(s), { id: uid++ });
+let side = "back";
+let steps = [], undoS = [], redoS = [], sel = null, tab = "home", ribbonOpen = true, q = "", lastGen = null, lastCode = "", lineEls = [], hoverIdx = null, hlEls = [], suppressClick = false;
+const opts = { dry: true, explain: true, code: null, tool: true };
+const closedCats = new Set();
+const KEY = "psb-steps-v1", OKEY = "psb-opts-v2";
+
+function load() {
+  try { const raw = JSON.parse(localStorage.getItem(KEY) || "null"); if (Array.isArray(raw) && raw.length) { steps = raw.filter(s => BLOCKS[s.type]).map(mk); return; } } catch (e) {}
+  steps = RECIPES[0].steps.map(mk);
+}
+function save() { try { localStorage.setItem(KEY, JSON.stringify(steps.map(s => ({ type: s.type, params: s.params })))); } catch (e) {} }
+function loadOpts() {
+  try { const o = JSON.parse(localStorage.getItem(OKEY) || "null"); if (o) { if (typeof o.dry === "boolean") opts.dry = o.dry; if (typeof o.explain === "boolean") opts.explain = o.explain; if (typeof o.tool === "boolean") opts.tool = o.tool; if (["right", "bottom", "hidden"].includes(o.code)) opts.code = o.code; } } catch (e) {}
+  if (!opts.code) opts.code = innerWidth >= 1180 ? "right" : "bottom";
+}
+function saveOpts() { try { localStorage.setItem(OKEY, JSON.stringify(opts)); } catch (e) {} }
+function applyLayout() { app.dataset.code = opts.code; app.dataset.tool = opts.tool ? "on" : "off"; }
+
+let toastTimer;
+function toast(msg) { const t = $("toast"); t.textContent = msg; t.classList.add("on"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("on"), 2400); }
+
+/* ----- history ----- */
+function snap() { undoS.push(JSON.stringify(steps)); if (undoS.length > 50) undoS.shift(); redoS = []; }
+function fixSel() { if (!steps.some(s => s.id === sel)) sel = null; }
+function undo() { if (!undoS.length) return; redoS.push(JSON.stringify(steps)); steps = JSON.parse(undoS.pop()); fixSel(); renderSteps(); }
+function redo() { if (!redoS.length) return; undoS.push(JSON.stringify(steps)); steps = JSON.parse(redoS.pop()); fixSel(); renderSteps(); }
+
+/* ----- ribbon ----- */
+const TABS = [["home", "Home"], ["recipes", "Recipes"], ["data", "Data"], ["run", "Run"], ["view", "View"], ["help", "Help"]];
+const RIBBON = {
+  home: [["Script", [["new", "file-plus", "New"], ["undo", "undo-2", "Undo"], ["redo", "redo-2", "Redo"]]], ["Create", [["ask", "sparkles", "Ask", "primary"], ["run", "play", "Run"], ["recipes", "book-open", "Recipes"]]], ["Output", [["copy", "copy", "Copy"], ["save", "download", "Save"]]], ["Options", [["tdry", "shield-check", "Preview", "toggle"], ["texp", "message-square", "Comments", "toggle"]]]],
+  recipes: [["Scripts", RECIPES.filter(r => !r.ui).map(r => ["r:" + r.id, r.icon, r.short])], ["Apps (front + back end)", RECIPES.filter(r => r.ui).map(r => ["r:" + r.id, r.icon, r.short])]],
+  data: [["Test data", [["td", "flask-conical", "Generate"], ["add:test_data", "plus", "Add step"]]], ["Connect", [["add:db_sqlite", "database", "SQLite"], ["add:db_sql", "server", "MySQL / PG"], ["add:db_mongo", "leaf", "MongoDB"], ["add:api_table", "cloud-download", "Web API"], ["add:gsheet", "sheet", "G Sheet"], ["add:json_file", "braces", "JSON"], ["add:save_sqlite", "database-backup", "Save to DB"]]], ["Pages", [["add:ui_page", "layers", "Page"], ["add:ui_goto", "arrow-right-to-line", "Go to page"], ["r:ui_pages", "app-window", "2-page app"]]]],
+  run: [["Go", [["run", "play", "Run now", "primary"], ["problems", "triangle-alert", "Check"]]], ["On your computer", [["cmd", "terminal", "Copy command"], ["pip", "package", "Packages"]]], ["Setup", [["https://www.python.org/downloads/", "external-link", "Python", "link"], ["pip", "package", "Packages"]]],],
+  view: [["Code", [["cr", "panel-right", "Right", "toggle"], ["cb", "panel-bottom", "Bottom", "toggle"], ["ch", "eye-off", "Hide", "toggle"]]], ["Toolbox", [["tt", "panel-left", "Toolbox", "toggle"]]], ["Steps", [["colall", "chevrons-down-up", "Fold"], ["expall", "chevrons-up-down", "Unfold"]]]],
+  help: [["Help", [["h:ui", "layout-template", "Front/Back"], ["h:path", "folder-search", "Paths"], ["h:vals", "braces", "Values"], ["h:safe", "shield-check", "Safety"], ["h:run", "play", "Running"]]]]
+};
+function btn([id, icon, label, kind]) {
+  if (kind === "link") return `<a class="rb" href="${id}" target="_blank" rel="noopener" title="${esc(label)}">${ic(icon, label[0])}<span>${esc(label)}</span></a>`;
+  return `<button class="rb${kind === "primary" ? " primary" : ""}" type="button" data-r="${esc(id)}"${kind === "toggle" ? ' aria-pressed="false"' : ""} title="${esc(label)}">${ic(icon, label[0])}<span>${esc(label)}</span></button>`;
+}
+function renderTabs() {
+  $("tabs").innerHTML = TABS.map(([id, l]) => `<button class="tab" role="tab" type="button" data-t="${id}" aria-selected="${id === tab}">${l}</button>`).join("");
+  $("rt").setAttribute("aria-expanded", String(ribbonOpen)); $("ribbon").classList.toggle("closed", !ribbonOpen);
+}
+function renderRibbon() {
+  $("ribbon").innerHTML = RIBBON[tab].map(([g, items]) => `<div class="grp"><div class="items">${items.map(btn).join("")}</div><div class="gname">${g}</div></div>`).join("");
+  paintIcons(); syncRibbon();
+}
+function syncRibbon() {
+  const set = (id, fn) => { const b = document.querySelector(`#ribbon [data-r="${id}"]`); if (b) fn(b); };
+  const pr = (id, on) => set(id, b => b.setAttribute("aria-pressed", String(!!on)));
+  set("undo", b => b.disabled = !undoS.length); set("redo", b => b.disabled = !redoS.length); set("new", b => b.disabled = !steps.length);
+  set("pip", b => b.disabled = !(lastGen && lastGen.pip.length));
+  pr("tdry", opts.dry); pr("texp", opts.explain); pr("cr", opts.code === "right"); pr("cb", opts.code === "bottom"); pr("ch", opts.code === "hidden"); pr("tt", opts.tool);
+}
+$("tabs").addEventListener("click", e => { const b = e.target.closest(".tab"); if (!b) return; if (b.dataset.t === tab) ribbonOpen = !ribbonOpen; else { tab = b.dataset.t; ribbonOpen = true; } renderTabs(); renderRibbon(); });
+$("rt").addEventListener("click", () => { ribbonOpen = !ribbonOpen; renderTabs(); });
+
+/* ----- toolbox ----- */
+function renderTool() {
+  const term = q.trim().toLowerCase(); let html = "";
+  document.querySelectorAll("#seg button").forEach(b => b.setAttribute("aria-selected", String(b.dataset.side === side)));
+  CATS.forEach(([cid, cname, , cside]) => {
+    if (!term && cside !== side) return;
+    const items = Object.entries(BLOCKS).filter(([id, d]) => d.cat === cid && (!term || (d.label + " " + (d.tip || "")).toLowerCase().includes(term)));
+    if (!items.length) return;
+    const closed = !term && closedCats.has(cid);
+    html += `<section class="cat${closed ? " closed" : ""}" style="--cat:var(--c-${cid})"><button type="button" class="ch" data-cat="${cid}" aria-expanded="${!closed}"><span class="dot"></span>${cname}<span class="n">${items.length}</span>${ic("chevron-down", "▾")}</button><div class="grid">${items.map(([id, d]) => `<button class="comp" type="button" data-type="${id}" title="${esc(d.tip || d.label)}">${ic(d.icon || "box", d.label[0])}<span>${esc(d.label)}</span></button>`).join("")}</div></section>`;
+  });
+  $("toolBody").innerHTML = html || `<p class="none">No match.</p>`; paintIcons();
+}
+$("q").addEventListener("input", e => { q = e.target.value; renderTool(); });
+$("toolBody").addEventListener("click", e => {
+  const h = e.target.closest(".ch"); if (h) { const c = h.dataset.cat; closedCats.has(c) ? closedCats.delete(c) : closedCats.add(c); renderTool(); return; }
+  const b = e.target.closest(".comp"); if (!b || suppressClick) return;
+  addStep(b.dataset.type); toast(`Added ${BLOCKS[b.dataset.type].label} (${steps.length} step${steps.length === 1 ? "" : "s"})`);
+});
+function setSide(s) { side = s; q = ""; $("q").value = ""; renderTool(); syncRail(); }
+$("seg").addEventListener("click", e => { const b = e.target.closest("button"); if (b) setSide(b.dataset.side); });
+$("toolBody").addEventListener("pointerdown", e => { const b = e.target.closest(".comp"); if (!b || e.pointerType !== "mouse" || !wide()) return; press(e, { kind: "new", type: b.dataset.type, label: BLOCKS[b.dataset.type].label }); });
+
+/* ----- narrow view switching ----- */
+function setView(v) { app.dataset.view = v; if (v !== "work") setDrawer(false); document.querySelectorAll(".bnav button").forEach(b => b.setAttribute("aria-selected", String(b.dataset.v === v))); }
+document.querySelector(".bnav").addEventListener("click", e => { const b = e.target.closest("button"); if (b) setView(b.dataset.v); });
+
+/* ----- phone: left rail + sliding toolbox ----- */
+const drawerOpen = () => app.dataset.drawer === "open";
+function syncRail() { const o = drawerOpen(); document.querySelectorAll("#rail button").forEach(b => { const k = b.dataset.rail; b.setAttribute("aria-pressed", String(k === "toggle" ? o : o && side === k)); }); }
+function setDrawer(open) { app.dataset.drawer = open ? "open" : "closed"; syncRail(); }
+$("rail").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return; const k = b.dataset.rail;
+  if (k === "toggle") { if (!drawerOpen() && app.dataset.view !== "work") setView("work"); setDrawer(!drawerOpen()); return; }
+  if (drawerOpen() && side === k) { setDrawer(false); return; }
+  if (app.dataset.view !== "work") setView("work");
+  setSide(k); setDrawer(true);
+});
+$("scrim").addEventListener("click", () => setDrawer(false));
+$("drawerX").addEventListener("click", () => setDrawer(false));
+
+/* ----- workspace ----- */
+const VARDEF = { ask: ["name", "answer"], setvar: ["name", "value"], calc: ["name", "result"], read_text: ["name", "text"], get_page: ["name", "page"], get_json: ["name", "info"], timestamp: ["name", "today"], random: ["name", "number"] };
+const UIVARS = { ui_input: "text_value", ui_dropdown: "choice", ui_check: "checked", ui_file: "picked" };
+function varsAt(i) {
+  const out = [], stack = [], ui = [];
+  for (let k = 0; k < i; k++) { const s = steps[k], d = BLOCKS[s.type];
+    if (VARDEF[s.type]) { const [key, df] = VARDEF[s.type]; const n = N(s.params[key], df); if (!out.includes(n)) out.push(n); }
+    if (UIVARS[s.type]) { const n = N(s.params.name, UIVARS[s.type]); if (!ui.includes(n)) ui.push(n); }
+    if (d.kind === "end") stack.pop(); else if (d.open) stack.push(s.type); }
+  if (stack.includes("ui_button")) ui.forEach(n => { if (!out.includes(n)) out.push(n); });
+  if (stack.includes("foreach_file")) out.push("file");
+  if (stack.includes("repeat")) out.push("count");
+  if (stack.includes("foreach_row")) out.push("row['Column name']");
+  return out;
+}
+const insHtml = i => { const v = varsAt(i); return v.length ? `<span>Insert:</span>` + v.map(n => `<button class="vchip" type="button" data-v="${esc(n)}">{${esc(n)}}</button>`).join("") : ""; };
+function sumOf(s) { const d = BLOCKS[s.type]; const v = d.fields.map(f => String(s.params[f.key] ?? "").trim().replace(/\s+/g, " ")).filter(Boolean); if (!v.length) return ""; const t = s.type === "if" ? v.join(" ") : v.slice(0, 2).join(" · "); return t.length > 70 ? t.slice(0, 69) + "…" : t; }
+function fieldHtml(s, f) {
+  const id = `s${s.id}-${f.key}`, v = s.params[f.key]; let ctl;
+  if (f.opts) ctl = `<select id="${id}" data-k="${f.key}">${f.opts.map(o => `<option${o === v ? " selected" : ""}>${esc(o)}</option>`).join("")}</select>`;
+  else if (f.area) ctl = `<textarea id="${id}" data-k="${f.key}" spellcheck="false"${f.mono ? ' style="font-family:var(--mono);font-size:13px"' : ""}>${esc(v)}</textarea>`;
+  else ctl = `<input id="${id}" data-k="${f.key}" type="${f.num ? "number" : "text"}" value="${esc(v)}" autocomplete="off" autocapitalize="off" spellcheck="false">`;
+  return `<div class="field${f.wide ? " wide" : ""}"><label for="${id}">${esc(f.label)}</label>${ctl}</div>`;
+}
+function addStep(type, at) {
+  snap(); const s = mk(B(type)); const si = steps.findIndex(x => x.id === sel);
+  const i = at != null ? at : (si >= 0 ? si + 1 : steps.length);
+  steps.splice(i, 0, s); sel = s.id; renderSteps(s.id);
+}
+function renderSteps(flashId) {
+  const dep = depths(steps);
+  $("steps").innerHTML = steps.map((s, i) => { const d = BLOCKS[s.type]; const textual = d.fields.some(f => !f.opts && !f.num);
+    return `<div class="step${s.col ? " col" : ""}${s.id === sel ? " sel" : ""}${s.id === flashId ? " flash" : ""}" data-id="${s.id}" style="--cat:var(--c-${d.cat});--depth:${Math.min(dep[i], 4)}">
+      <div class="sh"><span class="grip" title="Drag to move" aria-hidden="true">${ic("grip-vertical", "⋮")}</span><span class="tile">${ic(d.icon || "box", d.label[0])}</span><span class="ttl">${esc(d.label)}</span>${CATSIDE[d.cat] === "front" ? '<span class="tag">UI</span>' : ""}<span class="sum">${esc(sumOf(s))}</span>
+      <span class="tools">${d.hint ? `<button class="icon" type="button" data-act="hint" title="Help" aria-label="Show help for step ${i + 1}">${ic("info", "i")}</button>` : ""}<button class="icon" type="button" data-act="up" title="Move up" aria-label="Move step ${i + 1} up"${i ? "" : " disabled"}>${ic("arrow-up", "↑")}</button><button class="icon" type="button" data-act="down" title="Move down" aria-label="Move step ${i + 1} down"${i < steps.length - 1 ? "" : " disabled"}>${ic("arrow-down", "↓")}</button><button class="icon" type="button" data-act="dup" title="Duplicate" aria-label="Duplicate step ${i + 1}">${ic("copy", "⧉")}</button><button class="icon del" type="button" data-act="del" title="Delete" aria-label="Delete step ${i + 1}">${ic("trash-2", "✕")}</button></span>
+      ${d.fields.length ? `<button class="icon fold" type="button" data-act="fold" title="Fold or unfold" aria-label="Fold or unfold step ${i + 1}">${ic("chevron-down", "▾")}</button>` : ""}</div>
+      <p class="warn" data-warn></p>
+      ${d.fields.length ? `<div class="fields">${d.fields.map(f => fieldHtml(s, f)).join("")}</div>` : ""}${textual ? `<div class="ins">${insHtml(i)}</div>` : ""}${d.hint ? `<p class="hint" hidden>${esc(d.hint)}</p>` : ""}</div>`; }).join("");
+  $("empty").hidden = steps.length > 0; $("flow").hidden = !steps.length;
+  paintIcons();
+  if (flashId) { const el = $("steps").querySelector(`[data-id="${flashId}"]`); if (el) el.scrollIntoView({ block: "nearest", behavior: reduce() ? "auto" : "smooth" }); }
+  renderCode();
+}
+function refreshLive() { [...$("steps").querySelectorAll(".step")].forEach((el, i) => { const ins = el.querySelector(".ins"); if (ins) ins.innerHTML = insHtml(i); }); }
+const idxOf = el => steps.findIndex(s => s.id === +el.closest(".step").dataset.id);
+
+/* selection and code highlight */
+function applyHl() {
+  hlEls.forEach(e => e.classList.remove("hl")); hlEls = [];
+  const i = hoverIdx != null ? hoverIdx : steps.findIndex(s => s.id === sel);
+  const m = i >= 0 && lastGen && lastGen.map[i]; if (!m) return;
+  for (let k = m[0]; k <= m[1]; k++) if (lineEls[k]) { lineEls[k].classList.add("hl"); hlEls.push(lineEls[k]); }
+}
+function selectStep(id, scroll) {
+  if (sel !== id) { const old = $("steps").querySelector(".step.sel"); if (old) old.classList.remove("sel"); sel = id; const el = $("steps").querySelector(`[data-id="${id}"]`); if (el) el.classList.add("sel"); }
+  applyHl();
+  if (scroll && lastGen) { const i = steps.findIndex(s => s.id === id), m = lastGen.map[i], ed = $("editor"); if (m && lineEls[m[0]] && ed.clientHeight) ed.scrollTo({ top: Math.max(0, lineEls[m[0]].offsetTop - ed.clientHeight / 3), behavior: reduce() ? "auto" : "smooth" }); }
+}
+$("steps").addEventListener("focusin", e => { const st = e.target.closest(".step"); if (!st) return; if (e.target.matches("input[type=text],textarea")) st._last = e.target; selectStep(+st.dataset.id, true); });
+$("steps").addEventListener("mouseover", e => { const st = e.target.closest(".step"); const i = st ? steps.findIndex(s => s.id === +st.dataset.id) : null; if (i !== hoverIdx) { hoverIdx = i; applyHl(); } });
+$("steps").addEventListener("mouseleave", () => { hoverIdx = null; applyHl(); });
+$("workScroll").addEventListener("click", e => { if (e.target === e.currentTarget || e.target.id === "flow" || e.target.id === "steps") { const old = $("steps").querySelector(".step.sel"); if (old) old.classList.remove("sel"); sel = null; applyHl(); } });
+$("steps").addEventListener("mousedown", e => { if (e.target.closest(".vchip")) e.preventDefault(); });
+$("steps").addEventListener("click", e => {
+  const chip = e.target.closest(".vchip");
+  if (chip) { const st = chip.closest(".step"); let f = st._last; if (!f || !st.contains(f)) f = st.querySelector("input[type=text],textarea"); if (!f) return;
+    const a = f.selectionStart ?? f.value.length, b = f.selectionEnd ?? a; f.setRangeText("{" + chip.dataset.v + "}", a, b, "end"); f.focus(); f.dispatchEvent(new Event("input", { bubbles: true })); return; }
+  const st = e.target.closest(".step"); const b = e.target.closest("[data-act]");
+  if (!b) { if (st) selectStep(+st.dataset.id, true); return; }
+  if (b.disabled) return; const a = b.dataset.act, i = idxOf(b);
+  if (a === "fold") { steps[i].col = !steps[i].col; st.classList.toggle("col", !!steps[i].col); return; }
+  if (a === "hint") { const h = st.querySelector(".hint"); if (h) h.hidden = !h.hidden; return; }
+  snap();
+  if (a === "del") { steps.splice(i, 1); fixSel(); }
+  else if (a === "dup") { const c = mk(steps[i]); steps.splice(i + 1, 0, c); sel = c.id; }
+  else if (a === "up" && i > 0) [steps[i - 1], steps[i]] = [steps[i], steps[i - 1]];
+  else if (a === "down" && i < steps.length - 1) [steps[i + 1], steps[i]] = [steps[i], steps[i + 1]];
+  renderSteps(); });
+let typingSnap = 0;
+$("steps").addEventListener("input", e => { const k = e.target.dataset.k; if (!k) return; const now = Date.now(); if (now - typingSnap > 1500) { snap(); syncRibbon(); } typingSnap = now;
+  const i = idxOf(e.target); steps[i].params[k] = e.target.value; const sum = e.target.closest(".step").querySelector(".sum"); if (sum) sum.textContent = sumOf(steps[i]); refreshLive(); renderCode(); });
+$("steps").addEventListener("pointerdown", e => { const g = e.target.closest(".step .grip"); if (!g) return; const s = steps[idxOf(g)]; press(e, { kind: "move", id: s.id, label: BLOCKS[s.type].label }); });
+
+/* ----- drag and drop (pointer based, mouse and touch) ----- */
+let drag = null, ghost = null, line = null, scroller = null;
+function press(e, info) { if (e.button) return; drag = Object.assign({ x0: e.clientX, y0: e.clientY, x: e.clientX, y: e.clientY, on: false, at: null }, info);
+  addEventListener("pointermove", move); addEventListener("pointerup", drop); addEventListener("pointercancel", cancel); }
+function move(e) { if (!drag) return; drag.x = e.clientX; drag.y = e.clientY;
+  if (!drag.on) { if (Math.hypot(drag.x - drag.x0, drag.y - drag.y0) < 7) return; drag.on = true; document.body.classList.add("dragging");
+    ghost = document.createElement("div"); ghost.className = "ghost"; ghost.textContent = drag.label; document.body.appendChild(ghost);
+    line = document.createElement("div"); line.className = "dropline";
+    scroller = setInterval(() => { const wr = $("work").getBoundingClientRect(), ws = $("workScroll"); if (drag.y < wr.top + 50) ws.scrollTop -= 12; else if (drag.y > wr.bottom - 50) ws.scrollTop += 12; place(); }, 16); }
+  e.preventDefault(); place(); }
+function place() { if (!drag || !drag.on) return; ghost.style.left = drag.x + "px"; ghost.style.top = drag.y + "px";
+  const wr = $("work").getBoundingClientRect(); const inside = drag.x >= wr.left && drag.x <= wr.right && drag.y >= wr.top && drag.y <= wr.bottom;
+  $("work").classList.toggle("over", inside);
+  if (!inside) { line.remove(); drag.at = null; return; }
+  const els = [...$("steps").querySelectorAll(".step")]; let at = els.length;
+  for (let i = 0; i < els.length; i++) { const r = els[i].getBoundingClientRect(); if (drag.y < r.top + r.height / 2) { at = i; break; } }
+  if (els.length && (drag.at !== at || !line.parentNode)) { if (at < els.length) $("steps").insertBefore(line, els[at]); else $("steps").appendChild(line); }
+  drag.at = at; }
+function finish() { removeEventListener("pointermove", move); removeEventListener("pointerup", drop); removeEventListener("pointercancel", cancel);
+  clearInterval(scroller); if (ghost) ghost.remove(); if (line) line.remove(); ghost = line = null; $("work").classList.remove("over"); document.body.classList.remove("dragging"); drag = null; }
+function cancel() { const was = drag && drag.on; finish(); if (was) renderSteps(); }
+function drop() { if (!drag) return; const d = drag; finish(); if (!d.on) return;
+  suppressClick = true; setTimeout(() => suppressClick = false, 60);
+  if (d.at == null) { renderSteps(); return; }
+  if (d.kind === "new") { addStep(d.type, d.at); return; }
+  snap(); const from = steps.findIndex(s => s.id === d.id); const [s] = steps.splice(from, 1); steps.splice(d.at > from ? d.at - 1 : d.at, 0, s); sel = s.id; renderSteps(s.id); }
+
+/* ----- code, checks, status ----- */
+const KW = "for|in|if|else|import|from|as|with|print|pass|continue|not|and|or|True|False|None";
+function paint(line) {
+  const re = new RegExp(`(#.*$)|(f?"(?:\\\\.|[^"\\\\])*"|'(?:\\\\.|[^'\\\\])*')|\\b(${KW})\\b|\\b(\\d+(?:\\.\\d+)?)\\b`, "g");
+  let out = "", last = 0, m;
+  while ((m = re.exec(line))) { out += esc(line.slice(last, m.index)); const cls = m[1] ? "c" : m[2] ? "s" : m[3] ? "k" : "n"; out += `<span class="${cls}">${esc(m[0])}</span>`; last = re.lastIndex; }
+  return out + esc(line.slice(last));
+}
+let lastProblems = { by: [], list: [] }, statusKey = "";
+function renderCode() {
+  const g = generate(steps, opts.explain, { dry: opts.dry }); lastGen = g; lastCode = g.code;
+  const lines = g.code.replace(/\n$/, "").split("\n");
+  $("src").innerHTML = lines.map(l => `<span class="l">${paint(l) || " "}</span>`).join("");
+  $("gut").innerHTML = lines.map((_, i) => `<span>${i + 1}</span>`).join("");
+  lineEls = [...$("src").children];
+  const pr = problems(steps); lastProblems = pr; const n = pr.list.length;
+  document.querySelectorAll("#steps .step").forEach((el, i) => { const w = el.querySelector("[data-warn]"); const m = pr.by[i] || []; if (w) w.textContent = m.join(" "); el.classList.toggle("bad", m.length > 0); });
+  const key = String(n); if (key !== statusKey) { statusKey = key; $("stProb").className = "sb" + (n ? " bad" : ""); $("stProb").innerHTML = n ? `${ic("triangle-alert", "!")}${n} problem${n > 1 ? "s" : ""}` : `${ic("check", "✓")}No problems`; paintIcons(); }
+  $("stSteps").textContent = `${steps.length} step${steps.length === 1 ? "" : "s"}`;
+  $("stDry").hidden = !g.dry; $("stDry").textContent = opts.dry ? "Preview on" : "Preview off";
+  $("bnW").textContent = steps.length || ""; $("bnC").textContent = n || ""; $("bnC").className = "badge" + (n ? " bad" : "");
+  applyHl(); syncRibbon(); save();
+}
+$("stProb").addEventListener("click", () => openProblems());
+
+/* ----- dialogs ----- */
+let lastFocus = null;
+function openDlg(title, html) { lastFocus = document.activeElement; $("dlgT").textContent = title; $("dlgB").innerHTML = html; $("ov").hidden = false; paintIcons(); const f = $("dlgB").querySelector("textarea,button,input"); if (f) f.focus(); }
+function closeDlg() { if ($("ov").hidden) return; $("ov").hidden = true; $("dlgB").innerHTML = ""; if (lastFocus && lastFocus.focus) lastFocus.focus(); }
+$("dlgX").addEventListener("click", closeDlg);
+$("ov").addEventListener("mousedown", e => { if (e.target === $("ov")) closeDlg(); });
+function goStep(i) { closeDlg(); if (!wide()) setView("work"); const el = $("steps").querySelectorAll(".step")[i]; if (el) { el.scrollIntoView({ block: "center", behavior: reduce() ? "auto" : "smooth" }); selectStep(steps[i].id, true); el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash"); } }
+function openProblems() {
+  const l = lastProblems.list;
+  openDlg("Problems", l.length ? `<ul class="plist">${l.map(x => `<li><button type="button" data-go="${x.i}">Step ${x.i + 1}</button><span>${esc(x.m)}</span></li>`).join("")}</ul>` : `<p class="ok-msg">${ic("check", "✓")}No problems found.</p>`);
+  $("dlgB").onclick = e => { const b = e.target.closest("[data-go]"); if (b) goStep(+b.dataset.go); };
+}
+function openHelp(topic) {
+  const pip = lastGen && lastGen.pip.length ? `Run pip install ${lastGen.pip.join(" ")} once.` : "No extra packages are needed.";
+  const H = {
+    path: ["Find a path", [["monitor", "Windows: hold Shift, right-click the file or folder, then choose Copy as path."], ["laptop", "Mac: right-click it, hold Option, then choose Copy as Pathname."], ["clipboard", "Paste it into the box. Quotes are removed for you."]]],
+    vals: ["Remembered values", [["braces", "A name in curly brackets, like {name}, stands for something the script remembers."], ["mouse-pointer-click", "Click a chip under a text box to insert one."], ["files", "Inside For each file, {file} is the current file."]]],
+    safe: ["Safety", [["shield-check", "Rename, move, copy and delete start in Preview. The script only prints what it would do."], ["eye", "If the output looks right, turn Preview off in Home and copy the code again."], ["copy", "Try it on a copy of your files first."]]],
+    ui: ["Front end and back end", [["layout-template", "Front end is what the user sees: a window, text boxes, a dropdown, buttons and a result box."], ["server", "Back end is the work behind it: files, sheets, web, text and logic."], ["play", "Put back end steps inside a Button group. They run when the button is clicked, and text box values are available as {name}."]]],
+    run: ["Running it", [["download", "Install Python from python.org. On Windows, tick Add Python to PATH."], ["file-plus", "Paste the code into Notepad and save it as my_script.py. Set the type to All files."], ["package", pip], ["play", "Open Command Prompt or Terminal in that folder and run python my_script.py. On a Mac, use python3."]]]
+  }[topic]; if (!H) return;
+  openDlg(H[0], `<ul class="help">${H[1].map(([i, t]) => `<li>${ic(i, "•")}<span>${esc(t)}</span></li>`).join("")}</ul>`);
+}
+
+/* ----- copy and save ----- */
+async function copyText(t, msg) { try { await navigator.clipboard.writeText(t); toast(msg); } catch (e) { toast("Could not copy. Select the text and copy it."); } }
+const copyCode = () => copyText(lastCode, "Code copied. Paste it into Notepad.");
+let dl = null;
+async function saveScript() {
+  if (dl) { try { await dl.save({ filename: "my_script.txt", data: lastCode }); toast("Saved. Rename it to my_script.py."); } catch (e) { if (e && e.code !== "declined") toast("Saving is not available here. Use Copy."); } return; }
+  if (window.claude) { toast("Saving is not available here. Use Copy."); return; }
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([lastCode], { type: "text/x-python" })); a.download = "my_script.py"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+/* ----- plain English ----- */
+let sampler = null;
+const clean = list => (Array.isArray(list) ? list : []).filter(s => s && BLOCKS[s.type]).map(s => fill({ type: s.type, params: s.params || {} }));
+async function askClaude(text) {
+  const prompt = `You turn a plain-English request into a list of components for a visual Python script builder used by people who cannot code.
+
+COMPONENTS (id = meaning | parameters):
+${catalogText()}
+
+RULES
+- Reply with ONLY a JSON array, no prose, no code fences: [{"type":"<id>","params":{"<key>":"<value>"}}]
+- Every parameter value is a string. Option parameters must use one of the listed options exactly.
+- Text parameters can insert a remembered value with {name}. Inside foreach_file the current file is {file}. Inside foreach_row a cell is {row['Column']}. Sheet components all work on one table called data.
+- In the "if" component, "left" is a remembered name or Python expression (no braces), "right" is a plain value.
+- Components marked [opens a group] must be closed with an "end" component.
+- Front end components (ui_*) build a desktop window. If the user wants an app, window, form or buttons: start with ui_window, add inputs (ui_input, ui_dropdown, ui_check, ui_file) and a ui_out result box, then a ui_button group that contains the back end steps and is closed with "end". Inside a button group, text box values are available as {remember_as_name}. Use ui_write or ui_popup, not "say", to show results to the user.
+- Prefer the listed components. Only when none fits, use "custom" with short, correct Python in "code".
+- Use realistic placeholder paths the user can edit when they give none.
+
+REQUEST:
+${text}`;
+  let res;
+  try { res = await sampler.json(prompt); }
+  catch (e) { if (e && (e.code === "not_granted" || e.code === "rate_limited")) throw e; const r = await sampler(prompt); res = JSON.parse((r.text.match(/\[[\s\S]*\]/) || ["[]"])[0]); }
+  if (res && !Array.isArray(res) && Array.isArray(res.steps)) res = res.steps;
+  return clean(res);
+}
+function openAsk() {
+  openDlg("Ask in English", `<textarea id="ask" placeholder="Example: Read every Excel file in my Invoices folder, keep rows where Amount is above 1000, and save them as big_invoices.xlsx"></textarea>
+    <div class="row"><button class="btn primary" id="askBtn" type="button">${ic("sparkles", "*")}Build</button><span class="status-msg" id="askStatus" role="status"></span></div>
+    <div class="chips">${EXAMPLES.map((t, i) => `<button class="eg" type="button" data-i="${i}">${esc(t)}</button>`).join("")}</div>`);
+  $("askBtn").addEventListener("click", buildFromAsk);
+  $("ask").addEventListener("keydown", e => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); buildFromAsk(); } });
+  $("dlgB").onclick = e => { const b = e.target.closest(".eg"); if (b) { $("ask").value = EXAMPLES[+b.dataset.i]; $("ask").focus(); } };
+}
+async function buildFromAsk() {
+  const st = $("askStatus"), text = $("ask").value.trim(); const say = (m, bad) => { st.textContent = m; st.classList.toggle("warn2", !!bad); };
+  if (!text) { say("Type what you want, or tap an example.", true); return; }
+  const btn = $("askBtn"); btn.disabled = true; let plan = [];
+  if (sampler) { say("Working out the steps…"); try { plan = await askClaude(text); } catch (e) { plan = []; } }
+  if (!plan.length) plan = keywordPlan(text);
+  btn.disabled = false;
+  if (!plan.length) { say("No match. Name the job, like rename files or combine CSV files, or pick a recipe.", true); return; }
+  snap(); steps = plan.map(mk); sel = null; closeDlg(); renderSteps(); if (!wide()) setView("work"); toast("Built. Check each step.");
+}
+
+/* ----- ribbon actions ----- */
+function loadRecipe(id) { snap(); steps = RECIPES.find(r => r.id === id).steps.map(mk); sel = null; renderSteps(); if (!wide()) setView("work"); toast("Recipe loaded. Edit the boxes to fit your files."); }
+function setCode(m) { opts.code = m; saveOpts(); applyLayout(); syncRibbon(); }
+const ACTIONS = {
+  new() { if (!steps.length) return; snap(); steps = []; sel = null; renderSteps(); toast("Cleared. Undo brings it back."); },
+  undo, redo, ask: openAsk, copy: copyCode, save: saveScript, problems: openProblems,
+  recipes() { tab = "recipes"; ribbonOpen = true; renderTabs(); renderRibbon(); },
+  tdry() { opts.dry = !opts.dry; saveOpts(); renderCode(); },
+  texp() { opts.explain = !opts.explain; saveOpts(); renderCode(); },
+  pip() { if (lastGen && lastGen.pip.length) copyText("pip install " + lastGen.pip.join(" "), "Copied. Run it in Command Prompt or Terminal."); },
+  cmd() { copyText("python my_script.py", "Copied. Run it where you saved the file."); },
+  cr() { setCode("right"); }, cb() { setCode("bottom"); }, ch() { setCode("hidden"); },
+  tt() { if (!wide()) { setDrawer(!drawerOpen()); return; } opts.tool = !opts.tool; saveOpts(); applyLayout(); syncRibbon(); },
+  colall() { steps.forEach(s => s.col = true); document.querySelectorAll("#steps .step").forEach(e => e.classList.add("col")); },
+  expall() { steps.forEach(s => s.col = false); document.querySelectorAll("#steps .step").forEach(e => e.classList.remove("col")); }
+};
+function act(id) {
+  if (id.startsWith("r:")) loadRecipe(id.slice(2)); else if (id.startsWith("h:")) openHelp(id.slice(2)); else if (id.startsWith("add:")) { addStep(id.slice(4)); if (!wide()) setView("work"); } else if (ACTIONS[id]) ACTIONS[id]();
+  if (!wide() && id !== "recipes" && ribbonOpen) { ribbonOpen = false; renderTabs(); }
+}
+document.addEventListener("click", e => { const b = e.target.closest("[data-r]"); if (b && !b.disabled) act(b.dataset.r); });
+addEventListener("keydown", e => {
+  if (e.key === "Escape") closeDlg();
+  const t = e.target; if (t && t.matches && t.matches("input,textarea,select")) return;
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") { e.preventDefault(); e.shiftKey ? redo() : undo(); }
+  else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "y") { e.preventDefault(); redo(); }
+});
+
+/* ----- resizable code pane ----- */
+$("split").addEventListener("pointerdown", e => {
+  if (!wide()) return; e.preventDefault(); const mode = app.dataset.code, r = $("codePane").getBoundingClientRect(), x0 = e.clientX, y0 = e.clientY, main = $("main");
+  const mv = ev => { if (mode === "right") main.style.setProperty("--cw", Math.max(280, Math.min(innerWidth * 0.7, r.width + (x0 - ev.clientX))) + "px"); else main.style.setProperty("--ch", Math.max(140, Math.min(innerHeight * 0.7, r.height + (y0 - ev.clientY))) + "px"); };
+  const up = () => { removeEventListener("pointermove", mv); removeEventListener("pointerup", up); };
+  addEventListener("pointermove", mv); addEventListener("pointerup", up);
+});
+
+/* ----- start ----- */
+loadOpts(); applyLayout(); load(); ribbonOpen = wide();
+renderTabs(); renderRibbon(); renderTool(); renderSteps(); setView("work"); setDrawer(false); paintIcons();
+if (window.claude && claude.use) {
+  claude.use("sample").then(s => { sampler = s || null; }).catch(() => {});
+  claude.use("downloads").then(d => { dl = d || null; }).catch(() => {});
+}
+
+/* ================= Run, Output, app preview, test data ================= */
+const PYURL = "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js";
+let py = null, pyLoading = null, pane = "code", runBusy = false, appMode = false, logHtml = "", fileMsg = "";
+const NOT_IN_BROWSER = { tkinter: "windows (tkinter)", pyautogui: "mouse and keyboard control", smtplib: "sending email", pymysql: "MySQL servers", "psycopg2": "PostgreSQL servers", pymongo: "MongoDB servers", gspread: "Google Sheets", requests: "the open web" };
+
+function setPane(p) { pane = p; $("codePane").dataset.pane = p; document.querySelectorAll(".ed-bar [data-pane]").forEach(b => b.classList.toggle("off", b.dataset.pane !== p)); if (p === "out") renderOut(); }
+document.addEventListener("click", e => { const b = e.target.closest(".ed-bar [data-pane]"); if (b) setPane(b.dataset.pane); });
+
+function logAdd(t, cls) { const el = $("olog"); const line = cls ? `<span class="${cls}">${esc(t)}</span>` : esc(t); logHtml += line + "\n"; if (el) { el.innerHTML = logHtml; el.scrollTop = el.scrollHeight; $("outp").scrollTop = 1e6; } }
+function loadPy() {
+  if (py) return Promise.resolve(py);
+  if (pyLoading) return pyLoading;
+  pyLoading = new Promise((ok, no) => {
+    const done = async () => { try { const p = await window.loadPyodide({ stdout: t => logAdd(t), stderr: t => logAdd(t, "e") }); py = p; ok(p); } catch (e) { pyLoading = null; no(e); } };
+    if (window.loadPyodide) return done();
+    const s = document.createElement("script"); s.src = PYURL; s.onload = done; s.onerror = () => { pyLoading = null; s.remove(); no(new Error("download")); }; document.head.appendChild(s);
+  });
+  return pyLoading;
+}
+async function needPy() {
+  logAdd("Loading Python in your browser. The first time takes about 10 seconds...", "i");
+  try { const p = await loadPy(); return p; }
+  catch (e) { logAdd("Could not start Python here. The page needs internet access to cdn.jsdelivr.net.\nYou can still use Copy or Save and run the script on your computer.", "e"); return null; }
+}
+
+/* ----- virtual files ----- */
+const HOME = "/home/pyodide";
+function walk(dir, out) { const FS = py.FS; FS.readdir(dir).forEach(n => { if (n === "." || n === "..") return; const p = dir + "/" + n; const st = FS.stat(p); if (FS.isDir(st.mode)) walk(p, out); else out.push([p, st.size]); }); return out; }
+function listFiles() { if (!py) return []; try { return walk(HOME, []).filter(f => !/\/\.|__pycache__/.test(f[0])); } catch (e) { return []; } }
+function saveAny(name, data, mime) {
+  if (dl) { dl.save({ filename: name, data }).then(() => toast("Saved " + name)).catch(e => { if (e && e.code !== "declined") toast("Saving is not available here."); }); return; }
+  if (window.claude) { toast("Saving is not available here."); return; }
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([data], { type: mime || "application/octet-stream" })); a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+function filesHtml() {
+  const fl = listFiles(); if (!fl.length) return `<div class="app-note" style="color:#9fb0c6">No files yet. Upload yours, or make sample files.</div>`;
+  return fl.slice(0, 60).map(([p, sz], i) => `<div class="ofile"><span title="${esc(p)}">${esc(p.replace(HOME + "/", ""))}</span><small>${sz < 1024 ? sz + " B" : Math.round(sz / 1024) + " KB"}</small><button class="ob" type="button" data-dlf="${i}">${ic("download", "D")}</button></div>`).join("") + (fl.length > 60 ? `<div class="app-note">…and ${fl.length - 60} more</div>` : "");
+}
+function refreshFiles() { const el = $("ofiles"); if (el) { el.innerHTML = filesHtml(); paintIcons(); } }
+
+/* sample files: made from the file names found in the script */
+function sampleTargets(code) {
+  const f = new Set(), d = new Set();
+  [...code.matchAll(/"((?:[^"\\\n]|\\.){2,120})"/g)].forEach(m => { const v = m[1].replace(/\\\\/g, "/"); if (/\.(csv|xlsx|xls|txt|json|db)$/i.test(v) && !/^https?:/.test(v)) f.add(v); else if (/^[A-Za-z]:\/|^\.?\/?[\w.-]+\/[\w .\/-]+$/.test(v) && !/^https?:/.test(v) && !/\.\w{2,4}$/.test(v) && !/[{}*]/.test(v)) d.add(v); });
+  return { f: [...f], d: [...d] };
+}
+async function makeSamples() {
+  const p = await needPy(); if (!p) return;
+  const t = sampleTargets(lastCode), made = [];
+  const td = TESTGEN("id, name, email, city, amount, date, status", 40, 11), head = td.cols;
+  const csv = [head.join(","), ...td.rows.map(r => head.map(h => r[h]).join(","))].join("\n");
+  const mk = path => { path = path.replace(/^[A-Za-z]:/, "").replace(/^\/+/, ""); const dir = path.split("/").slice(0, -1).join("/"); if (dir) try { p.FS.mkdirTree(HOME + "/" + dir); } catch (e) { } return HOME + "/" + path; };
+  for (const name of t.f) {
+    const full = mk(name), ext = name.split(".").pop().toLowerCase();
+    try {
+      if (ext === "csv") p.FS.writeFile(full, csv);
+      else if (ext === "txt") p.FS.writeFile(full, "Hello world\nThis is a sample file\nHello again, world\nPython makes small jobs easy\n");
+      else if (ext === "json") p.FS.writeFile(full, JSON.stringify(td.rows.slice(0, 20), null, 1));
+      else if (ext === "xlsx" || ext === "xls") { await p.loadPackage(["pandas", "openpyxl"]); p.FS.writeFile(HOME + "/_s.csv", csv); await p.runPythonAsync(`import pandas as pd\npd.read_csv("_s.csv").to_excel(${JSON.stringify(full)}, index=False)`); }
+      else if (ext === "db") { p.FS.writeFile(HOME + "/_s.csv", csv); await p.runPythonAsync(`import sqlite3, csv\nc = sqlite3.connect(${JSON.stringify(full)})\nrows = list(csv.reader(open("_s.csv")))\nc.execute("create table if not exists customers (" + ",".join(h + " text" for h in rows[0]) + ")")\nc.executemany("insert into customers values (" + ",".join("?" * len(rows[0])) + ")", rows[1:])\nc.commit()`); }
+      made.push(name);
+    } catch (e) { logAdd("Could not make " + name + ": " + String(e.message || e).split("\n").pop(), "e"); }
+  }
+  for (const dir of t.d) { const base = mk(dir + "/x").replace(/\/x$/, ""); ["report.pdf", "photo1.jpg", "photo2.png", "notes.txt", "data.csv", "song.mp3", "setup.zip"].forEach((n, i) => { try { p.FS.writeFile(base + "/" + n, "sample " + i); } catch (e) { } }); made.push(dir + "/ (7 files)"); }
+  try { p.FS.unlink(HOME + "/_s.csv"); } catch (e) { }
+  logAdd(made.length ? "Sample files ready: " + made.join(", ") : "The script does not mention any file or folder names, so nothing to make.", made.length ? "g" : "i"); refreshFiles();
+}
+
+/* ----- friendly error text ----- */
+function friendly(msg) {
+  const last = String(msg).trim().split("\n").filter(Boolean).slice(-1)[0] || String(msg);
+  let hint = "";
+  const mm = last.match(/ModuleNotFoundError: No module named '([^']+)'/);
+  if (mm) { const k = mm[1].split(".")[0]; hint = NOT_IN_BROWSER[k] ? `\nThe browser cannot do ${NOT_IN_BROWSER[k]}. Run this script on your computer instead (Copy or Save).` : `\nThe package "${k}" is not available in the browser. Run on your computer, or try another component.`; }
+  else if (/FileNotFoundError|No such file/.test(last)) hint = "\nThe file or folder is not in the browser's file area. Use Upload or Sample files, then run again.";
+  else if (/OSError|ConnectionError|NetworkError|urlopen|Failed to fetch/.test(last)) hint = "\nThe browser blocks most network and database connections. Run on your computer for those.";
+  else if (/EOFError/.test(last)) hint = "\nThe script asked a question. Type the answers (one per line) in the Answers box, then run again.";
+  return last + hint;
+}
+function answersQueue() { const el = $("oans"); return el ? el.value.split("\n") : []; }
+async function preparePy(p, code) {
+  const q = answersQueue(); p.setStdin({ stdin: () => (q.length ? q.shift() : undefined) });
+  await p.runPythonAsync(`import getpass\ngetpass.getpass = lambda prompt="": input(prompt)`);
+  try { await p.loadPackagesFromImports(code); } catch (e) { }
+}
+
+/* ----- run a normal script ----- */
+async function runScript() {
+  if (runBusy) return; const g = lastGen;
+  if (!steps.length) { toast("Add a component first."); return; }
+  if (opts.code === "hidden") setCode("right"); if (!wide()) setView("code");
+  setPane("out"); logHtml = ""; const log = $("olog"); if (log) log.innerHTML = "";
+  if (g.ui) { appMode = true; renderOut(); logAdd("This is a window app. The preview above is clickable. On your computer it opens as a real window.", "i"); return; }
+  appMode = false; renderOut(); runBusy = true; $("runb").disabled = true;
+  try {
+    const hits = Object.keys(NOT_IN_BROWSER).filter(k => new RegExp("^(import|from) " + k, "m").test(lastCode) && k !== "tkinter");
+    const p = await needPy(); if (!p) return;
+    if (hits.length) logAdd("Heads up: " + hits.map(k => NOT_IN_BROWSER[k]).join(", ") + " may not work in the browser.", "i");
+    const before = new Set(listFiles().map(f => f[0]));
+    await preparePy(p, lastCode); logAdd("Running...", "i");
+    await p.runPythonAsync(lastCode); logAdd("Finished.", "g");
+    const after = listFiles(), fresh = after.filter(f => !before.has(f[0]));
+    if (fresh.length) logAdd(fresh.length + " new file" + (fresh.length > 1 ? "s" : "") + " below. Use the download buttons.", "g");
+  } catch (e) { logAdd(friendly(e.message || e), "e"); }
+  finally { runBusy = false; $("runb").disabled = false; refreshFiles(); }
+}
+
+/* ----- clickable app preview ----- */
+function groupEnd(i) { let d = 0; for (let k = i + 1; k < steps.length; k++) { const b = BLOCKS[steps[k].type]; if (b.open) d++; else if (b.kind === "end") { if (d === 0) return k; d--; } } return steps.length; }
+function appModel() {
+  const m = { title: "My app", pages: [], cur: null, w: 480 }; const root = { t: null, h: [] }; m.cur = root; m.pages.push(root);
+  for (let i = 0; i < steps.length; i++) {
+    const s = steps[i], p = s.params, T = s.type, n = N(p.name, "x");
+    if (T === "ui_window") m.title = p.title;
+    else if (T === "ui_page") { const pg = { t: p.title, id: "page_" + N(p.title, "page").toLowerCase(), h: [] }; m.pages.push(pg); m.cur = pg; }
+    else if (T === "ui_label") m.cur.h.push(`<div class="al">${esc(p.text)}</div>`);
+    else if (T === "ui_input") m.cur.h.push(`<label>${esc(p.label)}</label><input type="text" data-var="${esc(N(p.name, "text_value"))}" value="${esc(p.default)}">`);
+    else if (T === "ui_dropdown") m.cur.h.push(`<label>${esc(p.label)}</label><select data-var="${esc(N(p.name, "choice"))}">${String(p.options).split(",").map(o => o.trim()).filter(Boolean).map(o => `<option>${esc(o)}</option>`).join("")}</select>`);
+    else if (T === "ui_check") m.cur.h.push(`<label><input type="checkbox" data-var="${esc(N(p.name, "checked"))}"> ${esc(p.label)}</label>`);
+    else if (T === "ui_file") m.cur.h.push(`<label>${esc(p.label)}</label><input type="text" data-var="${esc(N(p.name, "picked"))}" placeholder="path in the browser file area"><span class="app-note">On your computer this opens a ${esc(p.kind)} picker.</span>`);
+    else if (T === "ui_button") { m.cur.h.push(`<button class="ab" type="button" data-btn="${i}">${esc(p.text)}</button>`); i = groupEnd(i); }
+    else if (T === "ui_out") m.cur.h.push(`<pre class="abox" data-box="${esc(N(p.name, "result"))}"></pre>`);
+  }
+  if (!m.pages[0].h.length && m.pages.length > 1) m.pages.shift();
+  return m;
+}
+let appPage = 0;
+function appHtml() {
+  const m = appModel(), many = m.pages.length > 1 || (m.pages[0] && m.pages[0].t);
+  return `<div class="app"><div class="app-t">${esc(m.title)}</div>${many ? `<div class="app-tabs">${m.pages.map((pg, k) => `<button type="button" data-pg="${k}" class="${k === appPage ? "on" : ""}">${esc(pg.t || "Main")}</button>`).join("")}</div>` : ""}${m.pages.map((pg, k) => `<div class="app-pg ${many ? (k === appPage ? "on" : "") : "solo"}" ${pg.id ? `data-pid="${pg.id}"` : ""}>${pg.h.join("") || '<div class="app-note">Empty page</div>'}</div>`).join("")}</div>`;
+}
+function gotoPage(id) { const pgs = [...document.querySelectorAll(".app-pg")]; const k = pgs.findIndex(e => e.dataset.pid === id); if (k < 0) return; appPage = k; pgs.forEach((e, j) => e.classList.toggle("on", j === k)); document.querySelectorAll(".app-tabs button").forEach((b, j) => b.classList.toggle("on", j === k)); }
+const pyLit = v => typeof v === "boolean" ? (v ? "True" : "False") : JSON.stringify(String(v));
+async function clickButton(i) {
+  if (runBusy) return; const end = groupEnd(i), inner = steps.slice(i + 1, end);
+  const vals = [...document.querySelectorAll(".app [data-var]")].map(e => `${e.dataset.var} = ${pyLit(e.type === "checkbox" ? e.checked : e.value)}`);
+  const boxes = [...new Set(steps.filter(s => s.type === "ui_out").map(s => N(s.params.name, "result")))], pages = steps.filter(s => s.type === "ui_page").map(s => "page_" + N(s.params.title, "page").toLowerCase());
+  let code = generate(inner, false, { dry: opts.dry }).code.split("\n").filter(l => !/^(import tkinter|from tkinter)/.test(l)).join("\n");
+  const pre = [`class _Box:`, `    def __init__(self, n): self.n = n`, `    def insert(self, where, t): _jsbox(self.n, t)`, `    def delete(self, *a): _jsclear(self.n)`, `    def see(self, *a): pass`, `class _NB:`, `    def select(self, p): _jspage(p)`, `class messagebox:`, `    showinfo = staticmethod(lambda t, m: _jspop(t, m))`, `notebook = _NB()`, ...boxes.map(b => `${b} = _Box(${JSON.stringify(b)})`), ...pages.map(p => `${p} = ${JSON.stringify(p)}`), ...vals].join("\n");
+  runBusy = true; logHtml = ""; $("olog").innerHTML = "";
+  try {
+    const p = await needPy(); if (!p) return;
+    p.globals.set("_jsbox", (n, t) => { const e = document.querySelector(`.app [data-box="${n}"]`); if (e) e.textContent += t; });
+    p.globals.set("_jsclear", n => { const e = document.querySelector(`.app [data-box="${n}"]`); if (e) e.textContent = ""; });
+    p.globals.set("_jspage", id => gotoPage(id)); p.globals.set("_jspop", (t, m) => { logAdd(t + ": " + m, "g"); toast(t + ": " + m); });
+    document.querySelectorAll(".app [data-box]").forEach(e => { e.textContent = ""; });
+    await preparePy(p, code); await p.runPythonAsync(pre + "\n" + code); logAdd("Done.", "g");
+  } catch (e) { logAdd(friendly(e.message || e), "e"); }
+  finally { runBusy = false; refreshFiles(); }
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-btn]"); if (b) { clickButton(+b.dataset.btn); return; }
+  const t = e.target.closest("[data-pg]"); if (t) { appPage = +t.dataset.pg; document.querySelectorAll(".app-pg").forEach((x, j) => x.classList.toggle("on", j === appPage)); document.querySelectorAll(".app-tabs button").forEach((x, j) => x.classList.toggle("on", j === appPage)); return; }
+  const d = e.target.closest("[data-dlf]"); if (d) { const f = listFiles()[+d.dataset.dlf]; if (f) { const name = f[0].split("/").pop(); const data = py.FS.readFile(f[0]); saveAny(name, /\.(txt|csv|json|md|py)$/i.test(name) ? new TextDecoder().decode(data) : data); } }
+});
+
+/* ----- the Output pane ----- */
+function renderOut() {
+  const needsAns = /\binput\(|getpass\(/.test(lastCode || "");
+  $("outp").innerHTML = `<div class="otools"><button class="ob" type="button" data-o="run">${ic("play", "R")}Run</button><button class="ob" type="button" data-o="up">${ic("upload", "U")}Upload files</button><button class="ob" type="button" data-o="sample">${ic("flask-conical", "S")}Sample files</button><button class="ob" type="button" data-o="clear">${ic("eraser", "C")}Clear</button><input id="oup" type="file" multiple hidden></div>`
+    + (lastGen && lastGen.ui ? `<div class="olab">App preview</div><div id="oapp">${appHtml()}</div>` : "")
+    + (needsAns ? `<div class="olab">Answers (one per line, for questions and passwords)</div><textarea class="oans" id="oans" placeholder="Type answers here before running"></textarea>` : "")
+    + `<div class="olab">Output</div><pre class="olog" id="olog">${logHtml}</pre><div class="olab">Files in the browser</div><div class="ofiles" id="ofiles">${filesHtml()}</div>`;
+  paintIcons();
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-o]"); if (!b) return; const k = b.dataset.o;
+  if (k === "run") { if (lastGen && lastGen.ui) { logHtml = ""; renderOut(); } else runScript(); }
+  else if (k === "up") $("oup").click(); else if (k === "sample") makeSamples(); else if (k === "clear") { logHtml = ""; $("olog").innerHTML = ""; }
+});
+document.addEventListener("change", async e => {
+  if (e.target.id !== "oup") return; const p = await needPy(); if (!p) return;
+  for (const f of e.target.files) p.FS.writeFile(HOME + "/" + f.name, new Uint8Array(await f.arrayBuffer()));
+  logAdd(e.target.files.length + " file(s) added to the browser file area.", "g"); refreshFiles(); e.target.value = "";
+});
+$("oans") && 0;
+
+/* ----- test data dialog ----- */
+const csvOf = (cols, rows) => [cols.join(","), ...rows.map(r => cols.map(c => { const v = String(r[c]); return /[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v; }).join(","))].join("\n");
+function openTD() {
+  openDlg("Test data generator", `<div class="tdf"><label for="tdc">Columns (type a list, or tap a type below)</label><textarea id="tdc" rows="2">id, name, email, city, amount, date</textarea></div>
+  <div class="chips" id="tdchips">${Object.entries(TD_TYPES).map(([k, v]) => `<button type="button" data-ty="${esc(k)}" title="${esc(v)}">${esc(k)}</button>`).join("")}</div>
+  <div class="tdrow"><div class="tdf"><label for="tdr">Rows</label><input id="tdr" type="number" min="1" max="5000" value="20"></div><div class="tdf"><label for="tds">Seed</label><input id="tds" type="number" value="42"></div></div>
+  <div class="tdw" id="tdp"></div>
+  <div class="chips"><button type="button" data-td="csv">${ic("download", "")} Download CSV</button><button type="button" data-td="json">Download JSON</button><button type="button" data-td="add">Add to my script</button></div>`);
+  const upd = () => { const g = TESTGEN($("tdc").value, $("tdr").value, $("tds").value); $("tdp").innerHTML = g.cols.length ? `<table class="tdt"><tr>${g.cols.map(c => `<th>${esc(c)}</th>`).join("")}</tr>${g.rows.slice(0, 8).map(r => `<tr>${g.cols.map(c => `<td>${esc(r[c])}</td>`).join("")}</tr>`).join("")}</table>` : `<p class="app-note" style="padding:8px">Pick at least one known type.</p>`; return g; };
+  upd(); $("dlgB").oninput = upd;
+  $("dlgB").onclick = e => {
+    const ty = e.target.closest("[data-ty]"); if (ty) { const t = $("tdc"); t.value = (t.value.trim() ? t.value.trim().replace(/,$/, "") + ", " : "") + ty.dataset.ty; upd(); return; }
+    const a = e.target.closest("[data-td]"); if (!a) return; const g = upd();
+    if (a.dataset.td === "csv") saveAny("test_data.csv", csvOf(g.cols, g.rows), "text/csv");
+    else if (a.dataset.td === "json") saveAny("test_data.json", JSON.stringify(g.rows, null, 1), "application/json");
+    else { snap(); const s = mk(B("test_data", { cols: $("tdc").value, rows: $("tdr").value, seed: $("tds").value })); const si = steps.findIndex(x => x.id === sel); steps.splice(si >= 0 ? si + 1 : steps.length, 0, s); sel = s.id; renderSteps(s.id); closeDlg(); toast("Test data step added."); }
+  };
+}
+Object.assign(ACTIONS, { run: runScript, td: openTD });
+$("runb").querySelector("i") && paintIcons();
+</script>
+</body>
+</html>

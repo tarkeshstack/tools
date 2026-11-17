@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Six Thinking Hats — Bring an Idea to the Table</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #F7F4EE;
+    --paper-deep: #EFEAE0;
+    --ink: #1C1A17;
+    --ink-soft: #5b574e;
+    --rule: #DAD3C4;
+
+    --hat-white: #E8E6E0;
+    --hat-white-ink: #6b6657;
+    --hat-red: #B23A2E;
+    --hat-black: #1C1A17;
+    --hat-yellow: #C9962C;
+    --hat-green: #3D7A4D;
+    --hat-blue: #2C5F8A;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+
+  .wrap{
+    max-width:920px;
+    margin:0 auto;
+    padding:48px 24px 100px;
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    margin-bottom:40px;
+    border-bottom:1px solid var(--rule);
+    padding-bottom:28px;
+  }
+  .eyebrow{
+    font-size:12.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    font-weight:600;
+    margin-bottom:14px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow .dots{display:inline-flex; gap:4px;}
+  .eyebrow .dots span{width:7px;height:7px;border-radius:50%;display:inline-block;}
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:clamp(34px, 5vw, 52px);
+    line-height:1.04;
+    margin:0 0 14px;
+    letter-spacing:-0.01em;
+  }
+  h1 em{
+    font-style:italic;
+    font-weight:500;
+    color:var(--ink-soft);
+  }
+  header p.sub{
+    font-size:16.5px;
+    color:var(--ink-soft);
+    max-width:560px;
+    line-height:1.55;
+    margin:0;
+  }
+
+  /* ---------- Idea input ---------- */
+  .desk{
+    background:#fff;
+    border:1px solid var(--rule);
+    border-radius:14px;
+    padding:22px;
+    box-shadow:0 1px 0 rgba(0,0,0,0.02);
+    margin-bottom:46px;
+  }
+  .desk label{
+    display:block;
+    font-size:12.5px;
+    font-weight:600;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-bottom:10px;
+  }
+  .desk textarea{
+    width:100%;
+    min-height:84px;
+    border:none;
+    resize:vertical;
+    font-family:'Fraunces', serif;
+    font-size:19px;
+    font-weight:500;
+    line-height:1.4;
+    color:var(--ink);
+    background:transparent;
+    outline:none;
+    padding:0;
+  }
+  .desk textarea::placeholder{
+    color:#b7b1a2;
+    font-style:italic;
+    font-weight:500;
+  }
+  .desk-foot{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-top:16px;
+    padding-top:16px;
+    border-top:1px dashed var(--rule);
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .hint{
+    font-size:13px;
+    color:var(--ink-soft);
+  }
+  .hint.error{ color:var(--hat-red); font-weight:600; }
+  button#run{
+    background:var(--ink);
+    color:var(--paper);
+    border:none;
+    border-radius:999px;
+    padding:13px 26px;
+    font-size:14.5px;
+    font-weight:600;
+    font-family:'Inter', sans-serif;
+    cursor:pointer;
+    transition:transform .15s ease, background .15s ease;
+    white-space:nowrap;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+  }
+  button#run:hover{ background:#34302a; transform:translateY(-1px); }
+  button#run:active{ transform:translateY(0); }
+  button#run:disabled{ opacity:.6; cursor:default; transform:none; }
+  button#run:focus-visible, .desk textarea:focus-visible{
+    outline:2px solid var(--hat-blue);
+    outline-offset:2px;
+  }
+  .spinner{
+    width:14px; height:14px;
+    border-radius:50%;
+    border:2px solid rgba(247,244,238,0.35);
+    border-top-color:var(--paper);
+    animation:spin .7s linear infinite;
+    display:none;
+  }
+  button#run.loading .spinner{ display:inline-block; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  /* ---------- Section label ---------- */
+  .section-label{
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+    margin:0 0 22px;
+  }
+  .section-label .num{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    color:var(--ink-soft);
+    font-size:15px;
+  }
+  .section-label h2{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:22px;
+    margin:0;
+  }
+
+  /* ---------- Hat cards ---------- */
+  #results{ display:none; }
+  #results.show{ display:block; }
+
+  .idea-echo{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:17px;
+    color:var(--ink-soft);
+    border-left:3px solid var(--ink);
+    padding-left:16px;
+    margin:0 0 16px;
+    line-height:1.5;
+  }
+  .idea-frame{
+    font-size:14.5px;
+    color:var(--ink-soft);
+    margin:0 0 38px;
+    line-height:1.6;
+    max-width:640px;
+  }
+
+  .hats-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:16px;
+    margin-bottom:48px;
+  }
+
+  .hat-card{
+    background:#fff;
+    border:1px solid var(--rule);
+    border-radius:12px;
+    overflow:hidden;
+    opacity:0;
+    transform:translateY(10px);
+    animation:rise .5s ease forwards;
+  }
+  @keyframes rise{ to{ opacity:1; transform:translateY(0); } }
+
+  .hat-band{
+    height:7px;
+    width:100%;
+  }
+  .hat-card .inner{
+    padding:20px 22px 22px;
+  }
+  .hat-head{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:12px;
+  }
+  .hat-chip{
+    width:34px; height:34px;
+    border-radius:50%;
+    flex:none;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:14px;
+    border:1.5px solid rgba(0,0,0,0.08);
+  }
+  .hat-titles h3{
+    font-family:'Fraunces', serif;
+    font-size:18.5px;
+    font-weight:600;
+    margin:0;
+    line-height:1.2;
+  }
+  .hat-titles .role{
+    font-size:12px;
+    color:var(--ink-soft);
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    font-weight:600;
+  }
+  .hat-opinion{
+    font-size:15.5px;
+    line-height:1.6;
+    margin:0 0 14px;
+    color:#2b2822;
+  }
+  .hat-example{
+    background:var(--paper-deep);
+    border-radius:9px;
+    padding:13px 15px;
+    font-size:14px;
+    line-height:1.55;
+    color:var(--ink-soft);
+    margin-bottom:10px;
+  }
+  .hat-example .tag{
+    font-weight:700;
+    color:var(--ink);
+    text-transform:uppercase;
+    font-size:11px;
+    letter-spacing:.08em;
+    margin-right:6px;
+  }
+  .hat-reference{
+    font-size:13.5px;
+    line-height:1.5;
+    color:var(--ink-soft);
+    padding-top:10px;
+    border-top:1px dashed var(--rule);
+  }
+  .hat-reference .tag{
+    font-weight:700;
+    text-transform:uppercase;
+    font-size:11px;
+    letter-spacing:.08em;
+    margin-right:6px;
+  }
+
+  /* hat-specific colors */
+  .white .hat-band{ background:var(--hat-white); }
+  .white .hat-chip{ background:var(--hat-white); color:var(--hat-white-ink); }
+  .white .hat-reference .tag{ color:var(--hat-white-ink); }
+
+  .red .hat-band{ background:var(--hat-red); }
+  .red .hat-chip{ background:var(--hat-red); color:#fff; }
+  .red .hat-reference .tag{ color:var(--hat-red); }
+
+  .black .hat-band{ background:var(--hat-black); }
+  .black .hat-chip{ background:var(--hat-black); color:#fff; }
+  .black .hat-reference .tag{ color:var(--hat-black); }
+
+  .yellow .hat-band{ background:var(--hat-yellow); }
+  .yellow .hat-chip{ background:var(--hat-yellow); color:#fff; }
+  .yellow .hat-reference .tag{ color:var(--hat-yellow); }
+
+  .green .hat-band{ background:var(--hat-green); }
+  .green .hat-chip{ background:var(--hat-green); color:#fff; }
+  .green .hat-reference .tag{ color:var(--hat-green); }
+
+  .blue .hat-band{ background:var(--hat-blue); }
+  .blue .hat-chip{ background:var(--hat-blue); color:#fff; }
+  .blue .hat-reference .tag{ color:var(--hat-blue); }
+
+  /* ---------- Summary / Table ---------- */
+  .table-panel{
+    background:var(--ink);
+    color:var(--paper);
+    border-radius:16px;
+    padding:30px 28px 32px;
+    opacity:0;
+    transform:translateY(10px);
+    animation:rise .5s ease forwards;
+    animation-delay:.5s;
+  }
+  .table-panel .label{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:12px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:#cfc9ba;
+    font-weight:600;
+    margin-bottom:14px;
+  }
+  .table-panel .label .ribbon{
+    display:inline-flex; gap:3px;
+  }
+  .table-panel .label .ribbon span{
+    width:14px;height:5px;border-radius:2px;display:inline-block;
+  }
+  .table-panel h2{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:24px;
+    margin:0 0 16px;
+    color:#fff;
+  }
+  .table-panel p{
+    font-size:15.5px;
+    line-height:1.65;
+    color:#e7e2d3;
+    margin:0 0 14px;
+  }
+  .table-panel p:last-child{ margin-bottom:0; }
+  .table-panel strong{ color:#fff; }
+
+  /* ---------- Loading skeleton ---------- */
+  #loadingState{ display:none; }
+  #loadingState.show{ display:block; }
+  .skeleton-row{
+    display:flex; align-items:center; gap:14px;
+    padding:18px 0; border-bottom:1px solid var(--rule);
+  }
+  .skeleton-row:last-child{ border-bottom:none; }
+  .skeleton-dot{
+    width:34px;height:34px;border-radius:50%;flex:none;
+    background:linear-gradient(90deg, var(--rule) 25%, #eee8da 50%, var(--rule) 75%);
+    background-size:200% 100%;
+    animation:shimmer 1.3s infinite;
+  }
+  .skeleton-lines{ flex:1; }
+  .skeleton-line{
+    height:10px; border-radius:5px; margin-bottom:8px;
+    background:linear-gradient(90deg, var(--rule) 25%, #eee8da 50%, var(--rule) 75%);
+    background-size:200% 100%;
+    animation:shimmer 1.3s infinite;
+  }
+  .skeleton-line.w60{ width:60%; }
+  .skeleton-line.w90{ width:90%; }
+  @keyframes shimmer{ 0%{background-position:200% 0;} 100%{background-position:-200% 0;} }
+
+  /* ---------- Error box ---------- */
+  .error-box{
+    display:none;
+    background:#fbeceA;
+    border:1px solid #e3b6ae;
+    color:#7a2a20;
+    border-radius:10px;
+    padding:16px 18px;
+    font-size:14px;
+    line-height:1.5;
+    margin-bottom:30px;
+  }
+  .error-box.show{ display:block; }
+
+  footer.note{
+    text-align:center;
+    margin-top:36px;
+    font-size:12.5px;
+    color:var(--ink-soft);
+  }
+
+  @media (min-width:680px){
+    .hats-grid{ grid-template-columns:1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">
+      <span class="dots">
+        <span style="background:var(--hat-white)"></span>
+        <span style="background:var(--hat-red)"></span>
+        <span style="background:var(--hat-black)"></span>
+        <span style="background:var(--hat-yellow)"></span>
+        <span style="background:var(--hat-green)"></span>
+        <span style="background:var(--hat-blue)"></span>
+      </span>
+      Parallel Thinking Method
+    </div>
+    <h1>Bring an idea to <em>the table.</em></h1>
+    <p class="sub">Six perspectives weigh in on your idea as a whole — not just its data points — and each one points to a real product or approach already tackling something similar. The table closes with a verdict.</p>
+  </header>
+
+  <div class="desk">
+    <label for="idea">Your idea</label>
+    <textarea id="idea" placeholder="e.g. An app that matches people to do a 30-minute walk together near their location, same day."></textarea>
+    <div class="desk-foot">
+      <span class="hint" id="hint">Type an idea, then bring it to the table.</span>
+      <button id="run">
+        <span class="spinner"></span>
+        <span class="btn-label">Bring to the table →</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="error-box" id="errorBox"></div>
+
+  <div id="loadingState">
+    <div class="section-label"><span class="num">·</span><h2>The table is thinking…</h2></div>
+    <div class="skeleton-row"><div class="skeleton-dot"></div><div class="skeleton-lines"><div class="skeleton-line w90"></div><div class="skeleton-line w60"></div></div></div>
+    <div class="skeleton-row"><div class="skeleton-dot"></div><div class="skeleton-lines"><div class="skeleton-line w90"></div><div class="skeleton-line w60"></div></div></div>
+    <div class="skeleton-row"><div class="skeleton-dot"></div><div class="skeleton-lines"><div class="skeleton-line w90"></div><div class="skeleton-line w60"></div></div></div>
+  </div>
+
+  <div id="results">
+    <div class="section-label">
+      <span class="num">01</span>
+      <h2>What the table heard</h2>
+    </div>
+    <p class="idea-echo" id="echo"></p>
+    <p class="idea-frame" id="ideaFrame"></p>
+
+    <div class="section-label">
+      <span class="num">02</span>
+      <h2>Six hats, six opinions</h2>
+    </div>
+    <div class="hats-grid" id="hatsGrid"></div>
+
+    <div class="section-label">
+      <span class="num">03</span>
+      <h2>The table convenes</h2>
+    </div>
+    <div class="table-panel" id="summaryPanel">
+      <div class="label">
+        <span class="ribbon">
+          <span style="background:var(--hat-white)"></span>
+          <span style="background:var(--hat-red)"></span>
+          <span style="background:var(--hat-black)"></span>
+          <span style="background:var(--hat-yellow)"></span>
+          <span style="background:var(--hat-green)"></span>
+          <span style="background:var(--hat-blue)"></span>
+        </span>
+        Closing summary
+      </div>
+      <h2 id="summaryTitle">Where the room lands</h2>
+      <div id="summaryBody"></div>
+    </div>
+  </div>
+
+  <footer class="note">Based on Edward de Bono's Six Thinking Hats framework. Each take is generated fresh by AI reasoning about your idea — real-world references are the model's best recollection, so double-check any product names before citing them elsewhere.</footer>
+
+</div>
+
+<script>
+(function(){
+
+  // ⚠️ EDIT THIS: point it at your deployed backend's /api/think endpoint.
+  // See README.md for how to deploy the backend (server.js).
+  const BACKEND_URL = "https://YOUR-BACKEND-URL-HERE/api/think";
+
+  const HAT_META = [
+    { key:'white',  name:'White Hat',  role:'Facts & information' },
+    { key:'red',    name:'Red Hat',    role:'Feelings & intuition' },
+    { key:'black',  name:'Black Hat',  role:'Caution & risk' },
+    { key:'yellow', name:'Yellow Hat', role:'Optimism & benefits' },
+    { key:'green',  name:'Green Hat',  role:'Creativity & alternatives' },
+    { key:'blue',   name:'Blue Hat',   role:'Process & oversight' }
+  ];
+
+  const ideaEl = document.getElementById('idea');
+  const runBtn = document.getElementById('run');
+  const hint = document.getElementById('hint');
+  const errorBox = document.getElementById('errorBox');
+  const loadingState = document.getElementById('loadingState');
+  const results = document.getElementById('results');
+  const echo = document.getElementById('echo');
+  const ideaFrame = document.getElementById('ideaFrame');
+  const grid = document.getElementById('hatsGrid');
+  const summaryBody = document.getElementById('summaryBody');
+
+  function setLoading(isLoading){
+    runBtn.disabled = isLoading;
+    runBtn.classList.toggle('loading', isLoading);
+    runBtn.querySelector('.btn-label').textContent = isLoading ? 'Thinking…' : 'Bring to the table →';
+  }
+
+  function showError(msg){
+    errorBox.textContent = msg;
+    errorBox.classList.add('show');
+  }
+  function clearError(){
+    errorBox.classList.remove('show');
+    errorBox.textContent = '';
+  }
+
+  // Note: the system prompt now lives in server.js (backend), not here —
+  // the frontend just sends the raw idea and trusts the server's shaping of it.
+
+  async function callClaude(idea){
+    if (BACKEND_URL.includes('YOUR-BACKEND-URL-HERE')){
+      throw new Error('The backend URL hasn\'t been configured yet. Edit BACKEND_URL in the script and point it at your deployed server (see README.md).');
+    }
+
+    let response;
+    try{
+      response = await fetch(BACKEND_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idea })
+      });
+    }catch(networkErr){
+      throw new Error(`Couldn't reach the server — ${networkErr.message}. Check the backend is running and BACKEND_URL is correct.`);
+    }
+
+    if (!response.ok){
+      let bodyText = '';
+      try{ bodyText = await response.text(); }catch(e){ /* ignore */ }
+      throw new Error(`Server responded ${response.status}: ${bodyText.slice(0,300) || 'no body'}`);
+    }
+
+    let parsed;
+    try{
+      parsed = await response.json();
+    }catch(e){
+      throw new Error(`Server returned something that wasn't valid JSON.`);
+    }
+
+    if (parsed && parsed.error){
+      throw new Error(parsed.error);
+    }
+
+    return parsed;
+  }
+
+  function renderHats(hatsData){
+    grid.innerHTML = '';
+    HAT_META.forEach((meta, i) => {
+      const d = hatsData[meta.key] || {};
+      const card = document.createElement('div');
+      card.className = `hat-card ${meta.key}`;
+      card.style.animationDelay = (i * 0.08) + 's';
+      card.innerHTML = `
+        <div class="hat-band"></div>
+        <div class="inner">
+          <div class="hat-head">
+            <div class="hat-chip">${meta.name.charAt(0)}</div>
+            <div class="hat-titles">
+              <h3>${meta.name}</h3>
+              <div class="role">${meta.role}</div>
+            </div>
+          </div>
+          <p class="hat-opinion">${escapeHtml(d.opinion || '')}</p>
+          <div class="hat-example"><span class="tag">Example</span>${escapeHtml(d.example || '')}</div>
+          <div class="hat-reference"><span class="tag">In the wild</span>${escapeHtml(d.reference || '')}</div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  function renderSummary(summary){
+    summaryBody.innerHTML = `
+      <p><strong>Verdict:</strong> ${escapeHtml(summary.verdict || '')}</p>
+      ${summary.tension ? `<p><strong>Where the hats disagree:</strong> ${escapeHtml(summary.tension)}</p>` : ''}
+      <p><strong>Next step:</strong> ${escapeHtml(summary.next_step || '')}</p>
+    `;
+  }
+
+  function escapeHtml(str){
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  async function run(){
+    const idea = ideaEl.value.trim();
+    if (!idea){
+      hint.textContent = 'Type an idea first — even a rough one works.';
+      hint.classList.add('error');
+      ideaEl.focus();
+      return;
+    }
+    hint.classList.remove('error');
+    hint.textContent = 'Type an idea, then bring it to the table.';
+    clearError();
+    results.classList.remove('show');
+    setLoading(true);
+    loadingState.classList.add('show');
+
+    try{
+      const data = await callClaude(idea);
+      echo.textContent = `"${idea}"`;
+      ideaFrame.textContent = data.framing || '';
+      renderHats(data.hats || {});
+      renderSummary(data.summary || {});
+      loadingState.classList.remove('show');
+      results.classList.add('show');
+      results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }catch(err){
+      loadingState.classList.remove('show');
+      showError(`Something went wrong bringing this idea to the table: ${err.message}. Give it another try.`);
+    }finally{
+      setLoading(false);
+    }
+  }
+
+  runBtn.addEventListener('click', run);
+  ideaEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) run();
+  });
+
+})();
+</script>
+
+</body>
+</html>

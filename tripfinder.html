@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TripFinder – Compare flights</title>
+<style>
+:root{--ink:#14142b;--mut:#6b6f8a;--brand:#5b4bff;--brand2:#00c2a8;--bg:#f3f4fb;--card:#fff;--line:#e6e7f2;--good:#0a9b6e;--warn:#e8890c;--r:20px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:90px}
+button{font-family:inherit;cursor:pointer}
+/* top bar */
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(15,12,41,.88);backdrop-filter:blur(12px);color:#fff}
+.backbtn{background:rgba(255,255,255,.14);color:#fff;border:0;border-radius:999px;padding:9px 16px;font-weight:700;font-size:15px}
+.backbtn:active{transform:scale(.96)}
+.logo{font-weight:900;font-size:20px;letter-spacing:-.5px;flex:1;cursor:pointer}.logo span{background:linear-gradient(90deg,#8f86ff,#3ff0d2);-webkit-background-clip:text;background-clip:text;color:transparent}
+.top select{background:rgba(255,255,255,.14);color:#fff;border:0;border-radius:999px;padding:8px 10px;font-weight:600}
+.top select option{color:#000}
+/* hero */
+.hero{position:relative;overflow:hidden;color:#fff;padding:26px 16px 64px;background:linear-gradient(135deg,#0f0c29,#302b63 55%,#24243e)}
+.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;filter:blur(60px);opacity:.55}
+.hero:before{width:260px;height:260px;background:#5b4bff;top:-90px;left:-60px}
+.hero:after{width:240px;height:240px;background:#00c2a8;bottom:-120px;right:-40px}
+.hero>*{position:relative;z-index:1}
+.hero.slim{padding:16px 16px 28px}
+.hero h1{margin:0 0 6px;font-size:clamp(26px,6vw,42px);line-height:1.1;letter-spacing:-1px}
+.hero p{margin:0;color:#cfd0ff;font-size:15px}
+.seg{display:inline-flex;background:rgba(255,255,255,.12);border-radius:999px;padding:4px;margin-top:16px}
+.seg button{border:0;background:transparent;color:#cfd0ff;padding:9px 18px;border-radius:999px;font-weight:700;font-size:14px}
+.seg button.on{background:#fff;color:var(--ink)}
+.steps{display:flex;gap:6px;align-items:center;font-size:12px;color:#b9baf0;flex-wrap:wrap}
+.steps b{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;background:rgba(255,255,255,.1);font-weight:600}
+.steps b.on{background:#fff;color:var(--ink)}.steps b.done{background:rgba(63,240,210,.2);color:#9ffbe9}
+.hero h2{margin:10px 0 0;font-size:clamp(20px,4.5vw,28px);letter-spacing:-.5px}
+.hero .sub{margin-top:4px;font-size:13px;color:#cfd0ff}
+main{max-width:1040px;margin:-42px auto 0;padding:0 12px;position:relative;z-index:2;animation:rise .35s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.panel{background:var(--card);border-radius:var(--r);padding:18px;box-shadow:0 10px 30px rgba(30,20,90,.1);margin-bottom:14px}
+.panel h3{margin:0 0 4px;font-size:18px;letter-spacing:-.3px}
+.hint{color:var(--mut);font-size:13px;margin:0 0 12px}
+/* country cards */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.cc{border:2px solid var(--line);background:#fff;border-radius:16px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;transition:.15s;color:var(--ink)}
+.cc span{font-size:28px}.cc b{font-size:13px}
+.cc:hover{border-color:#b9b3ff;transform:translateY(-2px)}
+.cc.on{border-color:var(--brand);background:linear-gradient(160deg,#f1efff,#e6fbf7);box-shadow:0 6px 18px rgba(91,75,255,.22)}
+.qp{display:flex;gap:8px;flex-wrap:wrap}
+.pill{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600;color:var(--ink);transition:.15s}
+.pill:hover{border-color:var(--brand);color:var(--brand)}
+.pill.on{background:var(--brand);border-color:var(--brand);color:#fff}
+/* airports */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:760px){.two{grid-template-columns:1fr}}
+.ph{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.ph h3{font-size:16px}
+.mini{border:0;background:#eeedff;color:var(--brand);font-weight:700;font-size:12px;padding:6px 10px;border-radius:999px}
+.mini.on{background:var(--brand);color:#fff}
+.gh{display:flex;align-items:center;justify-content:space-between;margin:12px 0 6px;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.chk{display:flex;flex-wrap:wrap;gap:8px}
+.ck{position:relative;display:flex;flex-direction:column;border:2px solid var(--line);border-radius:14px;padding:9px 14px 9px 36px;cursor:pointer;min-width:112px;transition:.15s}
+.ck input{position:absolute;opacity:0;pointer-events:none}
+.ck:before{content:"";position:absolute;left:11px;top:13px;width:16px;height:16px;border-radius:5px;border:2px solid #c3c5dc;background:#fff}
+.ck.on{border-color:var(--brand);background:#f4f2ff}
+.ck.on:before{background:var(--brand);border-color:var(--brand)}
+.ck.on:after{content:"✓";position:absolute;left:14px;top:11px;color:#fff;font-size:12px;font-weight:900}
+.ck b{font-size:14px}.ck small{color:var(--mut);font-size:11px}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.fld{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--mut);font-weight:600}
+.fld input,.fld select{border:2px solid var(--line);border-radius:12px;padding:11px;font-size:15px;color:var(--ink);background:#fff;font-family:inherit}
+.fld input:focus,.fld select:focus{outline:0;border-color:var(--brand)}
+/* bottom bar */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:10px 14px;display:flex;align-items:center;gap:12px;justify-content:space-between}
+.dock small{color:var(--mut)}.dock b{display:block}
+.btn{border:0;background:linear-gradient(135deg,var(--brand),#7b6dff);color:#fff;font-weight:800;font-size:15px;padding:13px 22px;border-radius:14px;box-shadow:0 8px 20px rgba(91,75,255,.35)}
+.btn:disabled{background:#c9cadb;box-shadow:none}
+.btn.sm{padding:9px 16px;font-size:13px;border-radius:10px;box-shadow:none}
+/* results */
+.ins-row{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 10px;scroll-snap-type:x proximity}
+.ins{flex:0 0 min(270px,78vw);scroll-snap-align:start;background:linear-gradient(160deg,#fff,#f6f5ff);border:1px solid var(--line);border-radius:18px;padding:14px;display:flex;gap:10px;box-shadow:0 4px 14px rgba(30,20,90,.06)}
+.ins .ic{font-size:26px;line-height:1}
+.ins b{font-size:14px;display:block;margin-bottom:2px}.ins p{margin:0 0 6px;font-size:12px;color:var(--mut)}
+.sec{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:6px 0 8px;flex-wrap:wrap}
+.sec h3{margin:0;font-size:17px}
+.mxwrap{overflow:auto;border-radius:14px;border:1px solid var(--line)}
+table.mx{border-collapse:separate;border-spacing:0;width:100%;min-width:100%;font-size:13px}
+.mx th,.mx td{padding:10px 8px;text-align:center;border-bottom:1px solid var(--line);border-right:1px solid var(--line);white-space:nowrap}
+.mx thead th{background:#fafaff;position:sticky;top:0}
+.mx tbody th{position:sticky;left:0;background:#fafaff;text-align:left;z-index:1}
+.mx th small,.mx td small{display:block;color:var(--mut);font-weight:500;font-size:11px}
+.mx td{cursor:pointer;transition:.12s;min-width:96px}
+.mx td:hover{filter:brightness(.95);transform:scale(1.03)}
+.mx td b{font-size:15px;display:block}
+.mx td.best{outline:3px solid var(--good);outline-offset:-3px;font-weight:700}
+.mx td.best em{font-style:normal;color:var(--good);font-size:10px;font-weight:800;display:block}
+.mx td.na{color:#aaa;cursor:default}
+.legend{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--mut);margin-top:8px}
+.legend i{flex:0 0 120px;height:8px;border-radius:99px;background:linear-gradient(90deg,hsl(150 70% 80%),hsl(95 70% 80%),hsl(40 80% 82%))}
+.rc{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px;cursor:pointer;transition:.15s}
+.rc:hover{border-color:#b9b3ff;box-shadow:0 8px 20px rgba(91,75,255,.12)}
+.rc .rt{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.rc .rt b{font-size:16px}.rc .rp{font-size:22px;font-weight:900}
+.rc.best{border:2px solid var(--good)}
+.bar{height:6px;border-radius:99px;background:#eceefa;margin:8px 0}.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--brand2),var(--brand))}
+.meta{display:flex;gap:6px 14px;flex-wrap:wrap;font-size:12px;color:var(--mut)}
+.tag{display:inline-block;font-size:10px;font-weight:800;padding:3px 8px;border-radius:99px;background:#e0f8ef;color:var(--good);margin-left:6px;vertical-align:middle}
+/* flights */
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.tile{background:#fff;border-radius:16px;padding:12px;text-align:center;border:1px solid var(--line)}
+.tile small{color:var(--mut);font-size:11px;display:block}.tile b{font-size:18px}
+.fc{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px;display:grid;grid-template-columns:90px 1fr auto;gap:12px;align-items:center}
+.fa{font-size:12px;color:var(--mut);display:flex;flex-direction:column;gap:4px;align-items:flex-start}
+.fa i{width:28px;height:28px;border-radius:50%;color:#fff;font-style:normal;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.lg{display:flex;align-items:center;gap:10px;padding:4px 0}.lg+.lg{border-top:1px dashed var(--line);margin-top:4px;padding-top:8px}
+.tm{display:flex;flex-direction:column;min-width:52px}.tm b{font-size:17px}.tm small{color:var(--mut);font-size:11px}.tm.r{text-align:right}
+.ln{flex:1;text-align:center;font-size:11px;color:var(--mut)}
+.line{height:2px;background:var(--line);margin:4px 0;position:relative}.line i{position:absolute;right:0;top:-3px;border:4px solid transparent;border-left-color:#b9bbd2}
+.st{color:var(--warn);font-weight:700}.dr{color:var(--good);font-weight:700}
+.fp{text-align:right;border-left:1px solid var(--line);padding-left:12px}.fp b{font-size:21px;display:block}.fp small{color:var(--mut);font-size:11px;display:block;margin-bottom:6px}
+@media(max-width:600px){.fc{grid-template-columns:1fr}.fp{border:0;padding:0;text-align:left;display:flex;align-items:center;justify-content:space-between}.fp small{margin:0}}
+.sel{width:100%;border:2px solid var(--line);border-radius:14px;padding:12px;font-size:16px;font-weight:600;background:#fff;color:var(--ink);font-family:inherit}
+.sel:focus{outline:0;border-color:var(--brand)}
+.ck.all{margin-bottom:8px;border-style:dashed;width:100%}
+.mx td.selc{box-shadow:inset 0 0 0 3px var(--brand)}
+.tipsd{padding:0}
+.tipsd summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:14px 18px;font-weight:800;font-size:16px}
+.tipsd summary::-webkit-details-marker{display:none}
+.tipsd summary .tg:before{content:"Show tips ▾"}.tipsd[open] summary .tg:before{content:"Hide ▴"}
+.tipsd summary small{color:var(--brand);font-weight:700;font-size:12px}
+.tipsd[open] summary{border-bottom:1px solid var(--line)}
+.tipsd>:not(summary){margin-left:18px;margin-right:18px}.tipsd>*:last-child{margin-bottom:16px}
+.tips{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px}
+.tscroll{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 10px;scroll-snap-type:x proximity}
+.tscroll .tp{flex:0 0 min(250px,74vw);scroll-snap-align:start}
+.tp{display:flex;gap:10px;border:1px solid var(--line);border-radius:14px;padding:12px;background:linear-gradient(160deg,#fff,#f8f7ff)}
+.tp .ti{font-size:22px;line-height:1.2}.tp b{font-size:14px;display:block;margin-bottom:2px}.tp p{margin:0 0 6px;font-size:12px;color:var(--mut)}
+.sv{color:var(--good);font-weight:800;font-size:12px}
+.legs.two{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.legs.two .lg{position:relative;padding:16px 10px 4px 0}.legs.two .lg+.lg{border-top:0;margin:0;padding-left:12px;border-left:1px dashed var(--line)}
+.ll{position:absolute;top:0;left:0;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--mut)}.legs.two .lg+.lg .ll{left:12px}
+.lg{position:relative}
+@media(max-width:600px){.legs.two .tm b{font-size:14px}.legs.two .tm{min-width:36px}.legs.two .ln{font-size:9px}.legs.two .tm small{font-size:10px}.legs.two .lg{gap:4px}}
+.tt{display:flex;gap:8px;margin-bottom:10px}
+.dr{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:10px}
+.drb{text-align:left;border:2px solid var(--line);border-radius:14px;padding:10px 12px;background:#fff;color:var(--ink)}
+.drb small{display:block;color:var(--mut);font-size:11px;font-weight:600}.drb b{font-size:15px}
+.drb:active{border-color:var(--brand)}
+.ov{position:fixed;inset:0;background:rgba(10,8,30,.55);z-index:60;display:flex;align-items:flex-end;justify-content:center}
+.cm{background:#fff;width:100%;max-width:560px;height:92vh;border-radius:24px 24px 0 0;display:flex;flex-direction:column;overflow:hidden}
+@media(min-width:700px){.ov{align-items:center}.cm{height:86vh;border-radius:24px}}
+.chd{display:flex;align-items:center;justify-content:space-between;padding:14px 16px}.chd span{width:32px}
+.chd .x{border:0;background:#f0f0f8;border-radius:50%;width:32px;height:32px;font-size:15px}
+.cs{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:8px;padding:0 14px 10px}
+.cb{text-align:left;border:2px solid var(--line);border-radius:12px;padding:8px 12px;background:#fff;color:var(--ink)}
+.cb.on{border-color:var(--brand);background:#f4f2ff}.cb small{display:block;color:var(--mut);font-size:11px}.cb b{font-size:15px}
+.wk{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:11px;font-weight:700;color:var(--mut);padding:6px 12px;border-bottom:1px solid var(--line);border-top:1px solid var(--line)}
+.cl{flex:1;overflow-y:auto;padding:0 12px 12px}
+.mo h4{margin:16px 0 6px;font-size:15px}
+.cg{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.cd{aspect-ratio:1/1.1;border:0;background:transparent;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:0;color:var(--ink);font-family:inherit;min-width:0}
+.cd em{font-style:normal;font-weight:700;font-size:14px}
+.cd span{font-size:9.5px;color:var(--mut);white-space:nowrap}
+.cd.low span{color:var(--good);font-weight:800}
+.cd.past{opacity:.3}
+.cd.r{background:#ece9ff;border-radius:0}
+.cd.s,.cd.e{background:var(--brand);color:#fff}.cd.s span,.cd.e span{color:#fff}
+.cd:not(.past):not(.s):not(.e):hover{background:#f1efff}
+.cf{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-top:1px solid var(--line)}
+.cf small{color:var(--mut);font-size:11px;flex:1}
+#flights{scroll-margin-top:70px}.rc.pick{border:2px solid var(--brand);background:#f4f2ff}
+.pg{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);margin:12px 0 6px}
+.prow{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}.prow .pill{white-space:nowrap;flex:0 0 auto}
+.days{display:flex;gap:6px;overflow-x:auto;padding:4px 2px 6px}
+.dc{flex:0 0 68px;border:2px solid transparent;border-radius:12px;padding:7px 2px;text-align:center;color:var(--ink);font-size:11px;font-family:inherit;background:#f3f4fb}
+.dc.gap{margin-right:12px}.dc small{display:block;color:var(--mut)}.dc b{display:block;font-size:17px}.dc span{display:block;font-weight:800;font-size:12px}
+.dc em{display:block;font-style:normal;font-size:9px;font-weight:800;color:var(--good)}
+.dc.on{border-color:var(--brand);box-shadow:0 4px 12px rgba(91,75,255,.25)}.dc.na{opacity:.45}
+.empty{background:#fff;border-radius:16px;padding:26px;text-align:center;color:var(--mut)}
+#toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:14px;max-width:90vw;font-size:14px;z-index:99;display:none;box-shadow:0 8px 28px rgba(0,0,0,.3)}
+.note{font-size:12px;color:var(--mut);text-align:center;margin:24px 0}
+</style>
+</head>
+<body>
+<div class="top">
+  <button class="backbtn" id="back" onclick="back()" style="display:none">← Back</button>
+  <div class="logo" onclick="home()">Trip<span>Finder</span></div>
+  <select id="cur" aria-label="Currency" onchange="render()"><option>USD</option><option>INR</option><option>GBP</option><option>EUR</option></select>
+</div>
+<div class="hero" id="hero"></div>
+<main id="app"></main>
+<div id="dock"></div>
+<div id="cal"></div>
+<div id="toast"></div>
+
+<script>
+/* ---------- data ---------- */
+const COUNTRY={UK:["United Kingdom","🇬🇧"],IN:["India","🇮🇳"],US:["United States","🇺🇸"],AE:["UAE","🇦🇪"],SG:["Singapore","🇸🇬"],JP:["Japan","🇯🇵"],FR:["France","🇫🇷"],TH:["Thailand","🇹🇭"],DE:["Germany","🇩🇪"],NL:["Netherlands","🇳🇱"],AU:["Australia","🇦🇺"],CA:["Canada","🇨🇦"],HK:["Hong Kong","🇭🇰"],TR:["Türkiye","🇹🇷"],QA:["Qatar","🇶🇦"],IT:["Italy","🇮🇹"],ES:["Spain","🇪🇸"],ID:["Indonesia","🇮🇩"],MY:["Malaysia","🇲🇾"],ZA:["South Africa","🇿🇦"]};
+const AIRPORTS=[
+["London","LHR","UK","South"],["Manchester","MAN","UK","North"],["Birmingham","BHX","UK","Midlands"],["Edinburgh","EDI","UK","Scotland"],["Glasgow","GLA","UK","Scotland"],["Bristol","BRS","UK","South"],
+["Delhi","DEL","IN","North"],["Mumbai","BOM","IN","West"],["Bengaluru","BLR","IN","South"],["Hyderabad","HYD","IN","South"],["Chennai","MAA","IN","South"],["Kolkata","CCU","IN","East"],["Goa","GOI","IN","West"],["Pune","PNQ","IN","West"],["Ahmedabad","AMD","IN","West"],["Kochi","COK","IN","South"],["Jaipur","JAI","IN","North"],
+["New York","JFK","US","East"],["Boston","BOS","US","East"],["Miami","MIA","US","East"],["Chicago","ORD","US","Central"],["Los Angeles","LAX","US","West"],["San Francisco","SFO","US","West"],
+["Dubai","DXB","AE","Emirates"],["Abu Dhabi","AUH","AE","Emirates"],
+["Singapore","SIN","SG","Main"],["Tokyo","HND","JP","Main"],["Osaka","KIX","JP","Main"],["Paris","CDG","FR","Main"],["Nice","NCE","FR","Main"],["Bangkok","BKK","TH","Main"],["Phuket","HKT","TH","Main"],
+["Frankfurt","FRA","DE","Main"],["Munich","MUC","DE","Main"],["Amsterdam","AMS","NL","Main"],["Sydney","SYD","AU","Main"],["Melbourne","MEL","AU","Main"],["Toronto","YYZ","CA","Main"],["Vancouver","YVR","CA","Main"],
+["Hong Kong","HKG","HK","Main"],["Istanbul","IST","TR","Main"],["Doha","DOH","QA","Main"],["Rome","FCO","IT","Main"],["Milan","MXP","IT","Main"],["Madrid","MAD","ES","Main"],["Barcelona","BCN","ES","Main"],["Bali","DPS","ID","Main"],["Kuala Lumpur","KUL","MY","Main"],["Cape Town","CPT","ZA","Main"]
+];
+const COORD={LHR:[51.5,-0.5],MAN:[53.4,-2.3],BHX:[52.5,-1.7],EDI:[55.9,-3.4],GLA:[55.9,-4.4],BRS:[51.4,-2.7],DEL:[28.6,77.1],BOM:[19.1,72.9],BLR:[13.2,77.7],HYD:[17.2,78.4],MAA:[13,80.2],CCU:[22.6,88.4],GOI:[15.4,73.8],PNQ:[18.6,73.9],AMD:[23.1,72.6],COK:[10.2,76.4],JAI:[26.8,75.8],JFK:[40.6,-73.8],BOS:[42.4,-71],MIA:[25.8,-80.3],ORD:[42,-87.9],LAX:[33.9,-118.4],SFO:[37.6,-122.4],DXB:[25.2,55.4],AUH:[24.4,54.7],SIN:[1.4,103.99],HND:[35.5,139.8],KIX:[34.4,135.2],CDG:[49,2.5],NCE:[43.7,7.2],BKK:[13.7,100.7],HKT:[8.1,98.3],FRA:[50,8.6],MUC:[48.4,11.8],AMS:[52.3,4.8],SYD:[-33.9,151.2],MEL:[-37.7,144.8],YYZ:[43.7,-79.6],YVR:[49.2,-123.2],HKG:[22.3,113.9],IST:[41.3,28.7],DOH:[25.3,51.6],FCO:[41.8,12.2],MXP:[45.6,8.7],MAD:[40.5,-3.6],BCN:[41.3,2.1],DPS:[-8.7,115.2],KUL:[2.7,101.7],CPT:[-34,18.6]};
+const ICON={LHR:"🎡",MAN:"⚽",BHX:"🚲",EDI:"🏰",GLA:"🎸",BRS:"🎈",DEL:"🕌",BOM:"🎬",BLR:"💻",HYD:"🍚",MAA:"🛕",CCU:"🌉",GOI:"🏖️",PNQ:"🎓",AMD:"🧵",COK:"🌴",JAI:"🏯",JFK:"🗽",BOS:"🦞",MIA:"🌴",ORD:"🌬️",LAX:"🌟",SFO:"🌁",DXB:"🏙️",AUH:"🕌",SIN:"🦁",HND:"🗼",KIX:"🏮",CDG:"🥐",NCE:"⛱️",BKK:"🛺",HKT:"🏝️",FRA:"🏦",MUC:"🍺",AMS:"🚲",SYD:"🎭",MEL:"☕",YYZ:"🍁",YVR:"🏔️",HKG:"🌃",IST:"🧿",DOH:"🏜️",FCO:"🏛️",MXP:"👗",MAD:"💃",BCN:"⛪",DPS:"🌺",KUL:"🌆",CPT:"⛰️"};
+const AIRLINES=[["Emirates","#d71921"],["Qatar Airways","#5c0632"],["British Airways","#075aaa"],["Lufthansa","#05164d"],["Air India","#c8102e"],["Singapore Air","#f0a30a"],["Turkish Airlines","#c70a0c"],["IndiGo","#2b3a99"],["KLM","#00a1de"],["Etihad","#bd8b13"]];
+const RATES={USD:[1,"$"],INR:[83.5,"₹"],GBP:[0.79,"£"],EUR:[0.93,"€"]};
+
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const iso=d=>d.toISOString().slice(0,10);
+const addDays=(s,n)=>{const d=new Date(s+"T12:00");d.setDate(d.getDate()+n);return iso(d)};
+const today=iso(new Date());
+const ap=c=>AIRPORTS.find(a=>a[1]===c);
+const nm=c=>ap(c)[0];
+const ic=c=>ICON[c]||"📍";
+const nmi=c=>ic(c)+" "+nm(c);
+const inC=c=>AIRPORTS.filter(a=>a[2]===c);
+const money=u=>{const [r,s]=RATES[$("#cur").value];return s+Math.round(u*r).toLocaleString()};
+const hm=m=>`${Math.floor(m/60)}h ${String(m%60).padStart(2,"0")}m`;
+const clock=m=>{m=((m%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0")};
+const nice=s=>new Date(s+"T12:00").toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short"});
+function toast(m){const t=$("#toast");t.textContent=m;t.style.display="block";clearTimeout(t._h);t._h=setTimeout(()=>t.style.display="none",3500)}
+function rng(str){let h=2166136261;for(const c of str){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return()=>{h+=0x6D2B79F5;let t=h;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296}}
+const km=(a,b)=>{const R=6371,r=Math.PI/180,[la1,lo1]=COORD[a],[la2,lo2]=COORD[b];const x=Math.sin((la2-la1)*r/2)**2+Math.cos(la1*r)*Math.cos(la2*r)*Math.sin((lo2-lo1)*r/2)**2;return 2*R*Math.asin(Math.sqrt(x))};
+
+/* ---------- demo data generators ---------- */
+function genFlights(from,to,date,cabin,ret){
+  const R=rng(from+to+date),dist=km(from,to),base=dist*0.075+40,dow=new Date(date+"T12:00").getDay(),dm=[1.1,.95,.9,.92,.98,1.12,1.08][dow],rm=ret?[1.06,.94,.92,.95,1,1.1,1.08][new Date(ret+"T12:00").getDay()]:1,out=[];
+  for(let i=0;i<14;i++){
+    const al=AIRLINES[Math.floor(R()*AIRLINES.length)];
+    const stops=dist<2500?(R()<.8?0:1):(R()<.35?0:R()<.8?1:2);
+    const dur=Math.round(dist/820*60+30+stops*(90+R()*150));
+    const dep=Math.floor((5+R()*17)*60/5)*5;
+    const price=Math.round(base*(.75+R()*.7)*(1-stops*.08)*dm*parseFloat(cabin)*rm);
+    out.push({al,stops,dur,dep,price,back:{dep:Math.floor((6+R()*16)*60/5)*5,dur:dur+Math.round((R()-.5)*40)}});
+  }
+  return out;
+}
+/* ---------- state & navigation ---------- */
+const S={view:"search",stack:[],fromC:"UK",toC:"IN",fromA:inC("UK").slice(0,3).map(a=>a[1]),toA:inC("IN").slice(0,3).map(a=>a[1]),trip:"return",dep:addDays(today,21),ret:addDays(today,28),pax:1,cabin:"1",
+  f:{direct:false,morning:false,day:false},vmode:"loc",sort:"value",route:null,win:null,preset:null,tipsOpen:false};
+function go(v){S.stack.push(S.view);S.view=v;render();window.scrollTo(0,0)}
+function back(){if(!S.stack.length)return;S.view=S.stack.pop();render();window.scrollTo(0,0)}
+function home(){S.stack=[];S.view="search";render();window.scrollTo(0,0)}
+
+/* ---------- step 1: search (country dropdowns, airports, dates) ---------- */
+function setC(side,c){
+  if(!c)return;
+  if(c===(side==="from"?S.toC:S.fromC)){toast("Choose two different countries");render();return}
+  S[side+"C"]=c;S[side+"A"]=inC(c).slice(0,3).map(a=>a[1]);render();
+}
+function quick(f,t){S.fromC=f;S.toC=t;S.fromA=inC(f).slice(0,3).map(a=>a[1]);S.toA=inC(t).slice(0,3).map(a=>a[1]);render()}
+function tgl(side,c){const k=side+"A";const i=S[k].indexOf(c);i>-1?S[k].splice(i,1):S[k].push(c);render()}
+function grpTgl(side,region){const k=side+"A",codes=inC(S[side+"C"]).filter(a=>a[3]===region).map(a=>a[1]);
+  const all=codes.every(c=>S[k].includes(c));S[k]=all?S[k].filter(c=>!codes.includes(c)):[...new Set([...S[k],...codes])];render()}
+function allTgl(side,on){S[side+"A"]=on?inC(S[side+"C"]).map(a=>a[1]):[];render()}
+function panel(side){
+  const C=S[side+"C"],k=side+"A",title=side==="from"?"✈️ Flying from":"🛬 Flying to";
+  const sel=`<select class="sel" onchange="setC('${side}',this.value)"><option value="">Select country…</option>${Object.entries(COUNTRY).map(([c,[n,f]])=>`<option value="${c}" ${C===c?"selected":""}>${f} ${n}</option>`).join("")}</select>`;
+  if(!C)return `<div class="panel"><h3>${title}</h3>${sel}<p class="hint" style="margin-top:10px">Pick a country to see its airports</p></div>`;
+  const list=inC(C),regions=[...new Set(list.map(a=>a[3]))],multi=regions.length>1,allOn=list.every(a=>S[k].includes(a[1]));
+  return `<div class="panel"><h3 style="margin-bottom:8px">${title}</h3>${sel}
+    <div class="gh" style="margin-top:14px"><span>Airports</span><button class="mini" onclick="allTgl('${side}',false)">Clear</button></div>
+    <label class="ck all ${allOn?"on":""}"><input type="checkbox" ${allOn?"checked":""} onchange="allTgl('${side}',this.checked)"><b>All airports</b><small>${list.length} in ${COUNTRY[C][0]}</small></label>
+    ${regions.map(r=>{const items=list.filter(a=>a[3]===r),all=items.every(a=>S[k].includes(a[1]));
+      return `${multi?`<div class="gh"><span>${r}</span><button class="mini ${all?"on":""}" onclick="grpTgl('${side}','${r}')">${all?"✓ Group":"Select group"}</button></div>`:""}
+      <div class="chk">${items.map(a=>`<label class="ck ${S[k].includes(a[1])?"on":""}"><input type="checkbox" ${S[k].includes(a[1])?"checked":""} onchange="tgl('${side}','${a[1]}')"><b>${ic(a[1])} ${a[0]}</b><small>${a[1]}</small></label>`).join("")}</div>`}).join("")}
+  </div>`;
+}
+function vSearch(){
+    return `${tipsPanel()}<div class="two">${panel("from")}${panel("to")}</div>
+  <div class="panel"><h3>📅 When are you travelling?</h3><p class="hint">Pick a quick option or set exact dates</p>${presetBar()}
+  <div class="tt" style="margin-top:16px"><button class="pill ${S.trip==="return"?"on":""}" onclick="S.trip='return';if(S.ret<=S.dep)S.ret=addDays(S.dep,7);render()">⇄ Return</button><button class="pill ${S.trip==="oneway"?"on":""}" onclick="S.trip='oneway';render()">→ One way</button></div>
+  <div class="dr"><button class="drb" onclick="openCal('dep')"><small>Depart</small><b>📅 ${nice(S.dep)}</b></button>${S.trip==="return"?`<button class="drb" onclick="openCal('ret')"><small>Return</small><b>📅 ${nice(S.ret)}</b></button>`:""}</div>
+  <div class="dr" style="margin-top:10px">
+    <label class="fld">Travellers<select onchange="S.pax=+this.value">${[1,2,3,4,5,6].map(n=>`<option ${S.pax===n?"selected":""}>${n}</option>`).join("")}</select></label>
+    <label class="fld">Cabin<select onchange="S.cabin=this.value">${[["1","Economy"],["1.6","Premium economy"],["2.6","Business"],["4","First"]].map(([v,l])=>`<option value="${v}" ${S.cabin===v?"selected":""}>${l}</option>`).join("")}</select></label>
+  </div></div>`;
+}
+function compare(){
+  if(!S.fromC||!S.toC){toast("Select both countries");return}
+  if(!S.fromA.length||!S.toA.length){toast("Select at least one airport on each side");return}
+  if(!S.dep||(S.trip==="return"&&(!S.ret||S.ret<=S.dep))){toast("Please check your dates");return}
+  S.f={direct:false,morning:false,day:false};S.win=S.dep;S.vmode="loc";S.sel=null;go("results");
+}
+
+/* ---------- step 3: compare ---------- */
+const dayLand=f=>{const m=(f.dep+f.dur)%1440;return m>=420&&m<=1140};
+const passF=f=>(!S.f.direct||f.stops===0)&&(!S.f.morning||f.dep<720)&&(!S.f.day||dayLand(f));
+function calc(){
+  const out=[];
+  for(const o of S.fromA)for(const d of S.toA){
+    const fl=genFlights(o,d,S.dep,S.cabin,S.trip==="return"?S.ret:null).filter(passF),r={o,d,fl,n:fl.length};
+    if(fl.length){const dir=fl.filter(f=>f.stops===0).map(f=>f.price);
+      Object.assign(r,{min:Math.min(...fl.map(f=>f.price)),fast:Math.min(...fl.map(f=>f.dur)),early:Math.min(...fl.map(f=>f.dep)),dayN:fl.filter(dayLand).length,dirMin:dir.length?Math.min(...dir):null})}
+    out.push(r);
+  }
+  return out;
+}
+const lbl=r=>S.fromA.length===1?nmi(r.d):S.toA.length===1?nmi(r.o):`${nmi(r.o)} → ${nmi(r.d)}`;
+function grp(ok,key){const m={};ok.forEach(r=>(m[key(r)]=m[key(r)]||[]).push(r));
+  return Object.entries(m).map(([k,a])=>({k,early:Math.min(...a.map(r=>r.early)),day:a.reduce((s,r)=>s+r.dayN,0)/a.reduce((s,r)=>s+r.n,0)}))}
+function tf(k){S.f[k]=!S.f[k];render()}
+function insights(R){
+  const ok=R.filter(r=>r.n);if(!ok.length)return[];const I=[],p=S.pax;
+  const cheap=[...ok].sort((a,b)=>a.min-b.min)[0],dear=[...ok].sort((a,b)=>b.min-a.min)[0],fast=[...ok].sort((a,b)=>a.fast-b.fast)[0];
+  const val=[...ok].sort((a,b)=>(a.min/cheap.min+a.fast/fast.fast)-(b.min/cheap.min+b.fast/fast.fast))[0];
+  if(ok.length>1&&cheap===fast)I.push({ic:"🏆",h:`${lbl(cheap)} is cheaper and faster`,s:`From ${money(cheap.min*p)} · ${hm(cheap.fast)} flight time`});
+  else{I.push({ic:"💰",h:`${lbl(cheap)} is cheapest`,s:`From ${money(cheap.min*p)}${ok.length>1?` · ${hm(cheap.fast)} fastest option`:""}`});
+    if(ok.length>1)I.push({ic:"⚡",h:`${lbl(fast)} is fastest`,s:`${hm(fast.fast)} · from ${money(fast.min*p)}`});
+    if(ok.length>2&&val!==cheap&&val!==fast)I.push({ic:"⚖️",h:`${lbl(val)} is the best balance`,s:`${money(val.min*p)} · ${hm(val.fast)}`})}
+  if(ok.length>1&&dear.min>cheap.min)I.push({ic:"🧮",h:`Save ${money((dear.min-cheap.min)*p)}`,s:`Choose ${lbl(cheap)} instead of ${lbl(dear)}`});
+  const byO=S.fromA.length>1,byD=S.toA.length>1;
+  if(byO||byD){
+    const g=grp(ok,r=>byO?nmi(r.o):nmi(r.d));
+    if(g.length>1){
+      const e=[...g].sort((a,b)=>a.early-b.early)[0];
+      I.push({ic:"🌅",h:byO?`${e.k} departures are earlier`:`Flights to ${e.k} leave earliest`,s:`First flight at ${clock(e.early)}`,fk:"morning",fl:"Morning only"});
+    }
+    const g2=grp(ok,r=>byD?nmi(r.d):nmi(r.o));
+    if(g2.length>1){
+      const d=[...g2].sort((a,b)=>b.day-a.day)[0];
+      I.push({ic:"🌞",h:byD?`${d.k} landing is daytime`:`Flights from ${d.k} land in daytime`,s:`${Math.round(d.day*100)}% of flights arrive 07:00–19:00`,fk:"day",fl:"Daytime only"});
+    }
+  }
+  const dr=ok.filter(r=>r.dirMin!=null);
+  if(dr.length){const dc=[...dr].sort((a,b)=>a.dirMin-b.dirMin)[0];
+    I.push({ic:"✈️",h:`${dr.length} of ${ok.length} routes fly direct`,s:`Cheapest direct: ${lbl(dc)} ${money(dc.dirMin*p)}`,fk:"direct",fl:"Direct only"})}
+  return I;
+}
+function openRoute(o,d){S.route=S.sel={o,d};render();setTimeout(()=>{const e=document.getElementById("flights");if(e)e.scrollIntoView({behavior:"smooth",block:"start"})},60)}
+function closeRoute(){S.sel=null;render()}
+function flightsPanel(){
+  if(!S.sel||S.vmode==="date")return"";
+  S.route=S.sel;
+  return `<div class="panel" id="flights"><div class="sec" style="margin-top:0"><h3>✈️ ${nmi(S.sel.o)} → ${nmi(S.sel.d)}</h3><button class="mini" onclick="closeRoute()">✕ Close</button></div>${vDetail()}</div>`;
+}
+function vResults(){
+  const R=calc(),ok=R.filter(r=>r.n),I=insights(R),p=S.pax;
+  const mn=ok.length?Math.min(...ok.map(r=>r.min)):0,mx=ok.length?Math.max(...ok.map(r=>r.min)):0;
+  const chip=(k,t)=>`<button class="pill ${S.f[k]?"on":""}" onclick="tf('${k}')">${t}</button>`;
+  const grid=()=>`<div class="mxwrap"><table class="mx"><thead><tr><th></th>${S.toA.map(d=>`<th>${ic(d)} ${nm(d)}<small>${d}</small></th>`).join("")}</tr></thead><tbody>
+    ${S.fromA.map(o=>`<tr><th>${ic(o)} ${nm(o)}<small>${o}</small></th>${S.toA.map(d=>{const r=R.find(x=>x.o===o&&x.d===d);
+      return r.n?`<td class="${r.min===mn&&ok.length>1?"best":""} ${S.sel&&S.sel.o===o&&S.sel.d===d?"selc":""}" style="background:${heatC(r.min,mn,mx)}" onclick="openRoute('${o}','${d}')"><b>${money(r.min*p)}</b><small>⚡ ${hm(r.fast)}</small>${r.dirMin!=null?"<small>direct ✓</small>":"<small>1+ stop</small>"}${r.min===mn&&ok.length>1?"<em>★ CHEAPEST</em>":""}</td>`:`<td class="na">–<small>no match</small></td>`}).join("")}</tr>`).join("")}
+    </tbody></table></div><div class="legend">Cheaper <i></i> Pricier · tap any cell for flights</div>`;
+  const rows=()=>{const mf=Math.min(...ok.map(x=>x.fast)),s=S.sort;const L=[...ok].sort((a,b)=>s==="cheapest"?a.min-b.min:s==="fastest"?a.fast-b.fast:(a.min/mn+a.fast/mf)-(b.min/mn+b.fast/mf));
+    return `<div class="qp" style="margin-bottom:10px">${[["value","⚖️ Best value"],["cheapest","💰 Cheapest"],["fastest","⚡ Fastest"]].map(([k,t])=>`<button class="pill ${S.sort===k?"on":""}" onclick="S.sort='${k}';render()">${t}</button>`).join("")}</div>`+
+    L.map((r,i)=>`<div class="rc ${i===0?"best":""} ${S.sel&&S.sel.o===r.o&&S.sel.d===r.d?"pick":""}" onclick="openRoute('${r.o}','${r.d}')"><div class="rt"><b>${nmi(r.o)} → ${nmi(r.d)}${i===0?'<span class="tag">TOP PICK</span>':""}</b><span class="rp">${money(r.min*p)}</span></div>
+      <div class="bar"><i style="width:${Math.max(8,r.min/mx*100)}%"></i></div>
+      <div class="meta"><span>⚡ ${hm(r.fast)}</span><span>🛫 first ${clock(r.early)}</span><span>🌞 ${Math.round(r.dayN/r.n*100)}% daytime landing</span><span>${r.dirMin!=null?"✈️ direct from "+money(r.dirMin*p):"1+ stop"}</span></div></div>`).join("")};
+  const empty=`<div class="empty">No flights match these filters.<br><br><button class="mini" onclick="S.f={direct:false,morning:false,day:false};render()">Reset filters</button></div>`;
+  const body=S.vmode==="date"?vDateGrid():!ok.length?empty:S.vmode==="list"?rows():grid();
+  const T=[["loc","📍 Location grid"],["date","📅 Date grid"],["list","☰ Ranked list"]];
+  return `<div class="panel"><div class="sec" style="margin-top:0"><h3>Filters</h3>${Object.values(S.f).some(Boolean)?`<button class="mini" onclick="S.f={direct:false,morning:false,day:false};render()">Reset</button>`:""}</div>
+    <div class="qp">${chip("direct","✈️ Direct only")}${chip("morning","🌅 Morning departures")}${chip("day","🌞 Daytime landing")}</div>
+    <div class="pg" style="margin-top:16px">When</div><div class="qp" style="margin-bottom:4px"><button class="pill on" onclick="openCal('dep')">📅 ${nice(S.dep)}${S.trip==="return"?" → "+nice(S.ret):""} · Change dates</button></div>${presetBar()}</div>
+  <div class="sec"><h3>${R.length} route${R.length>1?"s":""} compared</h3><div class="qp">${T.map(([k,t])=>`<button class="pill ${S.vmode===k?"on":""}" onclick="S.vmode='${k}';render()">${t}</button>`).join("")}</div></div>
+  <div class="panel">${body}</div>
+  ${flightsPanel()}
+  ${I.length?`<div class="sec"><h3>💡 Insights</h3></div><div class="ins-row">${I.map(i=>`<div class="ins"><div class="ic">${i.ic}</div><div><b>${i.h}</b><p>${i.s}</p>${i.fk?`<button class="mini ${S.f[i.fk]?"on":""}" onclick="tf('${i.fk}')">${S.f[i.fk]?"✓ ":""}${i.fl}</button>`:""}</div></div>`).join("")}</div>`:""}`;
+}
+
+/* ---------- dates: presets, date grid, 2-week strip ---------- */
+const heatC=(p,mn,mx)=>`hsl(${mx===mn?150:150-(p-mn)/(mx-mn)*110} 72% 88%)`;
+function presets(){
+  const t=today,d0=new Date(t+"T12:00"),mon=addDays(t,(8-d0.getDay())%7||7),d1=new Date(t+"T12:00");d1.setMonth(d1.getMonth()+1,1);
+  return [
+   {g:"Quick",items:[["wk","This week",addDays(t,1),7],["nw","Next week",mon,7],["nm","Next month",iso(d1),7]]},
+   {g:"Festivals",items:[["diw","🪔 Diwali","2026-11-06",9],["xm","🎄 Christmas","2026-12-21",12],["ny","🎆 New Year","2026-12-28",7],["holi","🎨 Holi ’27","2027-03-19",9],["dus","🏹 Dussehra ’27 (approx)","2027-10-07",10],["diw27","🪔 Diwali ’27","2027-10-26",9]]},
+   {g:"School & winter breaks (UK)",items:[["wb","❄️ Winter break","2026-12-19",15],["fh","🎒 Feb half-term","2027-02-13",8],["eb","🐣 Easter break","2027-03-26",16],["sb","☀️ Summer break","2027-07-23",14]]}
+  ].map(g=>({g:g.g,items:g.items.filter(i=>i[2]>t)})).filter(g=>g.items.length);
+}
+function presetBar(){return presets().map(g=>`<div class="pg">${g.g}</div><div class="prow">${g.items.map(i=>`<button class="pill ${S.preset===i[0]?"on":""}" onclick="applyPre('${i[0]}')">${i[1]}</button>`).join("")}</div>`).join("")}
+function applyPre(k){for(const g of presets())for(const i of g.items)if(i[0]===k){S.dep=i[2];S.ret=addDays(i[2],i[3]);S.win=i[2];S.preset=k}render()}
+function pickDay(d,len){S.dep=d;S.ret=addDays(d,len);S.preset=null;render()}
+function pickDates(d,r){S.dep=d;S.ret=r;S.preset=null;render()}
+function shiftWin(n){let w=addDays(S.win,n);if(w<today)w=today;S.win=w;render()}
+function minFor(dep,ret){let m=Infinity;for(const o of S.fromA)for(const d of S.toA)for(const f of genFlights(o,d,dep,S.cabin,ret))if(passF(f)&&f.price<m)m=f.price;return m===Infinity?null:m}
+function strip(){
+  const rt=S.trip==="return",len=rt?Math.max(1,Math.round((new Date(S.ret)-new Date(S.dep))/864e5)):0;
+  if(!S.win||S.win<today)S.win=S.dep<today?today:S.dep;
+  const days=[...Array(14)].map((_,i)=>{const d=addDays(S.win,i);return{d,p:minFor(d,rt?addDays(d,len):null)}});
+  const v=days.filter(x=>x.p!=null).map(x=>x.p);if(!v.length)return"";
+  const mn=Math.min(...v),mx=Math.max(...v);
+  const avg=a=>{const q=a.filter(x=>x.p!=null).map(x=>x.p);return q.length?q.reduce((s,x)=>s+x,0)/q.length:null};
+  const w1=avg(days.slice(0,7)),w2=avg(days.slice(7)),best=days.find(x=>x.p===mn);
+  let cmp="";if(w1&&w2&&Math.abs(w1-w2)/Math.max(w1,w2)>=.01){const a=w1<w2,pc=Math.round(Math.abs(w1-w2)/Math.max(w1,w2)*100);cmp=` · ${a?"Week 1":"Week 2"} is ~${pc}% cheaper on average`}
+  return `<div class="sec" style="margin-top:18px"><h3 style="font-size:15px">Next 2 weeks · cheapest fare per departure day</h3><span><button class="mini" onclick="shiftWin(-14)">‹ Earlier</button> <button class="mini" onclick="shiftWin(14)">Later ›</button></span></div>
+  <div class="days">${days.map((x,i)=>{const dt=new Date(x.d+"T12:00"),wd=dt.toLocaleDateString(undefined,{weekday:"short"});return x.p==null?`<div class="dc na"><small>${wd}</small><b>${dt.getDate()}</b><span>–</span></div>`:
+    `<button class="dc ${x.d===S.dep?"on":""} ${i===6?"gap":""}" style="background:${heatC(x.p,mn,mx)}" onclick="pickDay('${x.d}',${len})"><small>${wd}</small><b>${dt.getDate()}</b><span>${money(x.p*S.pax)}</span>${x.p===mn?"<em>★ lowest</em>":""}</button>`}).join("")}</div>
+  <div class="hint" style="margin:8px 0 0">Cheapest day: <b>${nice(best.d)}</b> · ${money(mn*S.pax)}${cmp}. Festival and school dates are approximate.</div>`;
+}
+function vDateGrid(){
+  let h="";
+  if(S.trip==="return"){
+    const O=[-3,-2,-1,0,1,2,3],D=O.map(n=>addDays(S.dep,n)),Rr=O.map(n=>addDays(S.ret,n));
+    const cells=D.map(d=>Rr.map(r=>d<today||r<=d?null:minFor(d,r))),vals=cells.flat().filter(x=>x!=null);
+    if(vals.length){const mn=Math.min(...vals),mx=Math.max(...vals);
+      h+=`<div class="sec" style="margin-top:0"><h3 style="font-size:15px">Depart × Return · cheapest fare across your routes</h3></div>
+      <div class="mxwrap"><table class="mx"><thead><tr><th>Depart ↓ &nbsp;Return →</th>${Rr.map(r=>`<th>${nice(r)}</th>`).join("")}</tr></thead><tbody>
+      ${D.map((d,i)=>`<tr><th>${nice(d)}</th>${Rr.map((r,j)=>{const x=cells[i][j];if(x==null)return `<td class="na">–</td>`;const sel=d===S.dep&&r===S.ret;
+        return `<td class="${x===mn?"best":""} ${sel?"selc":""}" style="background:${heatC(x,mn,mx)}" onclick="pickDates('${d}','${r}')"><b>${money(x*S.pax)}</b>${sel?"<small>selected</small>":""}${x===mn?"<em>★ LOWEST</em>":""}</td>`}).join("")}</tr>`).join("")}
+      </tbody></table></div><div class="legend">Cheaper <i></i> Pricier · tap a cell to use those dates</div>`}
+    else h+=`<div class="empty">No flights match these filters on these dates.</div>`;
+  }
+  return h+strip();
+}
+
+
+/* ---------- money-saving tips (info only, shown on home) ---------- */
+function tipsPanel(){
+  const dyn=[
+   ["📅","Be flexible by a few days","Fares swing with day of week and demand. Shifting 1–3 days is often the biggest saving – the Date grid shows it."],
+   ["⏳","Book in the sweet spot","Long-haul is often best 2–5 months ahead. Avoid the last 3 weeks, and don’t wait for a drop on peak dates (Diwali, Christmas, school breaks)."],
+   ["🕵️","Compare in a private window","Some travellers see fares move after repeat searches. Evidence is mixed, but a private window plus a second device is free."],
+   ["🛫","Try nearby airports","Tick more airports on both sides – Manchester instead of London can beat the headline fare, even after transport costs."],
+   ["✂️","Compare two one-ways","Two one-way tickets on different airlines are sometimes cheaper than a return."],
+   ["💳","Pay in local currency","Decline ‘pay in your currency’ prompts and use a card with no foreign transaction fees."]
+  ];
+  const ex=[
+   ["💺","Skip paid seat selection","Travelling alone? A free random seat is fine for most people. In a group, only pay if you must sit together.",20,60],
+   ["🥪","Carry your own food","Pack snacks and an empty bottle to refill after security – skips overpriced onboard and airport food.",10,30],
+   ["🎒","Cabin bag only","Check the airline’s allowance first – many long-haul fares already include a checked bag.",30,80],
+   ["📱","Check in online","Some budget airlines charge to check in at the airport.",10,55],
+   ["🚶","Skip priority boarding","You’ll still board, usually with the same seat.",10,40],
+   ["🏷️","Skip add-ons at checkout","Decline insurance, SMS updates and booking-fee extras you don’t need.",5,30],
+   ["🚆","Public transport to the airport","Pre-book rail or coach instead of a taxi.",10,50],
+   ["📺","Download films before you fly","Skip paid Wi-Fi and entertainment packs.",5,20]
+  ];
+  return `<details class="panel tipsd" ${S.tipsOpen?"open":""} ontoggle="S.tipsOpen=this.open"><summary><span>💸 Save money before you search</span><small class="tg"></small></summary>
+   <div class="pg" style="margin-top:12px">Avoid dynamic pricing</div>
+   <div class="tips">${dyn.map(t=>`<div class="tp"><span class="ti">${t[0]}</span><div><b>${t[1]}</b><p>${t[2]}</p></div></div>`).join("")}</div>
+   <div class="pg" style="margin-top:16px">Cut the extras</div>
+   <div class="tips">${ex.map(e=>`<div class="tp"><span class="ti">${e[0]}</span><div><b>${e[1]}</b><p>${e[2]}</p><small class="sv">Save about ${money(e[3]/.79)}–${money(e[4]/.79)} per person</small></div></div>`).join("")}</div>
+   <p class="hint" style="margin:8px 0 0">Typical ranges – they vary by airline and route. Check baggage and seat rules before you travel.</p></details>`;
+}
+
+
+/* ---------- calendar with prices ---------- */
+const CAL={open:false,step:"dep",dep:null,ret:null,len:7,memo:{}};
+function openCal(step){
+  CAL.open=true;CAL.dep=S.dep;CAL.ret=S.trip==="return"?S.ret:null;
+  CAL.len=S.trip==="return"?Math.max(1,Math.round((new Date(S.ret)-new Date(S.dep))/864e5)):7;
+  CAL.step=S.trip==="return"?(step||"dep"):"dep";
+  drawCal(true);
+}
+function closeCal(){CAL.open=false;$("#cal").innerHTML=""}
+function applyCal(){
+  S.dep=CAL.dep;if(S.trip==="return")S.ret=CAL.ret||addDays(CAL.dep,7);
+  S.preset=null;S.win=S.dep;closeCal();render();
+}
+function calPick(d){
+  if(d<today)return;
+  if(S.trip!=="return"){CAL.dep=d;CAL.ret=null;drawCal();return}
+  if(CAL.step==="dep"||!CAL.dep||d<=CAL.dep){CAL.dep=d;CAL.ret=null;CAL.step="ret"}
+  else CAL.ret=d;
+  drawCal();
+}
+function calPrice(d){
+  if(!S.fromA.length||!S.toA.length)return null;
+  const rt=S.trip==="return";let dep=d,ret=null;
+  if(rt){if(CAL.step==="ret"&&CAL.dep&&d>CAL.dep){dep=CAL.dep;ret=d}else ret=addDays(d,CAL.len)}
+  const key=[S.fromA.join(),S.toA.join(),S.cabin,JSON.stringify(S.f),dep,ret].join("|");
+  if(!(key in CAL.memo))CAL.memo[key]=minFor(dep,ret);
+  return CAL.memo[key];
+}
+function drawCal(first){
+  const el=$("#cal"),oldTop=el.querySelector(".cl")?el.querySelector(".cl").scrollTop:0,rt=S.trip==="return";
+  const t=new Date(today+"T12:00"),Y=t.getUTCFullYear(),M0=t.getUTCMonth(),mons=[];
+  const all=[];
+  for(let i=0;i<12;i++){
+    const y=Y+Math.floor((M0+i)/12),m=(M0+i)%12,off=(new Date(Date.UTC(y,m,1,12)).getUTCDay()+6)%7,n=new Date(Date.UTC(y,m+1,0,12)).getUTCDate();
+    const days=[];for(let d=1;d<=n;d++){const ds=iso(new Date(Date.UTC(y,m,d,12)));days.push({ds,d,p:ds<today?null:calPrice(ds)});if(ds>=today)all.push(days[days.length-1].p)}
+    mons.push({y,m,off,days});
+  }
+  const v=all.filter(x=>x!=null),mn=v.length?Math.min(...v):0;
+  const mname=(y,m)=>new Date(Date.UTC(y,m,1,12)).toLocaleDateString(undefined,{month:"long",year:"numeric",timeZone:"UTC"});
+  const html=mons.map(o=>`<div class="mo" data-m="${o.y}-${o.m}"><h4>${mname(o.y,o.m)}</h4><div class="cg">${"<i></i>".repeat(o.off)}${o.days.map(x=>{
+    const past=x.ds<today,sd=x.ds===CAL.dep,ed=rt&&x.ds===CAL.ret,inr=rt&&CAL.dep&&CAL.ret&&x.ds>CAL.dep&&x.ds<CAL.ret;
+    const low=x.p!=null&&x.p<=mn*1.06;
+    return `<button class="cd ${past?"past":""} ${sd?"s":""} ${ed?"e":""} ${inr?"r":""} ${low?"low":""}" ${past?"disabled":""} onclick="calPick('${x.ds}')"><em>${x.d}</em><span>${x.p!=null?money(x.p*S.pax):""}</span></button>`}).join("")}</div></div>`).join("");
+  const ok=!rt||CAL.ret;
+  el.innerHTML=`<div class="ov" onclick="if(event.target===this)closeCal()"><div class="cm">
+   <div class="chd"><button class="x" onclick="closeCal()">✕</button><b>Select dates</b><span></span></div>
+   <div class="cs"><button class="cb ${CAL.step==="dep"?"on":""}" onclick="CAL.step='dep';drawCal()"><small>Depart</small><b>${CAL.dep?nice(CAL.dep):"Add date"}</b></button>${rt?`<button class="cb ${CAL.step==="ret"?"on":""}" onclick="CAL.step='ret';drawCal()"><small>Return</small><b>${CAL.ret?nice(CAL.ret):"Add date"}</b></button>`:""}</div>
+   <div class="wk"><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span></div>
+   <div class="cl">${html}</div>
+   <div class="cf"><small>${rt&&CAL.step==="ret"?"Pick your return date":"Cheapest fare per person across your routes"} · <span style="color:var(--good);font-weight:800">green = lowest</span></small><button class="btn" ${ok?"":"disabled"} onclick="applyCal()">Done</button></div></div></div>`;
+  const cl=el.querySelector(".cl");
+  if(first){const tgt=cl.querySelector(`[data-m="${new Date(CAL.dep+"T12:00").getUTCFullYear()}-${new Date(CAL.dep+"T12:00").getUTCMonth()}"]`);cl.scrollTop=tgt?tgt.offsetTop-cl.offsetTop:0}else cl.scrollTop=oldTop;
+}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&CAL.open)closeCal()});
+
+/* ---------- step 4: route detail ---------- */
+function leg(a,b,dp,du,st,lab){return `<div class="lg">${lab?`<span class="ll">${lab}</span>`:""}<div class="tm"><b>${clock(dp)}</b><small>${a}</small></div><div class="ln">${hm(du)}<div class="line"><i></i></div><span class="${st?"st":"dr"}">${st?st+" stop"+(st>1?"s":""):"Direct"}</span></div><div class="tm r"><b>${clock(dp+du)}${dp+du>=1440?"<sup>+1</sup>":""}</b><small>${b}</small></div></div>`}
+function vDetail(){
+  const {o,d}=S.route,all=genFlights(o,d,S.dep,S.cabin,S.trip==="return"?S.ret:null),fl=all.filter(passF).sort((a,b)=>a.price-b.price),ret=S.trip==="return",p=S.pax;
+  if(!fl.length)return `<div class="empty">No flights match your filters on this route.<br><br><button class="mini" onclick="S.f={direct:false,morning:false,day:false};render()">Reset filters</button></div>`;
+  const dir=fl.filter(f=>f.stops===0);
+  return `<div class="tiles"><div class="tile"><small>Cheapest</small><b>${money(fl[0].price*p)}</b></div><div class="tile"><small>Fastest</small><b>${hm(Math.min(...fl.map(f=>f.dur)))}</b></div><div class="tile"><small>Direct from</small><b>${dir.length?money(dir[0].price*p):"–"}</b></div></div>
+  ${Object.values(S.f).some(Boolean)?`<div class="hint">Filters on: ${Object.entries(S.f).filter(e=>e[1]).map(e=>({direct:"Direct",morning:"Morning",day:"Daytime landing"})[e[0]]).join(", ")} · <a href="#" onclick="S.f={direct:false,morning:false,day:false};render();return false">reset</a></div>`:""}
+  ${fl.map(f=>`<div class="fc"><div class="fa"><i style="background:${f.al[1]}">${f.al[0][0]}</i>${f.al[0]}</div>
+    <div class="legs ${ret?"two":""}">${leg(o,d,f.dep,f.dur,f.stops,"Outbound")}${ret?leg(d,o,f.back.dep,f.back.dur,f.stops,"Return"):""}</div>
+    <div class="fp"><b>${money(f.price*p)}</b><small>${p>1?money(f.price)+" pp · ":""}${ret?"return":"one way"}</small><button class="btn sm" onclick="toast('Demo: this would open ${f.al[0]} on the partner site')">Select</button></div></div>`).join("")}`;
+}
+
+/* ---------- render ---------- */
+function steps(n){const L=["Search","Compare & see flights"];return `<div class="steps">${L.map((t,i)=>`<b class="${i+1===n?"on":i+1<n?"done":""}">${i+1<n?"✓":i+1} ${t}</b>`).join("")}</div>`}
+function routeTitle(){return `${COUNTRY[S.fromC][1]} ${COUNTRY[S.fromC][0]} → ${COUNTRY[S.toC][1]} ${COUNTRY[S.toC][0]}`}
+function tripSub(){return `${nice(S.dep)}${S.trip==="return"?" – "+nice(S.ret):""} · ${S.pax} traveller${S.pax>1?"s":""}`}
+function render(){
+  const v=S.view,hero=$("#hero"),app=$("#app"),dock=$("#dock");
+  $("#back").style.display=S.stack.length?"":"none";
+  let h="",body="",d="";
+  if(v==="search"){h=`<h1>Search once,<br>compare every route.</h1><p>Choose countries, tick airports, see what’s cheapest, fastest and earliest.</p>`;body=vSearch();
+    const n=S.fromA.length*S.toA.length;d=`<div><b>${n} route${n===1?"":"s"}</b><small>${S.fromA.length} from × ${S.toA.length} to</small></div><button class="btn" ${n?"":"disabled"} onclick="compare()">Compare →</button>`}
+  else if(v==="results"){h=steps(2)+`<h2>${routeTitle()}</h2><div class="sub">${tripSub()}</div>`;body=vResults()}
+  else if(v==="detail"){h=steps(2)+`<h2>${nmi(S.route.o)} → ${nmi(S.route.d)}</h2><div class="sub">${tripSub()}</div>`;body=vDetail()}
+  hero.className="hero"+(v==="search"?"":" slim");
+  hero.innerHTML=h;app.innerHTML=`${body}<p class="note">Demo prototype – prices and availability are simulated sample data. Connect a real flight API or affiliate feed to go live.</p>`;
+  app.style.marginTop=v==="search"?"-42px":"-8px";app.style.animation="none";app.offsetHeight;app.style.animation="";
+  dock.innerHTML=d?`<div class="dock">${d}</div>`:"";
+}
+render();
+</script>
+</body>
+</html>

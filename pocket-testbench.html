@@ -1,0 +1,819 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Pocket Testbench</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: chat column on the left, live device preview on the right; on phones the preview slides over the chat.
+   Palette: cool paper, navy ink, marker-yellow used only to point at the thing that is wrong. */
+:root{
+  --bg:#e8ecf0; --surface:#ffffff; --ink:#101c28; --muted:#586878; --line:#d2d9e1;
+  --accent:#12263a; --accent-ink:#ffffff; --mark:#ffd23f;
+  --pass:#146c43; --pass-bg:#dff3e8; --fail:#b3261e; --fail-bg:#fbe4e1; --warn:#835400; --warn-bg:#fdefc7;
+  --user:#12263a; --user-ink:#ffffff; --code:#eef2f6;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --cond:"IBM Plex Sans Condensed","IBM Plex Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0b131b; --surface:#131f2b; --ink:#e6edf4; --muted:#93a3b4; --line:#26384c;
+  --accent:#e6edf4; --accent-ink:#0b131b; --pass:#5ad19a; --pass-bg:#12342a; --fail:#ff8d82; --fail-bg:#3d1c19; --warn:#f2c14e; --warn-bg:#3a2d0d;
+  --user:#23405d; --user-ink:#ffffff; --code:#0e1822; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0b131b; --surface:#131f2b; --ink:#e6edf4; --muted:#93a3b4; --line:#26384c;
+  --accent:#e6edf4; --accent-ink:#0b131b; --pass:#5ad19a; --pass-bg:#12342a; --fail:#ff8d82; --fail-bg:#3d1c19; --warn:#f2c14e; --warn-bg:#3a2d0d;
+  --user:#23405d; --user-ink:#ffffff; --code:#0e1822; color-scheme:dark}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans)}
+button{font:inherit;cursor:pointer;color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.app{height:100%;display:flex;flex-direction:column;max-width:1500px;margin:0 auto}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--surface)}
+.brand{display:flex;flex-direction:column;line-height:1.15;min-width:0}
+.brand b{font:600 19px/1.1 var(--cond);letter-spacing:.01em;white-space:nowrap}
+.brand span{font:400 11.5px var(--mono);color:var(--muted)}
+.tools{display:flex;gap:8px}
+.btn{white-space:nowrap;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:0 14px;min-height:40px;font-weight:500}
+.btn:hover{border-color:var(--ink)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.small{min-height:32px;padding:0 10px;font-size:13px}
+.only-narrow{display:none}
+.split{flex:1;min-height:0;display:grid;grid-template-columns:minmax(340px,480px) 1fr}
+.chat{display:flex;flex-direction:column;min-height:0;min-width:0;padding-inline:16px;border-right:1px solid var(--line)}
+#log{flex:1;overflow-y:auto;padding-block:14px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:92%;padding:9px 13px;border-radius:12px;overflow-wrap:anywhere;flex-shrink:0}
+.msg p{margin:0 0 6px}.msg p:last-child{margin:0}.msg ul{margin:4px 0 6px;padding-left:20px}
+.msg code{font:13px var(--mono);background:var(--code);padding:1px 5px;border-radius:4px}
+.msg.user{align-self:flex-end;background:var(--user);color:var(--user-ink);border-bottom-right-radius:3px;white-space:pre-wrap}
+.msg.bot{align-self:flex-start;background:var(--surface);border:1px solid var(--line);border-bottom-left-radius:3px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:0 12px;min-height:36px;font-size:13.5px}
+.chip:hover{border-color:var(--ink)}
+.live{display:flex;align-items:center;gap:8px;margin-bottom:6px;padding:7px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font:13px var(--mono);color:var(--muted)}
+.live i{width:8px;height:8px;border-radius:50%;background:var(--ink);animation:b 1s infinite}
+@keyframes b{50%{opacity:.2}}
+@media (prefers-reduced-motion:reduce){.live i{animation:none}}
+form#f{display:flex;gap:8px;align-items:flex-end;padding-block:6px 4px}
+textarea#in{flex:1;min-width:0;resize:none;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:44px;max-height:130px}
+.hint{margin:2px 0 10px;font-size:12px;color:var(--muted)}
+/* result card */
+.card{align-self:stretch;flex-shrink:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.card-h{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--line)}
+.card-h b{overflow-wrap:anywhere}
+.badge{display:inline-block;border-radius:6px;padding:1px 8px;font:500 12px var(--mono);white-space:nowrap}
+.badge.pass{background:var(--pass-bg);color:var(--pass)}.badge.fail{background:var(--fail-bg);color:var(--fail)}.badge.warn{background:var(--warn-bg);color:var(--warn)}
+.dev{padding:10px 14px;border-bottom:1px solid var(--line)}
+.dev h3{margin:0 0 2px;font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.dev .counts{margin:0 0 8px;font-size:13.5px;color:var(--muted)}
+details.fd{border:1px solid var(--line);border-radius:8px;margin:5px 0}
+details.fd>summary{list-style:none;cursor:pointer;display:flex;gap:8px;align-items:flex-start;padding:8px 10px;min-height:40px}
+details.fd>summary::-webkit-details-marker{display:none}
+details.fd .t{flex:1;min-width:0;overflow-wrap:anywhere}
+.fb{padding:0 12px 11px;font-size:14px}
+.fb dt{font:500 11px var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-top:8px}
+.fb dd{margin:2px 0 0;overflow-wrap:anywhere}
+.fb code{font:12.5px var(--mono);background:var(--code);padding:1px 5px;border-radius:4px;overflow-wrap:anywhere}
+.passed{margin-top:6px;font-size:13.5px;color:var(--muted)}
+.passed ul{margin:4px 0 0;padding-left:18px}
+.card-f{display:flex;gap:8px;flex-wrap:wrap;padding:10px 14px}
+/* preview */
+.preview{display:flex;flex-direction:column;min-width:0;min-height:0;background:var(--bg)}
+.pbar{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:8px 14px;border-bottom:1px solid var(--line);background:var(--surface)}
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:0;background:none;padding:0 12px;min-height:34px;font:500 12.5px var(--mono)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.pname{font:12.5px var(--mono);color:var(--muted);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pwrap{flex:1;min-height:0;overflow:auto;padding:14px;display:flex;justify-content:center;align-items:flex-start}
+#stage{position:relative;flex:none;border:1px solid var(--line);border-radius:6px;background:#fff;overflow:hidden;box-shadow:0 1px 0 var(--line)}
+#frame{position:absolute;left:0;top:0;border:0;background:#fff;transform-origin:0 0}
+/* add-page sheet */
+.veil{position:fixed;inset:0;background:rgba(5,10,16,.55);display:grid;place-items:center;padding:16px;z-index:20}
+.sheet{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;width:100%;max-width:560px;max-height:100%;overflow:auto;display:flex;flex-direction:column;gap:12px}
+.sheet h2{margin:0;font:600 20px var(--cond)}.sheet p{margin:0;color:var(--muted);font-size:14px}
+.sheet textarea,.sheet input[type=url]{width:100%;font:13px var(--mono);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px}
+.sheet textarea{min-height:130px;resize:vertical}
+.sheet label{font:500 12px var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.drop{border:1.5px dashed var(--line);border-radius:10px;padding:14px;text-align:center;color:var(--muted);font-size:14px}
+.drop.over{border-color:var(--ink);color:var(--ink)}
+.err{color:var(--fail);font-size:13.5px}
+@media (max-width:900px){
+  .split{grid-template-columns:1fr}
+  .chat{border-right:0}
+  .only-narrow{display:inline-block}
+  .preview{position:fixed;left:0;right:0;bottom:0;top:calc(57px + env(safe-area-inset-top,0px));z-index:10;transform:translateY(102%);visibility:hidden;transition:transform .2s}
+  .preview.open{transform:none;visibility:visible}
+  .brand span{display:none}
+  header{padding:8px 12px;min-height:57px}
+  .btn{padding:0 11px}
+}
+@media (prefers-reduced-motion:reduce){.preview{transition:none}}
+</style>
+</head><body>
+
+<div class="app">
+  <header>
+    <div class="brand"><b>Pocket Testbench</b><span>runs in this tab · no server · no API key</span></div>
+    <div class="tools">
+      <button class="btn only-narrow" id="togglePreview" type="button">Preview</button>
+      <button class="btn primary" id="addBtn" type="button">Add page</button>
+    </div>
+  </header>
+
+  <div class="split">
+    <section class="chat" aria-label="Chat">
+      <div id="log" aria-live="polite"></div>
+      <div id="live" class="live" hidden><i></i><span id="liveText">Working…</span></div>
+      <form id="f" autocomplete="off">
+        <textarea id="in" rows="1" placeholder="e.g. check the form on phone" aria-label="Message"></textarea>
+        <button class="btn primary" id="send" type="submit" style="min-height:44px">Send</button>
+      </form>
+      <p class="hint">Heuristic checks, not a human tester. Steps work too: <code>click Generate</code> · <code>type Asha into Name</code> · <code>expect Agreement generated</code></p>
+    </section>
+
+    <aside class="preview" id="preview" aria-label="Page preview">
+      <div class="pbar">
+        <div class="seg" role="group" aria-label="Screen size">
+          <button type="button" data-dev="phone" aria-pressed="true">Phone 390</button>
+          <button type="button" data-dev="tablet" aria-pressed="false">Tablet 768</button>
+          <button type="button" data-dev="laptop" aria-pressed="false">Laptop 1280</button>
+        </div>
+        <span class="pname" id="pname">No page yet</span>
+        <button class="btn small only-narrow" id="closePreview" type="button">Back to chat</button>
+      </div>
+      <div class="pwrap" id="pwrap"><div id="stage"><iframe id="frame" title="Page being tested" sandbox="allow-scripts allow-same-origin allow-forms"></iframe></div></div>
+    </aside>
+  </div>
+</div>
+
+<div class="veil" id="veil" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <h2 id="sheetTitle">Add the page to test</h2>
+    <p>Your page stays in this tab. Only add pages you trust: they run scripts here so they can be tested.</p>
+    <div class="drop" id="drop">Drop a .html file here, or <button class="btn small" type="button" id="pick">choose file</button><input type="file" id="file" accept=".html,.htm,text/html" hidden></div>
+    <div><label for="paste">Or paste the page's HTML</label><textarea id="paste" placeholder="&lt;!doctype html&gt; …"></textarea></div>
+    <div class="row"><button class="btn primary" id="usePaste" type="button">Test pasted HTML</button></div>
+    <div><label for="url">Or a web address</label><div class="row" style="flex-wrap:nowrap;margin-top:4px"><input type="url" id="url" placeholder="https://yourname.github.io/app/"><button class="btn" id="useUrl" type="button">Fetch</button></div>
+      <p style="margin-top:6px;font-size:13px">Works only for sites that allow other sites to read them (GitHub Pages and raw GitHub do). Otherwise use paste or upload.</p></div>
+    <p class="err" id="sheetErr" hidden></p>
+    <div class="row" style="justify-content:space-between"><button class="btn" id="useSample" type="button">Use the example page</button><button class="btn" id="closeSheet" type="button">Cancel</button></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  function norm(s) { return String(s || "").replace(/\s+/g, " ").trim().toLowerCase(); }
+  function clip(s, n) { s = String(s == null ? "" : s).replace(/\s+/g, " ").trim(); return s.length > n ? s.slice(0, n - 1) + "…" : s; }
+  function plural(n, w) { return n + " " + w + (n === 1 ? "" : "s"); }
+
+  var DEV = { phone: { w: 390, h: 780, label: "Phone" }, tablet: { w: 768, h: 1024, label: "Tablet" }, laptop: { w: 1280, h: 800, label: "Laptop" } };
+  var frame = $("frame"), log = $("log");
+  var page = { html: "", name: "" }, device = "phone", busy = false, lastReport = null, loadMs = 0, hiTimer = null, hiEl = null;
+
+  /* ------------------------------------------------------------------ sample page (deliberately buggy) */
+  var SAMPLE = [
+    '<!doctype html><html><head><meta charset="utf-8"><title>Sample Agreement Generator</title>',
+    '<style>body{font-family:sans-serif;margin:20px}label{display:block;margin:10px 0 2px}input{font-size:13px;padding:4px;width:220px}',
+    'button{font-size:12px;padding:2px 6px;margin:8px 6px 0 0}.wide{width:560px;background:#eee;padding:6px;margin-top:16px}',
+    '.msg{margin-top:10px;color:#1a7f37}.faint{color:#b8b8b8;margin-top:14px}</style></head><body>',
+    '<h1>Sample Agreement Generator</h1>',
+    '<label for="n">Tenant name</label><input id="n" required>',
+    '<label>&nbsp;</label><input id="e" placeholder="Email address">',
+    '<div><button id="gen">Generate</button></div><div class="msg" id="out"></div>',
+    '<div id="dl" hidden><button id="pdf">Download PDF</button><button id="doc">Download Word</button></div>',
+    '<div class="wide">This fixed-width box is wider than a phone screen.</div>',
+    '<p class="faint">Low-contrast footer text</p>',
+    '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="width:40px;height:40px">',
+    '<script>',
+    'console.error("sample: deprecated API warning");',
+    'function save(name,blob){var a=document.createElement("a");a.download=name;a.href=URL.createObjectURL(blob);document.body.appendChild(a);a.click();a.remove();}',
+    'document.getElementById("gen").onclick=function(){var o=document.getElementById("out");',
+    'if(!document.getElementById("n").value.trim()){o.style.color="#c00";o.textContent="Tenant name is required";return}',
+    'o.style.color="#1a7f37";o.textContent="Agreement generated";document.getElementById("dl").hidden=false};',
+    'document.getElementById("pdf").onclick=function(){save("agreement.pdf",new Blob(["%PDF-1.4 sample agreement"],{type:"application/pdf"}))};',
+    'document.getElementById("doc").onclick=function(){save("agreement.docx",new Blob([],{type:"application/vnd.openxmlformats-officedocument.wordprocessingml.document"}))};',
+    '<\/script></body></html>'].join("\n");
+
+  /* ------------------------------------------------------------------ hooks injected into the tested page */
+  function hook() {
+    var L = window.__qa = { errors: [], warns: [], fails: [], blobs: [], dl: [], nav: [], dialogs: [], opened: [], submits: 0 };
+    function s(x) { try { return String(x); } catch (e) { return "?"; } }
+    window.addEventListener("error", function (e) {
+      var t = e.target;
+      if (t && t !== window && t.tagName) L.fails.push({ tag: t.tagName.toLowerCase(), src: (t.currentSrc || t.src || t.href || "").slice(0, 120) });
+      else L.errors.push(s(e.message || "Script error") + (e.lineno ? " (line " + e.lineno + ")" : ""));
+    }, true);
+    window.addEventListener("unhandledrejection", function (e) { L.errors.push("Unhandled promise rejection: " + s(e.reason && e.reason.message || e.reason)); });
+    var ce = console.error, cw = console.warn;
+    console.error = function () { L.errors.push("console.error: " + [].map.call(arguments, s).join(" ").slice(0, 200)); try { ce.apply(console, arguments); } catch (x) {} };
+    console.warn = function () { L.warns.push([].map.call(arguments, s).join(" ").slice(0, 200)); try { cw.apply(console, arguments); } catch (x) {} };
+    var cou = URL.createObjectURL;
+    URL.createObjectURL = function (b) { try { L.blobs.push({ size: b && b.size, type: (b && b.type) || "" }); } catch (x) {} return cou.apply(URL, arguments); };
+    document.addEventListener("click", function (e) {
+      var a = e.target && e.target.closest && e.target.closest("a[href],a[download]");
+      if (!a) return;
+      if (a.hasAttribute("download")) { L.dl.push({ name: a.getAttribute("download") }); return; }
+      var h = a.getAttribute("href");
+      if (h && h.charAt(0) !== "#" && !/^javascript:/i.test(h)) { L.nav.push(h); e.preventDefault(); }
+    }, true);
+    var ac = HTMLAnchorElement.prototype.click;
+    HTMLAnchorElement.prototype.click = function () { if (this.hasAttribute("download")) L.dl.push({ name: this.getAttribute("download") }); return ac.apply(this, arguments); };
+    window.alert = function (m) { L.dialogs.push("alert: " + s(m)); };
+    window.confirm = function (m) { L.dialogs.push("confirm: " + s(m)); return true; };
+    window.prompt = function (m) { L.dialogs.push("prompt: " + s(m)); return "Test"; };
+    window.print = function () { L.dialogs.push("print"); };
+    window.open = function (u) { L.opened.push(s(u)); return null; };
+    document.addEventListener("submit", function (e) { L.submits++; if (!e.defaultPrevented) e.preventDefault(); });
+    var f = window.fetch;
+    if (f) window.fetch = function () {
+      var u = s(arguments[0] && arguments[0].url || arguments[0]).slice(0, 100);
+      return f.apply(this, arguments).then(function (r) { if (!r.ok) L.fails.push({ tag: "fetch", src: u + " → " + r.status }); return r; },
+        function (err) { L.fails.push({ tag: "fetch", src: u + " → " + s(err && err.message) }); throw err; });
+    };
+  }
+  var HOOK = "<script>(" + hook.toString() + ")()<\/script>";
+  function withHooks(html, base) {
+    var extra = HOOK + (base ? '<base href="' + base.replace(/"/g, "&quot;") + '">' : "");
+    var m = /<head[^>]*>/i.exec(html) || /<html[^>]*>/i.exec(html) || /<!doctype[^>]*>/i.exec(html);
+    var out = m ? html.slice(0, m.index + m[0].length) + extra + html.slice(m.index + m[0].length) : extra + html;
+    return out + "\n<!--" + Date.now() + Math.random() + "-->";
+  }
+
+  /* ------------------------------------------------------------------ device + preview */
+  function layoutStage() {
+    var d = DEV[device], wrap = $("pwrap"), avail = Math.max(240, wrap.clientWidth - 30);
+    var s = Math.min(1, avail / d.w);
+    frame.style.width = d.w + "px"; frame.style.height = d.h + "px";
+    frame.style.transform = "scale(" + s + ")";
+    $("stage").style.width = Math.round(d.w * s) + "px"; $("stage").style.height = Math.round(d.h * s) + "px";
+  }
+  function setDevice(k) {
+    device = k;
+    document.querySelectorAll(".seg button").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.dev === k ? "true" : "false"); });
+    layoutStage();
+  }
+  document.querySelectorAll(".seg button").forEach(function (b) { b.addEventListener("click", function () { if (!busy) setDevice(b.dataset.dev); }); });
+  window.addEventListener("resize", layoutStage);
+  if (window.ResizeObserver) new ResizeObserver(layoutStage).observe($("pwrap"));
+  $("togglePreview").addEventListener("click", function () { $("preview").classList.add("open"); layoutStage(); });
+  $("closePreview").addEventListener("click", function () { $("preview").classList.remove("open"); });
+
+  function loadFrame() {
+    return new Promise(function (res) {
+      var done = false, t0 = performance.now();
+      function fin() { if (done) return; done = true; frame.onload = null; loadMs = performance.now() - t0; setTimeout(res, 400); }
+      frame.onload = fin; setTimeout(fin, 9000);
+      frame.srcdoc = withHooks(page.html, page.base);
+    });
+  }
+  function setPage(html, name, base) {
+    page = { html: html, name: name, base: base || "" };
+    $("pname").textContent = name + " · " + Math.max(1, Math.round(html.length / 1024)) + " KB";
+    return loadFrame();
+  }
+
+  /* ------------------------------------------------------------------ helpers that look inside the page */
+  function D() { return frame.contentDocument; }
+  function W() { return frame.contentWindow; }
+  function LOG() { return (W() && W().__qa) || { errors: [], warns: [], fails: [], blobs: [], dl: [], nav: [], dialogs: [], opened: [], submits: 0 }; }
+  function vis(e) {
+    var r = e.getBoundingClientRect();
+    if (r.width < 1 || r.height < 1) return false;
+    var cs = W().getComputedStyle(e);
+    return cs.visibility !== "hidden" && cs.display !== "none" && parseFloat(cs.opacity) > 0.01;
+  }
+  function accName(e) {
+    var d = D(), n = e.getAttribute("aria-label");
+    if (n && n.trim()) return n.trim();
+    var lb = e.getAttribute("aria-labelledby");
+    if (lb) { var t = lb.split(/\s+/).map(function (i) { var x = d.getElementById(i); return x ? x.textContent : ""; }).join(" ").trim(); if (t) return t; }
+    if (e.labels && e.labels.length) { var l = [].map.call(e.labels, function (x) { return x.textContent; }).join(" ").trim(); if (l) return l; }
+    var tag = e.tagName.toLowerCase();
+    if (tag === "input" && /^(button|submit|reset)$/i.test(e.type) && e.value) return e.value;
+    var txt = (e.innerText || e.textContent || "").trim(); if (txt) return txt;
+    var img = e.querySelector && e.querySelector("img[alt]"); if (img && img.alt.trim()) return img.alt.trim();
+    return (e.getAttribute("title") || e.getAttribute("alt") || "").trim();
+  }
+  function cssPath(e) {
+    var parts = [], n = e, b = e.ownerDocument.body;
+    while (n && n.nodeType === 1 && n !== b && parts.length < 6) {
+      if (n.id && /^[A-Za-z][\w-]*$/.test(n.id)) { parts.unshift("#" + n.id); break; }
+      var s = n.tagName.toLowerCase(), p = n.parentElement;
+      if (p) { var same = [].filter.call(p.children, function (c) { return c.tagName === n.tagName; }); if (same.length > 1) s += ":nth-of-type(" + (same.indexOf(n) + 1) + ")"; }
+      parts.unshift(s); n = n.parentElement;
+    }
+    return parts.join(" > ");
+  }
+  function desc(e) {
+    var t = clip(accName(e) || e.getAttribute("placeholder") || "", 28), tag = e.tagName.toLowerCase();
+    return tag + (e.id ? "#" + e.id : "") + (t ? ' "' + t + '"' : "");
+  }
+  function highlight(sel) {
+    var d = D(); if (!d || !sel) return false;
+    var e; try { e = d.querySelector(sel); } catch (x) { return false; }
+    if (!e) return false;
+    if (hiEl) { hiEl.style.outline = hiEl.__o || ""; hiEl.style.outlineOffset = ""; }
+    hiEl = e; e.__o = e.style.outline;
+    e.style.outline = "4px solid #ffd23f"; e.style.outlineOffset = "2px";
+    try { e.scrollIntoView({ block: "center" }); } catch (x) {}
+    clearTimeout(hiTimer); hiTimer = setTimeout(function () { if (hiEl) { hiEl.style.outline = hiEl.__o || ""; hiEl.style.outlineOffset = ""; hiEl = null; } }, 6000);
+    return true;
+  }
+
+  /* ------------------------------------------------------------------ acting on the page */
+  function startWatch() {
+    var w = { n: 0 }, d = D();
+    try { var mo = new (W().MutationObserver)(function (m) { w.n += m.length; }); mo.observe(d.documentElement, { subtree: true, childList: true, attributes: true, characterData: true }); w.mo = mo; } catch (x) {}
+    return w;
+  }
+  function snap(w) { var L = LOG(); return { m: w.n, b: L.blobs.length, dl: L.dl.length, nav: L.nav.length, dia: L.dialogs.length, op: L.opened.length, err: L.errors.length, sub: L.submits, text: (D().body.innerText || "") }; }
+  function setValue(e, v) {
+    var w = W(), proto = e.tagName === "SELECT" ? w.HTMLSelectElement.prototype : e.tagName === "TEXTAREA" ? w.HTMLTextAreaElement.prototype : w.HTMLInputElement.prototype;
+    Object.getOwnPropertyDescriptor(proto, "value").set.call(e, v);
+    e.dispatchEvent(new w.Event("input", { bubbles: true })); e.dispatchEvent(new w.Event("change", { bubbles: true }));
+  }
+  function sampleFor(e) {
+    var t = (e.type || "text").toLowerCase(), h = norm([e.name, e.id, e.placeholder, accName(e)].join(" "));
+    if (t === "email" || /e-?mail/.test(h)) return "test@example.com";
+    if (t === "tel" || /phone|mobile|tel\b/.test(h)) return "9876543210";
+    if (t === "url") return "https://example.com";
+    if (t === "password") return "Test@1234";
+    if (t === "date") return "2025-01-15";
+    if (t === "time") return "10:30";
+    if (t === "number") { var mn = e.min !== "" ? Number(e.min) : NaN; return String(isNaN(mn) ? 5 : mn + (e.max !== "" ? Math.floor((Number(e.max) - mn) / 2) : 1)); }
+    if (/name/.test(h)) return "Asha Rao";
+    if (/address|street/.test(h)) return "12 Test Street";
+    if (/city|town/.test(h)) return "London";
+    if (/zip|pin|post/.test(h)) return "560001";
+    return "Test value";
+  }
+  function autoFill() {
+    var d = D(), n = 0, groups = {};
+    [].forEach.call(d.querySelectorAll("input,select,textarea"), function (e) {
+      if (!vis(e) || e.disabled || e.readOnly) return;
+      var t = (e.type || "").toLowerCase();
+      if (/^(hidden|button|submit|reset|file|image|color)$/.test(t)) return;
+      if (t === "checkbox") { if (!e.checked) e.click(); n++; return; }
+      if (t === "radio") { if (!groups[e.name || e.id]) { groups[e.name || e.id] = 1; e.click(); n++; } return; }
+      if (t === "range") { setValue(e, String((Number(e.min || 0) + Number(e.max || 100)) / 2)); n++; return; }
+      if (e.tagName === "SELECT") { var o = [].filter.call(e.options, function (x) { return x.value !== "" && !x.disabled; }); if (o.length) { setValue(e, o[0].value); n++; } return; }
+      setValue(e, sampleFor(e)); n++;
+    });
+    return n;
+  }
+  var CLICKABLE = 'button,[role=button],input[type=button],input[type=submit],a[href^="#"],a[onclick],summary,[onclick]';
+  function candidates(done) {
+    return [].filter.call(D().querySelectorAll(CLICKABLE), function (e) { return !done.has(e) && vis(e) && !e.disabled && !(e.tagName === "A" && e.getAttribute("href") === "#" && false); });
+  }
+  function scoreName(names, q) { var s = 0; names.forEach(function (n) { n = norm(n); if (!n) return; if (n === q) s = Math.max(s, 3); else if (n.indexOf(q) === 0) s = Math.max(s, 2); else if (n.indexOf(q) >= 0) s = Math.max(s, 1); }); return s; }
+  function findClickable(q) {
+    q = norm(q); var best = null, bs = 0;
+    [].forEach.call(D().querySelectorAll('button,a,[role=button],input[type=button],input[type=submit],input[type=checkbox],input[type=radio],summary,label,[onclick],select,[role=tab]'), function (e) {
+      if (!vis(e)) return; var s = scoreName([accName(e), e.id, e.getAttribute("name")], q); if (s > bs) { best = e; bs = s; }
+    });
+    return best;
+  }
+  function findField(q) {
+    q = norm(q); var best = null, bs = 0;
+    [].forEach.call(D().querySelectorAll("input:not([type=hidden]),select,textarea"), function (e) {
+      if (!vis(e)) return; var s = scoreName([accName(e), e.placeholder, e.getAttribute("name"), e.id], q); if (s > bs) { best = e; bs = s; }
+    });
+    return best;
+  }
+
+  /* ------------------------------------------------------------------ checks */
+  function lum(c) { var a = c.map(function (v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }); return 0.2126 * a[0] + 0.7152 * a[1] + 0.0722 * a[2]; }
+  function rgba(s) { var m = /rgba?\(([^)]+)\)/.exec(s); if (!m) return null; var p = m[1].split(/[ ,\/]+/).filter(Boolean).map(Number); return { c: p.slice(0, 3), a: p.length > 3 ? p[3] : 1 }; }
+  function bgOf(e) {
+    var w = W(), n = e;
+    while (n && n.nodeType === 1) { var c = rgba(w.getComputedStyle(n).backgroundColor); if (c && c.a > 0.5) return c.c; n = n.parentElement; }
+    return [255, 255, 255];
+  }
+
+  function Collector(devKey) {
+    var out = [];
+    return {
+      out: out,
+      add: function (level, group, title, detail, fix, e) { out.push({ level: level, group: group, title: title, detail: detail || "", fix: fix || "", sel: e ? cssPath(e) : "", device: devKey }); }
+    };
+  }
+
+  function staticChecks(devKey, C, first) {
+    var d = D(), w = W(), L = LOG(), iw = w.innerWidth, all = [].slice.call(d.body.querySelectorAll("*"), 0, 2500);
+    // errors
+    if (L.errors.length) C.add("fail", "errors", plural(L.errors.length, "JavaScript error") + " while the page loaded", L.errors.slice(0, 3).join("\n"), "Open the browser console on your page and fix the first error; later ones are often caused by it.");
+    else C.add("pass", "errors", "No JavaScript errors while loading");
+    var fails = L.fails.filter(function (x, i, a) { return a.findIndex(function (y) { return y.src === x.src; }) === i; });
+    if (fails.length) C.add("warn", "errors", plural(fails.length, "resource") + " failed to load", fails.slice(0, 4).map(function (x) { return x.tag + ": " + (x.src || "(no address)"); }).join("\n"), "Check the file names and addresses. If they work on your site, this viewer may be blocking them.");
+    // speed
+    if (loadMs > 3500) C.add("warn", "speed", "Slow to load: " + (loadMs / 1000).toFixed(1) + " s", "Measured in this browser, so a real phone on mobile data will be slower.", "Compress images, defer scripts, and avoid large libraries you barely use.");
+    else C.add("pass", "speed", "Loaded in " + Math.round(loadMs) + " ms");
+    // page-level, once per run
+    if (first) {
+      if (!d.querySelector('meta[name=viewport]')) C.add("fail", "layout", "No viewport meta tag", "Phones will show a zoomed-out desktop layout instead of a mobile one.", 'Add <meta name="viewport" content="width=device-width, initial-scale=1"> inside <head>.');
+      else {
+        var vc = d.querySelector('meta[name=viewport]').content || "";
+        if (/user-scalable\s*=\s*(no|0)|maximum-scale\s*=\s*1(\.0)?\b/i.test(vc)) C.add("warn", "access", "Pinch-zoom is disabled", "The viewport tag blocks zooming, which hurts people with low vision.", "Remove user-scalable=no and maximum-scale=1.");
+        else C.add("pass", "layout", "Viewport meta tag present");
+      }
+      if (!(d.title || "").trim()) C.add("warn", "access", "Page has no <title>", "", "Add a short descriptive <title> in <head>.");
+      if (!d.documentElement.getAttribute("lang")) C.add("warn", "access", "No language set on <html>", "Screen readers guess the pronunciation.", 'Use <html lang="en"> (or your language).');
+      if (!d.querySelector("h1")) C.add("warn", "access", "No main heading (h1)", "", "Give the page one <h1> that names it.");
+      var ids = {}, dup = [];
+      [].forEach.call(d.querySelectorAll("[id]"), function (e) { if (ids[e.id]) dup.push(e.id); ids[e.id] = 1; });
+      if (dup.length) C.add("warn", "errors", "Duplicate id: " + dup.slice(0, 3).join(", "), "Duplicates make labels and scripts hit the wrong element.", "Make every id unique.");
+    }
+    // sideways overflow
+    var de = d.documentElement, over = de.scrollWidth - iw;
+    var offenders = all.filter(function (e) {
+      if (!vis(e)) return false; var r = e.getBoundingClientRect(); if (r.right <= iw + 1 && r.left >= -1) return false;
+      for (var p = e.parentElement; p && p !== d.body; p = p.parentElement) { var cs = w.getComputedStyle(p); if (/(auto|scroll|hidden)/.test(cs.overflowX) && p.getBoundingClientRect().right <= iw + 1) return false; }
+      return true;
+    }).filter(function (e, i, a) { return !a.some(function (o) { return o !== e && o.contains(e); }); });
+    offenders.sort(function (a, b) { return b.getBoundingClientRect().right - a.getBoundingClientRect().right; });
+    if (over > 1 || offenders.length) C.add("fail", "layout", "Page scrolls sideways at " + iw + " px wide", "Content sticks out by about " + Math.max(over, offenders.length ? Math.round(offenders[0].getBoundingClientRect().right - iw) : 0) + " px. Widest: " + offenders.slice(0, 3).map(desc).join(", "), "Use max-width:100% and flexible widths instead of fixed pixel widths; let rows wrap.", offenders[0]);
+    else C.add("pass", "layout", "Fits the " + iw + " px screen with no sideways scroll");
+    // tap targets
+    if (devKey !== "laptop") {
+      var small = [].filter.call(d.querySelectorAll('a[href],button,input:not([type=hidden]),select,textarea,[role=button],[onclick]'), function (e) { if (!vis(e)) return false; var r = e.getBoundingClientRect(); return Math.min(r.width, r.height) < 40 && !(e.tagName === "A" && e.closest("p,li") && e.parentElement.childNodes.length > 1); });
+      if (small.length) C.add(small.some(function (e) { return Math.min(e.getBoundingClientRect().width, e.getBoundingClientRect().height) < 24; }) ? "fail" : "warn", "layout", plural(small.length, "tap target") + " smaller than 40 px", small.slice(0, 4).map(function (e) { var r = e.getBoundingClientRect(); return desc(e) + " (" + Math.round(r.width) + "×" + Math.round(r.height) + ")"; }).join("\n"), "Give buttons and links at least 44×44 px of tappable area (padding counts).", small[0]);
+      else C.add("pass", "layout", "Buttons and links are big enough to tap");
+    }
+    // zoom-on-focus font size
+    if (devKey === "phone") {
+      var tiny = [].filter.call(d.querySelectorAll("input:not([type=hidden]):not([type=checkbox]):not([type=radio]),select,textarea"), function (e) { return vis(e) && parseFloat(w.getComputedStyle(e).fontSize) < 16; });
+      if (tiny.length) C.add("warn", "layout", "Inputs under 16 px make iPhones zoom in", tiny.slice(0, 3).map(desc).join(", "), "Set font-size:16px (or larger) on inputs.", tiny[0]);
+    }
+    // labels
+    var fields = [].filter.call(d.querySelectorAll("input:not([type=hidden]):not([type=submit]):not([type=button]):not([type=reset]):not([type=image]),select,textarea"), vis);
+    var nolab = fields.filter(function (e) { return !((e.labels && e.labels.length) || e.getAttribute("aria-label") || e.getAttribute("aria-labelledby") || e.title); });
+    var phOnly = nolab.filter(function (e) { return e.placeholder; }), none = nolab.filter(function (e) { return !e.placeholder; });
+    if (none.length) C.add("fail", "access", plural(none.length, "field") + " with no label", none.slice(0, 4).map(desc).join(", "), "Connect a <label for=\"id\"> to each field, or add aria-label.", none[0]);
+    if (phOnly.length) C.add("warn", "access", plural(phOnly.length, "field") + " labelled only by placeholder", phOnly.slice(0, 4).map(desc).join(", "), "Placeholders vanish while typing; add a visible <label>.", phOnly[0]);
+    if (fields.length && !nolab.length) C.add("pass", "access", "All " + fields.length + " form fields have labels");
+    // names for buttons and links
+    var unnamed = [].filter.call(d.querySelectorAll('button,a[href],[role=button],input[type=button],input[type=submit]'), function (e) { return vis(e) && !accName(e); });
+    if (unnamed.length) C.add("fail", "access", plural(unnamed.length, "button/link") + " with no readable name", unnamed.slice(0, 4).map(function (e) { return cssPath(e); }).join("\n"), "Add text or aria-label to icon-only controls.", unnamed[0]);
+    // images
+    var imgs = [].filter.call(d.images, vis), noalt = imgs.filter(function (i) { return !i.hasAttribute("alt"); });
+    var broken = [].filter.call(d.images, function (i) { return i.complete && i.naturalWidth === 0 && i.getAttribute("src"); });
+    if (broken.length) C.add("fail", "errors", plural(broken.length, "broken image"), broken.slice(0, 3).map(function (i) { return clip(i.getAttribute("src"), 70); }).join("\n"), "Fix the image path or upload the file.", broken[0]);
+    if (noalt.length) C.add("warn", "access", plural(noalt.length, "image") + " without alt text", noalt.slice(0, 3).map(desc).join(", "), 'Add alt="description" (or alt="" for decoration).', noalt[0]);
+    // font size + contrast (sampled)
+    var texts = all.filter(function (e) { return vis(e) && [].some.call(e.childNodes, function (n) { return n.nodeType === 3 && n.nodeValue.trim().length > 1; }); }).slice(0, 400);
+    var small12 = texts.filter(function (e) { return parseFloat(w.getComputedStyle(e).fontSize) < 12; });
+    if (small12.length) C.add("warn", "access", plural(small12.length, "text element") + " smaller than 12 px", small12.slice(0, 3).map(desc).join(", "), "Use at least 14 px for body text.", small12[0]);
+    var low = [];
+    texts.forEach(function (e) {
+      var cs = w.getComputedStyle(e), fg = rgba(cs.color); if (!fg) return;
+      var bg = bgOf(e), a = fg.a, mix = fg.c.map(function (v, i) { return v * a + bg[i] * (1 - a); });
+      var l1 = lum(mix), l2 = lum(bg), ratio = (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+      var big = parseFloat(cs.fontSize) >= 24 || (parseFloat(cs.fontSize) >= 18.66 && parseInt(cs.fontWeight, 10) >= 700);
+      if (ratio < (big ? 3 : 4.5)) low.push({ e: e, r: ratio });
+    });
+    low.sort(function (a, b) { return a.r - b.r; });
+    if (low.length) C.add("warn", "access", plural(low.length, "text element") + " with low contrast (estimated)", low.slice(0, 3).map(function (x) { return desc(x.e) + " ≈ " + x.r.toFixed(1) + ":1"; }).join("\n"), "Aim for 4.5:1 for normal text. Estimates ignore background images and gradients.", low[0].e);
+    else if (texts.length) C.add("pass", "access", "Text contrast looks fine (sampled)");
+  }
+
+  function reactionLabel(a, b) {
+    var r = [];
+    if (b.m > a.m) r.push("page changed"); if (b.b > a.b) r.push("file created"); if (b.dl > a.dl) r.push("download triggered");
+    if (b.nav > a.nav) r.push("link followed"); if (b.dia > a.dia) r.push("dialog shown"); if (b.op > a.op) r.push("new window"); if (b.sub > a.sub) r.push("form submitted");
+    return r;
+  }
+  async function interactChecks(devKey, C, topics) {
+    var d = D(), L = LOG(), watch = startWatch(), done = new Set(), clicks = 0, crashed = 0, silent = [], emptyAccepted = false;
+    var wantForms = topics.all || topics.forms, wantClicks = topics.all || topics.clicks, wantDl = topics.all || topics.downloads;
+    var hasText = [].some.call(d.querySelectorAll('input:not([type=hidden]):not([type=checkbox]):not([type=radio]):not([type=button]):not([type=submit]),textarea'), vis);
+    var validMsg = /required|invalid|please|must|enter|missing|can't|cannot|error/i;
+
+    async function round(pass) {
+      for (var r = 0; r < 3 && clicks < 40; r++) {
+        var list = candidates(done); if (!list.length) break;
+        for (var i = 0; i < list.length && clicks < 40; i++) {
+          var e = list[i]; if (!vis(e)) continue; done.add(e);
+          var before = snap(watch), name = clip(accName(e) || e.id || e.tagName, 30), errBefore = L.errors.length, blobBefore = L.blobs.length;
+          try { e.scrollIntoView({ block: "center" }); e.click(); } catch (x) { L.errors.push("click threw: " + x.message); }
+          clicks++; await sleep(220);
+          var after = snap(watch), react = reactionLabel(before, after), newErr = L.errors.slice(errBefore);
+          var invalid = false; try { invalid = !!d.querySelector(":invalid") && e.matches('[type=submit],button') && !!e.closest("form"); } catch (x) {}
+          if (newErr.length) { crashed++; if (wantClicks) C.add("fail", "clicks", "Clicking “" + name + "” causes an error", newErr.slice(0, 2).join("\n"), "Fix the click handler: the error message above points to the cause.", e); }
+          var newBlobs = L.blobs.slice(blobBefore);
+          newBlobs.forEach(function (b) {
+            if (!wantDl) return;
+            if (!b.size) C.add("fail", "downloads", "“" + name + "” produces an empty file (0 bytes)", "The download starts but contains nothing" + (b.type ? " (type " + b.type + ")" : "") + ".", "The Blob is built from empty data. Pass the real content (text, bytes or a generated document) to new Blob([...]).", e);
+            else C.add("pass", "downloads", "“" + name + "” produces a file (" + (b.size > 1024 ? (b.size / 1024).toFixed(1) + " KB" : b.size + " bytes") + ")");
+          });
+          if (pass === 1 && hasText && newBlobs.length && /generate|download|save|export|submit|create|send/i.test(name)) emptyAccepted = name;
+          if (!react.length && !invalid && !newErr.length && !after.text.slice(0, 5)) { /* nothing */ }
+          if (!react.length && !invalid && !newErr.length) silent.push({ name: name, e: e });
+          if (pass === 1 && wantForms && hasText) {
+            var gained = after.text.length > before.text.length && validMsg.test(after.text.slice(before.text.length > 0 ? 0 : 0).replace(before.text, ""));
+            if (gained || invalid) C.add("pass", "forms", "Empty form is rejected when you press “" + name + "”", clip(after.text.replace(before.text, "").trim(), 100));
+          }
+        }
+      }
+    }
+    await round(1);
+    if (emptyAccepted && wantForms) C.add("warn", "forms", "Empty form seems to be accepted by “" + emptyAccepted + "”", "It produced a result with every field blank, and no validation message appeared.", "Check required fields before generating, and show a message next to the field.");
+    var n = autoFill(); await sleep(150);
+    if (n) { done = new Set(); await round(2); }
+    if (wantClicks) {
+      var real = silent.filter(function (x) { return !/^(close|ok|cancel|dismiss)$/i.test(x.name); });
+      if (real.length) C.add("warn", "clicks", plural(real.length, "button") + " did nothing visible when clicked", real.slice(0, 4).map(function (x) { return "“" + x.name + "”"; }).join(", "), "Check the click handler is attached and that something on screen changes (a message, a state, a new section).", real[0].e);
+      if (!crashed && clicks) C.add("pass", "clicks", "Clicked " + plural(clicks, "control") + " without a crash");
+      if (!clicks) C.add("warn", "clicks", "No clickable buttons found", "I look for buttons, links to #sections and elements with click handlers.", "");
+    }
+    if (n && wantForms) C.add("pass", "forms", "Filled " + plural(n, "field") + " with sample data and pressed every button");
+    if (watch.mo) watch.mo.disconnect();
+    L.dialogs.slice(0, 2).forEach(function (m) { C.add("warn", "clicks", "The page showed a dialog", m, "Dialogs are fine, but make sure they say something helpful."); });
+  }
+
+  /* ------------------------------------------------------------------ step language */
+  var STEP_RE = /^\s*(click|tap|press|type|enter|fill|select|choose|check|tick|uncheck|untick|expect|see|should|wait|reload)\b/i;
+  function parseSteps(text) {
+    var lines = text.split(/\n|;|\bthen\b/i).map(function (s) { return s.trim(); }).filter(Boolean);
+    var steps = lines.filter(function (l) { return STEP_RE.test(l.replace(/^\d+[.)]\s*/, "")); }).map(function (l) { return l.replace(/^\d+[.)]\s*/, ""); });
+    return steps.length && steps.length >= Math.ceil(lines.length / 2) ? steps : null;
+  }
+  function unq(s) { return String(s).trim().replace(/^["“'‘]|["”'’]$/g, "").trim(); }
+  async function runSteps(steps, devKey, C) {
+    var watch = startWatch(), last = snap(watch);
+    for (var i = 0; i < steps.length; i++) {
+      var s = steps[i], label = "Step " + (i + 1) + ": " + clip(s, 70), m;
+      try {
+        if ((m = /^(?:click|tap|press)\s+(?:on\s+)?(?:the\s+)?(.+?)(?:\s+button)?$/i.exec(s))) {
+          var q = unq(m[1]), t = findClickable(q);
+          if (!t) { C.add("fail", "steps", label, "No visible button or link matches “" + q + "”. Visible controls: " + [].filter.call(D().querySelectorAll("button,a[href],[role=button],input[type=submit]"), vis).slice(0, 8).map(function (e) { return "“" + clip(accName(e), 20) + "”"; }).join(", "), "Use the exact text on the button.");
+            continue; }
+          var b = snap(watch), eb = LOG().errors.length; t.scrollIntoView({ block: "center" }); t.click(); await sleep(260);
+          var a = snap(watch), er = LOG().errors.slice(eb);
+          if (er.length) C.add("fail", "steps", label, "Clicking caused an error:\n" + er.slice(0, 2).join("\n"), "Fix the error in the click handler.", t);
+          else C.add("pass", "steps", label, reactionLabel(b, a).join(", ") || "clicked (nothing visibly changed)", "", t);
+          last = b;
+        } else if ((m = /^(?:type|enter|fill(?:\s+in)?)\s+(.+?)\s+(?:in|into|in the|into the|on)\s+(.+)$/i.exec(s))) {
+          var f = findField(unq(m[2]));
+          if (!f) { C.add("fail", "steps", label, "No visible field matches “" + unq(m[2]) + "”. Fields: " + [].filter.call(D().querySelectorAll("input:not([type=hidden]),select,textarea"), vis).slice(0, 8).map(function (e) { return "“" + clip(accName(e) || e.placeholder || e.name || e.id, 20) + "”"; }).join(", "), "Use the label or placeholder text."); continue; }
+          setValue(f, unq(m[1])); await sleep(120); C.add("pass", "steps", label, "Typed into " + desc(f), "", f);
+        } else if ((m = /^(?:select|choose)\s+(.+?)\s+(?:in|from|for)\s+(.+)$/i.exec(s))) {
+          var sel = findField(unq(m[2])), want = norm(unq(m[1]));
+          var opt = sel && sel.options && [].find.call(sel.options, function (o) { return norm(o.text) === want || norm(o.value) === want; }) || (sel && sel.options && [].find.call(sel.options, function (o) { return norm(o.text).indexOf(want) >= 0; }));
+          if (!sel || !opt) { C.add("fail", "steps", label, !sel ? "No dropdown matches “" + unq(m[2]) + "”." : "Options: " + [].map.call(sel.options, function (o) { return "“" + clip(o.text, 20) + "”"; }).slice(0, 8).join(", "), ""); continue; }
+          setValue(sel, opt.value); await sleep(120); C.add("pass", "steps", label, "Selected “" + opt.text + "”", "", sel);
+        } else if ((m = /^(check|tick|uncheck|untick)\s+(?:the\s+)?(.+)$/i.exec(s))) {
+          var cb = findField(unq(m[2])) || findClickable(unq(m[2])), want2 = /^(check|tick)$/i.test(m[1]);
+          if (!cb || cb.type !== "checkbox" && cb.type !== "radio") { C.add("fail", "steps", label, "No visible checkbox matches “" + unq(m[2]) + "”.", ""); continue; }
+          if (cb.checked !== want2) cb.click(); await sleep(120); C.add("pass", "steps", label, want2 ? "Checked" : "Unchecked", "", cb);
+        } else if ((m = /^(?:expect|see|should see|should)\s+(?:to\s+see\s+)?(no|not|nothing)?\s*(?:a\s+)?(download|file)?\s*(.*)$/i.exec(s)) || false) {
+          var neg = !!m[1], isDl = !!m[2] && !m[3].trim(), txt = unq(m[3] || ""), body = norm(D().body.innerText), now = snap(watch);
+          if (isDl) {
+            var got = LOG().blobs.slice(-1)[0], newDl = now.b > last.b || now.dl > last.dl;
+            if (neg ? !newDl : (newDl && got && got.size > 0)) C.add("pass", "steps", label, neg ? "No download happened" : "A file of " + got.size + " bytes was created");
+            else C.add("fail", "steps", label, newDl ? "A download happened but the file is empty (0 bytes)." : "No download happened after the previous step.", "Check the download button's handler builds a non-empty Blob.");
+          } else {
+            var has = body.indexOf(norm(txt)) >= 0;
+            if (neg ? !has : has) C.add("pass", "steps", label, neg ? "“" + txt + "” is not on the page" : "Found “" + txt + "” on the page");
+            else C.add("fail", "steps", label, neg ? "“" + txt + "” is on the page but shouldn't be." : "“" + txt + "” is not on the page. Visible text starts: “" + clip(D().body.innerText, 120) + "”", "Check the wording, or that the earlier steps lead here.");
+          }
+        } else if ((m = /^wait\s+(\d+(?:\.\d+)?)/i.exec(s))) {
+          await sleep(Math.min(5000, parseFloat(m[1]) * 1000)); C.add("pass", "steps", label, "Waited");
+        } else if (/^reload/i.test(s)) {
+          await loadFrame(); watch = startWatch(); last = snap(watch); C.add("pass", "steps", label, "Reloaded the page");
+        } else C.add("fail", "steps", label, "I didn't understand this step.", "Try: click <button>, type <text> into <field>, expect <text>.");
+      } catch (x) { C.add("fail", "steps", label, "The step itself failed: " + x.message, ""); }
+    }
+    if (watch.mo) watch.mo.disconnect();
+  }
+
+  /* ------------------------------------------------------------------ orchestration */
+  var GROUPS = ["layout", "access", "forms", "clicks", "downloads", "errors", "speed"];
+  function wanted(f, topics) { return topics.all || f.group === "errors" || f.group === "steps" || topics[f.group] || (f.group === "clicks" && topics.forms) || (f.group === "downloads" && (topics.forms || topics.clicks) && f.level !== "pass"); }
+  async function runTest(devs, topics, steps) {
+    var rep = { name: page.name, devices: [], at: new Date() };
+    for (var i = 0; i < devs.length; i++) {
+      var k = devs[i]; setDevice(k); live(DEV[k].label + ": opening the page");
+      await loadFrame();
+      var C = Collector(k);
+      try {
+        if (steps) { live(DEV[k].label + ": running your steps"); await runSteps(steps, k, C); }
+        else {
+          live(DEV[k].label + ": checking layout and accessibility"); staticChecks(k, C, i === 0);
+          if (topics.all || topics.forms || topics.clicks || topics.downloads) { live(DEV[k].label + ": clicking buttons and filling forms"); await interactChecks(k, C, topics); }
+        }
+      } catch (x) { C.add("fail", "errors", "The tester hit a problem", String(x && x.message || x), ""); }
+      rep.devices.push({ key: k, items: C.out.filter(function (f) { return steps ? true : wanted(f, topics); }), ms: loadMs });
+    }
+    live(null); lastReport = rep; return rep;
+  }
+  function verdictOf(rep) {
+    var fails = 0, warns = 0, passes = 0;
+    rep.devices.forEach(function (d) { d.items.forEach(function (f) { if (f.level === "fail") fails++; else if (f.level === "warn") warns++; else passes++; }); });
+    return { fails: fails, warns: warns, passes: passes, v: fails ? "fail" : warns ? "warn" : "pass" };
+  }
+
+  /* ------------------------------------------------------------------ chat rendering (textContent only) */
+  function live(t) { $("live").hidden = !t; if (t) $("liveText").textContent = t; }
+  function inline(parent, s) {
+    var re = /(\*\*[^*]+\*\*|`[^`]+`)/g, last = 0, m;
+    while ((m = re.exec(s))) {
+      if (m.index > last) parent.appendChild(document.createTextNode(s.slice(last, m.index)));
+      parent.appendChild(m[0][0] === "`" ? el("code", null, m[0].slice(1, -1)) : el("strong", null, m[0].slice(2, -2)));
+      last = m.index + m[0].length;
+    }
+    if (last < s.length) parent.appendChild(document.createTextNode(s.slice(last)));
+  }
+  function md(text) {
+    var f = document.createDocumentFragment(), ul = null, p = [];
+    function flush() { if (p.length) { var e = el("p"); inline(e, p.join(" ")); f.appendChild(e); p = []; } }
+    String(text).split("\n").forEach(function (ln) {
+      var li = /^\s*[-•]\s+(.*)$/.exec(ln);
+      if (li) { flush(); if (!ul) { ul = el("ul"); f.appendChild(ul); } var i = el("li"); inline(i, li[1]); ul.appendChild(i); }
+      else if (!ln.trim()) { flush(); ul = null; } else { ul = null; p.push(ln.trim()); }
+    });
+    flush(); return f;
+  }
+  function near() { return log.scrollHeight - log.scrollTop - log.clientHeight < 160; }
+  function say(kind, text, chips) {
+    var n = near(), m = el("div", "msg " + kind);
+    if (kind === "bot") m.appendChild(md(text)); else m.textContent = text;
+    if (chips) { var c = el("div", "chips"); chips.forEach(function (ch) { var b = el("button", "chip", ch.label); b.type = "button"; b.addEventListener("click", function () { if (ch.run) ch.run(); else submit(ch.text); }); c.appendChild(b); }); m.appendChild(c); }
+    log.appendChild(m); if (n || kind === "user") log.scrollTop = log.scrollHeight; return m;
+  }
+  function badge(level) { return el("span", "badge " + level, level === "pass" ? "PASS" : level === "fail" ? "FAIL" : "WARN"); }
+  function copy(text, btn) {
+    function fallback() { var t = el("textarea"); t.value = text; t.style.position = "fixed"; t.style.opacity = "0"; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); } catch (x) {} t.remove(); }
+    try { navigator.clipboard.writeText(text).catch(fallback); } catch (x) { fallback(); }
+    var o = btn.textContent; btn.textContent = "Copied"; setTimeout(function () { btn.textContent = o; }, 1500);
+  }
+  function reportText(rep) {
+    var v = verdictOf(rep), out = ["Pocket Testbench report: " + rep.name, v.fails + " problems, " + v.warns + " warnings, " + v.passes + " passed", ""];
+    rep.devices.forEach(function (d) { out.push("== " + DEV[d.key].label + " =="); d.items.filter(function (f) { return f.level !== "pass"; }).forEach(function (f) { out.push("[" + f.level.toUpperCase() + "] " + f.title); if (f.detail) out.push("   " + f.detail.replace(/\n/g, "\n   ")); if (f.fix) out.push("   Fix: " + f.fix); }); out.push(""); });
+    return out.join("\n");
+  }
+  function addCard(rep) {
+    var v = verdictOf(rep), card = el("div", "card"), h = el("div", "card-h");
+    h.appendChild(el("b", null, rep.name));
+    var vb = el("span", "badge " + v.v, v.v === "pass" ? "ALL GOOD" : v.v === "fail" ? plural(v.fails, "PROBLEM") : plural(v.warns, "WARNING"));
+    h.appendChild(vb); card.appendChild(h);
+    rep.devices.forEach(function (d) {
+      var sec = el("div", "dev"), c = { fail: 0, warn: 0, pass: 0 }; d.items.forEach(function (f) { c[f.level]++; });
+      sec.appendChild(el("h3", null, DEV[d.key].label + " · " + DEV[d.key].w + " px"));
+      sec.appendChild(el("p", "counts", plural(c.fail, "problem") + " · " + plural(c.warn, "warning") + " · " + c.pass + " passed"));
+      d.items.filter(function (f) { return f.level !== "pass"; }).sort(function (a, b) { return (a.level === "fail" ? 0 : 1) - (b.level === "fail" ? 0 : 1); }).forEach(function (f) {
+        var det = el("details", "fd"); if (f.level === "fail") det.open = true;
+        var sm = el("summary"); sm.appendChild(badge(f.level)); sm.appendChild(el("span", "t", f.title)); det.appendChild(sm);
+        var body = el("dl", "fb");
+        if (f.detail) { body.appendChild(el("dt", null, "What I saw")); body.appendChild(el("dd", null, f.detail)); }
+        if (f.fix) { body.appendChild(el("dt", null, "Likely fix")); body.appendChild(el("dd", null, f.fix)); }
+        if (f.sel) { var b = el("button", "btn small", "Show on page"); b.type = "button"; b.style.marginTop = "8px"; b.addEventListener("click", function () { setDevice(d.key); $("preview").classList.add("open"); setTimeout(function () { if (!highlight(f.sel)) say("bot", "I can't find that element any more: the page changed after the test. Run the test again."); }, 60); }); body.appendChild(b); }
+        det.appendChild(body); sec.appendChild(det);
+      });
+      var ok = d.items.filter(function (f) { return f.level === "pass"; });
+      if (ok.length) { var pd = el("details", "passed"), ps = el("summary", null, ok.length + " checks passed"); pd.appendChild(ps); var u = el("ul"); ok.forEach(function (f) { u.appendChild(el("li", null, f.title)); }); pd.appendChild(u); sec.appendChild(pd); }
+      card.appendChild(sec);
+    });
+    var ft = el("div", "card-f"), cb = el("button", "btn small", "Copy report"); cb.type = "button"; cb.addEventListener("click", function () { copy(reportText(rep), cb); });
+    var rb = el("button", "btn small", "Run again"); rb.type = "button"; rb.addEventListener("click", function () { submit("test everything"); });
+    ft.appendChild(cb); ft.appendChild(rb); card.appendChild(ft);
+    log.appendChild(card); card.scrollIntoView({ block: "start" });
+  }
+  function summaryText(rep) {
+    var v = verdictOf(rep), seen = {}, top = [];
+    rep.devices.forEach(function (d) { d.items.filter(function (f) { return f.level === "fail"; }).forEach(function (f) { if (!seen[f.title]) { seen[f.title] = []; top.push(f); } seen[f.title].push(DEV[d.key].label.toLowerCase()); }); });
+    var head = v.v === "pass" ? "**Looks good.** " + v.passes + " checks passed and nothing needs fixing." : v.fails ? "**" + plural(v.fails, "problem") + " found**" + (v.warns ? " and " + plural(v.warns, "warning") : "") + "." : "**No outright failures**, but " + plural(v.warns, "warning") + " worth a look.";
+    if (top.length) head += "\n" + top.slice(0, 4).map(function (f) { return "- " + f.title + " (" + seen[f.title].join(" + ") + ")"; }).join("\n");
+    return head + "\nTap a row below for the likely fix, or “Show on page” to see where it is.";
+  }
+
+  /* ------------------------------------------------------------------ understanding the message */
+  var TOPIC_WORDS = {
+    layout: /layout|overflow|responsive|mobile|scroll|viewport|zoom|tap|touch|size|fit|screen/, access: /access|a11y|label|alt\b|contrast|screen ?reader|aria|heading/,
+    forms: /form|input|field|validation|validate|submit|required/, clicks: /button|click|link|interact|work(s|ing)?\b|tap/, downloads: /download|pdf|word|docx|export|file|blob/,
+    errors: /error|console|crash|bug|exception|js\b|broken/, speed: /speed|slow|fast|load|perform/
+  };
+  function plan(text) {
+    var t = text.toLowerCase(), topics = {}, any = false;
+    Object.keys(TOPIC_WORDS).forEach(function (k) { if (TOPIC_WORDS[k].test(t)) { topics[k] = true; any = true; } });
+    if (/every ?thing|full|all checks|complete|thorough/.test(t) || !any) topics = { all: true };
+    var devs = [];
+    if (/phone|mobile|iphone|android|small screen/.test(t)) devs.push("phone");
+    if (/tablet|ipad/.test(t)) devs.push("tablet");
+    if (/laptop|desktop|computer|pc\b|big screen|wide/.test(t)) devs.push("laptop");
+    if (!devs.length || /both|all devices|everything/.test(t)) devs = ["phone", "laptop"];
+    return { topics: topics, devs: devs, any: any };
+  }
+  function describePage() {
+    var d = D(); if (!d || !d.body) return "";
+    var btn = [].filter.call(d.querySelectorAll('button,[role=button],input[type=submit],input[type=button]'), vis).map(function (e) { return "`" + clip(accName(e), 24) + "`"; });
+    var fld = [].filter.call(d.querySelectorAll("input:not([type=hidden]),select,textarea"), vis).map(function (e) { return "`" + clip(accName(e) || e.placeholder || e.name || e.id || e.type, 24) + "`"; });
+    return "**" + page.name + "** has " + plural(btn.length, "button") + (btn.length ? ": " + btn.slice(0, 8).join(", ") : "") + " and " + plural(fld.length, "field") + (fld.length ? ": " + fld.slice(0, 8).join(", ") : "") + ".";
+  }
+  function logsText() {
+    var L = LOG(), out = [];
+    L.errors.forEach(function (x) { out.push("- error: " + clip(x, 160)); }); L.warns.slice(0, 5).forEach(function (x) { out.push("- warning: " + clip(x, 160)); }); L.fails.slice(0, 5).forEach(function (x) { out.push("- failed to load: " + x.tag + " " + clip(x.src, 100)); });
+    return out.length ? "Console and network messages from the last run:\n" + out.join("\n") : "The page logged no errors, warnings or failed requests.";
+  }
+  var HELP = "I test web pages **inside your browser**: nothing is uploaded and no AI service is used. I open your page at phone and laptop sizes, check layout, accessibility, forms, buttons and downloads, and tell you what's wrong and how to fix it.\n\nTry:\n- `test it` or `check the form on phone`\n- `accessibility check` · `check downloads` · `show errors`\n- steps: `click Generate` then `expect Agreement generated`\n\nUse **Add page** to paste HTML, upload a file or fetch a web address. Pages from other sites can't be read by a browser unless they allow it, so for those, paste or upload.";
+
+  async function handle(text) {
+    var t = text.trim(), url = /https?:\/\/[^\s<>"']+/i.exec(t);
+    if (/^\s*<(!doctype|html|head|body|div|main|form|section|script|style|h1)/i.test(t) && t.length > 60) {
+      await setPage(t, "Pasted page"); say("bot", "Loaded your pasted page. Running the full check on phone and laptop."); return finishRun(await runTest(["phone", "laptop"], { all: true }));
+    }
+    if (url) {
+      var ok = await fetchUrl(url[0]); if (!ok) return;
+      var rest = t.replace(url[0], "").trim(), p = plan(rest);
+      var steps = parseSteps(rest);
+      return finishRun(await runTest(p.devs, steps ? {} : (rest ? p.topics : { all: true }), steps));
+    }
+    if (/^(hi|hello|hey|help|\?|what can you do|how does this work)\b/i.test(t)) return say("bot", HELP);
+    if (/^(clear|reset)\b/i.test(t)) { log.textContent = ""; return say("bot", "Cleared. Say `test it` whenever you're ready."); }
+    if (!page.html) return say("bot", "I need a page first. Add one, then tell me what to check.", [{ label: "Add page", run: openSheet }, { label: "Use the example", run: useSample }]);
+    var m = /^(?:preview|show)\s+(?:on\s+)?(phone|tablet|laptop|desktop)/i.exec(t);
+    if (m) { setDevice(m[1].toLowerCase() === "desktop" ? "laptop" : m[1].toLowerCase()); $("preview").classList.add("open"); return say("bot", "Showing the page at " + DEV[device].w + " px. On a wide screen it's on the right."); }
+    if (/what('| i)?s on|describe|list (the )?(buttons|fields|controls)|what (buttons|fields)/i.test(t)) { if (!D().body) await loadFrame(); return say("bot", describePage()); }
+    if (/^(show|any|what).*(error|console|log)/i.test(t)) return say("bot", logsText());
+    var steps2 = parseSteps(t);
+    if (steps2) { var p2 = plan(t); return finishRun(await runTest(p2.devs, {}, steps2)); }
+    var p3 = plan(t);
+    if (p3.any || /test|check|run|try|verify|scan|audit|review|look|go\b/i.test(t)) return finishRun(await runTest(p3.devs, p3.topics));
+    say("bot", "I'm a rule-based tester, so I work best with short instructions like `test it`, `check the form on phone`, or steps such as `click Generate`.", chips());
+  }
+  function finishRun(rep) {
+    say("bot", summaryText(rep)); addCard(rep);
+    if (!window.matchMedia("(max-width:900px)").matches) { setDevice(rep.devices[rep.devices.length - 1].key); }
+  }
+  function chips() {
+    return [{ label: "Test it", text: "test it" }, { label: "Phone only", text: "test on phone" }, { label: "Forms and downloads", text: "check forms and downloads" }, { label: "Accessibility", text: "accessibility check" }];
+  }
+
+  async function fetchUrl(u) {
+    live("Fetching " + clip(u, 50));
+    try {
+      var r = await fetch(u, { mode: "cors" }); if (!r.ok) throw new Error("HTTP " + r.status);
+      var html = await r.text(); live(null);
+      var base = r.url || u; await setPage(html, new URL(base).host + new URL(base).pathname.replace(/\/$/, ""), base);
+      say("bot", "Fetched **" + new URL(base).host + "**. Testing on phone and laptop sizes."); return true;
+    } catch (x) {
+      live(null);
+      say("bot", "I couldn't read that address from here. Browsers only let a page read another site when that site allows it, and this one doesn't (or this viewer blocks outside requests).\n\nEasy fix: open the page, view its source (or save it), then **paste or upload** it with Add page. Pages you host on GitHub Pages usually work by address.", [{ label: "Add page", run: openSheet }]);
+      return false;
+    }
+  }
+
+  /* ------------------------------------------------------------------ add-page sheet */
+  function openSheet() { $("sheetErr").hidden = true; $("veil").hidden = false; $("paste").focus(); }
+  function closeSheet() { $("veil").hidden = true; }
+  function sheetErr(m) { $("sheetErr").textContent = m; $("sheetErr").hidden = false; }
+  async function runFull(intro) { if (intro) say("bot", intro); submitBusy(async function () { finishRun(await runTest(["phone", "laptop"], { all: true })); }); }
+  async function useSample() { closeSheet(); await setPage(SAMPLE, "Example page (deliberately buggy)"); runFull("Loaded the example page. It has deliberate bugs, so you can see what a report looks like."); }
+  function readFile(f) {
+    if (!f) return; if (f.size > 4 * 1024 * 1024) return sheetErr("That file is over 4 MB. Single-page apps should be smaller.");
+    var fr = new FileReader(); fr.onerror = function () { sheetErr("Couldn't read that file."); };
+    fr.onload = async function () { closeSheet(); await setPage(String(fr.result), f.name); runFull("Loaded **" + f.name + "**."); }; fr.readAsText(f);
+  }
+  $("addBtn").addEventListener("click", openSheet); $("closeSheet").addEventListener("click", closeSheet); $("useSample").addEventListener("click", useSample);
+  $("pick").addEventListener("click", function () { $("file").click(); }); $("file").addEventListener("change", function () { readFile($("file").files[0]); });
+  var drop = $("drop");
+  ["dragover", "dragenter"].forEach(function (n) { drop.addEventListener(n, function (e) { e.preventDefault(); drop.classList.add("over"); }); });
+  ["dragleave", "drop"].forEach(function (n) { drop.addEventListener(n, function (e) { e.preventDefault(); drop.classList.remove("over"); }); });
+  drop.addEventListener("drop", function (e) { readFile(e.dataTransfer && e.dataTransfer.files[0]); });
+  $("usePaste").addEventListener("click", async function () { var h = $("paste").value; if (h.trim().length < 20 || h.indexOf("<") < 0) return sheetErr("Paste the page's full HTML first."); closeSheet(); await setPage(h, "Pasted page"); runFull("Loaded your pasted page."); });
+  $("useUrl").addEventListener("click", function () { var u = $("url").value.trim(); if (!/^https?:\/\//i.test(u)) return sheetErr("Start with http:// or https://"); closeSheet(); submitBusy(async function () { if (await fetchUrl(u)) finishRun(await runTest(["phone", "laptop"], { all: true })); }); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("veil").hidden) closeSheet(); });
+
+  /* ------------------------------------------------------------------ input */
+  async function submitBusy(fn) {
+    if (busy) return say("bot", "I'm still running the last test."); busy = true; $("send").disabled = true;
+    try { await fn(); } catch (x) { live(null); say("bot", "Something went wrong while testing: " + clip(x && x.message || x, 120)); }
+    busy = false; $("send").disabled = false; live(null);
+  }
+  function submit(text) { if (!text.trim() || busy) return; say("user", text); submitBusy(function () { return handle(text); }); }
+  var input = $("in");
+  function grow() { input.style.height = "auto"; input.style.height = Math.min(input.scrollHeight, 130) + "px"; }
+  input.addEventListener("input", grow);
+  input.addEventListener("keydown", function (e) { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); $("f").requestSubmit(); } });
+  $("f").addEventListener("submit", function (e) { e.preventDefault(); var t = input.value; input.value = ""; grow(); submit(t); });
+
+  /* ------------------------------------------------------------------ start: example page loaded, ready to test */
+  setDevice("phone");
+  setPage(SAMPLE, "Example page (deliberately buggy)");
+  say("bot", "Hi. I test web pages right here in your browser: no server, no AI key, nothing uploaded.\n\nI've loaded an **example page with a few deliberate bugs**. Say `test it` to see a report, or press **Add page** to test your own.",
+    chips().concat([{ label: "Add page", run: openSheet }]));
+  window.__testbench = { submit: submit, setPage: setPage, ready: function () { return !busy; } };
+})();
+</script>
+
+</body></html>

@@ -1,0 +1,437 @@
+<title>India Travel Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: light;
+    --ink:#12203f; --ink-2:#1c2f57; --paper:#efe9da; --paper-2:#f7f2e6; --card:#fffdf8;
+    --saffron:#c1652f; --gold:#a9843f; --peacock:#2f6b6b; --line:#dcd3bd; --text:#231f16; --text-soft:#6b6252;
+    --radius:14px; --shadow:0 1px 2px rgba(18,32,64,.08), 0 10px 26px rgba(18,32,64,.08);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#e8dcc0; --ink-2:#f3e9cf; --paper:#15130f; --paper-2:#1c1a14; --card:#211f18;
+      --saffron:#e08a4f; --gold:#c9a56a; --peacock:#5ba39a; --line:#3a352a; --text:#ece5d4; --text-soft:#a89d86;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 26px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#e8dcc0; --ink-2:#f3e9cf; --paper:#15130f; --paper-2:#1c1a14; --card:#211f18;
+    --saffron:#e08a4f; --gold:#c9a56a; --peacock:#5ba39a; --line:#3a352a; --text:#ece5d4; --text-soft:#a89d86;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 26px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;}
+  ::selection{background:var(--gold);color:#12203f;}
+  a{color:inherit;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  h1,h2,h3{font-family:'Newsreader',serif;text-wrap:balance;}
+  button{font:inherit;}
+  [hidden]{display:none!important;}
+  svg.icon{display:block;width:19px;height:19px;}
+
+  .topwrap{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;}
+  .topbar{background:var(--ink);border-bottom:3px solid var(--gold);}
+  .topbar-inner{max-width:1080px;margin:0 auto;padding:18px 20px 16px;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:0 0 6px;}
+  .brand-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  .brand{font-family:'Newsreader',serif;font-weight:600;font-size:26px;color:#f4ecd8;margin:0;}
+  .brand-sub{font-size:12.5px;color:rgba(244,236,216,.68);margin:0;max-width:380px;line-height:1.5;}
+
+  .search-wrap{max-width:1080px;margin:0 auto;padding:16px 20px 18px;display:flex;gap:10px;align-items:center;}
+  .search-box{position:relative;flex:1;max-width:440px;}
+  #searchInput{width:100%;padding:12px 14px 12px 36px;border:1px solid var(--line);border-radius:9px;font-size:14.5px;font-family:'Inter',sans-serif;background:var(--card);color:var(--text);box-shadow:var(--shadow);}
+  #searchInput:focus{outline:2px solid var(--gold);}
+  .search-box svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text-soft);pointer-events:none;}
+  .result-count{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--text-soft);white-space:nowrap;}
+
+  main{max-width:1080px;margin:0 auto;padding:6px 20px 48px;}
+
+  .facts-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin:22px 0 32px;box-shadow:var(--shadow);}
+  .fact{background:var(--card);padding:14px 16px;}
+  .fact-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;}
+  .fact-value{font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.35;}
+
+  /* ---- clusters (proximity groups, not state groups) ---- */
+  .cluster{margin-bottom:30px;}
+  .cluster-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:11px;padding-bottom:9px;border-bottom:1px dashed var(--line);}
+  .cluster-name{font-size:17px;font-weight:600;margin:0;color:var(--ink);}
+  .cluster-area{font-size:12px;color:var(--text-soft);}
+  .cluster-span{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.03em;color:var(--peacock);background:color-mix(in srgb, var(--peacock) 12%, transparent);border:1px solid color-mix(in srgb, var(--peacock) 32%, transparent);padding:4px 9px;border-radius:8px;white-space:nowrap;}
+
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;align-items:start;}
+
+  section.spot-card{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:14px 16px;transition:border-color .15s ease;}
+  section.spot-card:hover{border-color:var(--gold);}
+  .spot-head{display:flex;align-items:flex-start;gap:11px;cursor:pointer;}
+  .spot-icon{width:36px;height:36px;border-radius:9px;background:var(--ink);color:var(--paper-2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .spot-title-wrap{flex:1;min-width:0;}
+  .spot-title-wrap h3{font-size:15px;font-weight:600;margin:0;color:var(--ink);}
+  .spot-deck{margin:2px 0 0;font-size:12px;color:var(--text-soft);line-height:1.4;}
+  .chev{margin-left:auto;font-size:14px;color:var(--text-soft);transition:transform .2s ease;flex-shrink:0;padding-top:2px;}
+  .spot-card.open .chev{transform:rotate(180deg);}
+  .spot-body{display:none;padding:13px 0 0;}
+  .spot-card.open .spot-body{display:block;}
+  .timings-line{display:inline-flex;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--saffron);background:color-mix(in srgb, var(--saffron) 12%, transparent);border:1px solid color-mix(in srgb, var(--saffron) 32%, transparent);padding:5px 9px;border-radius:8px;margin:0 0 12px;line-height:1.4;}
+
+  .action-group{margin-bottom:10px;}
+  .action-group:last-child{margin-bottom:0;}
+  .action-label{display:flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;font-weight:600;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:6px;}
+  .chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:var(--ink);background:var(--paper-2);border:1px solid var(--line);border-radius:14px;padding:5px 10px;text-decoration:none;transition:border-color .15s ease, background .15s ease;}
+  .chip:hover{border-color:var(--gold);background:var(--card);}
+  .chip svg{width:11px;height:11px;flex-shrink:0;}
+
+  .no-results{font-size:13.5px;color:var(--text-soft);padding:24px 0;text-align:center;}
+
+  .chapter{position:relative;padding-left:56px;margin:44px 0 0;scroll-margin-top:70px;}
+  .chapter-node{position:absolute;left:0;top:-4px;width:42px;height:42px;display:flex;align-items:center;justify-content:center;color:var(--ink);border:1.5px solid var(--gold);border-radius:10px;background:var(--card);}
+  .chapter-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;}
+  .chapter-title{font-size:23px;font-weight:600;margin:0;color:var(--ink);}
+  .chapter-blurb{font-size:13.5px;color:var(--text-soft);line-height:1.6;margin:4px 0 18px;max-width:560px;}
+
+  .glossary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-bottom:16px;}
+  .gloss-item{border:1px solid var(--line);border-radius:11px;padding:13px 14px;background:var(--paper-2);}
+  .gloss-item .phrase{font-family:'Newsreader',serif;font-weight:600;font-size:14.5px;color:var(--ink);}
+  .gloss-item .meaning{font-size:12.5px;color:var(--text-soft);margin-top:3px;line-height:1.5;}
+
+  .rules-card{border:1px solid var(--line);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow);padding:16px 18px;}
+  .rules-card h4{margin:0 0 4px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);font-weight:600;}
+  .rules-list{margin:8px 0 0;padding:0;list-style:none;}
+  .rules-list li{font-size:13px;line-height:1.6;padding:9px 0;border-bottom:1px dashed var(--line);}
+  .rules-list li:last-child{border-bottom:none;}
+  .rules-list b{color:var(--ink);}
+
+  .footer-note{max-width:1080px;margin:8px auto 0;padding:20px 20px 40px;text-align:center;border-top:1px solid var(--line);}
+  .footer-note p{font-size:11.5px;color:var(--text-soft);line-height:1.6;margin:0;}
+
+  @media (max-width:560px){
+    .brand{font-size:21px;}
+    .chapter{padding-left:46px;}
+    .chapter-node{width:36px;height:36px;}
+    .search-wrap{flex-wrap:wrap;}
+    .search-box{max-width:none;width:100%;}
+    .cluster-span{margin-left:0;}
+  }
+</style>
+
+<div class="topwrap">
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand-row">
+        <div>
+          <p class="eyebrow">Field Guide for Domestic Travel</p>
+          <h1 class="brand">India Travel Guide</h1>
+        </div>
+        <p class="brand-sub">Individual sights, grouped only by what's actually near each other — open one to book travel, a hotel, a cab, or find what's nearby.</p>
+      </div>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-box">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="searchInput" type="text" placeholder="Search a sight, a town, a trip cluster…" autocomplete="off">
+    </div>
+    <span class="result-count mono" id="resultCount"></span>
+  </div>
+</div>
+
+<main>
+
+  <div class="facts-strip">
+    <div class="fact"><div class="fact-label">Best overall season</div><div class="fact-value">Oct – Mar, most of the country</div></div>
+    <div class="fact"><div class="fact-label">Book trains</div><div class="fact-value">IRCTC · Tatkal opens 1 day prior</div></div>
+    <div class="fact"><div class="fact-label">Book flights</div><div class="fact-value">4–6 weeks out for the best fares</div></div>
+    <div class="fact"><div class="fact-label">Permits needed</div><div class="fact-value">Ladakh, Arunachal, parts of Andaman</div></div>
+  </div>
+
+  <div id="clusterList"></div>
+
+  <div class="chapter" id="essentials-chapter">
+    <div class="chapter-node" id="essentialsIcon"></div>
+    <p class="chapter-eyebrow">Domestic Travel</p>
+    <h2 class="chapter-title">Getting Around India</h2>
+    <p class="chapter-blurb">The practical half of the trip, sorted once so the rest of it can be about the places above.</p>
+
+    <div class="glossary-grid">
+      <div class="gloss-item"><div class="phrase">Trains</div><div class="meaning">Book through IRCTC. General quota opens up to 120 days ahead; Tatkal opens the day before travel (10am for AC classes, 11am for non-AC). Rajdhani, Shatabdi and Vande Bharat trains are the fastest options on busy routes.</div></div>
+      <div class="gloss-item"><div class="phrase">Flights</div><div class="meaning">IndiGo, Air India, Vistara and SpiceJet cover most of the domestic network. Fares climb fast closer to the date — book 4–6 weeks out where the dates allow it.</div></div>
+      <div class="gloss-item"><div class="phrase">Cabs &amp; local transport</div><div class="meaning">Ola, Uber and Rapido (bike taxis) work in most cities. Smaller towns, hill stations and islands rely on local taxi unions and pre-agreed fares rather than app cabs.</div></div>
+      <div class="gloss-item"><div class="phrase">Permits</div><div class="meaning">Inner Line Permits are required for parts of Ladakh, Arunachal Pradesh and the Sikkim border; some Andaman zones need a tribal reserve permit. Check the specific route ahead — rules change by stretch and season.</div></div>
+      <div class="gloss-item"><div class="phrase">Money &amp; payments</div><div class="meaning">UPI is accepted almost everywhere in cities and larger towns. Carry some cash for rural areas, autos and small vendors — ATMs thin out in remote hill and island regions.</div></div>
+      <div class="gloss-item"><div class="phrase">Packing by season</div><div class="meaning">Light cottons for the plains, October–March. Warm layers for hill stations and the Himalayas year-round. Monsoon gear if you're travelling June–September, especially in the hills.</div></div>
+    </div>
+
+    <div class="rules-card">
+      <h4>On the ground</h4>
+      <ul class="rules-list">
+        <li><b>Shoes off</b> before entering temples, gurdwaras and most homes — look for the shoe rack at the door.</li>
+        <li><b>Dress modestly</b> at religious sites; a scarf to cover shoulders or head is worth keeping in your bag.</li>
+        <li><b>Ask before photographing</b> people, especially at ghats and in villages — a nod and a smile go a long way.</li>
+        <li><b>Right hand</b> for eating, giving and receiving — the left is considered unclean by long-standing convention.</li>
+        <li><b>Agree the fare first</b> with unmetered autos and rickshaws, and with boatmen at ghats and backwaters.</li>
+        <li><b>Keep copies</b> of your ID separate from the originals, and use registered taxis after dark in unfamiliar towns.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    <p>A quick-reference field guide, not official advice — timings, fares and permit rules shift with the season, and booking links open each provider's own site or app store page for you to search or book directly.</p>
+  </div>
+</main>
+
+<script>
+(function(){
+  var ICONS = {
+    city: '<path d="M3 20h18"/><rect x="4" y="9" width="6" height="11"/><rect x="12" y="4" width="7" height="16"/><line x1="6" y1="12" x2="6" y2="12.01"/><line x1="6" y1="15" x2="6" y2="15.01"/><line x1="6" y1="18" x2="6" y2="18.01"/><line x1="14" y1="8" x2="14" y2="8.01"/><line x1="14" y1="11" x2="14" y2="11.01"/><line x1="14" y1="14" x2="14" y2="14.01"/><line x1="17" y1="8" x2="17" y2="8.01"/><line x1="17" y1="11" x2="17" y2="11.01"/><line x1="17" y1="14" x2="17" y2="14.01"/>',
+    landmark: '<path d="M3 21h18"/><path d="M4 21V10h2v11"/><path d="M8 21V10h2v11"/><path d="M12 21V10h2v11"/><path d="M16 21V10h2v11"/><path d="M2 10l10-6 10 6"/>',
+    temple: '<path d="M12 2l2 3h-4z"/><path d="M12 5v2"/><path d="M7 9h10l1 3H6z"/><path d="M5 12h14l1 3H4z"/><path d="M4 15h16l1 6H3z"/>',
+    mountain: '<path d="M2 20l6-10 4 5 3-4 6 9z"/><path d="M13 10l-1.4 2"/>',
+    wave: '<path d="M2 8c1.5-2 3.5-2 5 0s3.5 2 5 0 3.5-2 5 0 3.5 2 5 0"/><path d="M2 14c1.5-2 3.5-2 5 0s3.5 2 5 0 3.5-2 5 0 3.5 2 5 0"/><path d="M2 20c1.5-2 3.5-2 5 0s3.5 2 5 0 3.5-2 5 0 3.5 2 5 0"/>',
+    desert: '<circle cx="17" cy="6" r="3"/><path d="M2 18c2-3 5-3 7-1s5 2 7 0 4-2 6 0"/><path d="M2 21h20"/>',
+    leaf: '<path d="M4 20c0-9 6-15 15-16-1 9-7 15-16 16z"/><path d="M6 18c2-4 5-7 9-9"/>'
+  };
+  function iconSVG(key){
+    return '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'+(ICONS[key]||ICONS.landmark)+'</svg>';
+  }
+  var CHIP_ICONS = {
+    train:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="13" rx="2"/><path d="M4 11h16"/><path d="M8 21l2-3h4l2 3"/><circle cx="8" cy="14" r=".6" fill="currentColor" stroke="none"/><circle cx="16" cy="14" r=".6" fill="currentColor" stroke="none"/></svg>',
+    plane:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13l8-2 5-8 2 1-3 8 5 1v2l-5 1 1 5-2 1-3-6-8 3v-2l4-3-4-1z"/></svg>',
+    bed:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-9"/><path d="M3 13h18"/><path d="M21 18v-3a3 3 0 0 0-3-3H9"/><path d="M3 18v3"/><path d="M21 18v3"/><circle cx="7" cy="9" r="2"/></svg>',
+    car:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 15l1.5-5A2 2 0 0 1 6.4 8.6h11.2A2 2 0 0 1 19.5 10L21 15"/><path d="M3 15h18v3a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1H6v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><circle cx="7.5" cy="15" r="1.5"/><circle cx="16.5" cy="15" r="1.5"/></svg>',
+    pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6.5 7-11a7 7 0 1 0-14 0c0 4.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.4"/></svg>',
+    fork:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 3v7a2 2 0 1 0 4 0V3"/><path d="M9 10v11"/><path d="M17 3c-1.5 0-2 2-2 4.5S15.5 12 17 12s2-2 2-4.5S18.5 3 17 3z"/><path d="M17 12v9"/></svg>'
+  };
+  function gmaps(q){ return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q); }
+  function chip(label, url, iconKey){
+    return '<a class="chip" href="'+url+'" target="_blank" rel="noopener">'+(CHIP_ICONS[iconKey]||'')+'<span>'+label+'</span></a>';
+  }
+
+  function actionGroups(spotName, area){
+    var q = spotName+', '+area;
+    return [
+      {label:'Book travel', chips:[
+        chip('IRCTC', 'https://www.irctc.co.in/nget/train-search', 'train'),
+        chip('MakeMyTrip', 'https://www.makemytrip.com/', 'plane'),
+        chip('Ixigo', 'https://www.ixigo.com/', 'train'),
+        chip('redBus', 'https://www.redbus.in/', 'car')
+      ]},
+      {label:'Book a hotel nearby', chips:[
+        chip('Booking.com', 'https://www.booking.com/searchresults.html?ss='+encodeURIComponent(q), 'bed'),
+        chip('MakeMyTrip Hotels', 'https://www.makemytrip.com/hotels/', 'bed'),
+        chip('Maps: hotels near here', gmaps('hotels near '+q), 'pin')
+      ]},
+      {label:'Book a cab', chips:[
+        chip('Uber', 'https://m.uber.com/ul/?action=setPickup&dropoff%5Bformatted_address%5D='+encodeURIComponent(q), 'car'),
+        chip('Ola', 'https://book.olacabs.com/', 'car'),
+        chip('Rapido', 'https://rapido.bike/', 'car')
+      ]},
+      {label:'Nearest public toilets', chips:[
+        chip('Maps: toilets near here', gmaps('public toilets near '+q), 'pin')
+      ]},
+      {label:'Nearest restaurants', chips:[
+        chip('Zomato', 'https://www.zomato.com/', 'fork'),
+        chip('Swiggy', 'https://www.swiggy.com/', 'fork'),
+        chip('Maps: food near here', gmaps('restaurants near '+q), 'pin')
+      ]}
+    ];
+  }
+
+  var CLUSTERS = [
+    {name:'Old Delhi Trail', area:'Old Delhi', span:'3 stops · half day', spots:[
+      {name:'Red Fort', icon:'landmark', deck:'Mughal red-sandstone fort and the site of the Independence Day flag-hoisting.', timings:'9:30am–4:30pm, closed Mon'},
+      {name:'Jama Masjid', icon:'temple', deck:"India's largest mosque — its courtyard holds 25,000 people at once.", timings:'7am–12pm, 1:30–6:30pm'},
+      {name:'Chandni Chowk', icon:'city', deck:"17th-century bazaar lanes — parathas, spices, and old Delhi in one stretch.", timings:'Shops ~10am–8pm, closed Sun'}
+    ]},
+    {name:'New Delhi Heritage Loop', area:'South Delhi', span:'3 stops · half day', spots:[
+      {name:"Humayun's Tomb", icon:'landmark', deck:'A Mughal garden-tomb that inspired the Taj Mahal a century later.', timings:'Sunrise–sunset'},
+      {name:'Qutub Minar', icon:'landmark', deck:"A 73m brick minaret and one of Delhi's oldest standing monuments.", timings:'7am–5pm'},
+      {name:'Lotus Temple', icon:'temple', deck:"A lotus-shaped Bahá'í house of worship, open to all faiths in silence.", timings:'9:30am–5:30pm, closed Mon'}
+    ]},
+    {name:'Agra Monument Circuit', area:'Agra, Uttar Pradesh', span:'3 stops · 1 day', spots:[
+      {name:'Taj Mahal', icon:'landmark', deck:'The marble mausoleum that needs no introduction — best at sunrise.', timings:'Sunrise–sunset, closed Fri'},
+      {name:'Agra Fort', icon:'landmark', deck:'Red sandstone fort that was the Mughal seat before the Red Fort in Delhi.', timings:'Sunrise–sunset'},
+      {name:'Mehtab Bagh', icon:'leaf', deck:"A garden directly across the river — the Taj's sunset view, minus the crowds.", timings:'Sunrise–sunset'}
+    ]},
+    {name:'Jaipur Fort Circuit', area:'Jaipur, Rajasthan', span:'3 stops · 1 day', spots:[
+      {name:'Amber Fort', icon:'landmark', deck:'Hilltop fort-palace reached by a short climb or an elephant ride up.', timings:'8am–5:30pm'},
+      {name:'Jal Mahal', icon:'wave', deck:'A palace that appears to float in the middle of Man Sagar Lake.', timings:'Viewable from the lakeside; no entry inside'},
+      {name:'Nahargarh Fort', icon:'landmark', deck:'Ridge-top fort above the city, best for sunset over Jaipur.', timings:'10am–5:30pm'}
+    ]},
+    {name:'Jaipur Old City Walk', area:'Jaipur, Rajasthan', span:'3 stops · half day', spots:[
+      {name:'City Palace, Jaipur', icon:'landmark', deck:'Still home to the former royal family, with courtyards and a textile museum.', timings:'9:30am–5pm'},
+      {name:'Hawa Mahal', icon:'landmark', deck:"The five-storey 'Palace of Winds', with 953 latticed windows.", timings:'9am–4:30pm'},
+      {name:'Jantar Mantar', icon:'landmark', deck:'An 18th-century open-air observatory of giant stone instruments.', timings:'9am–4:30pm'}
+    ]},
+    {name:'Udaipur Lake Walk', area:'Udaipur, Rajasthan', span:'3 stops · half day', spots:[
+      {name:'City Palace, Udaipur', icon:'landmark', deck:'A palace complex overlooking Lake Pichola, built over four centuries.', timings:'9:15am–5:30pm'},
+      {name:'Jagdish Temple', icon:'temple', deck:'A carved 17th-century temple a short walk from the palace gates.', timings:'5am–2pm, 4–10pm'},
+      {name:'Lake Pichola Jetty', icon:'wave', deck:'Boat rides across the lake, past Jag Mandir island.', timings:'Boats run 10am–6pm'}
+    ]},
+    {name:'Amritsar Circuit', area:'Amritsar, Punjab', span:'4 stops · 1–2 days', spots:[
+      {name:'Golden Temple', icon:'temple', deck:"Sikhism's holiest shrine, gilded and floating on its own sacred pool.", timings:'Open 24 hours'},
+      {name:'Jallianwala Bagh', icon:'leaf', deck:'Memorial garden marking the 1919 massacre, a short walk from the temple.', timings:'6am–7pm'},
+      {name:'Partition Museum', icon:'city', deck:"Housed in the Town Hall, telling the story of 1947 through personal objects.", timings:'10am–6pm, closed Mon'},
+      {name:'Wagah Border', icon:'city', deck:'The daily border-closing ceremony, 30km out — a half-day trip on its own.', timings:'Ceremony ~4:30–5:30pm winter, 5:30–6:30pm summer'}
+    ]},
+    {name:'Rishikesh Riverside', area:'Rishikesh, Uttarakhand', span:'3 stops · half day', spots:[
+      {name:'Laxman Jhula', icon:'temple', deck:'An iron suspension bridge across the Ganges, ringed by cafés and shops.', timings:'Open all day'},
+      {name:'Ram Jhula', icon:'temple', deck:"A quieter second bridge, near several of the town's biggest ashrams.", timings:'Open all day'},
+      {name:'Triveni Ghat', icon:'temple', deck:'The main ghat for the evening Ganga Aarti, lamps and all.', timings:'Aarti ~6pm, varies by season'}
+    ]},
+    {name:'Leh–Ladakh Route', area:'Ladakh', span:'4 stops · 6–8 days', spots:[
+      {name:'Thiksey Monastery', icon:'temple', deck:'A 12-storey monastery modelled on the Potala Palace in Lhasa.', timings:'7am–7pm'},
+      {name:'Pangong Lake', icon:'wave', deck:'A high-altitude lake that shifts through blues across the day.', timings:'Day visits; Inner Line Permit required'},
+      {name:'Nubra Valley', icon:'mountain', deck:'Sand dunes and double-humped camels, reached over Khardung La.', timings:'Day visits; permit required'},
+      {name:'Khardung La Pass', icon:'mountain', deck:"One of the world's highest motorable passes, at over 5,300m.", timings:'Open May–Oct, weather permitting'}
+    ]},
+    {name:'Manali Valley Loop', area:'Manali, Himachal Pradesh', span:'3 stops · 1 day', spots:[
+      {name:'Solang Valley', icon:'mountain', deck:'Snow slopes and paragliding, a short drive above Manali town.', timings:'9am–5pm'},
+      {name:'Old Manali', icon:'leaf', deck:'Café-lined lanes across the river, a slower pace than the main town.', timings:'Open all day'},
+      {name:'Hadimba Temple', icon:'temple', deck:'A wooden temple set inside a cedar forest, older than the town itself.', timings:'8am–7pm'}
+    ]},
+    {name:'Shimla Town Walk', area:'Shimla, Himachal Pradesh', span:'3 stops · half day', spots:[
+      {name:'Mall Road', icon:'city', deck:'The pedestrian spine of Shimla, colonial buildings included.', timings:'Open all day, no vehicles'},
+      {name:'Jakhoo Temple', icon:'temple', deck:'Hilltop Hanuman temple with the best rooftop view of the town.', timings:'6am–9pm'},
+      {name:'Kalka–Shimla Toy Train Station', icon:'mountain', deck:"The UNESCO-listed narrow-gauge line's Shimla terminus.", timings:'Trains depart through the morning'}
+    ]},
+    {name:'Mumbai Waterfront', area:'South Mumbai, Maharashtra', span:'3 stops · 1 day', spots:[
+      {name:'Gateway of India', icon:'landmark', deck:'A basalt arch facing the harbour, built for a royal visit in 1911.', timings:'Open all day'},
+      {name:'Marine Drive', icon:'wave', deck:"The city's sweeping seafront promenade, best at sunset.", timings:'Open all day'},
+      {name:'Elephanta Caves', icon:'landmark', deck:"Rock-cut cave temples on an island, an hour's ferry from the Gateway.", timings:'Ferries ~9am–2pm, closed Mon'}
+    ]},
+    {name:'North Goa Beach Loop', area:'North Goa', span:'3 stops · 1 day', spots:[
+      {name:'Baga Beach', icon:'wave', deck:"Goa's busiest beach strip — shacks, water sports and nightlife.", timings:'Open all day'},
+      {name:'Fort Aguada', icon:'landmark', deck:'A 17th-century Portuguese fort with a lighthouse and sea views.', timings:'9:30am–6pm'},
+      {name:'Anjuna Flea Market', icon:'city', deck:'A Wednesday-only market of clothes, music and everything else.', timings:'Wed, ~9am–sunset'}
+    ]},
+    {name:'South Goa Heritage Loop', area:'South Goa', span:'3 stops · 1 day', spots:[
+      {name:'Palolem Beach', icon:'wave', deck:'A quieter, curved beach with far fewer crowds than the north.', timings:'Open all day'},
+      {name:'Old Goa Churches', icon:'temple', deck:'UNESCO-listed Basilica of Bom Jesus and Sé Cathedral.', timings:'9am–6pm'},
+      {name:'Fontainhas', icon:'city', deck:"Panjim's Latin quarter of pastel houses and narrow lanes.", timings:'Open all day'}
+    ]},
+    {name:'Rann of Kutch Desert Circuit', area:'Kutch, Gujarat', span:'2 stops · 2–3 days', spots:[
+      {name:'Rann Utsav Salt Flats', icon:'desert', deck:'A white salt desert that fills with tents and music each winter.', timings:'Festival runs Nov–Feb'},
+      {name:'Kutch Handicraft Villages', icon:'leaf', deck:'Nirona and Bhujodi villages, known for Rogan art and weaving.', timings:'Workshops ~10am–6pm'}
+    ]},
+    {name:'Alleppey Backwater Cluster', area:'Alleppey & Kumarakom, Kerala', span:'2 stops · 2 days', spots:[
+      {name:'Alleppey Houseboat Jetty', icon:'wave', deck:'The starting point for overnight cruises through the backwaters.', timings:'Check-in ~12pm, check-out ~9am'},
+      {name:'Kumarakom Bird Sanctuary', icon:'leaf', deck:'A wetland reserve on the edge of Vembanad Lake.', timings:'6am–6pm'}
+    ]},
+    {name:'Munnar Tea Trail', area:'Munnar, Kerala', span:'3 stops · 1 day', spots:[
+      {name:'Eravikulam National Park', icon:'leaf', deck:'Home to the endangered Nilgiri tahr, best visited early.', timings:'7am–4pm, closed in heavy monsoon'},
+      {name:'Mattupetty Dam', icon:'wave', deck:'A reservoir ringed by tea gardens, popular for boating.', timings:'9am–5pm'},
+      {name:'Top Station', icon:'mountain', deck:"The highest viewpoint on the Munnar road, overlooking Tamil Nadu's plains.", timings:'Open daylight hours'}
+    ]},
+    {name:'Hampi Ruins Circuit', area:'Hampi, Karnataka', span:'3 stops · 1–2 days', spots:[
+      {name:'Virupaksha Temple', icon:'temple', deck:'A still-active temple at the heart of the ruins, gopuram and all.', timings:'6am–1pm, 4–8:30pm'},
+      {name:'Vittala Temple', icon:'temple', deck:'Home to the stone chariot and famously musical pillars.', timings:'8:30am–5:30pm'},
+      {name:'Matanga Hill', icon:'mountain', deck:"The best sunrise and sunset point over Hampi's boulder landscape.", timings:'Best at sunrise or sunset'}
+    ]},
+    {name:'Mysore Palace Loop', area:'Mysore, Karnataka', span:'3 stops · 1 day', spots:[
+      {name:'Mysore Palace', icon:'landmark', deck:'The former Wadiyar dynasty seat, lit up on Sunday evenings.', timings:'10am–5:30pm; lit 7–7:45pm Sun & holidays'},
+      {name:'Devaraja Market', icon:'city', deck:'A century-old market of spices, flowers and silk.', timings:'6am–8:30pm'},
+      {name:'Chamundi Hills', icon:'mountain', deck:'A hilltop temple with a wide view back over the city.', timings:'7:30am–2pm, 3:30–6pm'}
+    ]},
+    {name:'Ooty Hill Loop', area:'Ooty, Tamil Nadu', span:'3 stops · 1 day', spots:[
+      {name:'Ooty Lake', icon:'wave', deck:'An artificial lake in the town centre, popular for boating.', timings:'9am–6pm'},
+      {name:'Botanical Garden', icon:'leaf', deck:'Terraced gardens laid out in 1848, with a fossilised tree trunk.', timings:'7am–6:30pm'},
+      {name:'Doddabetta Peak', icon:'mountain', deck:'The highest point in the Nilgiris, with a telescope house at the top.', timings:'9am–5pm'}
+    ]},
+    {name:'Varanasi Ghat Walk', area:'Varanasi, Uttar Pradesh', span:'3 stops · 1 day', spots:[
+      {name:'Dashashwamedh Ghat', icon:'temple', deck:'The main ghat, and the stage for the nightly Ganga Aarti.', timings:'Aarti ~6:45–7:15pm'},
+      {name:'Kashi Vishwanath Temple', icon:'temple', deck:'One of the twelve Jyotirlinga shrines to Shiva, a short walk from the ghats.', timings:'3am–11pm, with breaks for rituals'},
+      {name:'Assi Ghat', icon:'temple', deck:'A quieter southern ghat, popular for sunrise yoga and boat rides.', timings:'Open all day'}
+    ]},
+    {name:'Darjeeling Viewpoint Trail', area:'Darjeeling, West Bengal', span:'3 stops · 1 day', spots:[
+      {name:'Tiger Hill', icon:'mountain', deck:'The pre-dawn viewpoint for sunrise over Kanchenjunga.', timings:'Departures ~4–4:30am'},
+      {name:'Batasia Loop', icon:'mountain', deck:'A spiral railway loop with a war memorial and mountain views.', timings:'6am–6pm'},
+      {name:'Chowrasta Mall', icon:'city', deck:"Darjeeling's central square, ringed by cafés and pony rides.", timings:'Open all day'}
+    ]},
+    {name:'Havelock Island Circuit', area:'Havelock (Swaraj Dweep), Andaman', span:'2 stops · 1–2 days', spots:[
+      {name:'Radhanagar Beach', icon:'wave', deck:"Consistently ranked among Asia's best beaches, and it's easy to see why.", timings:'Open all day'},
+      {name:'Elephant Beach', icon:'wave', deck:'A short boat or trek away, known for snorkelling over the reef.', timings:'Boats run ~8am–3pm'}
+    ]},
+    {name:'Port Blair Heritage', area:'Port Blair, Andaman', span:'2 stops · half day', spots:[
+      {name:'Cellular Jail', icon:'landmark', deck:'The colonial-era prison for freedom fighters, now a museum and light show.', timings:'9am–4:45pm; sound & light ~7:15pm'},
+      {name:"Corbyn's Cove Beach", icon:'wave', deck:'A palm-lined beach 8km from town, good for a quiet last afternoon.', timings:'Open all day'}
+    ]}
+  ];
+
+  var clusterList = document.getElementById('clusterList');
+  var searchInput = document.getElementById('searchInput');
+  var resultCount = document.getElementById('resultCount');
+  document.getElementById('essentialsIcon').innerHTML = iconSVG('city');
+
+  function matches(cluster, spot, q){
+    if(!q) return true;
+    q = q.toLowerCase();
+    var hay = [cluster.name, cluster.area, spot.name, spot.deck].join(' ').toLowerCase();
+    return hay.indexOf(q) !== -1;
+  }
+
+  function spotCardHTML(spot, area){
+    var groups = actionGroups(spot.name, area);
+    var groupsHTML = groups.map(function(g){
+      return '<div class="action-group"><div class="action-label">'+g.label+'</div><div class="chip-row">'+g.chips.join('')+'</div></div>';
+    }).join('');
+    return (
+      '<section class="spot-card">'+
+        '<div class="spot-head" role="button" tabindex="0" aria-expanded="false">'+
+          '<div class="spot-icon">'+iconSVG(spot.icon)+'</div>'+
+          '<div class="spot-title-wrap">'+
+            '<h3>'+spot.name+'</h3>'+
+            '<p class="spot-deck">'+spot.deck+'</p>'+
+          '</div>'+
+          '<span class="chev">▾</span>'+
+        '</div>'+
+        '<div class="spot-body">'+
+          '<span class="timings-line">'+spot.timings+'</span>'+
+          groupsHTML+
+        '</div>'+
+      '</section>'
+    );
+  }
+
+  function render(){
+    var q = searchInput.value.trim();
+    var html = '';
+    var total = 0;
+
+    CLUSTERS.forEach(function(cluster){
+      var spots = cluster.spots.filter(function(s){ return matches(cluster, s, q); });
+      if(spots.length === 0) return;
+      total += spots.length;
+      html +=
+        '<div class="cluster">'+
+          '<div class="cluster-head">'+
+            '<h2 class="cluster-name">'+cluster.name+'</h2>'+
+            '<span class="cluster-area">'+cluster.area+'</span>'+
+            '<span class="cluster-span mono">'+cluster.span+'</span>'+
+          '</div>'+
+          '<div class="card-grid">'+spots.map(function(s){ return spotCardHTML(s, cluster.area); }).join('')+'</div>'+
+        '</div>';
+    });
+
+    clusterList.innerHTML = total ? html : '<p class="no-results">Nothing matches that search — try a sight, a town, or clear it.</p>';
+    resultCount.textContent = total + (total===1 ? ' place' : ' places');
+
+    clusterList.querySelectorAll('.spot-head').forEach(function(head){
+      function toggle(){
+        var card = head.closest('.spot-card');
+        var open = card.classList.toggle('open');
+        head.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+      head.addEventListener('click', toggle);
+      head.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); }
+      });
+    });
+  }
+
+  searchInput.addEventListener('input', render);
+  render();
+})();
+</script>

@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SplitCart — Community Deal Marketplace</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #EFF2EC;
+    color: #16241C;
+  }
+  .page { max-width: 480px; margin: 0 auto; padding: 16px 12px 60px; }
+
+  /* ---------- Header ---------- */
+  .topbar {
+    background: linear-gradient(135deg, #1F6E4E 0%, #17573D 100%);
+    color: #fff;
+    padding: 18px 18px 20px;
+    border-radius: 16px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .topbar::after {
+    content: "";
+    position: absolute;
+    right: -30px; top: -30px;
+    width: 120px; height: 120px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 50%;
+  }
+  .brand-row { display: flex; align-items: center; gap: 10px; position: relative; z-index: 1; }
+  .brand-mark {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: rgba(255,255,255,0.18);
+    display: flex; align-items: center; justify-content: center; font-size: 19px;
+  }
+  .brand-name {
+    font-family: 'Sora', sans-serif; font-weight: 800; font-size: 21px; letter-spacing: -0.3px;
+  }
+  .brand-sub {
+    font-size: 12.5px; opacity: 0.85; margin-top: 3px; position: relative; z-index: 1;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 1px 3px rgba(22,36,28,0.08), 0 1px 2px rgba(22,36,28,0.05);
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+
+  /* ---------- New listing trigger ---------- */
+  #newPostBtn {
+    width: 100%;
+    background: #fff;
+    border: 1.5px dashed #C7D6CC;
+    border-radius: 14px;
+    padding: 15px 16px;
+    font-size: 14.5px;
+    font-weight: 600;
+    color: #1F6E4E;
+    text-align: left;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 14px;
+  }
+  #newPostBtn:hover { background: #F4F9F5; border-color: #1F6E4E; }
+  #newPostBtn .plus-badge {
+    width: 30px; height: 30px; border-radius: 8px; background: #E7F3EA;
+    display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0;
+  }
+
+  /* ---------- Composer ---------- */
+  .composer { padding: 18px; }
+  .composer-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .composer-head h3 { margin: 0; font-family: 'Sora', sans-serif; font-size: 17px; font-weight: 700; }
+  .composer-head span { font-size: 12px; color: #6B7D71; }
+
+  .field { margin-bottom: 13px; }
+  .field label {
+    display: block; font-size: 12px; color: #5B6D62; margin-bottom: 6px; font-weight: 600;
+  }
+  .field-row { display: flex; gap: 10px; }
+  .field-row > .field { flex: 1; }
+  .field select, .field input[type="text"], .field input[type="date"], .field input[type="time"] {
+    width: 100%;
+    padding: 10px 11px;
+    border: 1.5px solid #DEE5E0;
+    border-radius: 8px;
+    font-size: 14px;
+    background: #F8FAF8;
+    color: #16241C;
+    font-family: 'Inter', sans-serif;
+  }
+  .field select:focus, .field input:focus { outline: none; border-color: #1F6E4E; background: #fff; }
+  .other-input { margin-top: 7px; display: none; }
+  .other-input.show { display: block; }
+
+  .section-divider {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; font-weight: 700;
+    color: #8AA091; margin: 16px 0 10px;
+  }
+
+  .preview-card {
+    background: #16241C;
+    color: #F2EDE0;
+    border-radius: 10px;
+    padding: 13px 14px;
+    margin-bottom: 14px;
+  }
+  .preview-card .preview-label {
+    font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.6px; color: #8FCB9C;
+    font-weight: 700; margin-bottom: 8px; display: block;
+  }
+  .preview-card .flash-message { text-align: left; }
+
+  /* ---------- Flash message: text-only highlight, no background box ---------- */
+  .flash-message {
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    line-height: 1.6;
+  }
+  .flash-message .save-amount {
+    font-size: 19px;
+    font-weight: 800;
+  }
+  .flash-message .hurry {
+    color: #C1502E;
+    font-weight: 800;
+  }
+  .flash-message.flashing {
+    animation: flashHighlight 1.3s ease-in-out infinite;
+  }
+  @keyframes flashHighlight {
+    0%, 100% { color: inherit; text-shadow: none; }
+    50% { color: #C9860F; text-shadow: 0 0 8px rgba(227,167,46,0.45); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .flash-message.flashing { animation: none; }
+  }
+
+  .composer-actions { display: flex; gap: 8px; }
+  .btn {
+    border: none; border-radius: 9px; padding: 11px 16px; font-size: 14px;
+    font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif;
+  }
+  .btn-primary { background: #1F6E4E; color: #fff; flex: 1; }
+  .btn-primary:hover { background: #185A40; }
+  .btn-secondary { background: #F0F2EF; color: #46564C; }
+  .btn-secondary:hover { background: #E5E9E4; }
+  .btn-map {
+    background: #EAF1FB; color: #1A56B0; width: 100%;
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+    font-size: 13.5px; padding: 10px; margin-bottom: 14px; text-decoration: none;
+  }
+  .btn-map:hover { background: #DCE9F9; }
+  .btn-map:disabled { background: #F0F2EF; color: #9AA69D; cursor: not-allowed; }
+
+  /* ---------- Listing card ---------- */
+  .listing {
+    position: relative;
+    padding: 16px 16px 14px;
+  }
+  .listing.is-taken .listing-inner { opacity: 0.55; }
+
+  .ribbon {
+    position: absolute; top: 14px; right: -6px;
+    background: #E3A72E; color: #221A06;
+    font-size: 11.5px; font-weight: 800;
+    padding: 5px 12px 5px 10px;
+    border-radius: 6px 0 0 6px;
+  }
+  .ribbon::after {
+    content: ""; position: absolute; right: 0; top: 100%;
+    border-width: 6px 6px 0 0; border-style: solid;
+    border-color: #B8842A transparent transparent transparent;
+  }
+
+  .listing-top { display: flex; gap: 11px; align-items: flex-start; margin-bottom: 10px; }
+  .item-badge {
+    width: 46px; height: 46px; border-radius: 12px;
+    background: #E7F3EA; display: flex; align-items: center; justify-content: center;
+    font-size: 24px; flex-shrink: 0;
+  }
+  .listing-title { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 16.5px; margin: 0 0 3px; }
+  .listing-sub { font-size: 12px; color: #6B7D71; }
+  .listing-sub b { color: #46564C; font-weight: 600; }
+
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .tag {
+    background: #F0F2EF; color: #46564C; font-size: 11.5px; font-weight: 600;
+    padding: 5px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px;
+  }
+  .tag.deal-tag { background: #FBF0DB; color: #8A5D12; }
+  .tag.link-tag {
+    background: #EAF1FB; color: #1A56B0; text-decoration: none; cursor: pointer;
+  }
+  .tag.link-tag:hover { background: #DCE9F9; }
+
+  .listing .flash-message { display: block; margin-bottom: 12px; }
+
+  .stat-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;
+  }
+  .stat-block {
+    background: #F8FAF8; border: 1px solid #EAEFE9; border-radius: 10px;
+    padding: 9px 12px;
+  }
+  .stat-block.good { background: #EFF8F1; border-color: #D5EBDA; }
+  .stat-block.strike { background: #FBF3EF; border-color: #F1DDD2; }
+  .stat-label { display: block; font-size: 10.5px; color: #6B7D71; font-weight: 600; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.4px; }
+  .stat-value { font-family: 'Sora', sans-serif; font-size: 17px; font-weight: 700; color: #16241C; }
+  .stat-value.good-value { color: #1F6E4E; }
+  .stat-value.strike-value { color: #A85C3C; text-decoration: line-through; text-decoration-thickness: 1.5px; }
+
+  .cta {
+    width: 100%; border: none; border-radius: 10px; padding: 12px;
+    font-size: 14.5px; font-weight: 700; cursor: pointer;
+    background: #1F6E4E; color: #fff;
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+    font-family: 'Inter', sans-serif;
+  }
+  .cta:hover { background: #185A40; }
+  .cta:disabled {
+    background: #E9ECE9; color: #9AA69D; cursor: not-allowed;
+  }
+
+  .meet-info {
+    background: #F8FAF8; border: 1px dashed #DEE5E0; border-radius: 10px;
+    padding: 10px 12px; font-size: 12.5px; color: #46564C; line-height: 1.6; margin-top: 4px;
+  }
+  .meet-info a { color: #1A56B0; font-weight: 600; text-decoration: none; }
+  .meet-info a:hover { text-decoration: underline; }
+
+  .stamp {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(-14deg);
+    font-family: 'Sora', sans-serif; font-size: 24px; font-weight: 800; letter-spacing: 1.5px;
+    color: #C1502E; border: 3.5px solid #C1502E; padding: 5px 16px; border-radius: 8px;
+    text-transform: uppercase; pointer-events: none; z-index: 2; background: rgba(255,255,255,0.85);
+  }
+
+  .empty { text-align: center; padding: 34px 16px; color: #6B7D71; font-size: 14px; }
+
+  /* ---------- Modal ---------- */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(22,36,28,0.55);
+    display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 50;
+  }
+  .modal-overlay.hidden { display: none; }
+  .modal {
+    background: #fff; border-radius: 16px; padding: 22px; width: 100%; max-width: 360px;
+  }
+  .modal-icon {
+    width: 42px; height: 42px; border-radius: 11px; background: #E7F3EA;
+    display: flex; align-items: center; justify-content: center; font-size: 21px; margin-bottom: 12px;
+  }
+  .modal h3 { margin: 0 0 8px; font-family: 'Sora', sans-serif; font-size: 17px; font-weight: 700; }
+  .modal p { margin: 0 0 14px; font-size: 13.5px; color: #6B7D71; line-height: 1.45; }
+  .modal label {
+    display: block; font-size: 12px; color: #5B6D62; margin-bottom: 6px; font-weight: 600;
+  }
+  .modal-field { margin-bottom: 14px; }
+  .modal input {
+    width: 100%; padding: 11px; border: 1.5px solid #DEE5E0; border-radius: 9px;
+    font-size: 14px; background: #F8FAF8; font-family: 'Inter', sans-serif;
+  }
+  .modal input:focus { outline: none; border-color: #1F6E4E; background: #fff; }
+  .modal-field-row { display: flex; gap: 10px; }
+  .modal-field-row > .modal-field { flex: 1; }
+  .modal-actions { display: flex; gap: 8px; }
+
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="topbar">
+    <div class="brand-row">
+      <div class="brand-mark">🛍️</div>
+      <div class="brand-name">SplitCart</div>
+    </div>
+    <div class="brand-sub">Community marketplace for sharing bulk deals nearby</div>
+  </div>
+
+  <button id="newPostBtn">
+    <span class="plus-badge">＋</span> Saw a deal? List it for neighbors…
+  </button>
+
+  <div class="card hidden" id="composerCard">
+    <div class="composer" id="composer">
+      <div class="composer-head">
+        <h3>List a deal</h3>
+        <span>takes 20 seconds</span>
+      </div>
+
+      <div class="field">
+        <label>Your name</label>
+        <input type="text" id="posterName" placeholder="e.g. Priya">
+      </div>
+
+      <div class="field">
+        <label>Store</label>
+        <select id="store">
+          <option>Local Kirana Store</option>
+          <option>DMart</option>
+          <option>Reliance Smart Bazaar</option>
+          <option>Metro Cash & Carry</option>
+          <option>Big Bazaar</option>
+          <option>Wholesale Mandi</option>
+          <option>Blinkit / Zepto / Online</option>
+          <option value="__other">Other</option>
+        </select>
+        <input type="text" id="storeOther" class="other-input" placeholder="Enter store name">
+      </div>
+
+      <div class="field">
+        <label>Deal link (optional)</label>
+        <input type="text" id="dealLink" placeholder="Paste the Blinkit / Zepto / Amazon product or deal link">
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Item</label>
+          <select id="item">
+            <option>Rice</option>
+            <option>Wheat Atta</option>
+            <option>Cooking Oil</option>
+            <option>Toor Dal</option>
+            <option>Chana Dal</option>
+            <option>Sugar</option>
+            <option>Tea</option>
+            <option>Ghee</option>
+            <option>Detergent</option>
+            <option>Toilet Paper</option>
+            <option>Biscuits</option>
+            <option value="__other">Other</option>
+          </select>
+          <input type="text" id="itemOther" class="other-input" placeholder="Enter item name">
+        </div>
+        <div class="field">
+          <label>Unit</label>
+          <select id="unit">
+            <option>kg</option>
+            <option>g</option>
+            <option>L</option>
+            <option>ml</option>
+            <option>pcs</option>
+            <option>dozen</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Offer</label>
+        <select id="dealType">
+          <option>Buy 1 Get 1 Free</option>
+          <option>Buy 2 Get 1 Free</option>
+          <option>Buy 10kg Get 10kg Free</option>
+          <option>50% Off</option>
+          <option>25% Off</option>
+          <option>Flat ₹100 Off</option>
+          <option>Bulk Pack Discount</option>
+          <option value="__other">Other</option>
+        </select>
+        <input type="text" id="dealTypeOther" class="other-input" placeholder="Describe the offer">
+      </div>
+
+      <div class="section-divider">The maths — so neighbors see the real saving</div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Total deal quantity</label>
+          <select id="totalQty">
+            <option>5</option>
+            <option>10</option>
+            <option>15</option>
+            <option>20</option>
+            <option>25</option>
+            <option>50</option>
+            <option value="__other">Other</option>
+          </select>
+          <input type="text" id="totalQtyOther" class="other-input" placeholder="Enter total qty">
+        </div>
+        <div class="field">
+          <label>Total offer price</label>
+          <select id="offerPrice">
+            <option>₹200</option>
+            <option>₹300</option>
+            <option>₹500</option>
+            <option>₹750</option>
+            <option>₹1000</option>
+            <option>₹1500</option>
+            <option>₹2000</option>
+            <option value="__other">Other</option>
+          </select>
+          <input type="text" id="offerPriceOther" class="other-input" placeholder="Enter offer price">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>You get (their share)</label>
+          <select id="yourQty">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>5</option>
+            <option>10</option>
+            <option>15</option>
+            <option value="__other">Other</option>
+          </select>
+          <input type="text" id="yourQtyOther" class="other-input" placeholder="Enter qty">
+        </div>
+        <div class="field">
+          <label>Regular price / unit</label>
+          <select id="regularPrice">
+            <option>₹40</option>
+            <option>₹50</option>
+            <option>₹60</option>
+            <option>₹75</option>
+            <option>₹100</option>
+            <option>₹120</option>
+            <option>₹150</option>
+            <option value="__other">Other</option>
+          </select>
+          <input type="text" id="regularPriceOther" class="other-input" placeholder="Enter regular price">
+        </div>
+      </div>
+
+      <div class="preview-card">
+        <span class="preview-label">Listing preview</span>
+        <div class="flash-message flashing" id="preview"></div>
+      </div>
+
+      <div class="composer-actions">
+        <button class="btn btn-secondary" id="cancelBtn">Cancel</button>
+        <button class="btn btn-primary" id="postBtn">Post listing</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="feed"></div>
+</div>
+
+<div class="modal-overlay hidden" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-icon">📍</div>
+    <h3>Where and when should we meet?</h3>
+    <p>Share a pickup spot and a time so <b id="modalPosterName"></b> knows when and where to hand over your share.</p>
+
+    <div class="modal-field">
+      <label>Meet at</label>
+      <input type="text" id="modalAddress" placeholder="e.g. DMart Sector 18 or Flat 302, Wing B">
+    </div>
+    <p style="margin:-8px 0 12px; font-size:11.5px; color:#8AA091;">Defaults to the store — edit if you'd rather meet somewhere else, like your flat.</p>
+
+    <a class="btn btn-map" id="modalMapBtn" href="#" target="_blank" rel="noreferrer">
+      🗺️ Preview this spot on Google Maps
+    </a>
+
+    <div class="modal-field-row">
+      <div class="modal-field">
+        <label>Date</label>
+        <input type="date" id="modalDate">
+      </div>
+      <div class="modal-field">
+        <label>Time</label>
+        <input type="time" id="modalTime">
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-secondary" id="modalCancel">Cancel</button>
+      <button class="btn btn-primary" id="modalSubmit">Confirm interest</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let posts = [
+    {
+      id: 1,
+      poster: "Asha",
+      emoji: "🌾",
+      store: "DMart",
+      item: "Rice",
+      unit: "kg",
+      dealType: "Buy 10kg Get 10kg Free",
+      totalQty: 20,
+      offerPrice: 700,
+      yourQty: 10,
+      regularPrice: 75,
+      taken: false,
+      address: null,
+      meetDate: null,
+      meetTime: null,
+      link: null,
+      when: "2h ago"
+    },
+    {
+      id: 2,
+      poster: "Rakesh",
+      emoji: "🛢️",
+      store: "Local Kirana Store",
+      item: "Cooking Oil",
+      unit: "L",
+      dealType: "Buy 1 Get 1 Free",
+      totalQty: 10,
+      offerPrice: 950,
+      yourQty: 5,
+      regularPrice: 190,
+      taken: true,
+      address: "Wing B, Flat 204",
+      meetDate: "2026-09-14",
+      meetTime: "19:00",
+      link: null,
+      when: "1d ago"
+    }
+  ];
+  let nextId = 3;
+  let activePostId = null;
+
+  const $ = (id) => document.getElementById(id);
+
+  const ITEM_EMOJI = {
+    "Rice": "🌾", "Wheat Atta": "🌾", "Cooking Oil": "🛢️", "Toor Dal": "🫘",
+    "Chana Dal": "🫘", "Sugar": "🧂", "Tea": "🍵", "Ghee": "🧈",
+    "Detergent": "🧴", "Toilet Paper": "🧻", "Biscuits": "🍪"
+  };
+  const ITEM_UNIT = {
+    "Rice": "kg", "Wheat Atta": "kg", "Cooking Oil": "L", "Toor Dal": "kg",
+    "Chana Dal": "kg", "Sugar": "kg", "Tea": "kg", "Ghee": "kg",
+    "Detergent": "L", "Toilet Paper": "pcs", "Biscuits": "pcs"
+  };
+
+  function emojiFor(item) { return ITEM_EMOJI[item] || "🛒"; }
+  function num(v) { return parseFloat(String(v).replace(/[^0-9.]/g, "")) || 0; }
+  function money(n) { return "₹" + Math.round(n).toLocaleString("en-IN"); }
+
+  function fieldValue(selectId, otherId) {
+    const select = $(selectId);
+    if (select.value === "__other") {
+      return $(otherId).value.trim() || select.options[0].text;
+    }
+    return select.value;
+  }
+
+  function calc(totalQty, offerPrice, yourQty, regularPrice) {
+    const tQty = num(totalQty), oPrice = num(offerPrice), yQty = num(yourQty), rPrice = num(regularPrice);
+    const perUnit = tQty > 0 ? oPrice / tQty : 0;
+    const yourShare = perUnit * yQty;
+    const regularCost = rPrice * yQty;
+    const saving = regularCost - yourShare;
+    return { yourShare, regularCost, saving, perUnit };
+  }
+
+  function flashSentence(item, saving) {
+    return `You save <span class="save-amount">${money(saving)}</span> on `
+      + `<span class="save-amount">${item}</span> — <span class="hurry">Hurry up!</span>`;
+  }
+
+  function updatePreview() {
+    const item = fieldValue("item", "itemOther");
+    const unit = $("unit").value;
+    const totalQty = fieldValue("totalQty", "totalQtyOther");
+    const offerPrice = fieldValue("offerPrice", "offerPriceOther");
+    const yourQty = fieldValue("yourQty", "yourQtyOther");
+    const regularPrice = fieldValue("regularPrice", "regularPriceOther");
+    const { saving } = calc(totalQty, offerPrice, yourQty, regularPrice);
+    $("preview").innerHTML = flashSentence(item, saving);
+  }
+
+  $("item").addEventListener("change", () => {
+    const val = $("item").value;
+    if (ITEM_UNIT[val]) $("unit").value = ITEM_UNIT[val];
+    updatePreview();
+  });
+
+  ["store", "item", "dealType", "totalQty", "offerPrice", "yourQty", "regularPrice"].forEach((f) => {
+    $(f).addEventListener("change", () => toggleOther(f, f + "Other"));
+    $(f + "Other").addEventListener("input", updatePreview);
+  });
+  $("unit").addEventListener("change", updatePreview);
+
+  function toggleOther(selectId, otherId) {
+    const select = $(selectId);
+    const other = $(otherId);
+    if (select.value === "__other") {
+      other.classList.add("show");
+    } else {
+      other.classList.remove("show");
+      other.value = "";
+    }
+    updatePreview();
+  }
+
+  $("newPostBtn").addEventListener("click", () => {
+    $("newPostBtn").classList.add("hidden");
+    $("composerCard").classList.remove("hidden");
+    updatePreview();
+  });
+
+  $("cancelBtn").addEventListener("click", closeComposer);
+
+  function closeComposer() {
+    $("composerCard").classList.add("hidden");
+    $("newPostBtn").classList.remove("hidden");
+    $("dealLink").value = "";
+  }
+
+  $("postBtn").addEventListener("click", () => {
+    const poster = $("posterName").value.trim();
+    if (!poster) {
+      alert("Add your name before posting.");
+      return;
+    }
+    const store = fieldValue("store", "storeOther");
+    const item = fieldValue("item", "itemOther");
+    const unit = $("unit").value;
+    const dealType = fieldValue("dealType", "dealTypeOther");
+    const totalQty = num(fieldValue("totalQty", "totalQtyOther"));
+    const offerPrice = num(fieldValue("offerPrice", "offerPriceOther"));
+    const yourQty = num(fieldValue("yourQty", "yourQtyOther"));
+    const regularPrice = num(fieldValue("regularPrice", "regularPriceOther"));
+    const link = $("dealLink").value.trim() || null;
+
+    posts.unshift({
+      id: nextId++,
+      poster,
+      emoji: emojiFor(item),
+      store,
+      item,
+      unit,
+      dealType,
+      totalQty,
+      offerPrice,
+      yourQty,
+      regularPrice,
+      taken: false,
+      address: null,
+      meetDate: null,
+      meetTime: null,
+      link,
+      when: "just now"
+    });
+
+    closeComposer();
+    renderFeed();
+  });
+
+  function formatDate(d) {
+    if (!d) return "";
+    const parts = d.split("-");
+    if (parts.length !== 3) return d;
+    const date = new Date(parts[0], parts[1] - 1, parts[2]);
+    return date.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+  }
+  function formatTime(t) {
+    if (!t) return "";
+    const [h, m] = t.split(":").map(Number);
+    const period = h >= 12 ? "PM" : "AM";
+    const hour12 = ((h + 11) % 12) + 1;
+    return `${hour12}:${String(m).padStart(2, "0")} ${period}`;
+  }
+  function mapsUrl(address) {
+    return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
+  }
+
+  function renderFeed() {
+    const feed = $("feed");
+    if (posts.length === 0) {
+      feed.innerHTML = '<div class="card"><div class="empty">No deals shared yet. Be the first to list one.</div></div>';
+      return;
+    }
+    feed.innerHTML = posts.map((p) => {
+      const { yourShare, regularCost, saving } = calc(p.totalQty, p.offerPrice, p.yourQty, p.regularPrice);
+      const flashClass = p.taken ? "flash-message" : "flash-message flashing";
+      const meetBlock = p.taken
+        ? `<div class="meet-info">
+             📅 ${formatDate(p.meetDate)} at ${formatTime(p.meetTime)}<br>
+             📍 ${p.address} · <a href="${mapsUrl(p.address)}" target="_blank" rel="noreferrer">View on Maps</a>
+           </div>`
+        : "";
+      return `
+      <div class="card listing ${p.taken ? "is-taken" : ""}">
+        ${p.taken ? '<div class="stamp">Deal Taken</div>' : ""}
+        <div class="listing-inner">
+          <div class="ribbon">Save ${money(saving)}</div>
+          <div class="listing-top">
+            <div class="item-badge">${p.emoji}</div>
+            <div>
+              <p class="listing-title">${p.item}</p>
+              <div class="listing-sub">Listed by <b>${p.poster}</b> · ${p.when}</div>
+            </div>
+          </div>
+          <div class="tag-row">
+            <span class="tag">🏬 ${p.store}</span>
+            <span class="tag deal-tag">🏷️ ${p.dealType}</span>
+            ${p.link ? `<a class="tag link-tag" href="${p.link}" target="_blank" rel="noreferrer">🔗 View deal</a>` : ""}
+          </div>
+          <div class="${flashClass}">${flashSentence(p.item, saving)}</div>
+          <div class="stat-grid">
+            <div class="stat-block">
+              <span class="stat-label">You get</span>
+              <span class="stat-value">${p.yourQty}${p.unit}</span>
+            </div>
+            <div class="stat-block good">
+              <span class="stat-label">Your share</span>
+              <span class="stat-value good-value">${money(yourShare)}</span>
+            </div>
+            <div class="stat-block strike">
+              <span class="stat-label">Regular price</span>
+              <span class="stat-value strike-value">${money(regularCost)}</span>
+            </div>
+            <div class="stat-block good">
+              <span class="stat-label">You save</span>
+              <span class="stat-value good-value">${money(saving)}</span>
+            </div>
+          </div>
+          ${p.taken
+            ? meetBlock
+            : `<button class="cta" onclick="openModal(${p.id})">🤝 I'm interested</button>`}
+        </div>
+      </div>
+    `;
+    }).join("");
+  }
+
+  function updateMapLink() {
+    const addr = $("modalAddress").value.trim();
+    $("modalMapBtn").href = addr ? mapsUrl(addr) : "#";
+  }
+
+  function isOnlineStore(store) {
+    return /online|blinkit|zepto|amazon/i.test(store || "");
+  }
+
+  function openModal(id) {
+    activePostId = id;
+    const post = posts.find((p) => p.id === id);
+    $("modalPosterName").textContent = post.poster;
+    $("modalAddress").value = isOnlineStore(post.store) ? "" : post.store || "";
+    $("modalAddress").placeholder = isOnlineStore(post.store)
+      ? "e.g. Flat 302, Wing B — where to hand over your share"
+      : "e.g. DMart Sector 18 or Flat 302, Wing B";
+    $("modalDate").value = "";
+    $("modalTime").value = "";
+    const today = new Date().toISOString().split("T")[0];
+    $("modalDate").min = today;
+    updateMapLink();
+    $("modalOverlay").classList.remove("hidden");
+  }
+
+  $("modalAddress").addEventListener("input", updateMapLink);
+
+  $("modalCancel").addEventListener("click", () => {
+    $("modalOverlay").classList.add("hidden");
+    activePostId = null;
+  });
+
+  $("modalSubmit").addEventListener("click", () => {
+    const address = $("modalAddress").value.trim();
+    const date = $("modalDate").value;
+    const time = $("modalTime").value;
+    if (!address) { alert("Add where you'd like to pick up or meet."); return; }
+    if (!date) { alert("Pick a date to meet."); return; }
+    if (!time) { alert("Pick a time to meet."); return; }
+    const post = posts.find((p) => p.id === activePostId);
+    if (post) {
+      post.taken = true;
+      post.address = address;
+      post.meetDate = date;
+      post.meetTime = time;
+    }
+    $("modalOverlay").classList.add("hidden");
+    activePostId = null;
+    renderFeed();
+  });
+
+  renderFeed();
+</script>
+
+</body>
+</html>
