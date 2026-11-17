@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Apps Directory</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .app-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .app-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        .app-icon {
+            border-radius: 22%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-2">🤖 AI Apps Directory</h1>
+            <p class="text-white/90 text-lg">Discover the best AI-powered applications for your role</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="mb-8">
+            <div class="relative max-w-2xl mx-auto">
+                <input 
+                    type="text" 
+                    id="searchInput"
+                    placeholder="Search AI apps..." 
+                    class="w-full px-6 py-4 rounded-2xl text-lg shadow-2xl focus:outline-none focus:ring-4 focus:ring-purple-300"
+                />
+                <span class="absolute right-6 top-1/2 transform -translate-y-1/2 text-2xl">🔍</span>
+            </div>
+        </div>
+
+        <!-- Category Filter -->
+        <div class="mb-6 flex flex-wrap justify-center gap-2">
+            <button class="category-btn px-4 py-2 rounded-full bg-white/90 hover:bg-white font-medium transition" data-category="all">All Apps</button>
+            <button class="category-btn px-4 py-2 rounded-full bg-white/70 hover:bg-white font-medium transition" data-category="students">👨‍🎓 Students</button>
+            <button class="category-btn px-4 py-2 rounded-full bg-white/70 hover:bg-white font-medium transition" data-category="teachers">👩‍🏫 Teachers</button>
+            <button class="category-btn px-4 py-2 rounded-full bg-white/70 hover:bg-white font-medium transition" data-category="coders">💻 Coders</button>
+            <button class="category-btn px-4 py-2 rounded-full bg-white/70 hover:bg-white font-medium transition" data-category="designers">🎨 Designers</button>
+            <button class="category-btn px-4 py-2 rounded-full bg-white/70 hover:bg-white font-medium transition" data-category="managers">📊 Managers</button>
+            <button class="category-btn px-4 py-2 rounded-full bg-white/70 hover:bg-white font-medium transition" data-category="writers">✍️ Writers</button>
+            <button class="category-btn px-4 py-2 rounded-full bg-white/70 hover:bg-white font-medium transition" data-category="marketers">📢 Marketers</button>
+            <button class="category-btn px-4 py-2 rounded-full bg-white/70 hover:bg-white font-medium transition" data-category="creators">🎬 Creators</button>
+        </div>
+
+        <!-- Apps Grid -->
+        <div id="appsGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-3 md:gap-4">
+            <!-- Apps will be inserted here by JavaScript -->
+        </div>
+
+        <!-- No Results Message -->
+        <div id="noResults" class="hidden text-center text-white text-xl mt-12">
+            <p>😕 No apps found matching your search</p>
+        </div>
+    </div>
+
+    <script>
+        // Detect user's device
+        function getDeviceType() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                return 'ios';
+            }
+            
+            if (/android/i.test(userAgent)) {
+                return 'android';
+            }
+            
+            return 'web';
+        }
+
+        const deviceType = getDeviceType();
+
+        const apps = [
+            {
+                name: "ChatGPT",
+                icon: "🤖",
+                categories: ["students", "teachers", "coders", "managers", "writers"],
+                description: "AI assistant by OpenAI",
+                ios: "https://apps.apple.com/app/chatgpt/id6448311069",
+                android: "https://play.google.com/store/apps/details?id=com.openai.chatgpt"
+            },
+            {
+                name: "Claude",
+                icon: "🔮",
+                categories: ["students", "teachers", "coders", "managers", "writers"],
+                description: "AI assistant by Anthropic",
+                ios: "https://apps.apple.com/app/claude-by-anthropic/id6473753684",
+                android: "https://play.google.com/store/apps/details?id=com.anthropic.claude"
+            },
+            {
+                name: "Gemini",
+                icon: "✨",
+                categories: ["students", "teachers", "coders", "managers", "writers"],
+                description: "Google's AI assistant",
+                ios: "https://apps.apple.com/app/google-gemini/id6477489455",
+                android: "https://play.google.com/store/apps/details?id=com.google.android.apps.bard"
+            },
+            {
+                name: "Microsoft Copilot",
+                icon: "🌐",
+                categories: ["coders", "managers", "students"],
+                description: "AI-powered assistant",
+                ios: "https://apps.apple.com/app/microsoft-copilot/id6472538445",
+                android: "https://play.google.com/store/apps/details?id=com.microsoft.copilot"
+            },
+            {
+                name: "Perplexity",
+                icon: "🔎",
+                categories: ["students", "teachers", "managers"],
+                description: "AI-powered search",
+                ios: "https://apps.apple.com/app/perplexity-ask-anything/id1668000334",
+                android: "https://play.google.com/store/apps/details?id=ai.perplexity.app.android"
+            },
+            {
+                name: "GitHub Copilot",
+                icon: "👨‍💻",
+                categories: ["coders"],
+                description: "AI pair programmer",
+                ios: "https://github.com/features/copilot",
+                android: "https://github.com/features/copilot"
+            },
+            {
+                name: "Cursor",
+                icon: "⚡",
+                categories: ["coders"],
+                description: "AI code editor",
+                ios: "https://cursor.sh",
+                android: "https://cursor.sh"
+            },
+            {
+                name: "Replit",
+                icon: "🔧",
+                categories: ["coders", "students"],
+                description: "AI coding platform",
+                ios: "https://apps.apple.com/app/replit-idea-to-software-fast/id1481528127",
+                android: "https://play.google.com/store/apps/details?id=com.replit.app"
+            },
+            {
+                name: "Midjourney",
+                icon: "🎨",
+                categories: ["designers", "creators", "marketers"],
+                description: "AI art generation",
+                ios: "https://www.midjourney.com",
+                android: "https://www.midjourney.com"
+            },
+            {
+                name: "DALL-E",
+                icon: "🖼️",
+                categories: ["designers", "creators", "marketers"],
+                description: "AI image creator",
+                ios: "https://apps.apple.com/app/dall-e/id6446315034",
+                android: "https://play.google.com/store/apps/details?id=com.openai.dalle"
+            },
+            {
+                name: "Canva",
+                icon: "🎨",
+                categories: ["designers", "marketers", "teachers", "students"],
+                description: "Design with AI",
+                ios: "https://apps.apple.com/app/canva-design-photo-video/id897446215",
+                android: "https://play.google.com/store/apps/details?id=com.canva.editor"
+            },
+            {
+                name: "Adobe Firefly",
+                icon: "🔥",
+                categories: ["designers", "creators"],
+                description: "AI creative tool",
+                ios: "https://www.adobe.com/products/firefly.html",
+                android: "https://www.adobe.com/products/firefly.html"
+            },
+            {
+                name: "Figma",
+                icon: "🎯",
+                categories: ["designers", "coders"],
+                description: "Design with AI assist",
+                ios: "https://apps.apple.com/app/figma-design-and-prototype/id1152747299",
+                android: "https://play.google.com/store/apps/details?id=com.figma.mirror"
+            },
+            {
+                name: "Lensa AI",
+                icon: "📸",
+                categories: ["designers", "creators"],
+                description: "AI photo editor",
+                ios: "https://apps.apple.com/app/lensa-ai-photo-video-editor/id1436732536",
+                android: "https://play.google.com/store/apps/details?id=com.lensa.app"
+            },
+            {
+                name: "Remini",
+                icon: "✨",
+                categories: ["designers", "creators"],
+                description: "AI photo enhancer",
+                ios: "https://apps.apple.com/app/remini-ai-photo-enhancer/id1470373330",
+                android: "https://play.google.com/store/apps/details?id=com.bigwinepot.nwdn.international"
+            },
+            {
+                name: "Notion AI",
+                icon: "📝",
+                categories: ["managers", "students", "teachers", "writers"],
+                description: "AI-powered workspace",
+                ios: "https://apps.apple.com/app/notion-notes-tasks-ai/id1232780281",
+                android: "https://play.google.com/store/apps/details?id=notion.id"
+            },
+            {
+                name: "Grammarly",
+                icon: "✍️",
+                categories: ["writers", "students", "teachers", "managers"],
+                description: "AI writing assistant",
+                ios: "https://apps.apple.com/app/grammarly-keyboard-editor/id1158877342",
+                android: "https://play.google.com/store/apps/details?id=com.grammarly.android.keyboard"
+            },
+            {
+                name: "Jasper AI",
+                icon: "💎",
+                categories: ["writers", "marketers"],
+                description: "AI content creator",
+                ios: "https://www.jasper.ai",
+                android: "https://www.jasper.ai"
+            },
+            {
+                name: "Copy.ai",
+                icon: "📄",
+                categories: ["writers", "marketers"],
+                description: "AI copywriting tool",
+                ios: "https://www.copy.ai",
+                android: "https://www.copy.ai"
+            },
+            {
+                name: "Otter.ai",
+                icon: "🦦",
+                categories: ["managers", "students", "teachers"],
+                description: "AI meeting notes",
+                ios: "https://apps.apple.com/app/otter-voice-meeting-notes/id1276437113",
+                android: "https://play.google.com/store/apps/details?id=com.aisense.otter"
+            },
+            {
+                name: "Fireflies.ai",
+                icon: "🎙️",
+                categories: ["managers"],
+                description: "AI meeting assistant",
+                ios: "https://fireflies.ai",
+                android: "https://fireflies.ai"
+            },
+            {
+                name: "Gamma",
+                icon: "📊",
+                categories: ["managers", "teachers", "students", "marketers"],
+                description: "AI presentation maker",
+                ios: "https://gamma.app",
+                android: "https://gamma.app"
+            },
+            {
+                name: "Beautiful.ai",
+                icon: "💼",
+                categories: ["managers", "marketers"],
+                description: "AI presentation design",
+                ios: "https://www.beautiful.ai",
+                android: "https://www.beautiful.ai"
+            },
+            {
+                name: "Runway",
+                icon: "🎬",
+                categories: ["creators", "designers", "marketers"],
+                description: "AI video editor",
+                ios: "https://runwayml.com",
+                android: "https://runwayml.com"
+            },
+            {
+                name: "Descript",
+                icon: "🎙️",
+                categories: ["creators", "marketers"],
+                description: "AI video & podcast editor",
+                ios: "https://apps.apple.com/app/descript-video-podcast-editor/id1501447736",
+                android: "https://www.descript.com"
+            },
+            {
+                name: "Synthesia",
+                icon: "🎥",
+                categories: ["creators", "marketers", "teachers"],
+                description: "AI video creation",
+                ios: "https://www.synthesia.io",
+                android: "https://www.synthesia.io"
+            },
+            {
+                name: "Speechify",
+                icon: "🔊",
+                categories: ["students", "teachers"],
+                description: "AI text to speech",
+                ios: "https://apps.apple.com/app/speechify-text-to-speech/id1209815023",
+                android: "https://play.google.com/store/apps/details?id=com.cliffweitzman.speechify2"
+            },
+            {
+                name: "Duolingo",
+                icon: "🦉",
+                categories: ["students"],
+                description: "AI language learning",
+                ios: "https://apps.apple.com/app/duolingo-language-lessons/id570060128",
+                android: "https://play.google.com/store/apps/details?id=com.duolingo"
+            },
+            {
+                name: "Khan Academy",
+                icon: "📚",
+                categories: ["students", "teachers"],
+                description: "AI tutoring with Khanmigo",
+                ios: "https://apps.apple.com/app/khan-academy/id469863705",
+                android: "https://play.google.com/store/apps/details?id=org.khanacademy.android"
+            },
+            {
+                name: "Socratic",
+                icon: "🎓",
+                categories: ["students"],
+                description: "AI homework helper",
+                ios: "https://apps.apple.com/app/socratic-by-google/id1014164514",
+                android: "https://play.google.com/store/apps/details?id=com.google.socratic"
+            },
+            {
+                name: "Quizlet",
+                icon: "📖",
+                categories: ["students", "teachers"],
+                description: "AI study sets",
+                ios: "https://apps.apple.com/app/quizlet-ai-powered-flashcards/id546473125",
+                android: "https://play.google.com/store/apps/details?id=com.quizlet.quizletandroid"
+            },
+            {
+                name: "Turnitin",
+                icon: "🔍",
+                categories: ["teachers"],
+                description: "AI writing feedback",
+                ios: "https://www.turnitin.com",
+                android: "https://www.turnitin.com"
+            },
+            {
+                name: "Eduaide",
+                icon: "👩‍🏫",
+                categories: ["teachers"],
+                description: "AI teaching assistant",
+                ios: "https://www.eduaide.ai",
+                android: "https://www.eduaide.ai"
+            },
+            {
+                name: "HubSpot",
+                icon: "🚀",
+                categories: ["marketers", "managers"],
+                description: "AI marketing platform",
+                ios: "https://apps.apple.com/app/hubspot-crm/id467914860",
+                android: "https://play.google.com/store/apps/details?id=com.hubspot.android"
+            },
+            {
+                name: "Hootsuite",
+                icon: "🐦",
+                categories: ["marketers"],
+                description: "AI social media mgmt",
+                ios: "https://apps.apple.com/app/hootsuite/id341249709",
+                android: "https://play.google.com/store/apps/details?id=com.hootsuite.droid.full"
+            },
+            {
+                name: "Mailchimp",
+                icon: "📧",
+                categories: ["marketers"],
+                description: "AI email marketing",
+                ios: "https://apps.apple.com/app/mailchimp-marketing-crm/id593909663",
+                android: "https://play.google.com/store/apps/details?id=com.mailchimp.mailchimp"
+            },
+            {
+                name: "Zapier",
+                icon: "⚙️",
+                categories: ["managers", "coders", "marketers"],
+                description: "AI automation",
+                ios: "https://apps.apple.com/app/zapier/id1505983855",
+                android: "https://play.google.com/store/apps/details?id=com.zapier.android"
+            },
+            {
+                name: "Monday.com",
+                icon: "📅",
+                categories: ["managers"],
+                description: "AI project management",
+                ios: "https://apps.apple.com/app/monday-com/id1290128888",
+                android: "https://play.google.com/store/apps/details?id=com.monday.monday"
+            },
+            {
+                name: "ClickUp",
+                icon: "✅",
+                categories: ["managers", "coders"],
+                description: "AI productivity hub",
+                ios: "https://apps.apple.com/app/clickup-tasks-screenshots/id1438945959",
+                android: "https://play.google.com/store/apps/details?id=com.clickup.app"
+            },
+            {
+                name: "Character.AI",
+                icon: "🎭",
+                categories: ["students", "creators"],
+                description: "Chat with AI characters",
+                ios: "https://apps.apple.com/app/character-ai-chat-create/id6456390552",
+                android: "https://play.google.com/store/apps/details?id=ai.character.app"
+            },
+            {
+                name: "ElevenLabs",
+                icon: "🎤",
+                categories: ["creators", "marketers"],
+                description: "AI voice generation",
+                ios: "https://elevenlabs.io",
+                android: "https://elevenlabs.io"
+            }
+        ];
+
+        let currentCategory = 'all';
+
+        function createAppCard(app) {
+            let downloadLink = app.ios;
+            
+            if (deviceType === 'android' && app.android) {
+                downloadLink = app.android;
+            }
+            
+            return `
+                <a href="${downloadLink}" target="_blank" rel="noopener" class="app-card bg-white rounded-2xl p-3 shadow-lg block" data-categories="${app.categories.join(',')}">
+                    <div class="flex flex-col items-center text-center h-full">
+                        <div class="text-4xl mb-2 app-icon bg-gradient-to-br from-purple-100 to-pink-100 w-14 h-14 flex items-center justify-center">
+                            ${app.icon}
+                        </div>
+                        <h3 class="font-bold text-gray-800 mb-1 text-sm leading-tight">${app.name}</h3>
+                        <p class="text-xs text-gray-600 mb-2 line-clamp-2">${app.description}</p>
+                    </div>
+                </a>
+            `;
+        }
+
+        function renderApps(filteredApps) {
+            const grid = document.getElementById('appsGrid');
+            const noResults = document.getElementById('noResults');
+            
+            if (filteredApps.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+                grid.innerHTML = filteredApps.map(createAppCard).join('');
+            }
+        }
+
+        function filterApps() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            let filtered = apps.filter(app => {
+                const matchesSearch = app.name.toLowerCase().includes(searchTerm) || 
+                                    app.description.toLowerCase().includes(searchTerm);
+                const matchesCategory = currentCategory === 'all' || app.categories.includes(currentCategory);
+                return matchesSearch && matchesCategory;
+            });
+            
+            renderApps(filtered);
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', filterApps);
+
+        // Category filter
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                currentCategory = this.dataset.category;
+                
+                // Update button styles
+                document.querySelectorAll('.category-btn').forEach(b => {
+                    b.classList.remove('bg-white/90');
+                    b.classList.add('bg-white/70');
+                });
+                this.classList.remove('bg-white/70');
+                this.classList.add('bg-white/90');
+                
+                filterApps();
+            });
+        });
+
+        // Initial render
+        renderApps(apps);
+    </script>
+</body>
+</html>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Samvidhan Sahayak — Ask the Constitution</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+  :root{
+    --bg:#F3EFE6;
+    --card:#FFFFFF;
+    --ink:#20262B;
+    --ink-soft:#6B7278;
+    --saffron:#E8791F;
+    --green:#166A45;
+    --green-dark:#0F4C32;
+    --line:#E6E0D2;
+    --user-bubble:#166A45;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;}
+  body{
+    background:var(--bg);
+    font-family:'Inter',sans-serif;
+    color:var(--ink);
+    display:flex; flex-direction:column; height:100vh;
+    overflow:hidden;
+  }
+
+  header{
+    padding:16px 18px;
+    background:linear-gradient(120deg, #166A45 0%, #0F4C32 100%);
+    color:#fff;
+    display:flex; align-items:center; gap:12px;
+    box-shadow:0 2px 10px rgba(15,76,50,0.25);
+    position:relative; z-index:2;
+  }
+  header::after{
+    content:""; position:absolute; left:0; right:0; bottom:-3px; height:3px;
+    background:linear-gradient(90deg, #E8791F 0 33%, #fff 33% 66%, #166A45 66% 100%);
+    opacity:0.85;
+  }
+  .badge{
+    width:40px;height:40px;border-radius:50%;
+    background:#fff; display:flex;align-items:center;justify-content:center;
+    font-size:1.25rem; flex:0 0 auto;
+  }
+  header h1{font-family:'Poppins',sans-serif; font-weight:600; font-size:1.05rem; margin:0;}
+  header p{font-size:0.74rem; margin:2px 0 0; opacity:0.88;}
+
+  #feed{
+    flex:1; overflow-y:auto; padding:18px 14px 10px;
+    display:flex; flex-direction:column; gap:12px;
+  }
+  .row{display:flex;}
+  .row.user{justify-content:flex-end;}
+  .row.bot{justify-content:flex-start;}
+
+  .bubble{
+    max-width:85%; padding:12px 15px; border-radius:16px;
+    font-size:0.95rem; line-height:1.6;
+  }
+  .bubble.user{
+    background:var(--user-bubble); color:#fff;
+    border-bottom-right-radius:4px;
+  }
+  .bubble.bot{
+    background:var(--card); color:var(--ink);
+    border:1px solid var(--line);
+    border-bottom-left-radius:4px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.05);
+  }
+  .bubble.bot .lead{margin:0 0 6px; font-weight:500;}
+  .bubble.bot ul{margin:6px 0 2px; padding-left:19px;}
+  .bubble.bot li{margin-bottom:7px;}
+  .ref{
+    color:var(--saffron); font-weight:600; font-size:0.85em;
+    white-space:nowrap; text-decoration:none; border-bottom:1px dashed var(--saffron);
+  }
+  .ref:hover{color:#c4630f; border-bottom-style:solid;}
+  .src-note{
+    display:block; margin-top:9px; font-size:0.72rem; color:var(--ink-soft);
+  }
+
+  .typing{display:flex; gap:4px; padding:4px 0;}
+  .typing span{
+    width:6px;height:6px;border-radius:50%; background:var(--ink-soft);
+    animation: bounce 1.2s infinite ease-in-out;
+  }
+  .typing span:nth-child(2){animation-delay:0.15s;}
+  .typing span:nth-child(3){animation-delay:0.3s;}
+  @keyframes bounce{ 0%,60%,100%{transform:translateY(0); opacity:0.5;} 30%{transform:translateY(-4px); opacity:1;} }
+
+  .chips{
+    display:flex; gap:7px; overflow-x:auto; padding:2px 14px 10px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .chip{
+    flex:0 0 auto; font-size:0.78rem; padding:7px 13px; border-radius:16px;
+    background:#fff; border:1px solid var(--line); color:var(--ink-soft);
+    cursor:pointer; white-space:nowrap; transition:all .15s;
+  }
+  .chip:active{background:var(--saffron); color:#fff; border-color:var(--saffron);}
+
+  .inputbar{
+    display:flex; gap:8px; padding:10px 14px calc(10px + env(safe-area-inset-bottom));
+    background:var(--bg); border-top:1px solid var(--line);
+  }
+  #q{
+    flex:1; border:1px solid var(--line); border-radius:22px;
+    padding:12px 16px; font-size:0.95rem; font-family:'Inter',sans-serif;
+    background:#fff; color:var(--ink);
+  }
+  #q:focus{outline:none; border-color:var(--green);}
+  #askBtn{
+    width:46px;height:46px; border-radius:50%; border:none;
+    background:var(--green); color:#fff; font-size:1.15rem; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; flex:0 0 auto;
+    transition:background .15s;
+  }
+  #askBtn:active{background:var(--green-dark);}
+  #askBtn:disabled{opacity:0.5;}
+
+  .err{
+    font-size:0.85rem; color:#8a2b1f; background:#FBEAE6; border:1px solid #E9BCB2;
+    padding:10px 13px; border-radius:10px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">🇮🇳</div>
+  <div>
+    <h1>Samvidhan Sahayak</h1>
+    <p>Ask the Constitution — live-checked, plain-language answers</p>
+  </div>
+</header>
+
+<div id="feed"></div>
+<div class="chips" id="chips"></div>
+
+<div class="inputbar">
+  <input id="q" type="text" placeholder="Ask a question…" autocomplete="off"/>
+  <button id="askBtn" aria-label="Send">➤</button>
+</div>
+
+<script>
+const SYSTEM_PROMPT = `You are Samvidhan Sahayak, a friendly guide to the Constitution of India.
+Rules:
+- Answer ONLY using accurate, verifiable facts about the Constitution of India. Use web search to check exact Article numbers and wording before answering — never guess a number.
+- Explain in extremely simple, everyday, non-legal language. No jargon like "vide", "inter alia", "the instant case", etc.
+- Format your reply EXACTLY like this, plain text, no markdown symbols like ** or #:
+Line 1: one short, warm sentence directly answering the question (no article number on this line).
+Then one or more bullet lines, each starting with "- ", stating a single simple fact and ending with "(Article NUMBER)" citing the real, correct article. Use letter-suffixed numbers exactly as they exist (e.g. 21A, 39A, 300A) — never invent a number.
+- If the question is about something the Constitution genuinely does NOT cover (e.g. traffic fines, exact tax rates, exam cutoffs, day-to-day rules) say so honestly in one line, briefly note which ordinary law or authority actually covers it, and do NOT invent an article number for it.
+- If a question is broad (e.g. "rights for women"), give 3-6 of the most relevant, distinct points, not just one.
+- Keep the whole answer under 130 words.`;
+
+async function callClaude(userQuestion){
+  const response = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-6",
+      max_tokens: 1000,
+      system: SYSTEM_PROMPT,
+      messages: [{ role: "user", content: userQuestion }],
+      tools: [{ type: "web_search_20250305", name: "web_search" }]
+    })
+  });
+  if(!response.ok){
+    throw new Error("API request failed (" + response.status + ")");
+  }
+  const data = await response.json();
+  const text = (data.content || [])
+    .filter(item => item.type === "text")
+    .map(item => item.text)
+    .join("\n")
+    .trim();
+  if(!text) throw new Error("Empty response");
+  return text;
+}
+
+function articleLink(num){
+  const q = encodeURIComponent("Constitution of India Article " + num + " full text");
+  return "https://www.google.com/search?q=" + q;
+}
+
+function renderAnswer(rawText){
+  const lines = rawText.split("\n").map(l=>l.trim()).filter(Boolean);
+  if(lines.length === 0) return `<p class="lead">Sorry, I couldn't find a clear answer to that.</p>`;
+
+  let html = "";
+  const bulletLines = [];
+  let leadLine = null;
+
+  for(const line of lines){
+    if(/^-\s+/.test(line)){
+      bulletLines.push(line.replace(/^-\s+/, ""));
+    } else if(!leadLine){
+      leadLine = line;
+    } else {
+      bulletLines.push(line);
+    }
+  }
+
+  if(leadLine) html += `<p class="lead">${escapeHtml(leadLine)}</p>`;
+
+  if(bulletLines.length){
+    html += "<ul>";
+    for(const b of bulletLines){
+      const m = b.match(/\(Article\s+([0-9]+[A-Za-z]?)\)\s*$/i);
+      if(m){
+        const num = m[1];
+        const textPart = b.slice(0, m.index).trim();
+        html += `<li>${escapeHtml(textPart)} <a class="ref" href="${articleLink(num)}" target="_blank" rel="noopener">(Article ${num})</a></li>`;
+      } else {
+        html += `<li>${escapeHtml(b)}</li>`;
+      }
+    }
+    html += "</ul>";
+  }
+  return html;
+}
+
+function escapeHtml(s){
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function scrollFeed(){
+  const feed = document.getElementById('feed');
+  feed.scrollTop = feed.scrollHeight;
+}
+
+function addUserBubble(text){
+  const feed = document.getElementById('feed');
+  const row = document.createElement('div'); row.className='row user';
+  const b = document.createElement('div'); b.className='bubble user'; b.textContent=text;
+  row.appendChild(b); feed.appendChild(row);
+  scrollFeed();
+}
+
+function addTypingBubble(){
+  const feed = document.getElementById('feed');
+  const row = document.createElement('div'); row.className='row bot'; row.id='typingRow';
+  const b = document.createElement('div'); b.className='bubble bot';
+  b.innerHTML = `<div class="typing"><span></span><span></span><span></span></div>`;
+  row.appendChild(b); feed.appendChild(row);
+  scrollFeed();
+}
+
+function removeTypingBubble(){
+  const row = document.getElementById('typingRow');
+  if(row) row.remove();
+}
+
+function addBotBubble(html, isError){
+  const feed = document.getElementById('feed');
+  const row = document.createElement('div'); row.className='row bot';
+  const b = document.createElement('div'); b.className = isError ? 'bubble bot' : 'bubble bot';
+  b.innerHTML = isError ? `<div class="err">${html}</div>` : html + `<span class="src-note">Checked live via web search — tap an Article link to read the full text.</span>`;
+  row.appendChild(b); feed.appendChild(row);
+  scrollFeed();
+}
+
+let busy = false;
+async function ask(text){
+  text = text.trim();
+  if(!text || busy) return;
+  busy = true;
+  document.getElementById('askBtn').disabled = true;
+
+  addUserBubble(text);
+  addTypingBubble();
+
+  try{
+    const raw = await callClaude(text);
+    removeTypingBubble();
+    addBotBubble(renderAnswer(raw), false);
+  } catch(e){
+    removeTypingBubble();
+    addBotBubble("Something went wrong reaching the search service. Please try again in a moment.", true);
+  } finally {
+    busy = false;
+    document.getElementById('askBtn').disabled = false;
+  }
+}
+
+document.getElementById('askBtn').addEventListener('click', ()=>{
+  const input = document.getElementById('q');
+  ask(input.value);
+  input.value='';
+  input.focus();
+});
+document.getElementById('q').addEventListener('keydown', (e)=>{
+  if(e.key==='Enter'){ document.getElementById('askBtn').click(); }
+});
+
+const SAMPLE_QS = [
+  "Rights for women",
+  "Can police arrest me without reason?",
+  "Working hours",
+  "Helmet fine",
+  "Freedom of speech",
+  "National emergency",
+  "Can I own property?",
+  "Article 21"
+];
+const chipsDiv = document.getElementById('chips');
+SAMPLE_QS.forEach(q=>{
+  const c = document.createElement('div');
+  c.className='chip'; c.textContent=q;
+  c.addEventListener('click', ()=>ask(q));
+  chipsDiv.appendChild(c);
+});
+
+// Greeting
+(function(){
+  const feed = document.getElementById('feed');
+  const row = document.createElement('div'); row.className='row bot';
+  const b = document.createElement('div'); b.className='bubble bot';
+  b.innerHTML = `<p class="lead">Hi! Ask me anything about the Constitution of India — I'll check it live and answer in plain words with the exact Article number.</p><span class="src-note">Try "rights for women" or "helmet fine" below.</span>`;
+  row.appendChild(b); feed.appendChild(row);
+})();
+</script>
+</body>
+</html>

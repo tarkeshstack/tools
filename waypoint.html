@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Waypoint — Chart the route, guide the climb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFFFFF; --bg-soft:#FAF9F5;
+    --surface:#FFFFFF; --surface-alt:#F5F3ED;
+    --border:#E7E3D8; --border-strong:#D8D3C4;
+    --ink:#20261F; --ink-dim:#5B6459; --sage:#788679;
+    --trail:#C1592A; --trail-bright:#D9713F;
+    --gold:#AD7B1F; --gold-fill:#D9A441;
+    --moss:#3F6B58; --moss-soft:#E7EFEA;
+    --danger:#B23B22; --danger-soft:#F7E9E4;
+    --radius:14px;
+    --shadow-sm:0 1px 2px rgba(32,38,31,0.06);
+    --shadow-md:0 10px 30px rgba(32,38,31,0.08);
+    --font-display:'Fraunces', serif; --font-body:'Inter', sans-serif; --font-mono:'JetBrains Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  [hidden]{display:none !important;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--bg-soft); color:var(--ink); font-family:var(--font-body); min-height:100vh; line-height:1.55;}
+  a{color:inherit;} button{font-family:inherit;}
+
+  /* ---------- login ---------- */
+  #login-screen{min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;}
+  #login-screen[hidden]{display:none;}
+  .login-card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow-md); padding:34px 32px; max-width:400px; width:100%;}
+  .login-card h1{font-family:var(--font-display); font-size:1.6rem; margin:0 0 4px; color:var(--ink);}
+  .login-card p.sub{color:var(--ink-dim); font-size:0.88rem; margin:0 0 22px;}
+  .seg{display:flex; background:var(--surface-alt); border-radius:999px; padding:4px; margin-bottom:16px; border:1px solid var(--border);}
+  .seg button{flex:1; border:none; background:transparent; color:var(--ink-dim); padding:9px; border-radius:999px; font-size:0.85rem; font-weight:600; cursor:pointer;}
+  .seg button.active{background:var(--trail); color:#fff;}
+  .login-card .field{margin-bottom:14px;}
+  .login-card label{font-size:0.76rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--sage); font-weight:600; display:block; margin-bottom:6px;}
+  .login-card input, .login-card select{width:100%; background:var(--bg-soft); border:1px solid var(--border-strong); border-radius:9px; color:var(--ink); padding:10px 12px; font-size:0.94rem;}
+  .login-hint{font-size:0.78rem; color:var(--sage); margin-top:16px; line-height:1.5;}
+  #quick-login{margin-top:18px; border-top:1px solid var(--border); padding-top:14px;}
+  #quick-login p{font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--sage); font-weight:600; margin:0 0 8px;}
+  #quick-login .row{display:flex; flex-wrap:wrap; gap:6px;}
+
+  /* ---------- app shell ---------- */
+  header.masthead{display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 6vw; border-bottom:1px solid var(--border); background:var(--surface); flex-wrap:wrap; position:sticky; top:0; z-index:5;}
+  .brand{display:flex; align-items:center; gap:10px;}
+  .brand h1{font-family:var(--font-display); font-weight:700; font-size:1.3rem; margin:0; color:var(--ink);}
+  .compass{width:28px; height:28px; flex-shrink:0;}
+  .nav-mid{display:flex; align-items:center; gap:8px;}
+  .nav-btn{display:flex; align-items:center; gap:6px; border:1px solid var(--border-strong); background:var(--surface); color:var(--ink-dim); border-radius:999px; padding:8px 16px; font-size:0.85rem; font-weight:600; cursor:pointer;}
+  .nav-btn.active{background:var(--ink); color:#fff; border-color:var(--ink);}
+  .nav-btn:hover:not(.active){border-color:var(--ink-dim); color:var(--ink);}
+  .avatar-btn{width:34px; height:34px; border-radius:50%; background:var(--trail); color:#fff; border:none; font-weight:700; font-size:0.85rem; cursor:pointer; display:flex; align-items:center; justify-content:center;}
+  .avatar-btn.active{outline:2px solid var(--ink); outline-offset:2px;}
+
+  main{max-width:1180px; margin:0 auto; padding:16px 3.5vw 100px;}
+  .view{display:none;} .view.visible{display:block; animation:fadeIn .3s ease;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  /* ---------- home (swipe) view ---------- */
+  .card-view-head{text-align:center; margin-bottom:10px;}
+  .card-view-head h2{font-family:var(--font-display); font-size:1.2rem; margin:0 0 2px;}
+  .card-view-head p{color:var(--sage); font-size:0.82rem; margin:0;}
+  .carousel{position:relative;}
+  .carousel-viewport{width:100%; overflow:hidden; -webkit-user-select:none; user-select:none; touch-action:pan-y; cursor:grab;}
+  .carousel-viewport:active{cursor:grabbing;}
+  .carousel-track{width:100%; will-change:transform, opacity;}
+
+  .home-toggle{display:flex; justify-content:center; margin-bottom:16px;}
+  .home-toggle .seg2{display:inline-flex; background:var(--surface-alt); border:1px solid var(--border); border-radius:999px; padding:4px; gap:2px;}
+  .home-toggle button{border:none; background:transparent; color:var(--ink-dim); padding:8px 22px; border-radius:999px; font-size:0.82rem; font-weight:700; cursor:pointer; transition:all .2s ease;}
+  .home-toggle button.active{background:var(--ink); color:#fff; box-shadow:0 3px 10px rgba(32,38,31,0.18);}
+  .dots{display:flex; justify-content:center; gap:7px; margin-top:18px;}
+  .dot{width:6px; height:6px; border-radius:50%; background:var(--border-strong); cursor:pointer; border:none; padding:0; transition:all .25s cubic-bezier(.2,.8,.2,1);}
+  .dot.active{background:var(--trail); width:22px; border-radius:4px;}
+
+  .example-ribbon{display:inline-flex; align-items:center; gap:6px; font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--gold); background:#FBF1DD; border:1px solid #EBD8AC; padding:3px 10px; border-radius:999px; margin-bottom:8px;}
+  .example-cta{background:var(--bg-soft); border:1px dashed var(--border-strong); border-radius:10px; padding:14px 16px; margin-top:16px; text-align:center;}
+  .example-cta p{margin:0 0 10px; font-size:0.85rem; color:var(--ink-dim);}
+
+  /* ---------- profile view ---------- */
+  .profile-card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow-sm); padding:24px; display:flex; align-items:center; gap:16px; margin-bottom:28px; flex-wrap:wrap;}
+  .profile-avatar{width:56px; height:56px; border-radius:50%; background:var(--trail); color:#fff; font-family:var(--font-display); font-size:1.4rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .profile-info{flex:1; min-width:160px;}
+  .profile-info h2{font-family:var(--font-display); font-size:1.3rem; margin:0 0 2px;}
+  .profile-info p{margin:0; color:var(--sage); font-size:0.85rem;}
+  .btn-logout{background:var(--surface); border:1px solid var(--border-strong); color:var(--ink-dim); border-radius:999px; padding:9px 18px; font-size:0.82rem; cursor:pointer;}
+  .btn-logout:hover{color:var(--ink); border-color:var(--ink-dim);}
+
+  /* ---------- list view (inside profile) ---------- */
+  .filter-tabs{display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap;}
+  .filter-tab{border:1px solid var(--border-strong); background:var(--surface); color:var(--ink-dim); border-radius:999px; padding:7px 16px; font-size:0.82rem; font-weight:600; cursor:pointer;}
+  .filter-tab.active{background:var(--ink); color:#fff; border-color:var(--ink);}
+  .goal-row-list{display:flex; flex-direction:column; gap:10px;}
+  .goal-row{display:flex; align-items:center; gap:14px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:14px 16px; cursor:pointer; box-shadow:var(--shadow-sm); transition:border-color .15s ease;}
+  .goal-row:hover{border-color:var(--ink-dim);}
+  .row-main{flex:1; min-width:0;}
+  .row-title-line{display:flex; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap;}
+  .row-title{font-weight:600; font-size:0.95rem; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .row-owner{font-size:0.72rem; font-family:var(--font-mono); color:var(--gold); background:#FBF1DD; border:1px solid #EBD8AC; padding:1px 8px; border-radius:999px; flex-shrink:0;}
+  .row-progress-bar{height:6px; border-radius:4px; background:var(--surface-alt); overflow:hidden;}
+  .row-progress-fill{height:100%; background:linear-gradient(90deg,var(--moss),var(--gold-fill));}
+  .row-meta{display:flex; align-items:center; gap:10px; flex-shrink:0;}
+  .row-pct{font-family:var(--font-mono); font-size:0.85rem; color:var(--ink-dim); min-width:36px; text-align:right;}
+  .row-deadline{font-size:0.72rem; font-family:var(--font-mono); color:var(--sage); white-space:nowrap;}
+
+  .status-badge{font-size:0.76rem; font-weight:600; padding:4px 12px; border-radius:999px; white-space:nowrap; border:1px solid transparent; display:inline-flex; align-items:center; gap:6px;}
+  .status-badge::before{content:""; width:6px; height:6px; border-radius:50%; background:currentColor; flex-shrink:0;}
+  .status-select{border-radius:999px; padding:5px 12px; font-size:0.76rem; font-weight:600; cursor:pointer;}
+  .sb-on-track{background:var(--moss-soft); color:var(--moss); border-color:#CFE2D8;}
+  .sb-at-risk{background:#FBF1DD; color:var(--gold); border-color:#EBD8AC;}
+  .sb-blocked{background:var(--danger-soft); color:var(--danger); border-color:#EFCFC2;}
+  .sb-completed{background:var(--surface-alt); color:var(--ink-dim); border-color:var(--border-strong);}
+
+  /* ---------- trail card ---------- */
+  .trail-card{background:var(--surface); border:1.5px solid var(--border-strong); border-radius:var(--radius); padding:26px 34px; position:relative; box-shadow:var(--shadow-sm);}
+  .trail-card.is-example{border-style:dashed;}
+  .trail-card.status-overdue{border-color:var(--danger);}
+  .trail-card.status-close{border-color:var(--gold-fill);}
+  .trail-card.status-done{border-color:var(--moss);}
+  .card-top{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;}
+  .eyebrow{font-size:0.8rem; color:var(--sage); font-weight:500;}
+  .trail-card h3{font-family:var(--font-display); font-size:1.25rem; font-weight:600; margin:4px 0 6px; color:var(--ink);}
+  .trail-card .desc{margin:0 0 14px; color:var(--ink-dim); font-size:0.92rem;}
+  .owner-tag{font-size:0.72rem; font-family:var(--font-mono); color:var(--gold); background:#FBF1DD; border:1px solid #EBD8AC; padding:2px 8px; border-radius:999px;}
+
+  .stat-highlight{display:flex; align-items:stretch; background:var(--surface-alt); border-radius:10px; overflow:hidden; margin:4px 0 18px;}
+  .stat-block{flex:1; padding:12px 16px; text-align:center;}
+  .stat-num{display:block; font-family:var(--font-display); font-size:1.5rem; font-weight:700; color:var(--ink); line-height:1.1;}
+  .stat-num.stat-danger{color:var(--danger);}
+  .stat-label{display:block; font-size:0.74rem; color:var(--sage); margin-top:2px;}
+  .stat-divider{width:1px; background:var(--border-strong);}
+
+  .section-label{font-size:0.85rem; font-weight:700; color:var(--ink); margin:0 0 10px;}
+
+  .rsvp-box{background:var(--surface-alt); border-radius:10px; padding:14px 16px; margin:4px 0 18px; display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;}
+  .rsvp-info{display:flex; flex-direction:column; gap:2px;}
+  .rsvp-info strong{font-size:0.88rem; color:var(--ink);}
+  .rsvp-info span{font-size:0.78rem; color:var(--sage);}
+  .rsvp-info a{font-size:0.76rem; color:var(--trail); text-decoration:underline; cursor:pointer;}
+  .rsvp-actions{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+  .rsvp-other{font-size:0.76rem; color:var(--sage);}
+  .btn-confirmed{background:var(--moss-soft); color:var(--moss); border:1px solid #CFE2D8;}
+
+  .progress-row{display:flex; align-items:center; gap:12px; margin:10px 0 4px;}
+  .progress-pct{font-family:var(--font-mono); font-size:0.95rem; color:var(--gold); font-weight:600; min-width:44px;}
+  input[type="range"]{flex:1; accent-color:var(--trail); cursor:pointer; height:4px;}
+  .progress-readonly{flex:1; height:6px; background:var(--surface-alt); border-radius:4px; overflow:hidden;}
+  .progress-readonly-fill{height:100%; background:linear-gradient(90deg,var(--moss),var(--gold-fill));}
+
+  .meta-row{display:flex; align-items:center; gap:10px; margin:12px 0; flex-wrap:wrap;}
+  .btn{border:none; border-radius:9px; padding:11px 20px; font-weight:600; font-size:0.9rem; cursor:pointer; transition:transform .15s ease, background .2s ease;}
+  .btn:active{transform:scale(0.97);}
+  .btn-primary{background:var(--trail); color:#fff;}
+  .btn-primary:hover{background:var(--trail-bright);}
+  .btn-ghost{background:var(--surface); color:var(--ink-dim); border:1px solid var(--border-strong);}
+  .btn-ghost:hover{color:var(--ink); border-color:var(--ink-dim);}
+  .btn-small{padding:7px 14px; font-size:0.8rem;}
+  .btn-cal{background:#FBF1DD; color:var(--gold); border:1px solid #EBD8AC;}
+  .btn-cal:hover{border-color:var(--gold);}
+
+  details{border-top:1px solid var(--border); padding-top:9px; margin-top:6px;}
+  details + details{margin-top:9px;}
+  summary{cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--ink-dim); list-style:none; display:flex; align-items:center; gap:6px; padding:4px 0;}
+  summary::-webkit-details-marker{display:none;}
+  summary::before{content:"▸"; color:var(--trail); transition:transform .2s ease; display:inline-block;}
+  details[open] summary::before{transform:rotate(90deg);}
+
+  .waypoint-list{list-style:none; margin:10px 0; padding:0; display:flex; flex-direction:column; gap:8px;}
+  .waypoint-list li{display:flex; align-items:center; gap:10px; font-size:0.88rem; background:var(--bg-soft); border:1px solid var(--border); border-radius:8px; padding:9px 12px;}
+  .waypoint-list li.done{opacity:0.6;} .waypoint-list li.done .wp-label{text-decoration:line-through;}
+  .wp-marker{width:9px; height:9px; border-radius:50%; background:var(--sage); flex-shrink:0; cursor:pointer; border:none;}
+  .waypoint-list li.done .wp-marker{background:var(--gold-fill);}
+  .wp-label{flex:1; color:var(--ink);} .wp-date{font-family:var(--font-mono); font-size:0.74rem; color:var(--sage);}
+  .empty-hint{font-size:0.82rem; color:var(--sage); font-style:italic; margin:8px 0;}
+
+  .inline-form{display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;}
+  .inline-form input[type="text"]{flex:1; min-width:140px;}
+  .inline-form input, .inline-form textarea{background:var(--bg-soft); border:1px solid var(--border-strong); border-radius:8px; color:var(--ink); padding:8px 10px; font-size:0.85rem; font-family:var(--font-body);}
+
+  .notes-list{list-style:none; margin:10px 0; padding:0; display:flex; flex-direction:column; gap:10px;}
+  .note{background:var(--bg-soft); border-radius:8px; padding:10px 12px; border-left:3px solid var(--moss);}
+  .note.role-guide{border-left-color:var(--trail);}
+  .note.role-system{border-left-color:var(--sage); opacity:0.85; font-style:italic;}
+  .note-meta{display:flex; justify-content:space-between; align-items:center; font-size:0.72rem; font-family:var(--font-mono); color:var(--sage); margin-bottom:4px; gap:8px;}
+  .note-meta .note-role{font-weight:600;}
+  .note-meta .note-role.guide{color:var(--trail);} .note-meta .note-role.explorer{color:var(--moss);}
+  .note p{margin:0; font-size:0.86rem; color:var(--ink-dim);}
+  .note-share{background:none; border:none; color:#1DA851; cursor:pointer; font-size:0.7rem; font-weight:700; padding:0; flex-shrink:0;}
+  .note-share:hover{text-decoration:underline;}
+
+  .turn-banner{font-size:0.8rem; padding:9px 12px; border-radius:8px; margin-top:10px; background:#FBF1DD; color:var(--gold); border:1px solid #EBD8AC;}
+  .turn-banner.waiting{background:var(--surface-alt); color:var(--sage); border-color:var(--border);}
+  .closed-banner{font-size:0.8rem; padding:9px 12px; border-radius:8px; margin-top:10px; background:var(--moss-soft); color:var(--moss); border:1px solid #CFE2D8;}
+
+  .empty-state{text-align:center; padding:40px 20px; color:var(--sage);}
+  .empty-state svg{width:48px; height:48px; margin-bottom:10px; opacity:0.6;}
+  .db-note{font-size:0.72rem; color:var(--sage); margin-top:30px; border-top:1px solid var(--border); padding-top:14px; line-height:1.6;}
+
+  /* ---------- FAB + modal ---------- */
+  .fab{position:fixed; right:24px; bottom:24px; width:56px; height:56px; border-radius:50%; background:var(--trail); color:#fff; border:none; font-size:1.6rem; box-shadow:0 6px 16px rgba(32,38,31,0.18); cursor:pointer; z-index:6; display:flex; align-items:center; justify-content:center; line-height:1;}
+  .fab:hover{background:var(--trail-bright);}
+  .modal-overlay{position:fixed; inset:0; background:rgba(32,38,31,0.4); display:flex; align-items:center; justify-content:center; padding:20px; z-index:10;}
+  .modal-overlay[hidden]{display:none;}
+  .modal{background:var(--surface); border-radius:var(--radius); padding:26px 26px 22px; max-width:440px; width:100%; box-shadow:var(--shadow-md);}
+  .modal h2{font-family:var(--font-display); font-size:1.25rem; margin:0 0 4px;}
+  .modal p.sub{color:var(--sage); font-size:0.85rem; margin:0 0 18px;}
+  .field-row{display:grid; grid-template-columns:1.4fr 1fr; gap:14px; margin-bottom:12px;}
+  .field{display:flex; flex-direction:column; gap:6px;}
+  .field label{font-size:0.76rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--sage); font-weight:600;}
+  .field input, .field textarea, .field select{background:var(--bg-soft); border:1px solid var(--border-strong); border-radius:9px; color:var(--ink); padding:10px 12px; font-family:var(--font-body); font-size:0.94rem; resize:vertical;}
+  .field textarea{min-height:44px;}
+  .modal-actions{display:flex; justify-content:flex-end; gap:10px; margin-top:6px;}
+
+  #print-calendar{display:none;}
+  @media print{
+    body > *:not(#print-calendar){display:none !important;}
+    #print-calendar{display:block !important;}
+    .pc-header{margin-bottom:14px;}
+    .pc-header h1{font-family:var(--font-display); font-size:1.4rem; margin:0 0 2px;}
+    .pc-header p{margin:0; color:#555; font-size:0.85rem;}
+    .pc-month{page-break-after:always; padding-top:10px;}
+    .pc-month h2{font-family:var(--font-display); font-size:1.15rem; margin:0 0 10px;}
+    .pc-table{width:100%; border-collapse:collapse; table-layout:fixed;}
+    .pc-table th{border:1px solid #ccc; padding:4px; font-size:11px; background:#f2f2f2; text-align:center;}
+    .pc-table td{border:1px solid #ccc; vertical-align:top; height:80px; width:14.28%; padding:4px; font-size:10px;}
+    .pc-empty{background:#fafafa;}
+    .pc-daynum{font-weight:700; margin-bottom:3px; font-size:11px;}
+    .pc-chip{background:#eee; border-radius:3px; padding:2px 4px; margin-bottom:2px; font-size:9.5px; line-height:1.3; word-break:break-word;}
+  }
+
+  @media (max-width:640px){
+    .field-row{grid-template-columns:1fr;}
+    header.masthead{padding:12px 5vw;} main{padding:14px 4vw 100px;}
+    .trail-card{padding:20px 20px;}
+    .nav-mid .nav-btn span.label{display:none;}
+  }
+  @media (prefers-reduced-motion: reduce){ *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;} }
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-card">
+    <h1>Waypoint</h1>
+    <p class="sub">Sign in to see your own routes — or every route on your watch.</p>
+    <div class="seg">
+      <button type="button" data-lrole="explorer" class="active">I'm an Explorer</button>
+      <button type="button" data-lrole="guide">I'm a Guide</button>
+    </div>
+    <form id="login-form">
+      <div class="field"><label for="login-name">Your name</label><input type="text" id="login-name" placeholder="e.g. Priya" required></div>
+      <div class="field" id="manager-field"><label for="login-manager">Your guide</label><select id="login-manager"></select></div>
+      <button type="submit" class="btn btn-primary" style="width:100%;">Continue</button>
+    </form>
+    <p class="login-hint">First time here? Typing a new name creates your account. This is a lightweight demo identity — not secured login.</p>
+    <div id="quick-login">
+      <p>Quick test accounts</p>
+      <div class="row">
+        <button type="button" class="btn btn-ghost btn-small" data-quick="Priya|explorer">Priya (Explorer)</button>
+        <button type="button" class="btn btn-ghost btn-small" data-quick="Jordan|explorer">Jordan (Explorer)</button>
+        <button type="button" class="btn btn-ghost btn-small" data-quick="Sam|explorer">Sam (Explorer)</button>
+        <button type="button" class="btn btn-ghost btn-small" data-quick="Riley|explorer">Riley (Explorer)</button>
+        <button type="button" class="btn btn-ghost btn-small" data-quick="Morgan|guide">Morgan (Guide)</button>
+        <button type="button" class="btn btn-ghost btn-small" data-quick="Alex|guide">Alex (Guide)</button>
+        <button type="button" class="btn btn-ghost btn-small" data-quick="Devon|guide">Devon (Guide, empty)</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="app" hidden>
+<header class="masthead">
+  <div class="brand">
+    <svg class="compass" viewBox="0 0 40 40" fill="none">
+      <circle cx="20" cy="20" r="18" stroke="#AD7B1F" stroke-width="1.4"/>
+      <path d="M20 8 L23 19 L20 22 L17 19 Z" fill="#C1592A"/>
+      <path d="M20 32 L17 21 L20 18 L23 21 Z" fill="#20261F" fill-opacity="0.55"/>
+      <circle cx="20" cy="20" r="1.8" fill="#20261F"/>
+    </svg>
+    <h1>Waypoint</h1>
+  </div>
+  <div class="nav-mid">
+    <button class="nav-btn" id="nav-home" data-view="home"><span class="label">Home</span></button>
+    <button class="avatar-btn" id="nav-profile" data-view="profile" aria-label="Profile"></button>
+  </div>
+</header>
+
+<main>
+  <section id="home-view" class="view">
+    <div class="home-toggle">
+      <div class="seg2">
+        <button type="button" class="active" data-mode="swipe">Quick Review</button>
+        <button type="button" data-mode="progress">All Goals</button>
+      </div>
+    </div>
+
+    <div id="swipe-mode">
+      <div class="card-view-head">
+        <h2 id="card-view-title">Your routes</h2>
+        <p id="card-view-sub">Swipe to move between goals.</p>
+      </div>
+      <div class="carousel">
+        <div class="carousel-viewport" id="carousel-viewport">
+          <div class="carousel-track" id="carousel-track"></div>
+        </div>
+      </div>
+      <div class="dots" id="dots"></div>
+    </div>
+
+    <div id="progress-mode" hidden>
+      <div class="card-view-head" style="text-align:left; display:flex; align-items:flex-end; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+        <div>
+          <h2 id="list-view-title">All routes</h2>
+          <p id="list-view-sub">Every goal, with progress at a glance.</p>
+        </div>
+        <button class="btn btn-ghost btn-small" id="print-cal-btn">Print calendar</button>
+      </div>
+      <div class="filter-tabs">
+        <button class="filter-tab active" data-filter="all">All</button>
+        <button class="filter-tab" data-filter="open">Open</button>
+        <button class="filter-tab" data-filter="progress">In Progress</button>
+        <button class="filter-tab" data-filter="closed">Closed</button>
+      </div>
+      <div class="goal-row-list" id="goal-row-list"></div>
+    </div>
+  </section>
+
+  <div id="print-calendar"></div>
+
+  <section id="profile-view" class="view">
+    <div class="profile-card">
+      <div class="profile-avatar" id="profile-avatar"></div>
+      <div class="profile-info">
+        <h2 id="profile-name"></h2>
+        <p id="profile-meta"></p>
+      </div>
+      <button class="btn-logout" id="logout-btn">Sign out</button>
+    </div>
+  </section>
+
+  <p class="db-note">Data persists via Claude's built-in shared storage, standing in for a live spreadsheet. Wiring this to a real Google Sheet needs a small Apps Script backend deployed on your Google account — ask and I'll generate that file.</p>
+</main>
+
+<button class="fab" id="fab-add" hidden aria-label="Plan a new route">+</button>
+<div class="modal-overlay" id="modal-overlay" hidden>
+  <div class="modal">
+    <h2>Plan a new route</h2>
+    <p class="sub">Name the summit and set your deadline. It goes straight to <span id="my-guide-name">your guide</span>.</p>
+    <form id="goal-form">
+      <div class="field-row">
+        <div class="field"><label for="goal-title">Goal</label><input type="text" id="goal-title" placeholder="e.g. Ship the onboarding redesign" required></div>
+        <div class="field"><label for="goal-deadline">Deadline</label><input type="date" id="goal-deadline" required></div>
+      </div>
+      <div class="field" style="margin-bottom:14px;"><label for="goal-desc">What does reaching it look like?</label><textarea id="goal-desc" placeholder="A sentence or two on the destination."></textarea></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="modal-cancel">Cancel</button>
+        <button type="submit" class="btn btn-primary">Set out</button>
+      </div>
+    </form>
+  </div>
+</div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  const iso = (d) => d.toISOString().slice(0,10);
+  const addDays = (n) => { const d = new Date(); d.setDate(d.getDate()+n); return iso(d); };
+  const todayISO = () => iso(new Date());
+  function escapeHTML(str){ const div = document.createElement("div"); div.textContent = str || ""; return div.innerHTML; }
+
+  let users = [];
+  let goals = [];
+  let currentUser = null;
+  let currentView = "home";
+  let cardIndex = 0;
+  let listFilter = "all";
+
+  async function safeGet(key, shared){
+    try{ const r = await window.storage.get(key, shared); return r ? r.value : null; }catch(e){ return null; }
+  }
+  async function safeSet(key, value, shared){
+    try{ await window.storage.set(key, value, shared); return true; }
+    catch(e){ return false; }
+  }
+  async function safeDelete(key, shared){ try{ await window.storage.delete(key, shared); }catch(e){} }
+
+  const RIDGES = [
+    "M0,68 L26,44 L48,56 L78,22 L104,38 L132,14 L160,32 L190,10 L222,30 L252,18 L280,40 L300,30",
+    "M0,60 L22,50 L50,20 L74,34 L96,12 L126,28 L150,8 L180,26 L204,44 L234,16 L262,34 L300,22",
+    "M0,66 L30,30 L58,46 L86,18 L118,32 L142,6 L172,22 L200,38 L228,14 L256,30 L280,20 L300,12"
+  ];
+  const ridgeFor = (id) => RIDGES[[...id].reduce((a,c)=>a+c.charCodeAt(0),0) % RIDGES.length];
+  const STATUS_OPTS = ["On Track","At Risk","Blocked","Completed"];
+  const statusClass = (s) => "sb-" + s.toLowerCase().replace(/\s+/g,'-');
+
+  function daysLeft(deadline){ const d = new Date(deadline + "T00:00:00"); return Math.round((d - new Date(new Date().toDateString())) / 86400000); }
+  function deadlineStatus(deadline, progress, status){
+    if (status === "Completed" || progress >= 100) return "done";
+    const dl = daysLeft(deadline);
+    if (dl < 0) return "overdue";
+    if (dl <= 5) return "close";
+    return "ok";
+  }
+  function fmtDate(dstr){ const d = new Date(dstr + "T00:00:00"); return d.toLocaleDateString(undefined, { month:"short", day:"numeric" }); }
+  function lifecycle(goal){
+    if (goal.conversationClosed || goal.status === "Completed") return "closed";
+    if (goal.progress > 0) return "progress";
+    return "open";
+  }
+
+  // ---------- example goals for empty states ----------
+  function exampleGoal(role){
+    if (role === "explorer"){
+      return { id:"example", title:"Learn to give a five-minute project update", desc:"Deliver a crisp, confident status update in the next team sync — no rambling, no filler.",
+        ownerName: currentUser ? currentUser.name : "You", managerName: currentUser ? (currentUser.manager||"your guide") : "your guide",
+        deadline: addDays(14), created: todayISO(), progress: 30, status:"On Track",
+        waypoints:[{id:"ew1", label:"Outline the three key points", date:addDays(-2), done:true},{id:"ew2", label:"Practice run with a peer", date:addDays(5), done:false},{id:"ew3", label:"Deliver at the team sync", date:addDays(14), done:false}],
+        notes:[{id:"en1", role:"guide", author: currentUser ? (currentUser.manager||"Your guide") : "Your guide", text:"This is what a route looks like — tap the + button to set out on your own.", date:todayISO()}],
+        nextTurn:"explorer", conversationClosed:false, calendarScheduled:false, rsvpGuide:true, rsvpExplorer:false };
+    }
+    return { id:"example", title:"Learn to give a five-minute project update", desc:"Example route — this is what you'll see once an explorer assigns you a goal to guide.",
+      ownerName:"An explorer", managerName: currentUser ? currentUser.name : "You",
+      deadline: addDays(14), created: todayISO(), progress: 30, status:"On Track",
+      waypoints:[{id:"ew1", label:"Outline the three key points", date:addDays(-2), done:true},{id:"ew2", label:"Practice run with a peer", date:addDays(5), done:false}],
+      notes:[{id:"en1", role:"guide", author: currentUser ? currentUser.name : "You", text:"Once assigned, you'll add waypoints and trail notes right here.", date:todayISO()}],
+      nextTurn:"explorer", conversationClosed:false, calendarScheduled:false, rsvpGuide:false, rsvpExplorer:false };
+  }
+
+  // ---------- persistence ----------
+  async function loadAll(){
+    const uRaw = await safeGet("users", true);
+    try{ users = uRaw ? JSON.parse(uRaw) : null; }catch(e){ users = null; }
+    if(!users){
+      users = [
+        {name:"Morgan", role:"guide"}, {name:"Alex", role:"guide"}, {name:"Devon", role:"guide"},
+        {name:"Priya", role:"explorer", manager:"Morgan"}, {name:"Jordan", role:"explorer", manager:"Morgan"},
+        {name:"Sam", role:"explorer", manager:"Alex"}, {name:"Riley", role:"explorer", manager:"Alex"}
+      ];
+      await saveUsers();
+    }
+    const gRaw = await safeGet("goals", true);
+    try{ goals = gRaw ? JSON.parse(gRaw) : null; }catch(e){ goals = null; }
+    if(!goals){
+      goals = [
+        { id:"g1", title:"Ship the onboarding redesign", desc:"New user flow live in production with the guided checklist.",
+          ownerName:"Priya", managerName:"Morgan", deadline:addDays(21), created:addDays(-14), progress:55, status:"On Track",
+          waypoints:[{id:"w1", label:"Wireframes approved", date:addDays(-10), done:true},{id:"w2", label:"Usability test with 5 users", date:addDays(-2), done:true},{id:"w3", label:"Engineering handoff", date:addDays(4), done:false}],
+          notes:[{id:"n1", role:"guide", author:"Morgan", text:"Strong start — the test results were convincing. Let's scope the handoff doc together this week.", date:addDays(-2)},{id:"n2", role:"explorer", author:"Priya", text:"Handoff doc first draft is ready, sending today.", date:addDays(-1)},{id:"n3", role:"guide", author:"Morgan", text:"Read it — looks solid, just tighten the rollout section.", date:addDays(0)}],
+          nextTurn:"explorer", conversationClosed:false, calendarScheduled:false, rsvpGuide:true, rsvpExplorer:true },
+        { id:"g2", title:"Get comfortable with SQL window functions", desc:"Confident enough to use them unaided in weekly reporting.",
+          ownerName:"Priya", managerName:"Morgan", deadline:addDays(-3), created:addDays(-30), progress:78, status:"At Risk",
+          waypoints:[{id:"w5", label:"Finish the internal SQL course", date:addDays(-20), done:true},{id:"w6", label:"Rewrite last month's report with window fns", date:addDays(-6), done:true}],
+          notes:[{id:"n4", role:"guide", author:"Morgan", text:"Deadline slipped a little — no problem, let's just lock the pairing session in.", date:addDays(-3)}],
+          nextTurn:"explorer", conversationClosed:false, calendarScheduled:false, rsvpGuide:true, rsvpExplorer:false },
+        { id:"g3", title:"Present the Q2 retro to the team", desc:"Own the deck and narrate the wins and misses.",
+          ownerName:"Priya", managerName:"Morgan", deadline:addDays(-10), created:addDays(-40), progress:100, status:"Completed",
+          waypoints:[{id:"w7", label:"Draft deck reviewed", date:addDays(-18), done:true},{id:"w8", label:"Dry run with the team lead", date:addDays(-13), done:true},{id:"w9", label:"Presented live", date:addDays(-10), done:true}],
+          notes:[{id:"n5", role:"guide", author:"Morgan", text:"Nailed it — clear structure and you handled the questions well.", date:addDays(-10)},{id:"n6", role:"explorer", author:"Priya", text:"Thanks — the dry run really helped, doing that again next time.", date:addDays(-9)},{id:"n7", role:"system", author:"", text:"Conversation closed by Morgan.", date:addDays(-9)}],
+          nextTurn:"guide", conversationClosed:true, closedBy:"Morgan", closedDate:addDays(-9), calendarScheduled:true, rsvpGuide:true, rsvpExplorer:true },
+        { id:"g4", title:"Migrate the reporting pipeline off the legacy queue", desc:"Zero-downtime cutover to the new job runner.",
+          ownerName:"Jordan", managerName:"Morgan", deadline:addDays(-1), created:addDays(-8), progress:10, status:"Blocked",
+          waypoints:[{id:"w10", label:"Access to the new runner granted", date:addDays(-1), done:false}],
+          notes:[], nextTurn:"guide", conversationClosed:false, calendarScheduled:false, rsvpGuide:false, rsvpExplorer:false },
+        { id:"g5", title:"Learn the new design system", desc:"Ship one feature using only the new component library.",
+          ownerName:"Jordan", managerName:"Morgan", deadline:addDays(35), created:addDays(-1), progress:0, status:"On Track",
+          waypoints:[], notes:[], nextTurn:"guide", conversationClosed:false, calendarScheduled:false, rsvpGuide:false, rsvpExplorer:false },
+        { id:"g6", title:"Own the support runbook rewrite", desc:"Docs a new hire could follow without asking anyone a question.",
+          ownerName:"Sam", managerName:"Alex", deadline:addDays(3), created:addDays(-25), progress:82, status:"On Track",
+          waypoints:[{id:"w11", label:"Outline reviewed with guide", date:addDays(-20), done:true},{id:"w12", label:"First three sections drafted", date:addDays(-8), done:true},{id:"w13", label:"Peer review with support team", date:addDays(2), done:false}],
+          notes:[{id:"n8", role:"guide", author:"Alex", text:"This is close — get the peer review booked and we're done.", date:addDays(-2)}],
+          nextTurn:"explorer", conversationClosed:false, calendarScheduled:true },
+        { id:"g7", title:"Cut the on-call rotation from 8 to 6 people", desc:"Cross-train two more engineers to safely shrink the rotation.",
+          ownerName:"Sam", managerName:"Alex", deadline:addDays(-6), created:addDays(-50), progress:40, status:"Blocked",
+          waypoints:[{id:"w14", label:"Shadow schedule drafted", date:addDays(-30), done:true},{id:"w15", label:"First engineer signed off solo", date:addDays(-12), done:false}],
+          notes:[{id:"n9", role:"guide", author:"Alex", text:"What's blocking the sign-off — is it the runbook gaps again?", date:addDays(-7)},{id:"n10", role:"explorer", author:"Sam", text:"Yes, plus one of the two trainees moved teams. Need to restart with someone new.", date:addDays(-6)},{id:"n11", role:"system", author:"", text:"Conversation closed by Sam.", date:addDays(-6)}],
+          nextTurn:"guide", conversationClosed:true, closedBy:"Sam", closedDate:addDays(-6), calendarScheduled:false, rsvpGuide:true, rsvpExplorer:true },
+        { id:"g8", title:"Get certified on the cloud security basics course", desc:"Pass the exam and apply one finding to our own setup.",
+          ownerName:"Riley", managerName:"Alex", deadline:addDays(60), created:todayISO(), progress:0, status:"On Track",
+          waypoints:[], notes:[], nextTurn:"guide", conversationClosed:false, calendarScheduled:false, rsvpGuide:false, rsvpExplorer:false }
+      ];
+      await saveGoals();
+    }
+  }
+  async function saveUsers(){ await safeSet("users", JSON.stringify(users), true); }
+  async function saveGoals(){ await safeSet("goals", JSON.stringify(goals), true); }
+
+  let uidCounter = 1000;
+  const uid = (p) => p + (uidCounter++);
+
+  function nextBiweeklySaturday(){
+    const d = new Date(); const day = d.getDay(); const add = (6 - day + 7) % 7 || 7;
+    d.setDate(d.getDate() + add); d.setHours(10,0,0,0); return d;
+  }
+  function gcalLink(goal){
+    const start = nextBiweeklySaturday(); const end = new Date(start.getTime() + 30*60000);
+    const fmt = (d) => d.toISOString().replace(/[-:]/g,"").split(".")[0] + "Z";
+    const params = new URLSearchParams({ action:"TEMPLATE", text:"Progress review: " + goal.title,
+      dates: fmt(start) + "/" + fmt(end),
+      details:"Biweekly check-in on \"" + goal.title + "\" — owner: " + goal.ownerName + ", guide: " + goal.managerName + ". Review roadmap, notes, and status.",
+      recur:"RRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=SA" });
+    return "https://calendar.google.com/calendar/render?" + params.toString();
+  }
+  function waShareLink(goal, note){
+    const link = (typeof location !== "undefined" && location.href && !location.href.startsWith("about:")) ? location.href : "(open Waypoint to view)";
+    const who = note.role === "guide" ? "Guide" : note.role === "explorer" ? "Explorer" : "System";
+    const text = `Waypoint update — "${goal.title}"\nStatus: ${goal.status} · ${goal.progress}% to summit\n${who} (${note.author}): ${note.text}\n\nReview & reply: ${link}`;
+    return "https://wa.me/?text=" + encodeURIComponent(text);
+  }
+
+  function daysSince(dateStr){ const d = new Date(dateStr + "T00:00:00"); return Math.max(0, Math.round((new Date(new Date().toDateString()) - d) / 86400000)); }
+  function emptyState(msg){
+    return `<div class="empty-state"><svg viewBox="0 0 40 40" fill="none"><path d="M20 6 L34 34 H6 Z" stroke="#788679" stroke-width="1.6" fill="none"/><circle cx="20" cy="20" r="2" fill="#788679"/></svg><p>${msg}</p></div>`;
+  }
+
+  function statHighlight(goal){
+    const dl = daysLeft(goal.deadline);
+    const passed = daysSince(goal.created);
+    const done = goal.status === "Completed" || goal.progress >= 100;
+    const rightNum = done ? "✓" : (dl < 0 ? Math.abs(dl) : dl);
+    const rightLabel = done ? "goal reached" : (dl < 0 ? "days overdue" : dl === 0 ? "due today" : "days left");
+    return `<div class="stat-highlight">
+      <div class="stat-block"><span class="stat-num">${passed}</span><span class="stat-label">days passed</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-block"><span class="stat-num ${dl<0 && !done ? 'stat-danger':''}">${rightNum}</span><span class="stat-label">${rightLabel}</span></div>
+    </div>`;
+  }
+
+  function pendingSection(goal, role, isExample){
+    const pending = goal.waypoints.filter(w=>!w.done);
+    const completed = goal.waypoints.filter(w=>w.done);
+    const pendingHTML = pending.length ? pending.map(w => `
+      <li>
+        <button class="wp-marker" ${isExample?'disabled':''} data-action="toggle-wp" data-goal="${goal.id}" data-wp="${w.id}" aria-label="Mark done"></button>
+        <span class="wp-label">${escapeHTML(w.label)}</span><span class="wp-date">${fmtDate(w.date)}</span>
+      </li>`).join("") : `<p class="empty-hint">No pending action items — all caught up.</p>`;
+    const addForm = (role === "guide" && !isExample) ? `
+      <form class="inline-form" data-action="add-wp" data-goal="${goal.id}">
+        <input type="text" placeholder="Add action item" required maxlength="80">
+        <input type="date" required>
+        <button type="submit" class="btn btn-ghost btn-small">Add</button>
+      </form>` : "";
+    const completedBlock = completed.length ? `
+      <details><summary>Completed · ${completed.length}</summary>
+        <ul class="waypoint-list">${completed.map(w=>`<li class="done"><button class="wp-marker" ${isExample?'disabled':''} data-action="toggle-wp" data-goal="${goal.id}" data-wp="${w.id}"></button><span class="wp-label">${escapeHTML(w.label)}</span><span class="wp-date">${fmtDate(w.date)}</span></li>`).join("")}</ul>
+      </details>` : "";
+    return `
+      <p class="section-label">Pending action items</p>
+      <ul class="waypoint-list">${pendingHTML}</ul>
+      ${addForm}
+      ${completedBlock}`;
+  }
+
+  function rsvpSection(goal, role, isExample){
+    const reviewDate = nextBiweeklySaturday().toLocaleDateString(undefined,{weekday:'short', month:'short', day:'numeric'});
+    const myConfirmed = role === "guide" ? goal.rsvpGuide : goal.rsvpExplorer;
+    const otherName = role === "guide" ? goal.ownerName : goal.managerName;
+    const otherConfirmed = role === "guide" ? goal.rsvpExplorer : goal.rsvpGuide;
+    return `
+      <p class="section-label">Review meeting</p>
+      <div class="rsvp-box">
+        <div class="rsvp-info">
+          <strong>Next check-in · ${reviewDate}</strong>
+          <span>Biweekly progress review</span>
+          ${isExample ? "" : `<a data-action="schedule-cal" data-goal="${goal.id}">Add to calendar</a>`}
+        </div>
+        <div class="rsvp-actions">
+          <button class="btn btn-small ${myConfirmed?'btn-confirmed':'btn-ghost'}" ${isExample?'disabled':''} data-action="toggle-rsvp" data-goal="${goal.id}" data-role="${role}">${myConfirmed?"You're confirmed":"Confirm attendance"}</button>
+          <span class="rsvp-other">${escapeHTML(otherName)} ${otherConfirmed ? "confirmed" : "hasn't responded"}</span>
+        </div>
+      </div>`;
+  }
+
+  function trailCard(goal, role, isExample){
+    const dstatus = deadlineStatus(goal.deadline, goal.progress, goal.status);
+
+    const notesHTML = goal.notes.length ? goal.notes.map(n => `
+      <li class="note role-${n.role}">
+        <div class="note-meta">
+          <span><span class="note-role ${n.role}">${n.role==='guide'?'Guide':n.role==='explorer'?'Explorer':'System'}${n.author?' · '+escapeHTML(n.author):''}</span></span>
+          <span>${fmtDate(n.date)}</span>
+        </div>
+        <p>${escapeHTML(n.text)}</p>
+      </li>`).join("") : `<p class="empty-hint">No trail notes yet.</p>`;
+
+    if (isExample){
+      const cta = role === "explorer"
+        ? `<div class="example-cta"><p>This is a sample route so you know what to expect.</p><button class="btn btn-primary btn-small" data-action="open-modal">Plan your first real route</button></div>`
+        : `<div class="example-cta"><p>You'll see real explorer goals here as soon as one is assigned to you.</p></div>`;
+      return `
+      <article class="trail-card is-example status-${dstatus}" data-id="${goal.id}">
+        <span class="example-ribbon">Example</span>
+        <div class="card-top">
+          <div><span class="eyebrow">Started ${fmtDate(goal.created)}</span><h3>${escapeHTML(goal.title)}</h3></div>
+          <span class="status-badge ${statusClass(goal.status)}">${goal.status}</span>
+        </div>
+        <p class="desc">${escapeHTML(goal.desc || "")}</p>
+        ${statHighlight(goal)}
+        ${pendingSection(goal, role, true)}
+        ${rsvpSection(goal, role, true)}
+        <div class="progress-row"><span class="progress-pct">${goal.progress}%</span><div class="progress-readonly"><div class="progress-readonly-fill" style="width:${goal.progress}%"></div></div></div>
+        <details open><summary>Trail notes · ${goal.notes.length}</summary><ul class="notes-list">${notesHTML}</ul></details>
+        ${cta}
+      </article>`;
+    }
+
+    const progressControl = role === "explorer"
+      ? `<input type="range" min="0" max="100" value="${goal.progress}" data-action="progress" data-goal="${goal.id}" aria-label="Update your progress">`
+      : `<div class="progress-readonly"><div class="progress-readonly-fill" style="width:${goal.progress}%"></div></div>`;
+
+    const ownerTag = role === "guide" ? `<span class="owner-tag">${escapeHTML(goal.ownerName)}</span>` : "";
+    const statusControl = `<select class="status-select ${statusClass(goal.status)}" data-action="status" data-goal="${goal.id}">
+      ${STATUS_OPTS.map(s => `<option value="${s}" ${s===goal.status?'selected':''}>${s}</option>`).join("")}
+    </select>`;
+
+    const isParticipant = (role === "guide" && goal.managerName === currentUser.name) || (role === "explorer" && goal.ownerName === currentUser.name);
+    let commentArea;
+    if (goal.conversationClosed){
+      commentArea = `<div class="closed-banner">Conversation closed${goal.closedBy?' by '+escapeHTML(goal.closedBy):''}${goal.closedDate?' on '+fmtDate(goal.closedDate):''}.</div>`;
+    } else if (isParticipant && goal.nextTurn === role){
+      commentArea = `
+        <form class="inline-form" data-action="add-note" data-goal="${goal.id}" data-role="${role}">
+          <input type="text" placeholder="${role==='guide'?'Leave a note for the explorer…':'Reply to your guide…'}" required maxlength="240">
+          <button type="submit" class="btn btn-ghost btn-small">Post</button>
+        </form>
+        <div class="meta-row" style="margin-top:8px;"><button class="btn btn-ghost btn-small" data-action="close-thread" data-goal="${goal.id}">Mark conversation closed</button></div>`;
+    } else if (isParticipant){
+      commentArea = `<div class="turn-banner waiting">Waiting on the ${goal.nextTurn === 'guide' ? 'guide' : 'explorer'} to reply.</div>
+        <div class="meta-row" style="margin-top:8px;"><button class="btn btn-ghost btn-small" data-action="close-thread" data-goal="${goal.id}">Mark conversation closed</button></div>`;
+    } else { commentArea = ""; }
+
+    const notesHTMLFull = goal.notes.length ? goal.notes.map(n => `
+      <li class="note role-${n.role}">
+        <div class="note-meta">
+          <span><span class="note-role ${n.role}">${n.role==='guide'?'Guide':n.role==='explorer'?'Explorer':'System'}${n.author?' · '+escapeHTML(n.author):''}</span></span>
+          <span style="display:flex; align-items:center; gap:10px;">${fmtDate(n.date)}${n.role!=='system'?`<button class="note-share" data-action="share-note" data-goal="${goal.id}" data-note="${n.id}">Share</button>`:''}</span>
+        </div>
+        <p>${escapeHTML(n.text)}</p>
+      </li>`).join("") : `<p class="empty-hint">No trail notes yet.</p>`;
+
+    return `
+    <article class="trail-card status-${dstatus}" data-id="${goal.id}">
+      <div class="card-top">
+        <div><span class="eyebrow">Started ${fmtDate(goal.created)}</span><h3>${escapeHTML(goal.title)} ${ownerTag}</h3></div>
+        ${statusControl}
+      </div>
+      <p class="desc">${escapeHTML(goal.desc || "")}</p>
+      ${statHighlight(goal)}
+      ${pendingSection(goal, role, false)}
+      ${rsvpSection(goal, role, false)}
+      <div class="progress-row"><span class="progress-pct">${goal.progress}%</span>${progressControl}</div>
+      <details open><summary>Trail notes · ${goal.notes.filter(n=>n.role!=='system').length}</summary>
+        <ul class="notes-list">${notesHTMLFull}</ul>${commentArea}</details>
+    </article>`;
+  }
+
+  // ---------- data getters ----------
+  function myGoals(){
+    if (!currentUser) return [];
+    return currentUser.role === "guide" ? goals.filter(g=>g.managerName===currentUser.name) : goals.filter(g=>g.ownerName===currentUser.name);
+  }
+
+  // ---------- home: swipe mode ----------
+  function renderHome(fromDrag){
+    const list = myGoals();
+    const track = document.getElementById("carousel-track");
+    const dots = document.getElementById("dots");
+    const sub = document.getElementById("card-view-sub");
+    document.getElementById("card-view-title").textContent = currentUser.role === "guide" ? "Routes under your watch" : "Your routes";
+    if (!list.length){
+      track.innerHTML = trailCard(exampleGoal(currentUser.role), currentUser.role, true);
+      dots.innerHTML = "";
+      sub.textContent = currentUser.role === "guide" ? "No goals assigned yet — here's an example" : "No routes yet — here's an example";
+      resetTrackTransform(track);
+      return;
+    }
+    if (cardIndex >= list.length) cardIndex = list.length - 1;
+    if (cardIndex < 0) cardIndex = 0;
+    const goal = list[cardIndex];
+    track.innerHTML = trailCard(goal, currentUser.role, false);
+    sub.textContent = `Card ${cardIndex+1} of ${list.length} · swipe to browse`;
+    dots.innerHTML = list.map((g,i)=>`<button class="dot ${i===cardIndex?'active':''}" data-idx="${i}" aria-label="Go to route ${i+1}"></button>`).join("");
+    resetTrackTransform(track);
+  }
+  function resetTrackTransform(track){
+    track.style.transition = "none";
+    track.style.transform = "translateX(0)";
+    track.style.opacity = "0";
+    requestAnimationFrame(()=>{
+      track.style.transition = "opacity .2s ease";
+      track.style.opacity = "1";
+    });
+  }
+  function goTo(idx){ const list = myGoals(); if (!list.length) return; cardIndex = Math.max(0, Math.min(list.length-1, idx)); renderHome(); }
+
+  document.getElementById("dots").addEventListener("click", (e)=>{
+    const dot = e.target.closest(".dot"); if (dot) goTo(Number(dot.dataset.idx));
+  });
+
+  // swipe: unified pointer drag (mouse + touch + pen), ignores interactive controls inside the card
+  const viewport = document.getElementById("carousel-viewport");
+  const INTERACTIVE_SEL = "input, button, select, textarea, a, summary, .wp-marker, .note-share";
+  let dragActive = false, dragStartX = 0, dragDX = 0, dragPointerId = null;
+
+  viewport.addEventListener("pointerdown", (e)=>{
+    if (e.target.closest(INTERACTIVE_SEL)) return;
+    dragActive = true; dragStartX = e.clientX; dragDX = 0; dragPointerId = e.pointerId;
+    const track = document.getElementById("carousel-track");
+    track.style.transition = "none";
+    try{ viewport.setPointerCapture(e.pointerId); }catch(err){}
+  });
+  viewport.addEventListener("pointermove", (e)=>{
+    if (!dragActive || e.pointerId !== dragPointerId) return;
+    dragDX = e.clientX - dragStartX;
+    const track = document.getElementById("carousel-track");
+    track.style.transform = `translateX(${dragDX}px)`;
+    track.style.opacity = String(Math.max(0.4, 1 - Math.abs(dragDX) / 500));
+  });
+  function endDrag(){
+    if (!dragActive) return;
+    dragActive = false;
+    const track = document.getElementById("carousel-track");
+    const list = myGoals();
+    const commit = list.length > 1 && Math.abs(dragDX) > 70;
+    track.style.transition = "transform .22s cubic-bezier(.2,.8,.2,1), opacity .22s ease";
+    if (commit){
+      const dir = dragDX < 0 ? 1 : -1;
+      track.style.transform = `translateX(${dir * -60}px)`;
+      track.style.opacity = "0";
+      setTimeout(()=>goTo(cardIndex + dir), 140);
+    } else {
+      track.style.transform = "translateX(0)";
+      track.style.opacity = "1";
+    }
+    dragDX = 0;
+  }
+  viewport.addEventListener("pointerup", endDrag);
+  viewport.addEventListener("pointercancel", endDrag);
+  viewport.addEventListener("pointerleave", (e)=>{ if (dragActive && e.pointerType === "mouse") endDrag(); });
+
+  // ---------- home: progress mode ----------
+  function renderProgress(){
+    let list = myGoals();
+    if (listFilter !== "all") list = list.filter(g => lifecycle(g) === listFilter);
+    document.getElementById("list-view-title").textContent = currentUser.role === "guide" ? "All routes on your watch" : "All your routes";
+    const wrap = document.getElementById("goal-row-list");
+    if (!list.length){ wrap.innerHTML = emptyState(myGoals().length ? "Nothing matches this filter." : "No routes yet."); return; }
+    wrap.innerHTML = list.map(g => {
+      const ownerTag = currentUser.role === "guide" ? `<span class="row-owner">${escapeHTML(g.ownerName)}</span>` : "";
+      return `<div class="goal-row" data-goal="${g.id}">
+        <div class="row-main">
+          <div class="row-title-line"><span class="row-title">${escapeHTML(g.title)}</span>${ownerTag}<span class="status-badge ${statusClass(g.status)}">${g.status}</span></div>
+          <div class="row-progress-bar"><div class="row-progress-fill" style="width:${g.progress}%"></div></div>
+        </div>
+        <div class="row-meta"><span class="row-pct">${g.progress}%</span><span class="row-deadline">${fmtDate(g.deadline)}</span></div>
+      </div>`;
+    }).join("");
+  }
+  // ---------- print calendar ----------
+  const MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  function buildPrintCalendar(){
+    const list = myGoals();
+    const monthsMap = new Map();
+    list.forEach(g=>{
+      const d = new Date(g.deadline + "T00:00:00");
+      const key = d.getFullYear() + "-" + d.getMonth();
+      if (!monthsMap.has(key)) monthsMap.set(key, { year:d.getFullYear(), month:d.getMonth(), goals:[] });
+      monthsMap.get(key).goals.push(g);
+    });
+    const months = [...monthsMap.values()].sort((a,b)=>(a.year-b.year)||(a.month-b.month));
+    const header = `<div class="pc-header"><h1>${escapeHTML(currentUser.name)}'s goal calendar</h1><p>Deadlines by month · printed ${fmtDate(todayISO())}</p></div>`;
+    if (!months.length) return header + "<p>No goals with deadlines yet.</p>";
+    const monthsHTML = months.map(({year, month, goals: mGoals})=>{
+      const dim = new Date(year, month+1, 0).getDate();
+      const firstWeekday = new Date(year, month, 1).getDay();
+      const byDay = {};
+      mGoals.forEach(g=>{ const day = new Date(g.deadline + "T00:00:00").getDate(); (byDay[day]=byDay[day]||[]).push(g); });
+      const cells = [];
+      for (let i=0;i<firstWeekday;i++) cells.push(`<td class="pc-empty"></td>`);
+      for (let day=1; day<=dim; day++){
+        const dayGoals = byDay[day] || [];
+        cells.push(`<td><div class="pc-daynum">${day}</div>${dayGoals.map(g=>`<div class="pc-chip">${escapeHTML(g.title)}</div>`).join("")}</td>`);
+      }
+      while (cells.length % 7 !== 0) cells.push(`<td class="pc-empty"></td>`);
+      let rows = "";
+      for (let i=0;i<cells.length;i+=7) rows += `<tr>${cells.slice(i,i+7).join("")}</tr>`;
+      return `<div class="pc-month">
+        <h2>${MONTH_NAMES[month]} ${year}</h2>
+        <table class="pc-table">
+          <thead><tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+    }).join("");
+    return header + monthsHTML;
+  }
+  document.getElementById("print-cal-btn").addEventListener("click", ()=>{
+    document.getElementById("print-calendar").innerHTML = buildPrintCalendar();
+    window.print();
+  });
+
+  document.getElementById("goal-row-list").addEventListener("click", (e)=>{
+    const row = e.target.closest(".goal-row"); if (!row) return;
+    const list = myGoals(); const idx = list.findIndex(g=>g.id===row.dataset.goal);
+    if (idx > -1){ cardIndex = idx; setHomeMode("swipe"); }
+  });
+  document.querySelectorAll(".filter-tab").forEach(tab=>{
+    tab.addEventListener("click", ()=>{
+      document.querySelectorAll(".filter-tab").forEach(t=>t.classList.remove("active"));
+      tab.classList.add("active"); listFilter = tab.dataset.filter; renderProgress();
+    });
+  });
+
+  let homeMode = "swipe";
+  function setHomeMode(mode){
+    homeMode = mode;
+    document.querySelectorAll(".home-toggle button").forEach(b=>b.classList.toggle("active", b.dataset.mode===mode));
+    document.getElementById("swipe-mode").hidden = mode !== "swipe";
+    document.getElementById("progress-mode").hidden = mode !== "progress";
+    if (mode === "swipe") renderHome(); else renderProgress();
+  }
+  document.querySelectorAll(".home-toggle button").forEach(btn=>{
+    btn.addEventListener("click", ()=>setHomeMode(btn.dataset.mode));
+  });
+
+  // ---------- profile view (account only) ----------
+  function renderProfile(){
+    document.getElementById("profile-avatar").textContent = currentUser.name.slice(0,1).toUpperCase();
+    document.getElementById("profile-name").textContent = currentUser.name;
+    document.getElementById("profile-meta").textContent = currentUser.role === "guide"
+      ? "Guide"
+      : `Explorer · guided by ${currentUser.manager || "—"}`;
+  }
+
+  // ---------- view switching ----------
+  function switchView(view){
+    currentView = view;
+    document.getElementById("home-view").classList.toggle("visible", view === "home");
+    document.getElementById("profile-view").classList.toggle("visible", view === "profile");
+    document.getElementById("nav-home").classList.toggle("active", view === "home");
+    document.getElementById("nav-profile").classList.toggle("active", view === "profile");
+    if (view === "home"){ homeMode === "swipe" ? renderHome() : renderProgress(); }
+    else renderProfile();
+  }
+  document.getElementById("nav-home").addEventListener("click", ()=>switchView("home"));
+  document.getElementById("nav-profile").addEventListener("click", ()=>switchView("profile"));
+
+  function renderAll(){ if (homeMode === "swipe") renderHome(); else renderProgress(); if (currentView === "profile") renderProfile(); }
+  function reopenDetails(goalId, index){
+    const card = document.querySelector(`.trail-card[data-id="${goalId}"]`);
+    if (card){ const all = card.querySelectorAll("details"); if (all[index]) all[index].open = true; }
+  }
+
+  // ---------- login ----------
+  let loginRole = "explorer";
+  function refreshManagerOptions(){
+    const sel = document.getElementById("login-manager");
+    const gds = users.filter(u => u.role === "guide");
+    sel.innerHTML = gds.map(g => `<option value="${escapeHTML(g.name)}">${escapeHTML(g.name)}</option>`).join("") || `<option value="">No guides yet — you'll be the first</option>`;
+  }
+  document.querySelectorAll(".seg button").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      document.querySelectorAll(".seg button").forEach(b=>b.classList.remove("active"));
+      btn.classList.add("active"); loginRole = btn.dataset.lrole;
+      document.getElementById("manager-field").style.display = loginRole === "explorer" ? "flex" : "none";
+    });
+  });
+  document.getElementById("manager-field").style.display = "flex";
+  document.querySelectorAll('[data-quick]').forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const [name, role] = btn.dataset.quick.split("|");
+      document.getElementById("login-name").value = name;
+      document.querySelectorAll(".seg button").forEach(b=>b.classList.remove("active"));
+      const segBtn = document.querySelector(`.seg button[data-lrole="${role}"]`);
+      if (segBtn) segBtn.classList.add("active");
+      loginRole = role;
+      document.getElementById("manager-field").style.display = role === "explorer" ? "flex" : "none";
+      document.getElementById("login-form").requestSubmit();
+    });
+  });
+
+  document.getElementById("login-form").addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    const name = document.getElementById("login-name").value.trim();
+    if (!name) return;
+    let user = users.find(u => u.name.toLowerCase() === name.toLowerCase() && u.role === loginRole);
+    if (!user){
+      user = { name, role: loginRole };
+      if (loginRole === "explorer"){
+        const mgr = document.getElementById("login-manager").value;
+        user.manager = mgr || (users.find(u=>u.role==='guide')||{}).name || "Unassigned";
+      }
+      users.push(user); await saveUsers();
+    }
+    currentUser = user;
+    await safeSet("session", JSON.stringify(user), false);
+    enterApp();
+  });
+
+  function enterApp(){
+    document.getElementById("login-screen").hidden = true;
+    document.getElementById("app").hidden = false;
+    document.getElementById("nav-profile").textContent = currentUser.name.slice(0,1).toUpperCase();
+    document.getElementById("fab-add").hidden = currentUser.role !== "explorer";
+    if (currentUser.role === "explorer") document.getElementById("my-guide-name").textContent = currentUser.manager || "your guide";
+    cardIndex = 0; listFilter = "all"; homeMode = "swipe";
+    document.querySelectorAll(".filter-tab").forEach(t=>t.classList.remove("active"));
+    document.querySelector('.filter-tab[data-filter="all"]').classList.add("active");
+    document.querySelectorAll(".home-toggle button").forEach(b=>b.classList.toggle("active", b.dataset.mode==="swipe"));
+    document.getElementById("swipe-mode").hidden = false;
+    document.getElementById("progress-mode").hidden = true;
+    switchView("home");
+  }
+
+  document.getElementById("logout-btn").addEventListener("click", async ()=>{
+    await safeDelete("session", false);
+    currentUser = null;
+    document.getElementById("app").hidden = true;
+    document.getElementById("login-screen").hidden = false;
+    document.getElementById("login-form").reset();
+  });
+
+  // ---------- modal / new goal ----------
+  const overlay = document.getElementById("modal-overlay");
+  document.getElementById("fab-add").addEventListener("click", ()=>{ overlay.hidden = false; });
+  document.getElementById("modal-cancel").addEventListener("click", ()=>{ overlay.hidden = true; });
+  overlay.addEventListener("click", (e)=>{ if (e.target === overlay) overlay.hidden = true; });
+  document.body.addEventListener("click", (e)=>{ if (e.target.closest('[data-action="open-modal"]')) overlay.hidden = false; });
+
+  document.getElementById("goal-form").addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    const title = document.getElementById("goal-title").value.trim();
+    const deadline = document.getElementById("goal-deadline").value;
+    const desc = document.getElementById("goal-desc").value.trim();
+    if (!title || !deadline) return;
+    goals.unshift({
+      id: uid("g"), title, desc, ownerName: currentUser.name, managerName: currentUser.manager || "Unassigned",
+      deadline, created: todayISO(), progress:0, status:"On Track",
+      waypoints:[], notes:[], nextTurn:"guide", conversationClosed:false, calendarScheduled:false, rsvpGuide:false, rsvpExplorer:false
+    });
+    await saveGoals();
+    e.target.reset(); overlay.hidden = true;
+    cardIndex = 0; renderAll();
+  });
+
+  // ---------- delegated events ----------
+  document.body.addEventListener("submit", async (e)=>{
+    const form = e.target;
+    if (form.dataset.action === "add-wp"){
+      e.preventDefault();
+      const goal = goals.find(g=>g.id===form.dataset.goal);
+      const [labelInput, dateInput] = form.querySelectorAll("input");
+      if (!goal || !labelInput.value.trim() || !dateInput.value) return;
+      goal.waypoints.push({ id: uid("w"), label: labelInput.value.trim(), date: dateInput.value, done:false });
+      await saveGoals(); renderAll();
+    }
+    if (form.dataset.action === "add-note"){
+      e.preventDefault();
+      const goal = goals.find(g=>g.id===form.dataset.goal);
+      const input = form.querySelector("input");
+      if (!goal || !input.value.trim() || goal.conversationClosed) return;
+      const role = form.dataset.role;
+      goal.notes.push({ id: uid("n"), role, author: currentUser.name, text: input.value.trim(), date: todayISO() });
+      goal.nextTurn = role === "guide" ? "explorer" : "guide";
+      await saveGoals(); renderAll(); reopenDetails(goal.id, 0);
+    }
+  });
+
+  document.body.addEventListener("click", async (e)=>{
+    const wpBtn = e.target.closest('[data-action="toggle-wp"]');
+    if (wpBtn){
+      const goal = goals.find(g=>g.id===wpBtn.dataset.goal);
+      const wp = goal && goal.waypoints.find(w=>w.id===wpBtn.dataset.wp);
+      if (wp){ wp.done = !wp.done; await saveGoals(); renderAll(); }
+      return;
+    }
+    const rsvpBtn = e.target.closest('[data-action="toggle-rsvp"]');
+    if (rsvpBtn){
+      const goal = goals.find(g=>g.id===rsvpBtn.dataset.goal);
+      if (goal){
+        const key = rsvpBtn.dataset.role === "guide" ? "rsvpGuide" : "rsvpExplorer";
+        goal[key] = !goal[key];
+        await saveGoals(); renderAll();
+      }
+      return;
+    }
+    const calBtn = e.target.closest('[data-action="schedule-cal"]');
+    if (calBtn){
+      const goal = goals.find(g=>g.id===calBtn.dataset.goal);
+      if (goal){ window.open(gcalLink(goal), "_blank"); goal.calendarScheduled = true; await saveGoals(); }
+      return;
+    }
+    const closeBtn = e.target.closest('[data-action="close-thread"]');
+    if (closeBtn){
+      const goal = goals.find(g=>g.id===closeBtn.dataset.goal);
+      if (goal && !goal.conversationClosed){
+        goal.conversationClosed = true; goal.closedBy = currentUser.name; goal.closedDate = todayISO();
+        goal.notes.push({ id: uid("n"), role:"system", author:"", text: `Conversation closed by ${currentUser.name}.`, date: todayISO() });
+        await saveGoals(); renderAll(); reopenDetails(goal.id, 0);
+      }
+      return;
+    }
+    const shareBtn = e.target.closest('[data-action="share-note"]');
+    if (shareBtn){
+      const goal = goals.find(g=>g.id===shareBtn.dataset.goal);
+      const note = goal && goal.notes.find(n=>n.id===shareBtn.dataset.note);
+      if (goal && note) window.open(waShareLink(goal, note), "_blank");
+      return;
+    }
+  });
+
+  document.body.addEventListener("change", async (e)=>{
+    if (e.target.dataset.action === "status"){
+      const goal = goals.find(g=>g.id===e.target.dataset.goal);
+      if (goal){ goal.status = e.target.value; if (goal.status === "Completed") goal.progress = 100; await saveGoals(); renderAll(); }
+    }
+    if (e.target.dataset.action === "progress"){
+      const goal = goals.find(g=>g.id===e.target.dataset.goal);
+      if (goal) await saveGoals();
+    }
+  });
+  document.body.addEventListener("input", (e)=>{
+    if (e.target.dataset.action === "progress"){
+      const goal = goals.find(g=>g.id===e.target.dataset.goal);
+      if (goal){
+        goal.progress = Number(e.target.value);
+        const card = e.target.closest(".trail-card");
+        card.querySelector(".progress-pct").textContent = goal.progress + "%";
+        card.className = "trail-card status-" + deadlineStatus(goal.deadline, goal.progress, goal.status);
+      }
+    }
+  });
+
+  // ---------- boot ----------
+  (async function boot(){
+    await loadAll();
+    refreshManagerOptions();
+    const sRaw = await safeGet("session", false);
+    if (sRaw){
+      try{
+        const saved = JSON.parse(sRaw);
+        const found = users.find(u => u.name === saved.name && u.role === saved.role);
+        if (found){ currentUser = found; enterApp(); return; }
+      }catch(e){}
+    }
+  })();
+})();
+</script>
+</body>
+</html>

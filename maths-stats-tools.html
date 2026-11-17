@@ -217,12 +217,20 @@ box-shadow:0 1px 0 #5b6899,0 2px 0 #131730,0 3px 0 #11142a,0 4px 0 #0f1226,0 5px
 .calc.toolmode .lcdwrap,.calc.toolmode .ctl{display:none}.calc.toolmode .brandrow{margin-bottom:16px}
 .keys.tk .key{align-items:center;justify-content:center;padding:10px 8px;gap:6px;min-height:92px}.keys.tk .key .ke{position:static;font-size:24px}.keys.tk .key .kl{text-align:center;font-size:12.5px}
 
+.savedrow{margin:0 2px 12px}
+.svk{display:flex;align-items:center;justify-content:center;gap:8px;height:40px;border-radius:20px;text-decoration:none;font:700 13px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#2b3150;background:linear-gradient(180deg,#f1f2f5,#b9bcc6);border:1px solid #0f1224;box-shadow:inset 0 1px 0 #fff,inset 0 -2px 3px rgba(0,0,0,.2),0 4px 0 #0b0e1c,0 6px 8px rgba(0,0,0,.45);transition:transform .08s,box-shadow .08s}
+.svk b{color:#e5a100;font-size:17px;text-shadow:0 1px 0 rgba(255,255,255,.6)}
+.svk:active{transform:translateY(4px);box-shadow:inset 0 1px 0 #fff,0 0 0 #0b0e1c}
+.calc.toolmode .savedrow{display:none}
+.pad{grid-template-columns:1fr 1fr}
+
 </style>
 </head>
 <body>
 <div class="app"><section class="calc" id="calc">
 <div class="brandrow"><div class="brandl"><svg class="hi" viewBox="0 0 32 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21A13 13 0 0 1 29 21Z"/><path d="M16 21v-4M7.5 14.5l1.6 1.2M24.5 14.5l-1.6 1.2M16 8v2.5"/></svg><div class="brand"><b>Maths &amp; Stats Tools</b><small>Scientific Calculator</small></div></div><div class="solarbox"><i class="solar"></i><span>STUDY EDITION</span></div></div>
 <div class="lcdwrap"><div class="lcd"><div class="st"><span id="crumb">HOME</span><span>SEARCH</span></div><input id="q" type="search" placeholder="Search: mean, t-test, k-means…" autocomplete="off" aria-label="Search all calculators"></div></div>
+<div class="savedrow" id="savedrow"></div>
 <div class="ctl" id="ctl"></div>
 <div id="home"><main id="grid"></main></div>
 <div id="catview" hidden><div class="tv"></div></div>
@@ -4204,7 +4212,8 @@ function buildCtl(){
   const rp='<div class="rp"><button class="u" data-n="u" aria-label="Scroll up">▲</button><button class="d" data-n="d" aria-label="Scroll down">▼</button><button class="l" data-n="l" aria-label="Previous page">◀</button><button class="r" data-n="r" aria-label="Next page">▶</button><b>NAV</b></div>';
   $('ctl').innerHTML=pops.slice(0,2).join('')+rp+pops.slice(2,4).join('');
   $('ctl').querySelector('.rp').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const n=b.dataset.n;if(n==='u')scrollBy({top:-300,behavior:'smooth'});else if(n==='d')scrollBy({top:300,behavior:'smooth'});else if(n==='l')history.back();else history.forward();});
-  $('pad').innerHTML='<a class="pk red" href="#saved">★ SAVED</a><a class="pk navy" href="#" id="backKey">◀ BACK</a><a class="pk red" href="#" id="acKey">AC</a>';
+  $('savedrow').innerHTML='<a class="svk" href="#saved" title="Your saved tools"><b>★</b> Saved</a>';
+  $('pad').innerHTML='<a class="pk navy" href="#" id="backKey">◀ BACK</a><a class="pk red" href="#" id="acKey">AC</a>';
   $('acKey').onclick=e=>{e.preventDefault();query='';$('q').value='';if(location.hash&&location.hash!=='#')location.hash='';else showHome();};
   $('backKey').onclick=e=>{e.preventDefault();const h=location.hash,t=/tool=([a-z0-9]+)/.exec(h);if(t&&BY[t[1]])location.hash='#cat='+BY[t[1]].book;else if(h&&h!=='#')location.hash='';else if(query){query='';$('q').value='';showHome();}};
 }

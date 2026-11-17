@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Kya Kahenge Chaar Log</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{min-height:100vh;background:#FFFDF8;font-family:'Times New Roman',Times,serif;color:#2a2a2a;font-size:17px;}
+.wrap{max-width:700px;margin:0 auto;padding:32px 18px;}
+
+.hdr{text-align:center;margin-bottom:28px;}
+.hdr h1{font-size:clamp(1.5rem,5vw,2.3rem);color:#c0392b;border-bottom:2px solid #c0392b;display:inline-block;padding-bottom:5px;font-weight:bold;}
+.hdr p{margin-top:8px;font-size:.88rem;color:#bbb;letter-spacing:1px;}
+
+.card{background:#fff;border:1px solid #e8d8c8;border-radius:12px;padding:22px 24px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+.lbl{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:#bbb;display:block;margin-bottom:11px;}
+
+textarea{
+  width:100%;border:1px solid #d8ccbe;border-radius:8px;
+  padding:12px 15px;font-family:inherit;font-size:1.05rem;
+  background:#FFFDF8;outline:none;color:#2a2a2a;
+  transition:border-color .2s;min-height:110px;resize:vertical;line-height:1.7;
+}
+textarea::placeholder{color:#bbb;}
+textarea:focus{border-color:#c0392b;}
+
+.btn{font-family:inherit;font-size:.98rem;letter-spacing:1px;border:1px solid #c0392b;border-radius:8px;cursor:pointer;color:#fff;background:#c0392b;padding:12px 22px;transition:background .15s;}
+.btn:hover{background:#a93226;}
+.btn:disabled{background:#ccc;border-color:#ccc;cursor:not-allowed;}
+.btn-gen{display:block;width:100%;margin-top:12px;font-size:1.05rem;padding:14px;}
+
+.err{color:#c0392b;font-size:.85rem;margin-top:7px;}
+
+#loading{display:none;text-align:center;padding:30px;font-size:.95rem;color:#bbb;letter-spacing:1px;}
+
+#rlist{display:none;}
+.rtitle{text-align:center;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:#ccc;margin-bottom:14px;}
+
+.rrow{
+  display:flex;align-items:center;gap:0;
+  margin-bottom:14px;animation:si .35s ease-out both;
+}
+.rrow:nth-child(1){animation-delay:.04s}
+.rrow:nth-child(2){animation-delay:.13s}
+.rrow:nth-child(3){animation-delay:.22s}
+.rrow:nth-child(4){animation-delay:.31s}
+
+.ccol{
+  display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:108px;
+  background:#fff;border:1px solid #e8d8c8;border-right:none;
+  border-radius:12px 0 0 12px;padding:16px 8px 12px;
+  box-shadow:0 2px 8px rgba(0,0,0,.04);align-self:stretch;justify-content:center;
+}
+.cname{margin-top:7px;font-size:.7rem;letter-spacing:1px;text-transform:uppercase;color:#aaa;text-align:center;}
+.cbadge{margin-top:4px;font-size:.62rem;letter-spacing:.8px;padding:2px 8px;border-radius:20px;color:#fff;text-align:center;opacity:.88;}
+
+.bcol{
+  flex:1;background:#fff;border:1px solid #e8d8c8;border-radius:0 12px 12px 0;
+  padding:18px 20px;box-shadow:0 2px 8px rgba(0,0,0,.04);
+  align-self:stretch;display:flex;flex-direction:column;justify-content:center;position:relative;
+}
+.bcol::before{content:'';position:absolute;left:-13px;top:50%;transform:translateY(-50%);border:8px solid transparent;border-right:13px solid #e8d8c8;}
+.bcol::after{content:'';position:absolute;left:-10px;top:50%;transform:translateY(-50%);border:6px solid transparent;border-right:10px solid #fff;}
+.sfxtag{font-size:.75rem;color:#c0392b;letter-spacing:.5px;margin-bottom:5px;display:block;}
+.dialogue{font-size:1.07rem;line-height:1.65;color:#2a2a2a;}
+
+@keyframes si{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:translateX(0)}}
+
+@media(max-width:480px){
+  .rrow{flex-direction:column;}
+  .ccol{border-radius:12px 12px 0 0;border-right:1px solid #e8d8c8;border-bottom:none;width:100%;flex-direction:row;gap:12px;justify-content:flex-start;padding:12px 16px;}
+  .bcol{border-radius:0 0 12px 12px;}
+  .bcol::before,.bcol::after{display:none;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hdr">
+  <h1>Kya Kahenge Chaar Log</h1>
+  <p>Society Ka Reaction Simulator</p>
+</div>
+
+<div class="card">
+  <span class="lbl">Your Situation</span>
+  <textarea id="txt" placeholder="Maine naukri chodh di / Meri shaadi tay ho gayi / Baal pink kar liye / Main Canada ja raha hoon..."></textarea>
+  <button class="btn btn-gen" id="genBtn" onclick="go()">Kya Kahenge Chaar Log →</button>
+  <div class="err" id="genErr"></div>
+</div>
+
+<div id="loading">Chaar log soch rahe hain...</div>
+
+<div id="rlist">
+  <div class="rtitle">Log bol rahe hain</div>
+  <div id="rows"></div>
+</div>
+
+</div>
+<script>
+// ⬇️ REPLACE THIS with your Cloudflare Worker URL after deploying worker.js
+const WORKER_URL = "WORKER_URL_HERE";
+
+const C = {
+  "Sharma Ji": {
+    ac:"#d4621a",
+    svg:`<svg viewBox="0 0 100 110" width="82" height="90">
+  <rect x="18" y="65" width="64" height="44" rx="9" fill="#FF6B35"/>
+  <line x1="50" y1="65" x2="50" y2="109" stroke="#fff" stroke-width="1.2" opacity=".3"/>
+  <path d="M82 72 Q98 60 95 46" stroke="#FF6B35" stroke-width="9" stroke-linecap="round" fill="none"/>
+  <ellipse cx="94" cy="42" rx="5" ry="8" fill="#FDBCB4" transform="rotate(-25 94 42)"/>
+  <path d="M18 72 Q4 80 6 92" stroke="#FF6B35" stroke-width="9" stroke-linecap="round" fill="none"/>
+  <ellipse cx="50" cy="38" rx="25" ry="25" fill="#FDBCB4"/>
+  <ellipse cx="50" cy="16" rx="22" ry="6" fill="#fff" stroke="#ddd" stroke-width="1" transform="rotate(-5 50 16)"/>
+  <rect x="28" y="11" width="44" height="9" rx="4" fill="#fff" stroke="#ddd" stroke-width="1" transform="rotate(-5 50 15)"/>
+  <ellipse cx="25" cy="41" rx="5" ry="7" fill="#FDBCB4"/>
+  <ellipse cx="75" cy="41" rx="5" ry="7" fill="#FDBCB4"/>
+  <ellipse cx="41" cy="36" rx="7" ry="6" fill="#fff"/>
+  <ellipse cx="59" cy="36" rx="7" ry="6" fill="#fff"/>
+  <circle cx="42" cy="37" r="3.5" fill="#2a1a0a"/>
+  <circle cx="60" cy="37" r="3.5" fill="#2a1a0a"/>
+  <circle cx="43" cy="36" r="1.2" fill="#fff"/>
+  <circle cx="61" cy="36" r="1.2" fill="#fff"/>
+  <path d="M35 29 Q41 26 47 28" stroke="#5D4037" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <path d="M53 26 Q59 21 66 25" stroke="#5D4037" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <path d="M32 47 Q41 41 50 45 Q59 41 68 47 Q59 53 50 51 Q41 53 32 47Z" fill="#4a3020"/>
+  <path d="M42 57 Q50 54 58 57" stroke="#b07060" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M40 22 Q50 18 60 22" stroke="#e8a898" stroke-width="1" fill="none"/>
+</svg>`
+  },
+  "Aunty Ji": {
+    ac:"#9b2778",
+    svg:`<svg viewBox="0 0 100 110" width="82" height="90">
+  <rect x="16" y="65" width="68" height="44" rx="9" fill="#E91E8C"/>
+  <rect x="16" y="96" width="68" height="13" fill="#9C27B0"/>
+  <rect x="16" y="96" width="68" height="4" fill="#FFD700"/>
+  <path d="M84 72 Q100 60 97 44" stroke="#E91E8C" stroke-width="9" stroke-linecap="round" fill="none"/>
+  <rect x="91" y="32" width="13" height="20" rx="3" fill="#222" transform="rotate(18 97 42)"/>
+  <rect x="93" y="35" width="9" height="12" rx="2" fill="#4af" transform="rotate(18 97 42)"/>
+  <path d="M16 72 Q2 64 4 50" stroke="#E91E8C" stroke-width="9" stroke-linecap="round" fill="none"/>
+  <ellipse cx="4" cy="46" rx="8" ry="8" fill="#FDBCB4"/>
+  <ellipse cx="50" cy="38" rx="26" ry="26" fill="#FDBCB4"/>
+  <ellipse cx="50" cy="14" rx="15" ry="12" fill="#5D4037"/>
+  <circle cx="43" cy="10" r="5" fill="#FF69B4" stroke="#c04070" stroke-width="1"/>
+  <circle cx="57" cy="10" r="5" fill="#FF69B4" stroke="#c04070" stroke-width="1"/>
+  <circle cx="50" cy="7" r="4" fill="#FFD700"/>
+  <ellipse cx="24" cy="44" rx="5" ry="7" fill="#FDBCB4"/>
+  <circle cx="24" cy="52" r="5" fill="#FFD700" stroke="#c0a020" stroke-width="1"/>
+  <ellipse cx="76" cy="44" rx="5" ry="7" fill="#FDBCB4"/>
+  <circle cx="76" cy="52" r="5" fill="#FFD700" stroke="#c0a020" stroke-width="1"/>
+  <ellipse cx="40" cy="36" rx="9" ry="9" fill="#fff" stroke="#E91E8C" stroke-width="1"/>
+  <ellipse cx="60" cy="36" rx="9" ry="9" fill="#fff" stroke="#E91E8C" stroke-width="1"/>
+  <circle cx="41" cy="37" r="4.5" fill="#4A148C"/>
+  <circle cx="61" cy="37" r="4.5" fill="#4A148C"/>
+  <circle cx="42" cy="35.5" r="1.5" fill="#fff"/>
+  <circle cx="62" cy="35.5" r="1.5" fill="#fff"/>
+  <line x1="33" y1="28" x2="31" y2="24" stroke="#2a1a2a" stroke-width="1.8"/>
+  <line x1="37" y1="26" x2="36" y2="22" stroke="#2a1a2a" stroke-width="1.8"/>
+  <line x1="41" y1="26" x2="42" y2="22" stroke="#2a1a2a" stroke-width="1.8"/>
+  <line x1="59" y1="26" x2="58" y2="22" stroke="#2a1a2a" stroke-width="1.8"/>
+  <line x1="63" y1="26" x2="64" y2="22" stroke="#2a1a2a" stroke-width="1.8"/>
+  <line x1="67" y1="28" x2="69" y2="24" stroke="#2a1a2a" stroke-width="1.8"/>
+  <path d="M32 26 Q40 20 49 23" stroke="#3a1a2a" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <path d="M51 23 Q60 20 68 26" stroke="#3a1a2a" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <circle cx="50" cy="27" r="4" fill="#FF0000"/>
+  <ellipse cx="50" cy="53" rx="8" ry="9" fill="#1a0a0a"/>
+  <ellipse cx="50" cy="53" rx="5.5" ry="6.5" fill="#FF6B6B"/>
+</svg>`
+  },
+  "Bade Papa": {
+    ac:"#1a4e8a",
+    svg:`<svg viewBox="0 0 100 110" width="82" height="90">
+  <rect x="17" y="65" width="66" height="44" rx="9" fill="#1565C0"/>
+  <polygon points="50,65 45,74 50,102 55,74" fill="#c0392b"/>
+  <polygon points="44,65 56,65 54,74 46,74" fill="#e74c3c"/>
+  <path d="M17 80 Q6 74 9 62 Q26 67 48 65" stroke="#1565C0" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M83 80 Q94 74 91 62 Q74 67 52 65" stroke="#1565C0" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <ellipse cx="7" cy="62" rx="9" ry="8" fill="#C8956C"/>
+  <ellipse cx="93" cy="62" rx="9" ry="8" fill="#C8956C"/>
+  <ellipse cx="50" cy="37" rx="27" ry="27" fill="#C8956C"/>
+  <path d="M23 28 Q28 10 50 9 Q72 10 77 28" fill="#3a2a1a"/>
+  <path d="M38 14 Q40 8 44 13" stroke="#bbb" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M58 12 Q62 7 65 13" stroke="#bbb" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <ellipse cx="23" cy="40" rx="5" ry="7" fill="#C8956C"/>
+  <ellipse cx="77" cy="40" rx="5" ry="7" fill="#C8956C"/>
+  <ellipse cx="40" cy="34" rx="7.5" ry="5.5" fill="#fff"/>
+  <ellipse cx="60" cy="34" rx="7.5" ry="5.5" fill="#fff"/>
+  <circle cx="41" cy="35" r="3.5" fill="#1a0a0a"/>
+  <circle cx="61" cy="35" r="3.5" fill="#1a0a0a"/>
+  <circle cx="42" cy="34" r="1.2" fill="#fff"/>
+  <circle cx="62" cy="34" r="1.2" fill="#fff"/>
+  <rect x="32" y="37" width="16" height="10" rx="5" fill="none" stroke="#8a6830" stroke-width="2"/>
+  <rect x="52" y="37" width="16" height="10" rx="5" fill="none" stroke="#8a6830" stroke-width="2"/>
+  <line x1="48" y1="41" x2="52" y2="41" stroke="#8a6830" stroke-width="1.8"/>
+  <line x1="32" y1="41" x2="26" y2="39" stroke="#8a6830" stroke-width="1.8"/>
+  <line x1="68" y1="41" x2="74" y2="39" stroke="#8a6830" stroke-width="1.8"/>
+  <path d="M33 30 Q40 34 48 31" stroke="#2a1a0a" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+  <path d="M52 31 Q60 34 67 30" stroke="#2a1a0a" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+  <path d="M24 50 Q28 70 40 76 Q50 80 60 76 Q72 70 76 50 Q62 64 50 66 Q38 64 24 50Z" fill="#3a2a1a"/>
+  <path d="M42 57 Q50 54 58 57" stroke="#b08060" stroke-width="2" fill="none" stroke-linecap="round"/>
+</svg>`
+  },
+  "College Dost": {
+    ac:"#0e7a5a",
+    svg:`<svg viewBox="0 0 100 110" width="82" height="90">
+  <rect x="15" y="65" width="70" height="44" rx="11" fill="#00BFA5"/>
+  <rect x="32" y="90" width="36" height="18" rx="6" fill="#00897B"/>
+  <path d="M44 65 Q40 80 38 90" stroke="#00897B" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <path d="M56 65 Q60 80 62 90" stroke="#00897B" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <path d="M15 76 Q0 58 3 40" stroke="#00BFA5" stroke-width="10" stroke-linecap="round" fill="none"/>
+  <path d="M85 76 Q100 58 97 40" stroke="#00BFA5" stroke-width="10" stroke-linecap="round" fill="none"/>
+  <ellipse cx="3" cy="36" rx="9" ry="8" fill="#FDBCB4"/>
+  <ellipse cx="97" cy="36" rx="9" ry="8" fill="#FDBCB4"/>
+  <line x1="0" y1="30" x2="-2" y2="23" stroke="#FDBCB4" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="5" y1="28" x2="4" y2="21" stroke="#FDBCB4" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="10" y1="29" x2="13" y2="22" stroke="#FDBCB4" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="100" y1="30" x2="102" y2="23" stroke="#FDBCB4" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="95" y1="28" x2="96" y2="21" stroke="#FDBCB4" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="90" y1="29" x2="87" y2="22" stroke="#FDBCB4" stroke-width="3.5" stroke-linecap="round"/>
+  <ellipse cx="50" cy="38" rx="26" ry="26" fill="#FDBCB4"/>
+  <path d="M24 28 Q28 8 50 7 Q72 8 76 28" fill="#1a1a1a"/>
+  <path d="M24 28 Q20 16 28 12" fill="#1a1a1a"/>
+  <path d="M76 28 Q80 16 72 12" fill="#1a1a1a"/>
+  <polygon points="36,14 39,5 42,14" fill="#1a1a1a"/>
+  <polygon points="47,11 50,2 53,11" fill="#1a1a1a"/>
+  <polygon points="58,14 61,5 64,14" fill="#1a1a1a"/>
+  <rect x="22" y="40" width="7" height="12" rx="3.5" fill="#f0f0f0" stroke="#ddd" stroke-width="1"/>
+  <rect x="71" y="40" width="7" height="12" rx="3.5" fill="#f0f0f0" stroke="#ddd" stroke-width="1"/>
+  <ellipse cx="24" cy="40" rx="4" ry="6" fill="#FDBCB4"/>
+  <ellipse cx="76" cy="40" rx="4" ry="6" fill="#FDBCB4"/>
+  <circle cx="40" cy="37" r="10" fill="#fff" stroke="#00897B" stroke-width="1.2"/>
+  <circle cx="60" cy="37" r="10" fill="#fff" stroke="#00897B" stroke-width="1.2"/>
+  <circle cx="41" cy="38" r="5.5" fill="#2E7D32"/>
+  <circle cx="61" cy="38" r="5.5" fill="#2E7D32"/>
+  <circle cx="42" cy="36.5" r="2" fill="#fff"/>
+  <circle cx="62" cy="36.5" r="2" fill="#fff"/>
+  <text x="37" y="40" font-size="7" fill="#fff" opacity=".9">✦</text>
+  <text x="57" y="40" font-size="7" fill="#fff" opacity=".9">✦</text>
+  <path d="M31 24 Q40 18 49 22" stroke="#1a1a1a" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+  <path d="M51 22 Q60 18 69 24" stroke="#1a1a1a" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+  <ellipse cx="50" cy="54" rx="9" ry="10" fill="#1a1a1a"/>
+  <ellipse cx="50" cy="54" rx="6.5" ry="7.5" fill="#FF5252"/>
+  <path d="M78 22 Q82 16 80 12 Q76 16 78 22Z" fill="#a0d8ef"/>
+</svg>`
+  }
+};
+
+async function go(){
+  const input=document.getElementById('txt').value.trim();
+  if(!input)return;
+
+  if(WORKER_URL==="WORKER_URL_HERE"){
+    document.getElementById('genErr').textContent='⚠️ Please set up the Cloudflare Worker first and update WORKER_URL in this file.';
+    return;
+  }
+
+  document.getElementById('rlist').style.display='none';
+  document.getElementById('loading').style.display='block';
+  document.getElementById('genBtn').disabled=true;
+  document.getElementById('genBtn').textContent='Soch rahe hain...';
+  document.getElementById('genErr').textContent='';
+
+  const prompt=`You are writing a comedy sketch. Someone just announced: "${input}"
+
+Write 4 DIFFERENT funny Hinglish reactions. Each must be SPECIFIC to this exact situation.
+
+Characters:
+- Sharma Ji: nosy uncle. Jealous, ALWAYS brings up Sharma ji ka beta. Log kya kahenge.
+- Aunty Ji: gossip queen. Already told 5 people. Says Suno suno or Haaye. Mentions her own daughter.
+- Bade Papa: strict elder. Khandaan ki izzat. Says hamare zamane mein. Lectures and sulks.
+- College Dost: Gen Z bestie. Hypes or roasts. Says bhai/yaar/bro. Short punchy lines.
+
+Rules:
+- Each dialogue MUST reference something specific from the situation
+- Vary emotions (Jealous, Smug, Devastated, Confused, Proud, Suspicious, Relieved, Hyped, etc.)
+- Vary sfx (Ram Ram!, Haaye!, Tobah!, Wah wah!, Arre!, Bas karo!, BHAI!, Matlab?!, etc.)
+- Max 28 words each. Be creative and funny.
+
+Respond ONLY with a JSON array, zero explanation:
+[{"character":"Sharma Ji","emotion":"word","sfx":"sound!","dialogue":"hinglish"},{"character":"Aunty Ji","emotion":"word","sfx":"sound!","dialogue":"hinglish"},{"character":"Bade Papa","emotion":"word","sfx":"sound!","dialogue":"hinglish"},{"character":"College Dost","emotion":"word","sfx":"sound!","dialogue":"hinglish"}]`;
+
+  let panels=null;
+  try{
+    const res=await fetch(WORKER_URL,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-haiku-4-5-20251001",
+        max_tokens:800,
+        temperature:1,
+        messages:[{role:"user",content:prompt}]
+      })
+    });
+    const d=await res.json();
+    if(d.error)throw new Error(d.error.message||'API error');
+    const t=(d.content||[]).map(c=>c.text||'').join('');
+    const clean=t.replace(/```json|```/g,'').trim();
+    const m=clean.match(/\[[\s\S]*\]/);
+    if(!m)throw new Error('Could not parse response');
+    const p=JSON.parse(m[0]);
+    if(Array.isArray(p)&&p.length>=4)panels=p.slice(0,4);
+    else throw new Error('Incomplete response');
+  }catch(e){
+    document.getElementById('genErr').textContent='Error: '+e.message+' — please try again.';
+  }
+
+  document.getElementById('loading').style.display='none';
+  document.getElementById('genBtn').disabled=false;
+  document.getElementById('genBtn').textContent='Kya Kahenge Chaar Log →';
+  if(panels)render(panels);
+}
+
+function render(panels){
+  const rows=document.getElementById('rows');
+  rows.innerHTML='';
+  panels.forEach((r,i)=>{
+    const ch=C[r.character]||Object.values(C)[i];
+    const d=document.createElement('div');
+    d.className='rrow';
+    d.innerHTML=`
+      <div class="ccol">
+        ${ch.svg}
+        <div class="cname">${r.character}</div>
+        <div class="cbadge" style="background:${ch.ac}">${r.emotion}</div>
+      </div>
+      <div class="bcol">
+        <span class="sfxtag">${r.sfx}</span>
+        <span class="dialogue">${r.dialogue}</span>
+      </div>`;
+    rows.appendChild(d);
+  });
+  const rl=document.getElementById('rlist');
+  rl.style.display='block';
+  rl.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+document.addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='Enter')go();});
+</script>
+</body>
+</html>

@@ -542,6 +542,62 @@ body.printing #cc { display:none !important; }
   .pv-x { width:36px; height:36px; font-size:22px; }
   #modal-box { width:640px; }
 }
+
+/* ═════════ v52: bigger text on the blank / new cards on laptops & desktops ═════════ */
+@media screen and (min-width:900px) {
+  .slot-empty .se-lab { font-size:calc(22px*var(--izoom,1)*var(--sz,1)); }
+  .slot-empty .se-hint { font-size:calc(16px*var(--izoom,1)*var(--sz,1)); max-width:none; line-height:1.4; }
+  .slot-empty .se-add { font-size:calc(15px*var(--izoom,1)*var(--sz,1)); padding:4px 16px; margin-top:10px; }
+  .add-card-cell .ac-title { font-size:20px; }
+  .add-card-cell .ac-ex { font-size:15px; max-width:none; }
+  .add-card-cell .ac-plus { width:40px; height:40px; }
+  .add-card-cell .ac-plus svg { width:18px; height:18px; }
+  .card-note-big { font-size:calc(var(--num)*.8px); }
+}
+
+/* ═════════ v53: relaxed-couple scene ═════════ */
+#welcome-x { z-index:6; background:rgba(255,255,255,.85) !important; }
+#welcome .w-card { max-height:94vh; overflow-y:auto; padding-top:18px; }
+.scene { position:relative; margin:-4px -10px 6px; border-radius:14px; overflow:hidden; cursor:pointer; height:170px; background:#bfe6ff; -webkit-tap-highlight-color:transparent; }
+.scene svg { display:block; width:100%; height:100%; }
+.sc-bub { position:absolute; left:10px; top:10px; max-width:54%; text-align:left; background:#fff; color:#1b1b1b; font:700 14px/1.3 'DM Sans',sans-serif; padding:8px 12px; border-radius:14px; box-shadow:0 3px 10px rgba(0,0,0,.18); transition:opacity .35s, transform .35s; }
+.sc-bub::after { content:''; position:absolute; left:34px; bottom:-7px; width:14px; height:14px; background:#fff; transform:rotate(45deg); }
+.sc-bub.out { opacity:0; transform:translateY(-6px); }
+.sc-chips { display:flex; gap:8px; justify-content:center; margin:0 0 10px; }
+.sc-chip { border:2px solid #1f5fd1; background:#fff; color:#1f5fd1; border-radius:999px; padding:5px 14px; font:700 13px 'DM Sans',sans-serif; cursor:pointer; }
+.sc-chip.on { background:#1f5fd1; color:#fff; }
+.sc-couple { transform-origin:190px 158px; }
+@media (prefers-reduced-motion:no-preference) {
+  .sc-p1 { transform-origin:163px 158px; animation:scSway 3.2s ease-in-out infinite; }
+  .sc-p2 { transform-origin:214px 158px; animation:scSway 3.2s ease-in-out -1.6s infinite; }
+  .sc-card { transform-box:fill-box; transform-origin:center; animation:scWave 2.4s ease-in-out infinite; }
+  .sc-cloud.c1 { animation:scDrift 18s linear infinite alternate; } .sc-cloud.c2 { animation:scDrift 24s linear infinite alternate-reverse; }
+  .sc-sun { animation:scPulse 4s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
+  .sc-wave { animation:scDrift 5s ease-in-out infinite alternate; }
+}
+@keyframes scSway { 0%,100%{transform:rotate(-1.5deg)} 50%{transform:rotate(1.5deg)} }
+@keyframes scWave { 0%,100%{transform:rotate(-8deg)} 50%{transform:rotate(8deg)} }
+@keyframes scDrift { from{transform:translateX(-14px)} to{transform:translateX(18px)} }
+@keyframes scPulse { 50%{transform:scale(1.12)} }
+@media (min-width:900px) { .scene { height:185px; } #welcome .w-card { padding:22px 34px 24px; } .w-big { font-size:52px !important; margin-bottom:12px !important; } .sc-bub { font-size:17px; top:14px; padding:10px 16px; } .sc-chip { font-size:15px; padding:7px 18px; } }
+
+/* ═════════ v54: recommend line + share popup ═════════ */
+.stp { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:4px 10px; margin:2px 0 8px; font:700 13px 'DM Sans',sans-serif; color:#17804a; }
+.stp b { font-weight:800; font-size:14px; } .stp em { font-style:normal; color:#5b6b60; font-weight:600; flex-basis:100%; text-align:center; }
+.stp .dots { display:inline-flex; gap:5px; } .stp .dots i { width:22px; height:6px; border-radius:3px; background:#cfe8d8; } .stp .dots i.on { background:#17804a; }
+@media (min-width:900px) { .stp { font-size:15px; } .stp b { font-size:16.5px; } }
+.cc-rec { text-align:center; margin:0 0 4px; font:800 15px 'DM Sans',sans-serif; color:#17804a; background:#e8f7ee; border-radius:10px; padding:7px 10px; }
+#sh { position:fixed; inset:0; z-index:3300; display:none; align-items:center; justify-content:center; padding:14px; background:rgba(15,25,50,.55); }
+#sh.open { display:flex; animation:wFade .3s ease-out both; }
+.sh-box { position:relative; width:100%; max-width:400px; background:rgba(255,255,255,.97); border-radius:18px; padding:20px 18px 14px; text-align:center; box-shadow:0 12px 40px rgba(0,0,0,.35); }
+.sh-sub { margin:0 6px 14px; color:#555; font:600 14.5px/1.45 'DM Sans',sans-serif; }
+.sh-wa { width:100%; display:flex; align-items:center; justify-content:center; gap:10px; height:50px; border:none; border-radius:12px; background:#25d366; color:#fff; font:800 17px 'DM Sans',sans-serif; letter-spacing:.3px; cursor:pointer; }
+.sh-wa svg { width:26px; height:26px; }
+.sh-row { display:flex; gap:8px; justify-content:center; margin-top:10px; }
+.sh-later { margin-top:8px; background:none; border:none; color:#888; font:600 13px 'DM Sans',sans-serif; cursor:pointer; padding:6px 10px; }
+@media (min-width:900px) { .sh-box { max-width:480px; padding:26px 24px 18px; } .sh-sub { font-size:16.5px; } .sh-wa { height:56px; font-size:19px; } .cc-rec { font-size:17px; } }
+@media print { #sh { display:none !important; } }
+body.printing #sh { display:none !important; }
 </style>
 </head>
 <body>
@@ -551,11 +607,83 @@ body.printing #cc { display:none !important; }
 <div id="welcome" onclick="if(event.target===this)closeWelcome()">
   <div class="w-card">
     <button id="welcome-x" onclick="closeWelcome()" title="Close" aria-label="Close">×</button>
+    <div class="scene" id="scene" onclick="sceneTap()" title="Tap!">
+      <svg viewBox="0 0 320 170" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+        <rect id="sc-sky" width="320" height="170" fill="#bfe6ff"/>
+        <circle class="sc-sun" cx="262" cy="40" r="18" fill="#ffd84d"/>
+        <g class="sc-cloud c1"><ellipse cx="60" cy="38" rx="26" ry="9" fill="#fff"/><ellipse cx="78" cy="32" rx="16" ry="8" fill="#fff"/></g>
+        <g class="sc-cloud c2"><ellipse cx="200" cy="58" rx="22" ry="7" fill="#fff"/><ellipse cx="214" cy="53" rx="13" ry="6" fill="#fff"/></g>
+        <g id="sc-beach">
+          <rect y="104" width="320" height="30" fill="#4aa8e8"/>
+          <path class="sc-wave" d="M0 112q10-5 20 0t20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0" fill="none" stroke="#fff" stroke-width="2" opacity=".7"/>
+          <rect y="132" width="320" height="38" fill="#f3d9a4"/>
+          <path d="M44 150q-4-40 6-62" stroke="#8a5a2b" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <ellipse cx="38" cy="88" rx="20" ry="6" fill="#2e9d62" transform="rotate(-25 38 88)"/><ellipse cx="62" cy="86" rx="20" ry="6" fill="#2e9d62" transform="rotate(25 62 86)"/><ellipse cx="50" cy="80" rx="16" ry="6" fill="#3fb877"/>
+        </g>
+        <g id="sc-mountain" style="display:none">
+          <polygon points="0,140 70,60 130,140" fill="#8aa3c7"/><polygon points="70,60 82,78 70,74 58,80" fill="#fff"/>
+          <polygon points="90,140 170,40 250,140" fill="#6f89b3"/><polygon points="170,40 186,66 170,60 154,68" fill="#fff"/>
+          <polygon points="200,140 270,76 320,140" fill="#8aa3c7"/>
+          <rect y="136" width="320" height="34" fill="#6cc08a"/>
+          <polygon points="30,140 40,112 50,140" fill="#2e8b57"/><polygon points="270,142 281,114 292,142" fill="#2e8b57"/>
+        </g>
+        <g id="sc-city" style="display:none">
+          <rect x="10" y="78" width="40" height="70" fill="#9aa8c9"/><rect x="56" y="58" width="34" height="90" fill="#7f8fb8"/><rect x="96" y="90" width="38" height="58" fill="#b4bfdc"/>
+          <rect x="196" y="70" width="36" height="78" fill="#8c9bc2"/><rect x="238" y="50" width="34" height="98" fill="#7a8ab4"/><rect x="278" y="88" width="34" height="60" fill="#a9b6d6"/>
+          <g fill="#ffe36e"><rect x="18" y="88" width="6" height="6"/><rect x="32" y="88" width="6" height="6"/><rect x="18" y="104" width="6" height="6"/><rect x="64" y="70" width="6" height="6"/><rect x="76" y="70" width="6" height="6"/><rect x="64" y="90" width="6" height="6"/><rect x="204" y="82" width="6" height="6"/><rect x="218" y="98" width="6" height="6"/><rect x="246" y="64" width="6" height="6"/><rect x="258" y="84" width="6" height="6"/><rect x="286" y="100" width="6" height="6"/></g>
+          <rect y="146" width="320" height="24" fill="#c9c9cf"/>
+        </g>
+        <g class="sc-couple">
+          <g class="sc-p1">
+            <rect x="141" y="112" width="12" height="22" rx="4" fill="#1f5fd1"/>
+            <rect x="152" y="108" width="22" height="34" rx="8" fill="#d62828"/>
+            <rect x="153" y="140" width="8" height="18" rx="3" fill="#2b3a67"/><rect x="165" y="140" width="8" height="18" rx="3" fill="#2b3a67"/>
+            <circle cx="163" cy="98" r="10" fill="#f2c9a0"/>
+            <ellipse cx="163" cy="90" rx="15" ry="4" fill="#ffd84d"/><path d="M154 90q9-12 18 0z" fill="#ffd84d"/>
+            <path d="M172 118l22 6" stroke="#f2c9a0" stroke-width="5" stroke-linecap="round"/>
+          </g>
+          <g class="sc-p2">
+            <path d="M205 112h18l5 34h-28z" fill="#1f5fd1"/>
+            <rect x="207" y="142" width="6" height="16" rx="3" fill="#f2c9a0"/><rect x="219" y="142" width="6" height="16" rx="3" fill="#f2c9a0"/>
+            <circle cx="214" cy="100" r="10" fill="#f2c9a0"/>
+            <path d="M203 100q0-14 11-14t11 14q-4-6-11-6t-11 6z" fill="#3b2a20"/><path d="M204 100q-3 16 4 18" stroke="#3b2a20" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <path d="M206 118l-14 6" stroke="#f2c9a0" stroke-width="5" stroke-linecap="round"/>
+            <path d="M224 118l16-18" stroke="#f2c9a0" stroke-width="5" stroke-linecap="round"/>
+            <g class="sc-card" transform="rotate(-12 246 90)"><rect x="236" y="78" width="22" height="15" rx="2.5" fill="#d62828" stroke="#fff" stroke-width="1.5"/><text x="247" y="89" font-family="Arial Black,Arial" font-weight="900" font-size="8" text-anchor="middle" fill="#fff">SOS</text></g>
+          </g>
+        </g>
+      </svg>
+      <div class="sc-bub" id="sc-bub">We don’t worry — we explore!</div>
+    </div>
+    <div class="sc-chips" id="sc-chips">
+      <button class="sc-chip on" data-d="beach" onclick="setDest('beach',true,event)">Beach</button>
+      <button class="sc-chip" data-d="mountain" onclick="setDest('mountain',true,event)">Mountains</button>
+      <button class="sc-chip" data-d="city" onclick="setDest('city',true,event)">City</button>
+    </div>
     <p class="w-sub">It’s great that you are thinking of safety.</p>
     <p class="w-big">Let’s make your<br>SOS card now</p>
     <label class="w-lab" for="w-country">Choose your country</label>
     <select id="w-country"></select>
+    <div class="stp"><b>Get yours in just 2 steps</b><span class="dots"><i class="on"></i><i></i></span><em>Step 1 of 2 · pick your country</em></div>
     <button class="w-go" onclick="startCard()">Show my card</button>
+  </div>
+</div>
+
+<!-- SHARE-WITH-FRIENDS POPUP (shown once, before leaving the card popups) -->
+<div id="sh" onclick="if(event.target===this)closeSh()">
+  <div class="sh-box">
+    <button class="pv-x" onclick="closeSh()" title="Close" aria-label="Close">×</button>
+    <div class="pv-title">Share this site</div>
+    <p class="sh-sub">Send it to friends and family — it takes them a minute, and it could matter one day.</p>
+    <button class="sh-wa" onclick="shareWhatsApp()">
+      <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8.5 8.2c.3 3.2 2.9 5.8 6.1 6.2l1.3-1.5-2-1-.9.7a4.2 4.2 0 0 1-2.1-2.1l.7-.9-1-2z" fill="currentColor"/></svg>
+      Share on WhatsApp
+    </button>
+    <div class="sh-row">
+      <button class="pv-btn pv-edit" onclick="shareSite()">More options</button>
+      <button class="pv-btn pv-edit" onclick="copySiteLink()">Copy link</button>
+    </div>
+    <button class="sh-later" onclick="closeSh()">Maybe later</button>
   </div>
 </div>
 
@@ -564,6 +692,8 @@ body.printing #cc { display:none !important; }
   <div class="cc-box">
     <button class="pv-x" onclick="closeCc()" title="Close" aria-label="Close">×</button>
     <div class="pv-title">Add custom cards?</div>
+    <div class="stp"><b>1 step left</b><span class="dots"><i class="on"></i><i class="on"></i></span></div>
+    <p class="cc-rec">We recommend adding a few cards — it’s quick.</p>
     <p class="cc-sub">Tap a blank card to fill it in — or skip.</p>
     <div class="cc-grid" id="cc-grid"></div>
     <div class="pv-bar">
@@ -581,7 +711,7 @@ body.printing #cc { display:none !important; }
     <div class="pv-img" id="pv-img"><div class="pv-wait">Preparing your card…</div></div>
     <div class="pv-bar">
       <button class="pv-btn pv-share" onclick="shareCard()"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>Share</button>
-      <button class="pv-btn pv-print" onclick="closePv();doPrint()"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Print</button>
+      <button class="pv-btn pv-print" onclick="closePv(true);doPrint()"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Print</button>
       <button class="pv-btn pv-edit" onclick="closePv()">Edit</button>
     </div>
   </div>
@@ -1035,7 +1165,7 @@ function saveCard() {
   saveOwn(); closeModal(); renderGrid();
 }
 document.getElementById('modal-overlay').addEventListener('click', e=>{ if (e.target.id==='modal-overlay') closeModal(); });
-document.addEventListener('keydown', e=>{ if (e.key==='Escape') { closeModal(); closePv(); closeWelcome(); closeCc(); } });
+document.addEventListener('keydown', e=>{ if (e.key==='Escape') { closeModal(); closePv(); closeWelcome(); closeCc(); closeSh(); } });
 
 // ══════════════ ZOOM (screen only) + PRINT (A4) ══════════════
 function applyZoom() {
@@ -1196,7 +1326,7 @@ async function shareCard() {
 // ══════════════ WELCOME → COUNTRY → CARD POPUP ══════════════
 (function(){ const w = document.getElementById('w-country'); w.innerHTML = document.getElementById('country-select').innerHTML; w.value = currentCountry; })();
 function closeWelcome(){ document.getElementById('welcome').style.display = 'none'; window.scrollTo(0,0); }   // crossed → home page
-function closePv(){ document.getElementById('pv').classList.remove('open'); window.scrollTo(0,0); }              // crossed → home page
+function closePv(skipShare){ document.getElementById('pv').classList.remove('open'); if (skipShare!==true && maybeShare()) return; window.scrollTo(0,0); }   // crossed → share prompt (once) → home page
 function startCard() {
   const cc = document.getElementById('w-country').value;
   _userTouched = true;
@@ -1206,7 +1336,7 @@ function startCard() {
   document.getElementById('welcome').style.display = 'none';
   renderCc(); document.getElementById('cc').classList.add('open');       // step 2: custom cards (or skip)
 }
-function closeCc(){ document.getElementById('cc').classList.remove('open'); window.scrollTo(0,0); }   // crossed → home page
+function closeCc(skipShare){ document.getElementById('cc').classList.remove('open'); if (skipShare!==true && maybeShare()) return; window.scrollTo(0,0); }   // crossed → share prompt (once) → home page
 function renderCc() {
   const g = document.getElementById('cc-grid'); if (!g) return; g.innerHTML = '';
   CARDS.filter(c=>c.own).forEach(c=>{
@@ -1222,7 +1352,7 @@ function renderCc() {
   g.appendChild(n);
 }
 async function showCardPreview() {
-  closeCc();
+  closeCc(true);
   const box = document.getElementById('pv-img'); box.innerHTML = '<div class="pv-wait">Preparing your card…</div>';
   document.getElementById('pv').classList.add('open');
   try {
@@ -1230,6 +1360,61 @@ async function showCardPreview() {
     const img = new Image(); img.alt = 'Your SOS card'; img.src = cv.toDataURL('image/png');
     box.innerHTML = ''; box.appendChild(img);
   } catch(e) { box.innerHTML = '<div class="pv-wait">Could not preview — tap Edit to see your card.</div>'; }
+}
+
+
+// ══════════════ RELAXED-COUPLE SCENE (welcome popup) ══════════════
+const DESTS = {
+  beach:    {sky:'#bfe6ff', lines:['We don’t worry — we’re at the beach!','We relax. We have our SOS card.','Sun, sea… and help one tap away.']},
+  mountain: {sky:'#d6e8ff', lines:['Let’s go higher — no worries!','We explore. SOS card is in our pocket.','Fresh air, big views, zero stress.']},
+  city:     {sky:'#ffe9c7', lines:['Let’s get lost in the streets!','Local emergency numbers? Sorted.','We relax because we’re prepared.']}
+};
+let _dest = 'beach', _li = 0, _sceneTimer = null, _auto = true;
+function showLine(txt) {
+  const b = document.getElementById('sc-bub'); if (!b) return;
+  b.classList.add('out'); setTimeout(()=>{ b.textContent = txt; b.classList.remove('out'); }, 260);
+}
+function setDest(k, byUser, ev) {
+  if (ev) ev.stopPropagation();
+  if (byUser) _auto = false;
+  _dest = k; _li = 0;
+  ['beach','mountain','city'].forEach(n=>{ const g = document.getElementById('sc-'+n); if (g) g.style.display = n===k ? '' : 'none'; });
+  document.getElementById('sc-sky').setAttribute('fill', DESTS[k].sky);
+  document.querySelectorAll('.sc-chip').forEach(c=>c.classList.toggle('on', c.dataset.d===k));
+  showLine(DESTS[k].lines[0]);
+}
+function sceneTap() { _auto = false; _li = (_li+1) % DESTS[_dest].lines.length; showLine(DESTS[_dest].lines[_li]); }
+(function(){
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  const keys = Object.keys(DESTS); let n = 0;
+  _sceneTimer = setInterval(()=>{
+    const w = document.getElementById('welcome');
+    if (!w || w.style.display === 'none') { clearInterval(_sceneTimer); return; }
+    n++;
+    if (_auto && n % 3 === 0) setDest(keys[(keys.indexOf(_dest)+1)%keys.length], false);
+    else { _li = (_li+1) % DESTS[_dest].lines.length; showLine(DESTS[_dest].lines[_li]); }
+  }, 3600);
+})();
+
+
+// ══════════════ SHARE THE SITE WITH FRIENDS & FAMILY ══════════════
+let _shDone = false;
+function maybeShare(){ if (_shDone) return false; _shDone = true; document.getElementById('sh').classList.add('open'); return true; }
+function closeSh(){ document.getElementById('sh').classList.remove('open'); window.scrollTo(0,0); }
+const siteUrl = () => location.href.split('#')[0];
+const siteMsg = () => 'I made my emergency SOS card in a minute — police, ambulance, doctor and family numbers as tap-to-call QR codes. Free, make yours: '+siteUrl();
+function shareWhatsApp(){
+  try { window.gtag && gtag('event','share_whatsapp'); } catch(e){}
+  window.open('https://wa.me/?text='+encodeURIComponent(siteMsg()), '_blank', 'noopener');
+}
+async function shareSite(){
+  try { window.gtag && gtag('event','share_site'); } catch(e){}
+  if (navigator.share) { try { await navigator.share({title:'SOS Emergency Card', text:'Make your free SOS emergency card:', url:siteUrl()}); } catch(e){} return; }
+  copySiteLink();
+}
+async function copySiteLink(){
+  try { await navigator.clipboard.writeText(siteMsg()); showToast('Link copied — paste it anywhere'); }
+  catch(e) { window.prompt('Copy this link:', siteMsg()); }
 }
 
 // ══════════════ AUTO-DETECT LOCATION (by IP — no permission prompt) ══════════════
@@ -1274,6 +1459,26 @@ function showToast(msg, actLabel, act) {
 document.querySelectorAll('[contenteditable]').forEach(el=>el.addEventListener('keydown',e=>{ if(e.key==='Enter'){e.preventDefault();el.blur();} }));
 
 // ══════════════ BOOT ══════════════
+
+/* Exit-intent: browsers can't show custom UI on real tab close, so show the share popup
+   when the visitor heads for the exit (cursor leaves top, back button) or tries to leave. */
+(function(){
+  let touched=false;
+  const arm=()=>{touched=true;};
+  ['pointerdown','keydown','touchstart'].forEach(ev=>addEventListener(ev,arm,{once:true,passive:true}));
+  const busy=()=>document.body.classList.contains('printing')||document.getElementById('welcome')&&document.getElementById('welcome').classList.contains('open');
+  const exitShare=()=>{ if(!touched||busy()) return false; return maybeShare(); };
+  document.addEventListener('mouseout',e=>{ if(!e.relatedTarget && e.clientY<=0) exitShare(); });
+  try{
+    history.pushState({sos:1},'',location.href);
+    addEventListener('popstate',()=>{ if(!_shDone && touched && !busy()){ maybeShare(); history.pushState({sos:1},'',location.href); } });
+  }catch(_){}
+  addEventListener('beforeunload',e=>{
+    if(_shDone||!touched||busy()) return;
+    maybeShare();
+    e.preventDefault(); e.returnValue='';
+  });
+})();
 applyZoom(); renderGrid(); initSortable(); autoDetect();
 </script>
 </body>
