@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Website Builder</title>
+<meta name="viewport" content="width=1400">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+<style>
+html,body{margin:0;height:100%;overflow:hidden;font-family:Segoe UI,Arial}
+button{cursor:pointer}
+
+/* ===== MENU ===== */
+#menu{
+  height:36px;background:#ededed;border-bottom:1px solid #aaa;
+  display:flex;align-items:center;gap:8px;padding:0 8px;
+}
+
+/* ===== TOOLBAR ===== */
+#toolbar{
+  height:78px;background:#f6f6f6;border-bottom:1px solid #bbb;
+  display:flex;gap:6px;padding:4px;overflow-x:auto;
+}
+.tool{
+  width:64px;height:64px;background:white;border:1px solid #ccc;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-size:11px;
+}
+.tool span{font-size:20px}
+.tool:hover{border-color:#2563eb}
+
+/* ===== LAYOUT ===== */
+#app{
+  display:grid;
+  grid-template-columns:120px 1fr;
+  height:calc(100% - 114px);
+}
+#pages{background:#fff;border-right:1px solid #ccc;overflow:auto;padding:2px}
+
+#workspaceWrap{
+  background:#cfcfcf;
+  display:flex;justify-content:center;
+}
+#workspace{
+  background:white;
+  width:1000px;height:100%;
+  overflow:auto;padding:20px;
+  border:1px solid #999;
+}
+
+/* ===== COMPONENT ===== */
+.comp{
+  border:1px dashed #aaa;
+  padding:10px;margin:10px 0;
+}
+.comp.selected{outline:2px solid #2563eb}
+
+/* ===== PAGE LIST ===== */
+.page{
+  padding:6px;border:1px solid #ccc;margin-bottom:6px;cursor:pointer;
+}
+.page.active{background:#e0ebff}
+</style>
+</head>
+
+<body>
+
+<!-- MENU -->
+<div id="menu">
+  <button onclick="addPage()">➕ Page</button>
+  <button onclick="renamePage()">✏ Rename Page</button>
+
+  <select onchange="loadTemplate(this.value)">
+    <option value="">📄 Templates</option>
+    <option value="blank">Blank</option>
+    <option value="landing">Landing</option>
+    <option value="blog">Blog</option>
+    <option value="shop">Shop</option>
+    <option value="portfolio">Portfolio</option>
+    <option value="business">Business</option>
+    <option value="saas">SaaS</option>
+    <option value="login">Login</option>
+  </select>
+
+  <button onclick="undo()">↩ Undo</button>
+  <button onclick="redo()">↪ Redo</button>
+  <button onclick="preview()">👁 Preview</button>
+  <button onclick="exportZip()">📦 Export ZIP</button>
+</div>
+
+<!-- TOOLBAR -->
+<div id="toolbar">
+  <div class="tool" onclick="add('h1')"><span>H1</span>H1</div>
+  <div class="tool" onclick="add('h2')"><span>H2</span>H2</div>
+  <div class="tool" onclick="add('h3')"><span>H3</span>H3</div>
+  <div class="tool" onclick="add('p')"><span>📝</span>Text</div>
+  <div class="tool" onclick="addButton()"><span>🔘</span>Button</div>
+  <div class="tool" onclick="addLink()"><span>🔗</span>Link</div>
+  <div class="tool" onclick="addImage()"><span>🖼</span>Image</div>
+  <div class="tool" onclick="addGallery()"><span>🖼🖼</span>Gallery</div>
+  <div class="tool" onclick="addSection()"><span>⬛</span>Section</div>
+  <div class="tool" onclick="addColumns(2)"><span>📐</span>2 Col</div>
+  <div class="tool" onclick="addColumns(3)"><span>🔲</span>3 Col</div>
+  <div class="tool" onclick="addHero()"><span>⭐</span>Hero</div>
+  <div class="tool" onclick="addCard()"><span>🧱</span>Card</div>
+  <div class="tool" onclick="addPricing()"><span>💰</span>Pricing</div>
+  <div class="tool" onclick="addTestimonial()"><span>💬</span>Review</div>
+  <div class="tool" onclick="addForm()"><span>📋</span>Form</div>
+  <div class="tool" onclick="addFooter()"><span>⬇</span>Footer</div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div id="pages"></div>
+  <div id="workspaceWrap"><div id="workspace"></div></div>
+</div>
+
+<script>
+let pages={}, current="page1", selected=null;
+let history=[], future=[];
+
+pages.page1="";
+
+function snapshot(){ history.push(JSON.stringify(pages)); future=[]; }
+function save(){ pages[current]=workspace.innerHTML; }
+function renderPages(){
+  pagesDiv.innerHTML="";
+  Object.keys(pages).forEach(p=>{
+    const d=document.createElement("div");
+    d.className="page"+(p===current?" active":"");
+    d.textContent=p;
+    d.onclick=()=>openPage(p);
+    pagesDiv.appendChild(d);
+  });
+}
+function openPage(p){ save(); current=p; workspace.innerHTML=pages[p]; renderPages(); }
+function addPage(){
+  snapshot();
+  let n="page"+(Object.keys(pages).length+1);
+  pages[n]="";
+  openPage(n);
+}
+function renamePage(){
+  const n=prompt("New page name:",current);
+  if(!n||pages[n])return;
+  pages[n]=pages[current];
+  delete pages[current];
+  openPage(n);
+}
+
+/* ===== UNDO / REDO ===== */
+function undo(){ if(!history.length)return; future.push(JSON.stringify(pages)); pages=JSON.parse(history.pop()); openPage(current); }
+function redo(){ if(!future.length)return; history.push(JSON.stringify(pages)); pages=JSON.parse(future.pop()); openPage(current); }
+
+/* ===== COMPONENT CORE ===== */
+function wrap(el){
+  const w=document.createElement("div");
+  w.className="comp";
+  w.appendChild(el);
+  w.onclick=e=>{e.stopPropagation();select(w)};
+  w.ondblclick=()=>el.contentEditable=true;
+  workspace.appendChild(w);
+  snapshot(); save();
+}
+function select(el){
+  document.querySelectorAll(".comp").forEach(c=>c.classList.remove("selected"));
+  el.classList.add("selected");
+  selected=el;
+}
+
+/* ===== ADD COMPONENTS ===== */
+function add(t){ const e=document.createElement(t); e.innerText="Edit text"; wrap(e); }
+function addButton(){
+  const b=document.createElement("button");
+  b.innerText="Button";
+  b.onclick=()=>handleAction(b);
+  wrap(b);
+}
+function handleAction(btn){
+  const a=prompt("Action: alert | page | link");
+  if(a==="alert") btn.onclick=()=>alert("Clicked");
+  if(a==="page"){ const p=prompt("Page name"); btn.onclick=()=>openPage(p); }
+  if(a==="link"){ const u=prompt("URL"); btn.onclick=()=>window.open(u); }
+}
+function addLink(){ const a=document.createElement("a"); a.href="#"; a.innerText="Link"; wrap(a); }
+function addImage(){ const i=document.createElement("img"); i.src="https://via.placeholder.com/800x300"; i.style.width="100%"; wrap(i); }
+function addGallery(){
+  const g=document.createElement("div");
+  g.innerHTML="<img src='https://via.placeholder.com/200'>".repeat(3);
+  wrap(g);
+}
+function addSection(){ const s=document.createElement("section"); s.style.padding="40px"; s.innerText="Section"; wrap(s); }
+function addColumns(n){
+  const d=document.createElement("div");
+  d.style.display="grid";
+  d.style.gridTemplateColumns=`repeat(${n},1fr)`;
+  d.innerHTML="<div>Column</div>".repeat(n);
+  wrap(d);
+}
+function addHero(){
+  const h=document.createElement("div");
+  h.innerHTML="<h1>Hero Title</h1><p>Subtitle</p><button>CTA</button>";
+  h.style.padding="60px"; h.style.background="#eef";
+  wrap(h);
+}
+function addCard(){
+  const c=document.createElement("div");
+  c.innerHTML="<h3>Card</h3><p>Description</p>";
+  c.style.border="1px solid #ccc"; c.style.padding="20px";
+  wrap(c);
+}
+function addPricing(){
+  const p=document.createElement("div");
+  p.innerHTML="<h3>Plan</h3><h2>$29</h2><p>Features</p><button>Buy</button>";
+  p.style.border="2px solid #2563eb"; p.style.padding="20px";
+  wrap(p);
+}
+function addTestimonial(){
+  const t=document.createElement("blockquote");
+  t.innerText="Customer review text";
+  wrap(t);
+}
+function addForm(){
+  const f=document.createElement("form");
+  f.innerHTML="<input placeholder='Email'><br><button>Submit</button>";
+  wrap(f);
+}
+function addFooter(){
+  const f=document.createElement("footer");
+  f.innerText="Footer";
+  f.style.background="#222"; f.style.color="#fff"; f.style.padding="30px";
+  wrap(f);
+}
+
+/* ===== TEMPLATES ===== */
+function loadTemplate(t){
+  snapshot();
+  if(t==="blank") workspace.innerHTML="";
+  if(t==="landing") workspace.innerHTML="<h1>Welcome</h1><p>Hero</p><button>Get Started</button>";
+  if(t==="blog") workspace.innerHTML="<h1>Blog</h1><p>Post</p>";
+  if(t==="shop") workspace.innerHTML="<h1>Shop</h1><div>Product</div>";
+  if(t==="portfolio") workspace.innerHTML="<h1>Portfolio</h1><p>Projects</p>";
+  if(t==="business") workspace.innerHTML="<h1>Business</h1><p>Services</p>";
+  if(t==="saas") workspace.innerHTML="<h1>SaaS</h1><p>Features</p><button>Start</button>";
+  if(t==="login") workspace.innerHTML="<h1>Login</h1><input placeholder='Email'><button>Login</button>";
+  save();
+}
+
+/* ===== EXPORT ===== */
+function preview(){ save(); const w=window.open(); w.document.write(workspace.innerHTML); }
+async function exportZip(){
+  save();
+  const zip=new JSZip();
+  Object.keys(pages).forEach(p=>zip.file(p+".html",pages[p]));
+  const blob=await zip.generateAsync({type:"blob"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="website.zip";
+  a.click();
+}
+
+/* INIT */
+const workspace=document.getElementById("workspace");
+const pagesDiv=document.getElementById("pages");
+openPage("page1");
+</script>
+
+</body>
+</html>

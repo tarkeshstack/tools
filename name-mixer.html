@@ -1,0 +1,2302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4NYHNVZFP"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-L4NYHNVZFP');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Baby Name Generator – Blend Mom & Dad's Names, Find by Meaning, Rashi | Name Mixer</title>
+<meta name="description" content="Free baby name generator: blend mom's and dad's names, or find baby names by meaning, language, rashi and number of letters. Shortlist favourites and share them.">
+<meta name="keywords" content="baby names, baby name generator, blend parents names, baby names with meaning, rashi baby names, Indian baby names, boy names, girl names">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://babynames.website/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:image" content="https://babynames.website/icon-512.png">
+<meta name="theme-color" content="#e8478b">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Name Mixer">
+<meta property="og:title" content="For the cute little one – Baby Name Generator">
+<meta property="og:description" content="Blend mom's and dad's names or find baby names by meaning, language and rashi. Shortlist and share your favourites.">
+<meta property="og:url" content="https://babynames.website/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://babynames.website/icon-512.png">
+<meta name="twitter:title" content="For the cute little one – Baby Name Generator">
+<meta name="twitter:description" content="Blend mom's and dad's names or find baby names by meaning, language and rashi.">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Name Mixer","url":"https://babynames.website/","description":"Baby name generator that blends parents' names and finds names by meaning, language, rashi and length.","applicationCategory":"LifestyleApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff; --card: #ffffff; --text: #2b2230; --muted: #7d7285;
+    --a: #e0567a; --b: #3b82c4; --m: #8b5cf6; --t: #1f9d6b;
+    --border: #eadfe6; --accent: #8b5cf6; --warn: #c2410c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #17131c; --card: #221c29; --text: #f3edf7; --muted: #a698b0; --a: #ff7a9e; --b: #6cb2f2; --m: #b79cff; --t: #4ade9b; --border: #372d41; --accent: #a78bfa; --warn: #fb923c; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  body::before { content: "🎉 🎈 🎊 🥳 🎂 🎁 🪅 🎈 🎊 🎉 🎁 🥳"; position: fixed; inset: -10%; z-index: 0; pointer-events: none; font-size: 64px; line-height: 2.2; letter-spacing: 38px; word-break: break-all; opacity: .02; transform: rotate(-12deg); overflow: hidden; }
+  body::after { content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(circle at 10% 15%, rgba(236,72,153,.015), transparent 40%), radial-gradient(circle at 90% 30%, rgba(59,130,246,.012), transparent 42%), radial-gradient(circle at 25% 85%, rgba(250,204,21,.015), transparent 40%), radial-gradient(circle at 85% 90%, rgba(139,92,246,.012), transparent 40%); }
+  .wrap { position: relative; z-index: 1; min-height: 100vh; }
+  .wrap > .panel:first-of-type { padding-top: 26px; padding-bottom: 30px; }
+  .wrap > .panel:first-of-type .inputs input { padding-top: 14px; padding-bottom: 14px; font-size: 17px; }
+  .wrap > .panel:first-of-type input[type=range] { margin: 10px 0 14px; }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 28px 16px 70px; }
+  .congrats { display: flex; align-items: center; gap: 12px; padding: 14px 16px; margin-bottom: 18px; border-radius: 16px; color: #fff; background: linear-gradient(120deg, #ec4899, #8b5cf6 55%, #3b82f6); box-shadow: 0 6px 18px rgba(139,92,246,.25); }
+  .congrats > div { flex: 1; min-width: 0; }
+  .congrats b { font-size: 1.05rem; }
+  .congrats > div > div { font-size: .85rem; opacity: .95; margin-top: 2px; }
+  .cg-ic { font-size: 1.7rem; }
+  .congrats { padding: 9px 14px; margin-bottom: 12px; border-radius: 14px; }
+  .congrats b { font-size: .95rem; }
+  #cgSub { display: none; }
+  .cg-ic { font-size: 1.2rem; }
+  .chip .rashi { font-size: .75rem; margin-top: 4px; color: var(--m); }
+  .chip .rashi.none { color: var(--muted); }
+  h1 { margin: 0 0 4px; font-size: 1.9rem; }
+  .sub { color: var(--muted); margin: 0 0 22px; }
+  .panel { background: color-mix(in srgb, var(--card) 38%, transparent); -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4); box-shadow: 0 8px 28px rgba(80,60,140,.12), inset 0 1px 0 rgba(255,255,255,.45); border: 1px solid var(--border); border-radius: 16px; padding: 18px; margin-bottom: 12px; }
+  .inputs { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: end; }
+  .inputs2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+  .exonly { display: none; }
+  body.explore .exonly { display: block; }
+  body.explore #namesRow { display: none; }
+  body.explore .inputs2 { margin-top: 0; grid-template-columns: 1fr; }
+  body.explore #wrapMid { display: none; }
+  label.l { font-size: .78rem; color: var(--muted); display: block; margin-bottom: 4px; }
+  input[type=text], input[type=number], select {
+    width: 100%; font: inherit; padding: 10px 12px; border-radius: 10px; border: 2px solid var(--border);
+    background: var(--bg); color: var(--text); outline: none;
+  }
+  .inputs input[type=text] { font-size: 1.1rem; padding: 12px 14px; }
+  input:focus, select:focus { border-color: var(--accent); }
+  #nameA:focus { border-color: var(--a); } #nameB:focus { border-color: var(--b); }
+  .plus { align-self: start; margin-top: 24px; line-height: 0; }
+  .tk { margin-top: 10px; margin-bottom: 0 !important; }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 14px; }
+  button { font: inherit; cursor: pointer; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--text); padding: 9px 14px; }
+  button.primary { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
+  button:hover { filter: brightness(1.06); }
+  #modeSeg, #genderSeg { display: flex; width: 100%; }
+  #modeSeg button, #genderSeg button { flex: 1; padding: 13px 8px; }
+  #modeSeg button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 11px 8px; line-height: 1.2; }
+  #modeSeg button small { font-size: .66rem; font-weight: 400; opacity: .8; line-height: 1.25; }
+  .opwrap { display: flex; justify-content: center; margin: -4px 0; }
+  .opchip { border-radius: 999px; padding: 3px 16px; font-size: 12px; font-weight: 700; letter-spacing: .06em; background: var(--bg); border: 1px solid var(--border); color: var(--accent); cursor: pointer; }
+  .opchip[data-v=and] { background: var(--accent); color: #fff; }
+  .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .seg button { border: none; border-radius: 0; background: var(--bg); padding: 9px 13px; }
+  .seg button.active { background: var(--accent); color: #fff; font-weight: 600; }
+  .chk { font-size: .88rem; color: var(--muted); display: flex; gap: 6px; align-items: center; }
+  .spacer { flex: 1; }
+  details.filters summary { cursor: pointer; font-weight: 600; list-style: none; }
+  details.filters summary::-webkit-details-marker { display: none; }
+  details.filters summary::before { content: "▸ "; color: var(--muted); }
+  details.filters[open] summary::before { content: "▾ "; }
+  details.filters summary { padding: 4px 0; }
+  details.filters > .fgrid { margin-top: 10px; }
+  .cnt { display: inline-block; margin-left: 6px; padding: 0 8px; border-radius: 999px; background: var(--accent); color: #fff; font-size: .68rem; font-weight: 600; line-height: 1.6; vertical-align: 1px; }
+  .cnt:empty { display: none; }
+  .panel:has(> details.filters:not([open])) { padding-top: 8px; padding-bottom: 8px; }
+  .lead { font-size: .8rem; color: var(--muted); text-align: center; margin: -4px 0 12px; line-height: 1.35; }
+  .fgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-top: 14px; }
+  .fgrid .wide { grid-column: 1 / -1; }
+  .hint { font-size: .75rem; color: var(--muted); margin-top: 3px; }
+  .legend { font-size: .82rem; color: var(--muted); margin-top: 10px; }
+  .legend b.a { color: var(--a); } .legend b.b { color: var(--b); } .legend b.t { color: var(--t); } .legend b.m { color: var(--m); }
+  h2 { font-size: 1.1rem; margin: 26px 0 10px; }
+  h2 small { color: var(--muted); font-weight: 400; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(330px, 100%), 1fr)); gap: 10px; }
+  .chip { background: color-mix(in srgb, var(--card) 38%, transparent); -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4); box-shadow: 0 6px 20px rgba(80,60,140,.12), inset 0 1px 0 rgba(255,255,255,.45); border: 1px solid var(--border); border-radius: 14px; padding: 10px; text-align: left; position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr); gap: 10px; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+  .chip .cl { min-width: 0; }
+  .chip.nopv { grid-template-columns: minmax(0, 1fr); }
+
+  .tip { font-size: .78rem; color: var(--muted); margin: 2px 2px 10px; line-height: 1.35; }
+  .chip .nmrow { display: flex; align-items: flex-start; gap: 6px; }
+  .chip .cr { min-width: 0; display: flex; flex-direction: column; gap: 4px; justify-content: center; }
+  .thumb { border-radius: 8px; overflow: hidden; cursor: pointer; border: 1px solid var(--border); }
+  .thumb svg { display: block; width: 100%; height: auto; }
+  .pvcap { display: flex; justify-content: space-between; align-items: center; font-size: .7rem; color: var(--muted); gap: 6px; }
+  .pvcap button { padding: 1px 8px; font-size: .85rem; border-radius: 6px; }
+  .x { position: absolute; top: 4px; right: 6px; z-index: 2; width: 30px; height: 32px; display: inline-flex; align-items: center; justify-content: center; padding: 0 !important; border-radius: 0; line-height: 1; font-size: 1.4rem; font-weight: 300; background: none !important; color: var(--text) !important; border: none !important; }
+  .x:hover { color: var(--accent) !important; }
+  .dbar { font-size: .85rem; color: var(--muted); margin: 0 0 10px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .dbar button { padding: 4px 10px; font-size: .82rem; }
+  .viewbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 4px 0 0; }
+  .favonly { display: none; }
+  body.favview .favonly { display: inline-block; }
+  .tk b { color: var(--accent); }
+  input[type=range] { width: 100%; accent-color: var(--accent); padding: 0; border: none; background: none; }
+  .chip .nm { font-size: 1.3rem; font-weight: 700; letter-spacing: .3px; word-break: break-word; cursor: pointer; }
+  .chip .pa { color: var(--a); } .chip .pb { color: var(--b); } .chip .pt { color: var(--t); } .chip .pm { color: var(--m); }
+  .chip .full { font-size: .8rem; margin-top: 3px; }
+  .chip .nick { font-size: .78rem; color: var(--muted); margin-top: 4px; }
+  .chip .meta { font-size: .7rem; color: var(--muted); margin-top: 3px; }
+  .chip .via { font-size: .74rem; color: var(--text); margin-top: 4px; line-height: 1.35; }
+  .uq { font-size: .72rem; margin-top: 6px; display: flex; align-items: center; justify-content: flex-start; gap: 6px; }
+  .uq .bar { width: 46px; height: 5px; border-radius: 3px; background: var(--border); overflow: hidden; display: inline-block; }
+  .uq .bar i { display: block; height: 100%; background: var(--uc); }
+  .uq b { color: var(--uc); font-weight: 600; }
+  .u4 { --uc: #16a34a; } .u3 { --uc: #65a30d; } .u2 { --uc: #d97706; } .u1 { --uc: #dc2626; }
+  .pv { margin-top: 8px; padding: 5px 10px; font-size: .78rem; border-radius: 8px; }
+  .modal { position: fixed; inset: 0; background: rgba(10,8,14,.72); z-index: 80; overflow: auto; padding: 14px; }
+  .modal[hidden] { display: none; }
+  .mbox { max-width: 920px; margin: 0 auto; background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 16px; }
+  .mhead { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .mname { font-size: 1.6rem; font-weight: 700; }
+  .msub { color: var(--muted); font-size: .9rem; }
+  .mhead select { width: auto; }
+  .mgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 12px; margin-top: 14px; }
+  .scene { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .scene svg { display: block; width: 100%; height: auto; }
+  .scene .cap { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 10px; font-size: .84rem; }
+  .scene .cap button { padding: 5px 10px; font-size: .8rem; }
+  .chip .warn { font-size: .68rem; color: var(--warn); margin-top: 3px; }
+  .star { position: absolute; top: 4px; right: 36px; z-index: 2; width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; color: var(--text); background: none !important; border: none !important; padding: 0 !important; cursor: pointer; }
+  .star svg { width: 27px; height: 27px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linejoin: round; transition: transform .15s; }
+  .star:hover svg { opacity: .65; }
+  .star.on { color: #ed4956; }
+  .star.on svg { fill: #ed4956; stroke: #ed4956; animation: heartPop .35s cubic-bezier(.2,1.6,.4,1); }
+  @keyframes heartPop { 0% { transform: scale(.4); } 60% { transform: scale(1.3); } 100% { transform: scale(1); } }
+  .shr { position: absolute; right: 10px; bottom: 8px; z-index: 2; display: inline-flex; align-items: center; color: var(--text) !important; color: var(--muted); background: none !important; border: none !important; padding: 2px 4px !important; line-height: 1; }
+  .shr:hover { color: var(--accent); }
+  .shr svg { width: 22px; height: 22px; display: block; }
+  .chip { padding-bottom: 32px !important; }
+  .chip:not(.nopv) .cr { margin-top: 30px; }
+  .chip .nmrow { padding-right: 72px; align-items: center; min-height: 32px; }
+  .best { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(330px, 100%), 1fr)); gap: 12px; }
+  .best .chip { border: 2px solid var(--accent); }
+  .best .chip .nm { font-size: 1.45rem; }
+  .browse { display: flex; flex-wrap: wrap; gap: 8px; }
+  .browse button { padding: 7px 11px; font-size: .88rem; }
+  .browse button small { color: var(--muted); }
+  .empty { color: var(--muted); text-align: center; padding: 26px 0; }
+  .note { font-size: .78rem; color: var(--muted); margin-top: 30px; text-align: center; }
+
+  /* ---- guided naming (pop-up flow) ---- */
+  #wiz { --wbg: linear-gradient(165deg, #ffe3ec 0%, #efe7ff 48%, #dff1ff 100%); --wcard: rgba(255,255,255,.88); --winp: rgba(255,255,255,.9); --wink: #2b2230; --wmut: #7d7285; --wline: rgba(139,92,246,.25); --wgrad: linear-gradient(120deg, #ff7aa2 0%, #9b7bff 62%, #6cb2f2 100%);
+    position: fixed; inset: 0; z-index: 70; display: flex; align-items: center; justify-content: center; padding: 14px; background: var(--wbg); color: var(--wink); overflow: hidden;
+    font-family: "Fredoka", "Nunito", ui-rounded, system-ui, -apple-system, "Segoe UI", sans-serif; }
+  @media (prefers-color-scheme: dark) { #wiz { --wbg: linear-gradient(165deg, #2b1733 0%, #1d1a3a 50%, #13263b 100%); --wcard: rgba(34,28,45,.9); --winp: rgba(20,16,28,.7); --wink: #f5eefa; --wmut: #b3a5c0; --wline: rgba(167,139,250,.35); } }
+  #wiz[hidden] { display: none; }
+  #wiz * { box-sizing: border-box; }
+  #wiz .wfl { position: absolute; font-size: 1.7rem; opacity: .55; pointer-events: none; user-select: none; animation: wFloat 9s ease-in-out infinite; }
+  #wiz .wconf { position: absolute; top: -16px; width: 8px; height: 14px; border-radius: 2px; pointer-events: none; animation: wFall linear forwards; }
+  #wiz .wcard { position: relative; z-index: 1; width: 100%; max-width: 440px; max-height: calc(100vh - 28px); max-height: calc(100dvh - 28px); display: flex; flex-direction: column; padding: 16px 20px 18px; text-align: center;
+    background: var(--wcard); -webkit-backdrop-filter: blur(18px) saturate(1.3); backdrop-filter: blur(18px) saturate(1.3); border: 1.5px solid var(--wline); border-radius: 30px; box-shadow: 0 30px 70px rgba(120,80,200,.28); animation: wPop .45s cubic-bezier(.2,.9,.3,1.15); }
+  #wiz .wcard.res { max-width: 680px; }
+  #wiz .wtop { display: flex; align-items: center; justify-content: space-between; min-height: 30px; }
+  #wiz .wdots { display: flex; gap: 6px; align-items: center; }
+  #wiz .wdot { width: 8px; height: 8px; border-radius: 6px; background: var(--wline); transition: all .25s; }
+  #wiz .wdot.on { width: 24px; background: linear-gradient(90deg, #ff7aa2, #9b7bff); }
+  #wiz .wskip { background: none !important; border: none !important; color: var(--wmut); font: inherit; font-size: .85rem; padding: 6px 8px !important; cursor: pointer; }
+  #wiz .wstep { display: none; min-height: 0; flex-direction: column; flex: 1; }
+  #wiz .wstep.on { display: flex; animation: wSlide .35s ease-out; }
+  #wiz .wbody { overflow-y: auto; min-height: 0; flex: 1; padding: 2px 2px 4px; }
+  #wiz .wbig { font-size: 3.6rem; line-height: 1; margin: 10px 0 4px; animation: wBounce 2.4s ease-in-out infinite; }
+  #wiz .wh { margin: 8px 0 6px; font-size: 1.85rem; line-height: 1.12; font-weight: 600; background: var(--wgrad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  #wiz .wh.sm { font-size: 1.45rem; }
+  #wiz .wp { margin: 0 0 16px; color: var(--wmut); font-size: 1rem; line-height: 1.4; }
+  #wiz .wp.small { font-size: .85rem; margin-bottom: 8px; }
+  #wiz .wrow2 { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: end; text-align: left; }
+  #wiz .wplus { font-size: 1.6rem; font-weight: 600; color: var(--m); padding-bottom: 8px; }
+  #wiz label { display: block; font-size: .78rem; color: var(--wmut); text-align: left; }
+  #wiz input[type=text] { display: block; width: 100%; margin-top: 4px; padding: 13px 14px; font: inherit; font-size: 1.1rem; color: var(--wink); background: var(--winp); border: 2px solid var(--wline); border-radius: 16px; outline: none; }
+  #wiz input[type=text]:focus { border-color: #9b7bff; box-shadow: 0 0 0 4px rgba(155,123,255,.18); }
+  #wiz .wfam { margin-top: 10px; }
+  #wiz .wchips { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 14px; }
+  #wiz .wchips button, #wiz .wl { font: inherit; color: var(--wink); background: var(--winp); border: 1.5px solid var(--wline); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: transform .15s; }
+  #wiz .wchips button:active, #wiz .wl:active { transform: scale(.96); }
+  #wiz .wchips button.on, #wiz .wl.on { color: #fff; background: var(--wgrad); border-color: transparent; font-weight: 600; }
+  #wiz .wpeek { min-height: 78px; margin: 14px 0 12px; padding: 10px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-content: center; border: 1.5px dashed var(--wline); border-radius: 20px; }
+  #wiz .wph { color: var(--wmut); font-size: .9rem; }
+  #wiz .wpk { padding: 6px 13px; font-size: 1.05rem; font-weight: 600; background: var(--winp); border: 1.5px solid var(--wline); border-radius: 999px; animation: wPop .4s both; animation-delay: calc(var(--i) * 70ms); }
+  #wiz .wpk .pa { color: #e0567a; } #wiz .wpk .pb { color: #3b82c4; } #wiz .wpk .pm { color: #8b5cf6; } #wiz .wpk .pt { color: #1f9d6b; }
+  #wiz .wgo { width: 100%; margin-top: 6px; padding: 14px 18px; font: inherit; font-size: 1.05rem; font-weight: 600; color: #fff; background: var(--wgrad) !important; border: none !important; border-radius: 999px; cursor: pointer; box-shadow: 0 10px 22px rgba(155,123,255,.38); transition: transform .15s, opacity .2s; }
+  #wiz .wgo:active { transform: scale(.98); }
+  #wiz .wgo:disabled { opacity: .45; box-shadow: none; cursor: not-allowed; }
+  #wiz .wlink { background: none !important; border: none !important; font: inherit; font-size: .88rem; color: var(--wmut); text-decoration: underline; padding: 8px 10px !important; cursor: pointer; }
+  #wiz .wlens { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 4px 0 14px; }
+  #wiz .wl { display: flex; flex-direction: column; align-items: center; gap: 1px; min-width: 72px; padding: 9px 12px; border-radius: 18px; }
+  #wiz .wl b { font-size: 1.4rem; line-height: 1.1; }
+  #wiz .wl small { font-size: .68rem; opacity: .75; }
+  #wiz .wlist { overflow-y: auto; flex: 1; min-height: 0; margin: 0 -8px; padding: 4px 8px 8px; text-align: left; }
+  #wiz .wlist .empty { text-align: center; color: var(--wmut); padding: 24px 8px; }
+  #wiz .wfoot { display: flex; gap: 8px; align-items: center; justify-content: space-between; margin-top: 8px; }
+  #wiz .wfoot .wgo { width: auto; flex: 1; margin: 0; }
+  #wizOpen { font-size: .85rem; padding: 7px 12px; border-radius: 10px; }
+  @keyframes wFloat { 0%, 100% { transform: translateY(0) rotate(-6deg); } 50% { transform: translateY(-22px) rotate(8deg); } }
+  @keyframes wFall { to { transform: translateY(110vh) rotate(540deg); opacity: .9; } }
+  @keyframes wPop { from { opacity: 0; transform: translateY(14px) scale(.94); } to { opacity: 1; transform: none; } }
+  @keyframes wSlide { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: none; } }
+  @keyframes wBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  @media (min-width: 700px) { #wiz .wcard { zoom: 1.4; max-height: calc((100vh - 28px) / 1.4); max-height: calc((100dvh - 28px) / 1.4); } #wiz .wcard.res { max-width: 600px; } #wiz .wfl { font-size: 2.6rem; } }
+  @media (min-width: 700px) and (max-height: 950px) { #wiz .wcard { zoom: 1.12; max-height: calc((100vh - 28px) / 1.12); max-height: calc((100dvh - 28px) / 1.12); } }
+  @media (prefers-reduced-motion: reduce) { #wiz *, #wiz .wcard { animation: none !important; } }
+  .toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: var(--text); color: var(--bg); padding: 9px 16px; border-radius: 20px; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 90; }
+  .toast.show { opacity: 1; }
+  @media (max-width: 640px) { .inputs, .inputs2 { grid-template-columns: 1fr; } .plus { margin: 0; justify-self: center; } }
+
+  .panel, .chip { border: 1.5px solid color-mix(in srgb, var(--accent) 35%, var(--border)); }
+  .seg { border: 1.5px solid color-mix(in srgb, var(--accent) 55%, var(--border)); }
+  .seg button + button { border-left: 1.5px solid color-mix(in srgb, var(--accent) 55%, var(--border)); }
+  .viewbar { border: 1.5px solid color-mix(in srgb, var(--accent) 35%, var(--border)); border-radius: 14px; padding: 8px 10px; background: color-mix(in srgb, var(--card) 38%, transparent); -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4); }
+  .best .chip { border: 2px solid var(--accent); }
+
+  /* festive theme */
+  :root { --bg: #fff8f1; --card: #ffffff; --border: #f6d9e4; --accent: #e8478b; --text: #3a2440; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #1d1426; --card: #281b33; --border: #4a2d55; --accent: #ff6fa8; } }
+  body { background: var(--bg) radial-gradient(circle at 8% 0%, rgba(255,196,77,.28), transparent 35%), radial-gradient(circle at 95% 10%, rgba(236,72,153,.18), transparent 38%), radial-gradient(circle at 50% 100%, rgba(59,130,246,.14), transparent 45%) fixed; }
+  body::before { opacity: .07 !important; }
+  .wrap::before { content: ""; display: block; height: 8px; border-radius: 8px; margin-bottom: 14px; background: repeating-linear-gradient(90deg,#ff5d8f 0 40px,#ffc44d 40px 80px,#3bb4a0 80px 120px,#5b8def 120px 160px,#a66cff 160px 200px); }
+  .panel { background: var(--card); border-radius: 18px; box-shadow: 0 6px 20px rgba(232,71,139,.10); }
+  .chip { border-radius: 16px; background: var(--card); box-shadow: 0 3px 12px rgba(255,140,60,.12); transition: transform .15s, box-shadow .15s; }
+  .chip:hover { transform: translateY(-2px) rotate(-.4deg); box-shadow: 0 8px 20px rgba(232,71,139,.2); }
+  button.primary, .seg button.active, .cnt { background: linear-gradient(120deg,#ff5d8f,#ff9a3c); border-color: transparent; }
+  .seg button.active { color: #fff; }
+  .wrap h1, .wrap > #results h2 { background: linear-gradient(90deg,#e8478b,#ff9a3c,#a66cff); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .vidb { font: inherit; font-size: .78rem; font-weight: 600; margin-top: 6px; padding: 6px 10px; border-radius: 999px; color: #fff; border: none; cursor: pointer; background: linear-gradient(120deg,#ff5d8f,#ff9a3c); }
+  #vidBar { position: fixed; left: 50%; bottom: 18px; transform: translate(-50%, 140%); z-index: 85; display: flex; gap: 10px; align-items: center; max-width: calc(100vw - 24px); padding: 10px 12px 10px 16px; border-radius: 999px; background: #3a2440; color: #fff; box-shadow: 0 10px 30px rgba(0,0,0,.35); transition: transform .35s cubic-bezier(.2,.9,.3,1.2); }
+  #vidMsg { white-space: nowrap; font-weight: 600; }
+  #vidBar.show { transform: translate(-50%, 0); }
+  #vidBar button { font: inherit; border: none; cursor: pointer; border-radius: 999px; padding: 8px 14px; font-weight: 600; color: #fff; background: linear-gradient(120deg,#ff5d8f,#ff9a3c); white-space: nowrap; }
+  #vidBar button.x { position: static; width: auto; height: auto; font-size: 1rem; color: #fff !important; background: none !important; padding: 4px 8px !important; opacity: .7; }
+  .tip { background: #fff3c9; color: #6b4a00; border: 1.5px dashed #ffc44d; border-radius: 12px; padding: 8px 12px; }
+  @media (prefers-color-scheme: dark) { .tip { background: #3a2d12; color: #ffd98a; } }
+
+  .hero { text-align: center; margin: 4px 0 16px; }
+  .hero h1 { margin: 0; font-family: "Fredoka", system-ui, sans-serif; font-weight: 600; font-size: clamp(1.25rem, 5.6vw, 2.2rem); line-height: 1.2; background: linear-gradient(90deg,#e8478b,#ff9a3c,#a66cff); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero p { margin: 4px 0 0; color: var(--muted); font-size: .95rem; }
+  .allbox { margin: 10px 0; }
+  .allbox > summary { cursor: pointer; list-style: none; font-size: 1.15rem; font-weight: 700; padding: 10px 14px; border-radius: 14px; background: var(--card); border: 1.5px dashed color-mix(in srgb, var(--accent) 45%, var(--border)); }
+  .allbox > summary::-webkit-details-marker { display: none; }
+  .allbox > summary::before { content: "▸ "; color: var(--accent); }
+  .allbox[open] > summary::before { content: "▾ "; }
+  .allbox > summary small { font-size: .75rem; font-weight: 500; color: var(--muted); }
+  .allbox[open] .xh { display: none; }
+  .allbox[open] > summary { margin-bottom: 10px; }
+  .grid.small { grid-template-columns: repeat(auto-fill, minmax(min(190px, 100%), 1fr)); gap: 8px; }
+  .grid.small .chip { padding: 8px 10px; border-radius: 12px; }
+  .grid.small .chip .nm { font-size: 1.05rem; }
+  .grid.small .chip .nick, .grid.small .chip .via, .grid.small .chip .meta, .grid.small .chip .full, .grid.small .chip .rashi { font-size: .68rem; margin-top: 2px; }
+  /* ===== 3D story journey ===== */
+  #jny { position: fixed; inset: 0; z-index: 75; overflow: hidden; color: #fff; font-family: "Fredoka", system-ui, sans-serif; background: linear-gradient(#2b1c52 0%, #6a3f8e 50%, #ff9f8e 100%); -webkit-user-select: none; user-select: none; }
+  #jny[hidden] { display: none; }
+  #jny.warm { background: linear-gradient(#ffb6c9 0%, #ffd9a8 55%, #fff1c9 100%); }
+  #jny * { box-sizing: border-box; }
+  #jny .jstage { position: absolute; inset: 0; overflow: hidden; }
+  #jny .jscale { position: absolute; left: 50%; top: 40%; width: 0; height: 0; transform: scale(var(--s, 1)); }
+  #jny .jpersp { position: absolute; left: 0; top: 0; width: 0; height: 0; perspective: 1000px; perspective-origin: 0 0; }
+  #jny .jworld { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-style: preserve-3d; transform: translateZ(var(--dz, -120px)) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform 1.6s cubic-bezier(.2,.7,.2,1); }
+  #jny .jworld.live { transition: none; }
+  #jny .f { position: absolute; backface-visibility: hidden; }
+  #jny .back  { left: -400px; top: -350px; width: 800px; height: 700px; transform: translateZ(-350px); background: repeating-linear-gradient(90deg, #ffd5e4 0 64px, #ffeaf1 64px 128px); }
+  #jny .back::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 190px; background: linear-gradient(#fff6e9, #f6dcc0); border-top: 8px solid #fff; }
+  #jny .left  { left: -350px; top: -350px; width: 700px; height: 700px; transform: translateX(-400px) rotateY(90deg); background: linear-gradient(90deg, #c9b7f3, #e4d9ff); }
+  #jny .right { left: -350px; top: -350px; width: 700px; height: 700px; transform: translateX(400px) rotateY(-90deg); background: linear-gradient(270deg, #c9b7f3, #e4d9ff); }
+  #jny .floor { left: -400px; top: -350px; width: 800px; height: 700px; transform: translateY(350px) rotateX(90deg); background: repeating-linear-gradient(90deg, #f2cf9f 0 90px, #e8be86 90px 94px); }
+  #jny .ceil  { left: -400px; top: -350px; width: 800px; height: 700px; transform: translateY(-350px) rotateX(-90deg); background: #fff4f0; }
+  #jny .o { position: absolute; left: 0; top: 0; transform-style: preserve-3d; transform: translate3d(var(--x, 0px), var(--y, 0px), var(--z, 0px)); }
+  #jny .o > .in { position: absolute; transform: translate(-50%, -50%); line-height: 1; white-space: nowrap; }
+  #jny .rug { left: -250px; top: -170px; width: 500px; height: 340px; border-radius: 50%; transform: translateY(349px) rotateX(90deg) translateZ(0px); background: radial-gradient(circle, #ffe3a8 0 30%, #ffc2d6 31% 55%, #cfe2ff 56% 100%); box-shadow: 0 0 0 6px #fff8; }
+  #jny .win { width: 220px; height: 260px; transform: translate3d(0, -120px, -345px); border-radius: 110px 110px 12px 12px; border: 10px solid #fff; background: linear-gradient(#10163a, #3b2c78); overflow: hidden; left: -110px; top: -130px; }
+  #jny .win i { position: absolute; width: 4px; height: 4px; background: #fff; border-radius: 50%; animation: jTw 2.4s ease-in-out infinite; }
+  #jny .win b { position: absolute; right: 30px; top: 30px; font-size: 54px; filter: drop-shadow(0 0 14px #ffe9a8); font-weight: 400; }
+  #jny .shelf { left: -150px; top: -10px; width: 300px; height: 14px; border-radius: 6px; background: #fff; transform: translate3d(-250px, -40px, -340px); box-shadow: 0 6px 0 #e5cfae; }
+  #jny .orb { transform-style: preserve-3d; animation: jSpin 16s linear infinite; position: absolute; left: 0; top: 0; }
+  #jny .orb span { position: absolute; font-size: 44px; left: -24px; top: -24px; }
+  #jny .stick { position: absolute; left: -2px; top: -300px; width: 4px; height: 260px; background: #fff; opacity: .8; }
+  #jny .baby { width: 200px; height: 250px; cursor: pointer; transition: transform 1.4s cubic-bezier(.3,.8,.2,1); }
+  #jny .baby .bsv { position: absolute; left: -100px; top: -125px; width: 200px; height: 250px; overflow: visible; animation: jBreath 3.4s ease-in-out infinite; transform-origin: 50% 100%; }
+  #jny .baby .eyes-happy, #jny .baby .m-happy, #jny .baby .zz { opacity: 0; transition: opacity .2s; }
+  #jny .baby.happy .eyes-happy, #jny .baby.happy .m-happy { opacity: 1; }
+  #jny .baby.happy .eyes-closed, #jny .baby.happy .m-calm { opacity: 0; }
+  #jny .baby.happy .bsv { animation: jWig .5s ease-in-out 3; }
+  #jny .baby.sleepy .zz { opacity: 1; animation: jZ 1.6s ease-in-out infinite; }
+  #jny .baby.beat .bsv { animation: jBeat .8s ease-in-out infinite; }
+  #jny .lapo .in { transform: translate(-50%, -50%); }
+  #jny .person .in { text-align: center; }
+  #jny .person .em { display: block; font-size: 84px; animation: jBob 1.6s ease-in-out infinite; animation-delay: var(--d, 0s); filter: drop-shadow(0 8px 6px rgba(80,40,80,.28)); transition: transform .4s; }
+  #jny .person .tg { display: inline-block; margin-top: 2px; font-size: 15px; font-weight: 500; padding: 2px 10px; border-radius: 999px; background: #fffc; color: #6a3f8e; }
+  #jny .person.talk .em { transform: scale(1.35) translateY(-10px); }
+  #jny .person.talk .tg { background: #ff7aa2; color: #fff; }
+  #jny .person { transition: transform 1s cubic-bezier(.2,.8,.2,1), opacity .6s; }
+  #jny .person.away { opacity: 0; transform: translate3d(var(--x), var(--y), -1200px); }
+  #jny .bl { position: absolute; font-size: 28px; pointer-events: none; animation: jUp 1.8s ease-out forwards; }
+  #jny .say { position: absolute; padding: 6px 14px; border-radius: 18px; background: #fff; color: #6a3f8e; font-size: 20px; font-weight: 600; pointer-events: none; animation: jUp 1.8s ease-out forwards; white-space: nowrap; }
+  #jny .flag { position: absolute; width: 0; height: 0; border-left: 22px solid transparent; border-right: 22px solid transparent; border-top: 44px solid var(--c); transform-origin: 50% 0; animation: jSw 2.2s ease-in-out infinite; animation-delay: var(--d); }
+  #jny .bal { animation: jFloat 5s ease-in-out infinite; animation-delay: var(--d); }
+  #jny .ncard { width: 300px; height: 150px; transform-style: preserve-3d; transition: transform 1.3s cubic-bezier(.3,1.2,.4,1); position: absolute; left: -150px; top: -75px; }
+  #jny .ncard.flip { transform: rotateY(180deg); }
+  #jny .ncard > div { position: absolute; inset: 0; border-radius: 22px; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; text-align: center; }
+  #jny .ncard .fr { background: linear-gradient(135deg, #ff7aa2, #9b7bff); font-size: 52px; box-shadow: 0 14px 30px rgba(80,30,100,.4); }
+  #jny .ncard .bk { background: #fffdf8; color: #6a3f8e; transform: rotateY(180deg); flex-direction: column; box-shadow: 0 14px 30px rgba(80,30,100,.4); border: 5px solid #ffc44d; }
+  #jny .ncard .bk small { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: #b08bd0; }
+  #jny .ncard .bk b { font-size: 46px; line-height: 1.1; font-weight: 600; display: block; }
+  #jny .ncard .bk b span { display: inline-block; animation: jDrop .7s cubic-bezier(.3,1.5,.5,1) both; animation-delay: calc(var(--i) * 110ms + 1s); }
+  #jny .ncard .bk em { font-style: normal; font-size: 14px; color: #8a7a9a; }
+  #jny .jvig { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 50% 42%, transparent 35%, rgba(30,10,50,.55) 100%); }
+  #jny .jbar { position: absolute; left: 0; right: 0; top: 0; z-index: 3; display: flex; align-items: center; gap: 8px; padding: 12px 14px; }
+  #jny .jprog { display: flex; gap: 6px; flex: 1; }
+  #jny .jprog i { width: 22px; height: 6px; border-radius: 6px; background: #fff5; transition: all .3s; }
+  #jny .jprog i.on { background: #fff; width: 34px; }
+  #jny .jbar button { font: inherit; color: #fff; background: #0003; border: 1px solid #fff4; border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+  #jny .jcap { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; padding: 14px 16px calc(16px + env(safe-area-inset-bottom)); max-height: 52vh; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; background: linear-gradient(transparent, rgba(40,15,70,.55) 28%); }
+  #jny.warm .jcap { background: linear-gradient(transparent, rgba(110,40,120,.78) 30%); }
+  #jny .jtxt { font-size: clamp(1.1rem, 4.6vw, 1.7rem); font-weight: 600; line-height: 1.25; text-shadow: 0 2px 10px rgba(30,10,60,.55); max-width: 640px; animation: jIn .6s ease-out; }
+  #jny .jtxt small { display: block; font-size: .72em; font-weight: 400; opacity: .9; margin-top: 4px; }
+  #jny .jact { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; max-width: 640px; width: 100%; }
+  #jny .jb { font: inherit; font-size: 1.05rem; font-weight: 600; color: #fff; background: linear-gradient(120deg, #ff7aa2, #9b7bff 60%, #6cb2f2); border: none; border-radius: 999px; padding: 13px 24px; cursor: pointer; box-shadow: 0 8px 22px rgba(70,20,110,.4); animation: jIn .5s ease-out; }
+  #jny .jb.ghost { background: #fff3; box-shadow: none; border: 1px solid #fff6; font-weight: 500; }
+  #jny .jvibe { display: inline-flex; gap: 8px; align-items: center; padding: 7px 14px; border-radius: 999px; background: #fff; color: #6a3f8e; font-weight: 600; font-size: .95rem; animation: jIn .5s ease-out; }
+  #jny .jvibe i { display: inline-block; width: 70px; height: 8px; border-radius: 8px; background: #e7dcf6; overflow: hidden; vertical-align: middle; } #jny .jvibe i b { display: block; height: 100%; background: linear-gradient(90deg, #ff7aa2, #9b7bff); }
+  #jny .jthink { display: inline-flex; gap: 5px; } #jny .jthink i { width: 8px; height: 8px; border-radius: 50%; background: #fff; animation: jDot 1s infinite; } #jny .jthink i:nth-child(2) { animation-delay: .15s; } #jny .jthink i:nth-child(3) { animation-delay: .3s; }
+  #jny .jvotes { width: 100%; max-width: 560px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; text-align: left; max-height: 30vh; padding-right: 2px; }
+  #jny .jv { display: flex; gap: 10px; align-items: center; background: #ffffffee; color: #4a2f6a; border-radius: 16px; padding: 6px 12px; font-size: .92rem; animation: jIn .4s ease-out; }
+  #jny .jv .e { font-size: 1.6rem; } #jny .jv b { color: #e0567a; font-size: 1.05rem; } #jny .jv small { display: block; color: #85729c; line-height: 1.2; }
+  #jny .jcands { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  #jny .jcands button { font: inherit; color: #4a2f6a; background: #fffe; border: 2px solid transparent; border-radius: 999px; padding: 6px 14px; cursor: pointer; font-weight: 600; }
+  #jny .jcands button.on { border-color: #ff7aa2; background: #fff; box-shadow: 0 0 0 3px #ff7aa255; }
+  #jny .jcands button small { opacity: .6; font-weight: 400; margin-left: 4px; }
+  #jny canvas.jconf { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
+  #jny .jvid { position: absolute; inset: 0; z-index: 6; background: rgba(25,8,45,.82); display: flex; align-items: center; justify-content: center; padding: 16px; }
+  #jny .jvc { width: 100%; max-width: 380px; max-height: 100%; overflow-y: auto; background: #fffdf8; color: #4a2f6a; border-radius: 24px; padding: 18px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,.45); }
+  #jny .jvc h3 { margin: 0 0 10px; font-weight: 600; font-size: 1.25rem; } #jny .jvc p { color: #85729c; margin: 10px 0 0; }
+  #jny .jvmsg { color: #b0354f; font-size: .85rem; margin-top: 6px; }
+  #jny .jvc video { width: 100%; max-height: 52vh; border-radius: 16px; background: #000; display: block; }
+  #jny .jvb { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 12px; } #jny .jvb .jb { padding: 10px 16px; font-size: .95rem; } #jny .jvb .jb.ghost { color: #6a3f8e; background: #f1eafb; border: none; }
+  #jny .jpb { height: 12px; border-radius: 12px; background: #eadff8; overflow: hidden; } #jny .jpb b { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #ff7aa2, #9b7bff); }
+  #jny .jin { font: inherit; font-size: 1.1rem; width: 100%; max-width: 360px; padding: 12px 16px; border-radius: 999px; border: 2px solid #fff6; background: #fffe; color: #4a2f6a; outline: none; text-align: center; }
+  @keyframes jSpin { to { transform: rotateY(360deg); } }
+  @keyframes jTw { 50% { opacity: .2; transform: scale(.5); } }
+  @keyframes jBreath { 50% { transform: scale(1.03, 1.05); } }
+  @keyframes jWig { 25% { transform: rotate(-6deg); } 75% { transform: rotate(6deg); } }
+  @keyframes jBeat { 0%, 100% { transform: scale(1); } 20% { transform: scale(1.07); } 40% { transform: scale(1); } 60% { transform: scale(1.05); } }
+  @keyframes jZ { 50% { transform: translateY(-8px); opacity: .5; } }
+  @keyframes jBob { 50% { transform: translateY(-10px); } }
+  @keyframes jUp { from { opacity: 1; transform: translateY(0) scale(.8); } to { opacity: 0; transform: translateY(-90px) scale(1.2); } }
+  @keyframes jIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @keyframes jDot { 50% { transform: translateY(-5px); opacity: .5; } }
+  @keyframes jSw { 50% { transform: rotate(8deg); } }
+  @keyframes jFloat { 50% { transform: translateY(-26px) rotate(4deg); } }
+  @keyframes jDrop { from { opacity: 0; transform: translateY(-60px) rotateX(90deg); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { #jny *, #jny .jworld { animation-duration: .01s !important; transition-duration: .01s !important; } }
+  #jnyOpen { font-size: .85rem; padding: 7px 12px; border-radius: 10px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero"><h1>🍼 For the cute little one 🧸</h1><p>Find a name as special as they are</p></header>
+  <div class="panel">
+    <div class="seg" id="modeSeg" style="margin-bottom:12px">
+      <button data-m="blend" class="active"><span class="tl">💞 Blend Names</span><small>mix yours and your spouse’s names</small></button>
+      <button data-m="explore"><span class="tl">🔎 Find Names</span><small>find by meaning, language, rashi or letters</small></button>
+    </div>
+    <div style="margin-bottom:14px">
+      <div class="seg" id="genderSeg">
+        <button data-g="m">👦 Baby boy</button>
+        <button data-g="f">👧 Baby girl</button>
+      </div>
+    </div>
+    <div class="lead" id="lead">Enter your name and your spouse’s name — we’ll blend them into baby name ideas.</div>
+    <div class="inputs" id="namesRow">
+      <div id="wrapA">
+        <label class="l" for="nameA">First name</label><input id="nameA" type="text" placeholder="e.g. Rohan" autocomplete="off">
+      </div>
+      <div class="plus" id="plusSign" title="Blend" aria-hidden="true">
+        <svg width="48" height="34" viewBox="0 0 46 34"><circle cx="17" cy="17" r="13" fill="var(--a)" opacity=".8"/><circle cx="29" cy="17" r="13" fill="var(--b)" opacity=".8"/><path d="M23 5.5A13 13 0 0 1 23 28.5A13 13 0 0 1 23 5.5z" fill="var(--m)"/></svg>
+      </div>
+      <div id="wrapB">
+        <label class="l" for="nameB">Second name</label><input id="nameB" type="text" placeholder="e.g. Anika" autocomplete="off">
+      </div>
+    </div>
+    <div class="inputs2">
+      <div id="wrapMid"><label class="l" for="midName">Middle name (optional)</label><input id="midName" type="text" placeholder="e.g. Kumar" autocomplete="off"></div>
+      <div><label class="l" for="lastName">Last name (optional)</label><input id="lastName" type="text" placeholder="e.g. Sharma" autocomplete="off"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <details class="filters" id="meanBox">
+    <summary>Meaning &amp; language <span class="cnt" id="meanCnt"></span></summary>
+    <div class="fgrid">
+        <div class="wide"><label class="l" for="theme">Based on</label><select id="theme"><option value="">None</option></select></div>
+        <div class="wide opwrap"><button type="button" class="opchip" id="op1" data-v="or" title="Tap to switch between OR and AND">OR</button></div>
+        <div class="wide"><label class="l" for="trait">Trait / personality</label><select id="trait"><option value="">None</option></select></div>
+        <div class="wide opwrap"><button type="button" class="opchip" id="op2" data-v="or" title="Tap to switch between OR and AND">OR</button></div>
+        <div class="wide"><label class="l" for="mWord">Synonyms of a word</label><input id="mWord" type="text" placeholder="e.g. happy, khush, feliz" autocomplete="off"></div>
+        <div class="wide"><label class="l" for="mLang">In language</label><select id="mLang"><option value="all">All languages</option></select></div>
+        <div class="wide hint" id="mStatus"></div>
+        <div class="wide opwrap"><button type="button" class="opchip" id="op3" data-v="and" title="Tap to switch between OR and AND">AND</button></div>
+        <div class="wide"><label class="l" for="rashi">Rashi (moon sign)</label><select id="rashi"><option value="">None</option></select></div>
+        <div class="wide hint" id="rashiInfo"></div>
+    </div>
+    </details>
+  </div>
+
+  <div class="panel">
+    <details class="filters" id="filtBox">
+      <summary>Filters &amp; options <span class="cnt" id="filtCnt"></span></summary>
+      <div class="fgrid">
+        <div><label class="l" for="startsWith">Starts with</label><input id="startsWith" type="text" placeholder="e.g. R" autocomplete="off"></div>
+        <div><label class="l" for="endsWith">Ends with</label><input id="endsWith" type="text" placeholder="e.g. an" autocomplete="off"></div>
+        <div>
+          <label class="l" for="rhyme">Rhymes with</label><input id="rhyme" type="text" placeholder="e.g. Aarav" autocomplete="off">
+        </div>
+        <div class="exonly"><label class="l" for="exKind">Show</label><select id="exKind"><option value="all">All ideas</option><option value="curated">Real names &amp; words</option><option value="invented">Newly invented</option></select></div>
+        <div class="wide row" style="margin-top:0">
+          <label class="chk"><input type="checkbox" id="nice" checked> Easy to pronounce</label>
+          <label class="chk"><input type="checkbox" id="nodict"> Avoid dictionary words</label>
+          <label class="chk"><input type="checkbox" id="showRashi" checked> Show rashi on names</label>
+          <label class="chk"><input type="checkbox" id="showMeaning" checked> Show meaning on names</label>
+          <span class="spacer"></span>
+          <select id="sort" style="width:auto">
+            <option value="short">Fewest letters first</option>
+            <option value="long">Most letters first</option>
+            <option value="uniq">Most unique first</option>
+            <option value="score">Best match first</option>
+            <option value="az">A → Z</option>
+            <option value="random">Random</option>
+          </select>
+          <button id="reset">Reset filters</button>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="panel" style="padding:12px 18px">
+    <label class="l" for="maxLen" style="margin:0 0 4px">No. of letters in name: up to <b id="maxLenVal" style="color:var(--accent)">any</b></label>
+    <input id="maxLen" type="range" min="2" max="15" value="15">
+    <label class="chk" style="margin-top:8px"><input type="checkbox" id="uniqOnly"> Unique names only</label>
+  </div>
+
+  <div class="viewbar">
+    <div class="seg" id="viewSeg">
+      <button data-v="all" class="active">All ideas</button>
+      <button data-v="fav">♥ Shortlist (<span id="favCount">0</span>)</button>
+    </div>
+    <span class="spacer"></span>
+    <select id="favSort" class="favonly" style="width:auto" title="Sort the shortlist">
+      <option value="added">Order added</option>
+      <option value="short">Fewest letters first</option>
+      <option value="long">Most letters first</option>
+      <option value="uniq">Most unique first</option>
+      <option value="az">A → Z</option>
+    </select>
+  </div>
+  <div id="out"></div>
+</div>
+<div id="wiz" hidden role="dialog" aria-modal="true" aria-label="Guided baby naming">
+  <div class="wcard" id="wCard">
+    <div class="wtop"><div class="wdots" id="wDots"><i class="wdot on"></i><i class="wdot"></i><i class="wdot"></i><i class="wdot"></i></div><button type="button" class="wskip" data-skip>Skip ✕</button></div>
+
+    <div class="wstep on" data-s="1">
+      <div class="wbody">
+        <div class="wbig">🎉👶🍼</div>
+        <h2 class="wh">Congratulations,<br>new Mom &amp; Dad!</h2>
+        <p class="wp">Welcome to the best adventure of your life.<br>Let’s name the little one.</p>
+      </div>
+      <button type="button" class="wgo" data-next>Let’s begin →</button>
+    </div>
+
+    <div class="wstep" data-s="2">
+      <div class="wbody">
+        <h2 class="wh sm">Dad’s name + Mom’s name</h2>
+        <p class="wp">Type both names and watch baby name ideas appear.</p>
+        <div class="wrow2">
+          <label>Dad’s name<input class="w-dad" type="text" placeholder="e.g. Rohan" autocomplete="off" autocapitalize="words"></label>
+          <span class="wplus">+</span>
+          <label>Mom’s name<input class="w-mom" type="text" placeholder="e.g. Anika" autocomplete="off" autocapitalize="words"></label>
+        </div>
+        <div class="wchips" id="wGender"><button type="button" data-g="m">👦 Boy</button><button type="button" data-g="f">👧 Girl</button></div>
+        <label class="wfam">Family name (optional)<input class="w-fam" type="text" placeholder="e.g. Sharma" autocomplete="off" autocapitalize="words"></label>
+        <div class="wpeek" id="wPeek" aria-live="polite"><span class="wph">Names will appear here ✨</span></div>
+      </div>
+      <button type="button" class="wgo" data-next disabled>Next → pick letters</button>
+      <div><button type="button" class="wlink" data-example>Try an example</button></div>
+    </div>
+
+    <div class="wstep" data-s="3">
+      <div class="wbody">
+        <h2 class="wh sm">How many letters?</h2>
+        <p class="wp">Pick one or more — or leave it open for every length.</p>
+        <div class="wlens" id="wLens"></div>
+      </div>
+      <button type="button" class="wgo" data-next>Show my names ✨</button>
+      <div><button type="button" class="wlink" data-back>← Back</button></div>
+    </div>
+
+    <div class="wstep" data-s="4">
+      <h2 class="wh sm" id="wResHead">✨ Names for you</h2>
+      <p class="wp small">Tap ♥ on the ones you love — shortlisted names show how they’ll look on a T-shirt, certificate and more.</p>
+      <div class="wlist" id="wList"></div>
+      <div class="wfoot"><button type="button" class="wlink" data-back>← Letters</button><button type="button" class="wgo" id="wHome">Skip to home page →</button></div>
+    </div>
+  </div>
+</div>
+<div id="jny" hidden role="dialog" aria-modal="true" aria-label="Your baby’s story">
+  <div class="jstage"><div class="jscale" id="jScale"><div class="jpersp"><div class="jworld" id="jWorld"></div></div></div><div class="jvig"></div></div>
+  <canvas class="jconf" id="jConf"></canvas>
+  <div class="jbar"><div class="jprog" id="jProg"><i></i><i></i><i></i><i></i></div><button type="button" id="jMute" aria-label="Sound">🔊</button><button type="button" id="jSkip">Skip ✕</button></div>
+  <div class="jcap"><div class="jtxt" id="jTxt"></div><div class="jact" id="jAct"></div></div>
+</div>
+<div class="modal" id="modal" hidden>
+  <div class="mbox">
+    <div class="mhead">
+      <div><div class="mname" id="mName"></div><div class="msub" id="mSub"></div></div>
+      <span class="spacer"></span>
+      <select id="voice" title="Voice accent for “Hear it”">
+        <option value="en-GB">Voice: English (UK)</option>
+        <option value="en-US">Voice: English (US)</option>
+        <option value="en-IN">Voice: English (India)</option>
+        <option value="hi-IN">Voice: Hindi</option>
+      </select>
+      <button id="mCopy">Copy name</button>
+      <button id="mClose">✕ Close</button>
+    </div>
+    <div class="mgrid" id="mGrid"></div>
+  </div>
+</div>
+<div id="vidBar" role="status"><span id="vidMsg"></span><button type="button" id="vidGo">🎬 Make &amp; share video</button><button type="button" class="x" id="vidX" aria-label="Dismiss">✕</button></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const V = "aeiouy";
+const isV = c => V.includes(c);
+const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+const capWords = s => s.split(/(\s+|-)/).map(cap).join("");
+const $ = id => document.getElementById(id);
+const clean = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z]/g, "");
+
+/* ---------- common English words (for "avoid dictionary words") ---------- */
+const DICT = new Set(("able acid aged also area army away baby back ball band bank base bath bean bear beat beef bell belt bend best bike bill bird bite blue boat body bold bolt bomb bond bone book boom boot born boss both bowl bulk burn bush busy cafe cake call calm camp card care cart case cash cast cell chat chef chip city clap clay clip club coal coat code coin cold come cook cool cope copy cord core corn cost crew crop dark data date dawn days dead deal dear deck deed deep deer desk dial dice diet dirt dish disk dive dock does dome done door dose down draw drip drop drum duck dull dust duty each earn ease east easy edge else even ever evil exam face fact fade fail fair fall fame farm fast fate fear feed feel feet fell felt file fill film find fine fire firm fish fist five flag flat flee flip flow foam fold folk food foot fork form fort four free from fuel full fund gain game gang gate gave gear gift girl give glad glow glue goal goat gold golf gone good grab gray grew grid grin grip grow gulf hair half hall hand hang hard harm hate have head heal hear heat heel held hell help herb here hero hide high hill hint hire hold hole holy home hood hook hope horn host hour huge hull hunt hurt idea inch into iron item jack jail jazz join joke jump june jury just keen keep kept kick kill kind king kiss knee knew know lack lady lake lamp land lane last late lawn lazy lead leaf lean left lend less life lift like lily line link lion list live load loan lock loft logo long look loop lord lose loss lost loud love luck lump lung mail main make male mall many mark mask mass mate meal mean meat meet melt memo menu mess mild mile milk mill mind mine mint miss mode mood moon more most move much must myth nail name navy near neat neck need nest news next nice nine none noon nose note noun odds okay once only onto open oral oven over pace pack page paid pain pair pale palm park part pass past path peak peel peer pick pile pine pink pipe plan play plot plug plus poem poet pole poll pond pool poor pope port pose post pour pray pull pump pure push quit race rack rage rail rain rank rare rate read real rear rely rent rest rice rich ride ring rise risk road rock role roll roof room root rope rose rude ruin rule rush safe sail sake sale salt same sand save seal seat seed seek seem seen self sell send sent ship shoe shop shot show shut sick side sign silk sing sink site size skin skip slam slim slip slow snap snow soap soar sock soft soil sold sole some song soon sort soul soup spin spot star stay stem step stir stop such suit sure swim tail take tale talk tall tank tape task team tear tell tend tent term test text than that them then they thin this thus tide tidy tile till time tiny tips tire told toll tone took tool tops tour town trap tree trim trip true tube tune turn twin type unit upon urge used user vary vast very view vote wage wait wake walk wall want warm warn wash wave weak wear week well went were west what when whom wide wife wild will wind wine wing wire wise wish with wolf wood wool word wore work worn wrap yard yarn year yell yoga zero zone zoom " +
+"about above actor adult after again agent agree ahead alarm album alert alive allow alone along alter amber angel anger angle angry apple apply arena argue arise armor aside asset audio avoid award aware bacon badge basic basis beach beard beast begin being below bench berry birth black blade blame blank blast blaze bless blind block blood bloom board boost bound brain brand brave bread break brick bride brief bring broad brown brush build bunch burst cabin cable candy carry catch cause chain chair chalk charm chase cheap check chess chest chief child chill choir claim class clean clear clerk click cliff climb clock close cloud coach coast color couch could count court cover crack craft crane crash cream creek crime cross crowd crown crush curve cycle daily dairy dance dealt death debut delay depth diary dream dress drift drink drive eagle early earth eight elbow elder empty enjoy enter equal error event every exact extra faith false fancy fault feast fence fever field fifty fight final first flame flash fleet flesh float flood floor flour fluid focus force forth forty found frame fresh front frost fruit funny ghost giant given glass globe glory grace grade grain grand grant grape grass great green greet group guard guess guest guide habit happy harsh heart heavy honey honor horse hotel house human humor ideal image index inner input issue ivory jelly jewel joint judge juice knife known label labor large laser later laugh layer learn lease least leave legal lemon level light limit linen liver local logic loose lover lower lucky lunch magic major maker maple march match maybe mayor meant medal media mercy merge merit metal meter might minor minus mixed model money month moral motor mount mouse mouth movie music naive nerve never night noble noise north novel nurse ocean offer often olive onion opera orbit order other ought outer owner paint panel paper party pasta patch pause peace pearl phase phone photo piano piece pilot pitch pizza place plain plane plant plate plaza point polar pound power press price pride prime print prior prize proof proud pulse punch pupil queen quick quiet quote radar radio raise rally ranch range rapid ratio reach ready realm rebel refer relax reply rider ridge right rival river roast robot rough round route royal rural sadly saint salad sauce scale scene scope score scout sense serve seven shade shake shall shape share sharp sheep sheet shelf shell shift shine shirt shock shore short shout sight silly since sixth skill sleep slice slide small smart smile smoke snake solar solid solve sorry sound south space spare spark speak speed spell spend spice spine split spoke sport staff stage stair stake stamp stand stare start state steam steel steep stick still stock stone stood store storm story stove strip study stuff style sugar suite sunny super sweet swift swing sword table taste teach thank theme there thick thing think third those three throw thumb tiger tight timer title toast today token tooth topic total touch tough tower trace track trade trail train treat trend trial tribe trick truck truly trust truth twice uncle under union unity until upper upset urban usual valid value video virus visit vital vivid vocal voice waste watch water wheel where which while white whole whose woman world worry worth would wound write wrong yield young youth zebra " +
+"almost anchor animal answer around autumn banner basket beauty before better beyond bridge bright broken butter canyon castle center chance change charge choice circle clever coffee comfort common copper corner cotton couple create dagger dancer daring desert design dinner doctor dollar dragon driver during eager easily editor eleven empire engine escape evening expert fabric family farmer father feather finger flight flower forest forget fossil friend frozen future garden gentle ginger glance golden grasp guitar hammer handle happen harbor health hidden hockey honest hunter island jacket jungle junior kernel kitten ladder lantern launch leader legend lesson letter lizard lonely magnet mammal manner marble market master meadow member mirror mobile modern moment mother motion muscle mystic narrow nation nature nephew nickel noodle normal number object office orange origin palace parent pencil pepper person pillow planet player pocket poetry potato powder prince proper public pumpkin purple rabbit random reason record reward riddle rocket rubber saddle safety sailor salmon school screen season second secret shadow silent silver simple singer sister smooth spirit spring square stable steady stream street strong summer sunset supper switch symbol system tablet talent tender thirty thread throne ticket tomato travel treasure trophy tunnel turtle valley velvet victim violet vision wallet wander weapon weekly window winter wisdom wizard wonder yellow").split(" "));
+
+const GOD_THEMES = ["hindu", "greek", "norse", "egyptian"];
+const ALIASES = {
+  krishna: ["Govinda","Madhav","Kanha","Gopal"], rama: ["Raghav","Raghunandan","Ramchandra"], shiva: ["Mahesh","Shankar","Bholenath","Mahadev"], vishnu: ["Narayan","Hari","Keshav"],
+  ganesh: ["Ganapati","Vinayak","Gajanan","Ekdant"], indra: ["Devendra","Shakra","Purandar"], surya: ["Ravi","Bhaskar","Divakar","Aditya"], agni: ["Pavak","Vahni","Anal"],
+  varun: ["Pracheta","Toyesh"], kartik: ["Murugan","Skanda","Subramanya","Guha"], hanuman: ["Maruti","Bajrang","Anjaneya","Pavanputra"],
+  lakshmi: ["Shri","Padma","Kamala","Indira"], durga: ["Ambika","Bhavani","Shivani","Chandika"], parvati: ["Gauri","Uma","Girija","Shailaja"], saraswati: ["Vani","Sharada","Bharati","Veena"],
+  sita: ["Janaki","Maithili","Vaidehi"], radha: ["Radhika","Madhavi"], gauri: ["Parvati","Girija"], uma: ["Aparna","Parvati"], ganga: ["Bhagirathi","Jahnavi","Mandakini"], shakti: ["Devi","Mahamaya"],
+  zeus: ["Jupiter"], apollo: ["Phoebus"], ares: ["Mars"], hermes: ["Mercury"], poseidon: ["Neptune"], helios: ["Sol"], athena: ["Minerva","Pallas"], artemis: ["Diana","Cynthia"],
+  hera: ["Juno"], demeter: ["Ceres"], aphrodite: ["Venus","Cytherea"], hestia: ["Vesta"], selene: ["Luna"], nike: ["Victoria"], eos: ["Aurora"],
+  odin: ["Woden","Wotan"], thor: ["Donar"], baldur: ["Balder","Baldr"], freyr: ["Frey","Yngvi"], tyr: ["Tiw"], heimdall: ["Rig"], freya: ["Freyja"], frigg: ["Frigga"], idun: ["Iduna"],
+  ra: ["Re","Amun-Ra"], osiris: ["Asar","Wesir"], horus: ["Heru","Hor"], anubis: ["Anpu","Inpu"], thoth: ["Djehuty","Tehuti"], amun: ["Amon","Amen"], isis: ["Aset"], hathor: ["Athyr"], bastet: ["Bast"], nut: ["Nuit"]
+};
+
+/* ---------- themes: [word, gender m/f/u, meaning] ---------- */
+const THEMES = {
+  english: { label: "English names", items: [
+    ["Oliver","m","olive tree"],["Liam","m","resolute protector"],["Noah","m","rest, comfort"],["Ethan","m","strong, firm"],["Lucas","m","light"],["Henry","m","ruler of the home"],["Leo","m","lion"],["Oscar","m","divine spear"],["Theo","m","gift of God"],["Felix","m","lucky"],["Ryan","m","little king"],["Adam","m","earth"],["Daniel","m","God is my judge"],
+    ["Emma","f","whole, universal"],["Olivia","f","olive tree"],["Ava","f","life"],["Mia","f","mine / beloved"],["Lily","f","lily flower"],["Grace","f","grace"],["Ella","f","light"],["Chloe","f","blooming"],["Amelia","f","industrious"],["Isla","f","island"],["Ruby","f","red gemstone"],["Sophie","f","wisdom"],["Zoe","f","life"],["Nora","f","honour"],["Alice","f","noble"],
+    ["Riley","u","courageous"],["Jordan","u","flowing down"],["Avery","u","ruler of elves"],["Quinn","u","wise"],["Rowan","u","little red one"] ]},
+  hindu: { label: "Hindu gods & goddesses", items: [
+    ["Krishna","m","dark, all-attractive"],["Rama","m","pleasing"],["Shiva","m","auspicious"],["Vishnu","m","all-pervading"],["Ganesh","m","lord of hosts"],["Indra","m","king of the gods"],["Surya","m","the sun"],["Agni","m","fire"],["Varun","m","god of water & sky"],["Kartik","m","war god, Kartikeya"],["Hanuman","m","devotion & strength"],
+    ["Lakshmi","f","fortune"],["Durga","f","invincible"],["Parvati","f","daughter of the mountain"],["Saraswati","f","knowledge, flowing"],["Sita","f","furrow"],["Radha","f","prosperity"],["Gauri","f","radiant"],["Uma","f","light, tranquility"],["Ganga","f","the sacred river"],["Shakti","f","power"] ]},
+  greek: { label: "Greek gods", items: [
+    ["Zeus","m","sky god"],["Apollo","m","light & music"],["Ares","m","war"],["Hermes","m","messenger"],["Poseidon","m","sea"],["Atlas","m","Titan who holds the sky"],["Helios","m","the sun"],
+    ["Athena","f","wisdom"],["Artemis","f","the hunt"],["Hera","f","queen of gods"],["Demeter","f","harvest"],["Aphrodite","f","love"],["Hestia","f","hearth"],["Selene","f","the moon"],["Iris","f","rainbow"],["Nike","f","victory"],["Eos","f","dawn"] ]},
+  norse: { label: "Norse gods", items: [
+    ["Odin","m","wisdom & war"],["Thor","m","thunder"],["Baldur","m","light"],["Freyr","m","fertility"],["Tyr","m","law & justice"],["Heimdall","m","watchman of the gods"],
+    ["Freya","f","love & beauty"],["Frigg","f","queen of Asgard"],["Sif","f","golden-haired"],["Idun","f","youth"] ]},
+  egyptian: { label: "Egyptian gods", items: [
+    ["Ra","m","the sun"],["Osiris","m","afterlife"],["Horus","m","sky"],["Anubis","m","guide of souls"],["Thoth","m","wisdom"],["Amun","m","the hidden one"],
+    ["Isis","f","magic & motherhood"],["Hathor","f","joy & music"],["Bastet","f","protection"],["Nut","f","sky"],["Maat","f","truth & balance"] ]},
+  islamic: { label: "Islamic (divine attribute names)", items: [
+    ["Rahim","m","merciful"],["Karim","m","generous"],["Hakim","m","wise"],["Aziz","m","mighty"],["Latif","m","gentle"],["Malik","m","sovereign"],["Wadud","m","loving"],["Rahman","m","compassionate"],["Salam","u","peace"],["Nur","u","light"] ]},
+  sanskrit: { label: "Sanskrit words", items: [
+    ["Chandra","u","moon"],["Surya","m","sun"],["Tara","f","star"],["Ananda","u","joy"],["Shanti","f","peace"],["Veda","u","knowledge"],["Kiran","u","ray of light"],["Neel","u","blue"],["Aadi","u","the beginning"],["Prem","m","love"],["Jaya","f","victory"],["Kavya","f","poetry"],["Ravi","m","sun"],["Tejas","m","radiance"],["Amrit","u","nectar of life"],["Divya","f","divine"],["Asha","f","hope"],["Isha","f","goddess / ruler"] ]},
+  latin: { label: "Latin words", items: [
+    ["Luna","f","moon"],["Stella","f","star"],["Aurora","f","dawn"],["Lucia","f","light"],["Vita","f","life"],["Clara","f","bright"],["Felix","m","lucky"],["Victor","m","conqueror"],["Maximus","m","greatest"],["Leo","m","lion"],["Sol","u","sun"] ]},
+  japanese: { label: "Japanese words", items: [
+    ["Sora","u","sky"],["Hana","f","flower"],["Yuki","u","snow / happiness"],["Haru","u","spring"],["Aoi","u","blue"],["Ren","u","lotus"],["Akira","u","bright"],["Sakura","f","cherry blossom"],["Hikari","u","light"],["Kai","u","sea"],["Nami","f","wave"] ]},
+  arabic: { label: "Arabic words", items: [
+    ["Layla","f","night"],["Amir","m","prince"],["Noor","u","light"],["Zayn","m","grace"],["Yara","f","small butterfly"],["Farah","f","joy"],["Jamal","m","beauty"],["Hana","f","happiness"],["Rayan","m","gate of Paradise"] ]},
+  spanish: { label: "Spanish words", items: [
+    ["Luz","f","light"],["Sol","u","sun"],["Mar","u","sea"],["Cielo","u","sky"],["Alma","f","soul"],["Paz","f","peace"],["Dulce","f","sweet"],["Rey","m","king"],["Leon","m","lion"],["Estrella","f","star"] ]}
+};
+Object.entries(THEMES).forEach(([k, t]) => {
+  const o = document.createElement("option"); o.value = k; o.textContent = t.label; $("theme").appendChild(o);
+});
+
+/* ---------- Hindu rashi: [id, label, western, starting sounds] ---------- */
+const RASHIS = [
+  ["mesha","Mesha (मेष)","Aries","chu che cho la li lu le lo a"],
+  ["vrishabha","Vrishabha (वृषभ)","Taurus","i e u o va vi vu ve vo"],
+  ["mithuna","Mithuna (मिथुन)","Gemini","ka ki ku gha chha ke ko ha"],
+  ["karka","Karka (कर्क)","Cancer","hi hu he ho da di du de do"],
+  ["simha","Simha (सिंह)","Leo","ma mi mu me mo ta ti tu te"],
+  ["kanya","Kanya (कन्या)","Virgo","to pa pi pu sha na tha pe po"],
+  ["tula","Tula (तुला)","Libra","ra ri ru re ro ta ti tu te"],
+  ["vrishchika","Vrishchika (वृश्चिक)","Scorpio","to na ni nu ne no ya yi yu"],
+  ["dhanu","Dhanu (धनु)","Sagittarius","ye yo bha bhi bhu dha pha bhe"],
+  ["makara","Makara (मकर)","Capricorn","bho ja ji khi khu khe kho ga gi"],
+  ["kumbha","Kumbha (कुंभ)","Aquarius","gu ge go sa si su se so da"],
+  ["meena","Meena (मीन)","Pisces","di du th jha na de do cha chi"]
+];
+RASHIS.forEach(r => { const o = document.createElement("option"); o.value = r[0]; o.textContent = r[1] + " — " + r[2]; $("rashi").appendChild(o); });
+
+/* ---------- meaning words in several languages ----------
+   [id, opposite id, trait label, en, hi, sa, es, fr, ar, ja, la, gr]  (romanised) */
+const LANGS = { en: "English", hi: "Hindi", sa: "Sanskrit", es: "Spanish", fr: "French", ar: "Arabic", ja: "Japanese", la: "Latin", gr: "Greek" };
+const LKEYS = Object.keys(LANGS);
+const CONCEPT_ROWS = [
+  ["happy","sad","Always happy & joyful","happy joy glad cheer bliss merry","khush khushi anand prasann harsh","ananda harsha sukha mudita","feliz alegria gozo dicha","heureux joie gai bonheur","farah said surur bahja","yorokobi ureshii shiawase kofuku","laetus gaudium felix hilaris","chara euphrosyne eudaimon eutychia"],
+  ["sad","happy","Sad & melancholic","sad sorrow gloom grief blue","udaas dukh gham shok","dukkha shoka vishada vyatha","triste pena tristeza dolor","triste chagrin peine","huzn hazin alam","kanashii kanashimi urei","tristis maestus luctus","lype penthos athymia"],
+  ["brave","fearful","Brave & fearless","brave bold valor daring hero fearless","veer nidar sahasi shoor bahadur","veera shura nirbhaya dhira","valiente audaz bravo valor","brave vaillant hardi courage","shuja jasur basil batal","yuki yusha isami","fortis audax virtus valens","andreia alke tharros"],
+  ["fearful","brave","Timid & fearful","fear timid afraid dread","dar darpok bhay bheeru","bhaya bhiru trasa bhiti","miedo temor timido","peur crainte timide","khawf jaban rahba","kowai kyofu osore","timor metus pavor","phobos deimos tromos"],
+  ["wise","foolish","Wise & clever","wise sage clever smart genius insight","gyani buddhi vidvan chatur","pragya medha vidya prajna dhi","sabio sabiduria astuto listo","sage sagesse savant sagace","hakim hikma aqil fahim alim","kenja chie satoshi","sapiens prudens sagax sapientia","sophia phronesis sophos gnosis"],
+  ["foolish","wise","Foolish & naive","fool silly naive dim","murkh nadan bevakuf bhola","murkha mudha avidya","tonto necio ingenuo bobo","sot fou naif benet","ghabi ahmaq jahil","baka oroka manuke","stultus fatuus insipiens","moros anoetos aphron"],
+  ["kind","cruel","Kind & compassionate","kind gentle caring tender mercy grace","dayalu karuna kripa komal sneh","karuna daya kripa maitri","amable bondad ternura piedad","gentil bonte doux tendresse","rahim rahma lutf hanan karim","yasashii nasake jihi","benignus clemens misericordia pietas","agathos eleos philia eunoia"],
+  ["cruel","kind","Cruel & harsh","cruel harsh fierce stern","krur nirdayi kathor","krura nirdaya ghora","cruel duro feroz","cruel dur feroce","qasi shadid wahshi","zankoku kibishii","crudelis durus saevus","agrios skliros apanthropos"],
+  ["calm","angry","Calm & peaceful","calm peace serene still quiet","shant shanti sukoon sthir","shanta shanti prashanta sama","calma paz sereno tranquilo","calme paix serein tranquille","salam hudu sakina sukun","heiwa shizuka odayaka nagi","pax placidus serenus quies","eirene galene hesychia ataraxia"],
+  ["angry","calm","Angry & fierce","anger wrath fury fire","krodh gussa kop agni","krodha kopa manyu","ira furia enojo","colere rage fureur","ghadab ghayz","ikari gekido","ira furor rabies","orge thymos menis"],
+  ["light","dark","Bright & radiant","light bright shine radiant glow dawn","roshni prakash chamak ujala kiran","prakasha jyoti tejas deepa aloka","luz brillo claro aurora","lumiere eclat clair aube","nur diya daw sana","hikari akari akira teru","lux lucia clara aurora","phos photeini lampros eos"],
+  ["dark","light","Dark & mysterious","dark night shadow dusk","andhera raat saya kala","tamas ratri chhaya krishna","oscuro noche sombra","sombre nuit ombre","layl zalam zill","yami yoru kage","tenebrae nox umbra","skotos nyx skia"],
+  ["love","","Loving & affectionate","love dear darling cherish heart","prem pyaar sneh mohabbat ishq","prema sneha anuraga priya","amor querido carino","amour cheri aimant","hubb ishq wadud habib","ai koi itoshii","amor caritas amans","agape eros philia storge"],
+  ["strong","weak","Strong & mighty","strong mighty power might steel","balwan shakti takat dridh","bala shakti dridha virya","fuerte poder fuerza","fort force puissant","qawi aziz quwwa matin","tsuyoi chikara tsuyoshi","fortis robur potens","ischys dynamis kratos alke"],
+  ["weak","strong","Gentle & delicate","weak frail delicate soft","kamzor komal nazuk","durbala mridu sukumara","debil fragil suave","faible fragile doux","daif raqiq latif","yowai kayowai yawaraka","infirmus fragilis mollis","astheneis malakos"],
+  ["lucky","","Lucky & fortunate","lucky fortune fortunate fate","bhagya kismat saubhagya","bhagya saubhagya shubha","suerte fortuna dichoso","chance fortune heureux","haz saad barakah","un koun fuku","felix fortuna fortunatus","tyche eutychia eutyches"],
+  ["victory","","Victorious & winner","victory win triumph champion","jeet vijay jaya vijeta","jaya vijaya jayati","victoria triunfo ganador","victoire triomphe vainqueur","nasr fawz intisar","shori katsu masaru","victor victoria triumphus","nike nikephoros nikitas"],
+  ["truth","","Truthful & honest","truth honest true sincere","satya sach imaandar","satya rita yatharth","verdad honesto veraz","verite honnete vrai","haqq sidq amin sadiq","makoto shinjitsu","veritas verus fidelis","aletheia alethes"],
+  ["beauty","","Graceful & beautiful","beauty grace lovely fair elegant","sundar sundari manohar saundarya","sundara rupa lavanya shobha","bella hermosa belleza gracia","belle beaute gracieuse","jamal jamila husn hasna","bi utsukushii kirei rei","pulchra bella venusta decora","kallos kalli omorphia charis"],
+  ["free","","Free-spirited","free liberty wild wander","azad mukt swatantra","mukta svatantra moksha","libre libertad","libre liberte","hurr hurriya","jiyu","liber libertas","eleftheria eleftheros"],
+  ["hope","","Hopeful & optimistic","hope dream wish faith","asha umeed vishwas","asha shraddha apeksha","esperanza sueno fe","espoir reve foi","amal raja tafaul","kibo yume nozomi","spes fides votum","elpida elpis oneiro"],
+  ["pure","","Pure & innocent","pure clean innocent pristine","pavitra nirmal shuddh nishkalank","shuddha pavitra nirmala vimala","puro limpio inocente","pur innocent propre","tahir safi bari naqi","seijo mukku junsui","purus castus innocens","katharos agnos"],
+  ["playful","","Playful & cheerful","playful fun lively sunny","masti chulbul","lila krida vinoda","jugueton divertido alegre","joueur espiegle enjoue","marih mazah","asobi tanoshii yokki","ludens iocosus",""],
+  ["loyal","","Loyal & devoted","loyal faithful devoted true","wafadar nishtha bhakt samarpit","nishtha bhakta dhruva","leal fiel devoto","loyal fidele devoue","wafi amin ikhlas","chujitsu chugi","fidelis fides constans","pistos pistis"],
+  ["creative","","Creative & artistic","create art muse dream","kala rachna srijan kalpana","srishti kala kalpana shilpa","arte creador musa","art createur muse","fann ibda mubdi","sozo geijutsu","ars creator","techne poiesis mousa"],
+  ["leader","","Leader & royal","king queen leader prince royal","raja rani neta yuvraj","raja rajan nayaka adhipa","rey reina lider principe","roi reine chef prince","malik amir qaid sultan","ou kimi taisho","rex regina princeps dux","basileus basilissa archon"],
+  ["humble","","Humble & modest","humble modest simple meek","vinamra namra saral","vinaya vinita nama","humilde modesto sencillo","humble modeste simple","tawadu mutawadi","kenkyo","humilis modestus","tapeinos metrios"]
+];
+const CMAP = {}, WORD_INDEX = new Map();
+CONCEPT_ROWS.forEach(row => {
+  const c = { id: row[0], ant: row[1], label: row[2], w: {} };
+  LKEYS.forEach((l, i) => { c.w[l] = (row[3 + i] || "").split(" ").filter(Boolean); });
+  CMAP[c.id] = c;
+  LKEYS.forEach(l => c.w[l].forEach(w => {
+    const k = clean(w); if (!WORD_INDEX.has(k)) WORD_INDEX.set(k, new Set()); WORD_INDEX.get(k).add(c.id);
+  }));
+});
+const NEGATIVE = new Set(["sad", "fearful", "foolish", "cruel", "angry"]);
+CONCEPT_ROWS.filter(r => !NEGATIVE.has(r[0])).forEach(r => { const o = document.createElement("option"); o.value = r[0]; o.textContent = r[2]; $("trait").appendChild(o); });
+LKEYS.forEach(l => { const o = document.createElement("option"); o.value = l; o.textContent = LANGS[l]; $("mLang").appendChild(o); });
+
+/* online English synonym / antonym lookup (Datamuse) for words not in the built-in list */
+const ONLINE = new Map(), PENDING = new Set();
+function fetchOnline(k) {
+  if (PENDING.has(k) || ONLINE.has(k)) return;
+  PENDING.add(k);
+  const get = rel => fetch("https://api.datamuse.com/words?rel_" + rel + "=" + encodeURIComponent(k) + "&max=15").then(r => r.json());
+  Promise.all([get("syn"), get("ant")]).then(([s, a]) => {
+    const f = arr => arr.map(x => x.word).filter(w => /^[a-z]+$/i.test(w)).map(w => w.toLowerCase());
+    ONLINE.set(k, { syn: f(s), ant: f(a) });
+  }).catch(() => ONLINE.set(k, { fail: true })).finally(() => { PENDING.delete(k); update(); });
+}
+
+function resolveMeaning(ctx) {
+  const res = { items: [], msg: "" };
+  const ant = ctx.mmode === "ant";
+  const src = new Set();
+  const extra = [];
+  if (ctx.trait) src.add(ctx.trait);
+  if (ctx.mword) {
+    const k = clean(ctx.mword);
+    if (k.length >= 2) {
+      const hit = WORD_INDEX.get(k);
+      if (hit) hit.forEach(id => src.add(id));
+      else {
+        const on = ONLINE.get(k);
+        if (!on) { fetchOnline(k); res.msg = "Looking up “" + ctx.mword + "” online…"; }
+        else if (on.fail) res.msg = "“" + ctx.mword + "” isn't in the built-in word list and the online lookup isn't available right now. Pick a Trait above, or add words in “Your own words”.";
+        else {
+          on.syn.concat([k]).forEach(w => (WORD_INDEX.get(w) || []).forEach(id => src.add(id)));
+          (ant ? on.ant : on.syn).forEach(w => extra.push(w));
+          if (!src.size && !extra.length) res.msg = "No " + (ant ? "antonyms" : "synonyms") + " found for “" + ctx.mword + "”.";
+        }
+      }
+    }
+  }
+  const langs = ctx.mlang === "all" ? LKEYS : [ctx.mlang];
+  const seen = new Set(); const noOpp = []; const skippedNeg = [];
+  src.forEach(id => {
+    const c = CMAP[id];
+    const target = ant ? c.ant : id;
+    if (!target) { noOpp.push(c.id); return; }
+    if (NEGATIVE.has(target)) { skippedNeg.push(c.id); return; }
+    langs.forEach(l => CMAP[target].w[l].forEach(w => {
+      const k = clean(w); if (k.length < 2 || seen.has(k) || blocked(k)) return; seen.add(k);
+      res.items.push([w, "u", (ant ? "opposite of " + c.id : c.id) + " · " + LANGS[l]]);
+    }));
+  });
+  if (langs.includes("en")) extra.forEach(w => {
+    const k = clean(w); if (k.length < 2 || seen.has(k) || blocked(k)) return; seen.add(k);
+    res.items.push([w, "u", (ant ? "opposite of " : "synonym of ") + clean(ctx.mword) + " · English (online)"]);
+  });
+  if (skippedNeg.length && !res.items.length) res.msg = "The " + (ant ? "opposite" : "matching") + " words for “" + skippedNeg.join(", ") + "” have negative meanings, so they aren't suggested. Try synonyms of a positive trait instead.";
+  else if (noOpp.length && !res.items.length) res.msg = "No stored opposite for “" + noOpp.join(", ") + "”. Try synonyms, or another trait/word.";
+  else if (res.items.length) res.msg = res.items.length + " " + (ant ? "opposite-meaning" : "same-meaning") + " words found" + (ctx.mlang === "all" ? " across languages" : " in " + LANGS[ctx.mlang]) + " — blended with your names below.";
+  res.items = res.items.slice(0, 40);
+  return res;
+}
+
+/* ---------- safety screen: offensive, negative, slang, famous people & characters ----------
+   Matching styles: SUB = anywhere in the name · START = at the start (or the whole name) · EXACT = whole name only.
+   Real names that merely contain a flagged fragment (e.g. Kshitij, Ashok, Anushka, Nazia) are kept on purpose. */
+const SAFE_WORDS = ["kshitij", "shiti", "shitij", "shitiz", "shital", "shitala", "shitanshu"];
+const W = s => s.split(" ");
+const BL_SUB = W(
+  // obscene / sexual (English + common romanised Hindi, Spanish, French, German)
+  "fuck shit cunt bitch whore slut nigg porn penis vagina bastard asshole wank twat dildo horny faggot tranny retard cripple pussy " +
+  "chutiya gaandu gandu bhosd madarch behench bhench betichod bakchod bhadwa bhadve harami kamina lund " +
+  "pendejo cabron mierda joder chinga merde putain salope connard scheisse fotze schlampe " +
+  // severe negative meanings
+  "suicide murder terror satan lucifer devil demon death killer kill " +
+  // dictators / infamous figures / famous mononyms
+  "hitler stalin mussolini saddam gaddafi voldemort pikachu spiderman superman batman ironman beyonce rihanna shakira eminem ronaldo neymar tendulkar shahrukh amitabh kardashian zuckerberg neonazi");
+const BL_START = W(
+  // obscene (short fragments, start/whole-name only)
+  "dick cock piss turd crap rape chink chut raand jhant chodu kutta kutti lauda launda puta puto arsch " +
+  // negative meanings
+  "ugly stupid idiot loser liar cheat thief lazy dumb sorrow misery agony gloom doom curse cruel brutal savage wicked vile filth dirty trash " +
+  "worthless useless hatred hate spite bitter suffer victim slave coward poison toxic bleed wound decay rotten drunk junkie addict crazy insane lunatic maniac psycho corpse ghoul " +
+  "murkh nadan bevakuf pagal nalayak badnaam dushman zehar paap ghrina bhoot raakshas rakshas daayan manhoos nirdayi krur darpok bheeru udaas dukh vyatha kangal kanjoos jhoot dhokha lalchi ghamandi maut mrityu shaitan shaitaan haiwan janwar dukkha vishada " +
+  "miedo muerte diablo demonio triste tonto necio diable shaytan kafir ahmaq stultus kuso " +
+  // characters & villains from stories / mythology
+  "ravana ravan kansa kamsa shakuni duryodhan dushasan kaikeyi manthara putana taraka surpanakha mahishasur hiranyakashipu kumbhakarna sauron gollum dumbledore gandalf katniss mufasa doraemon nobita shinchan naruto skywalker chewbacca deadpool wolverine maleficent cruella gargamel jezebel medusa");
+const BL_EXACT = new Set(W(
+  // short / ambiguous fragments: blocked only when they are the entire name
+  "ass anus sex sexy cum tit tits boob boobs butt fag dyke hell damn anal bite verga cono culo kike spic gook paki coon negro nazi isis randi randy saala chod tatti hijra chakka mc bc fuk fck " +
+  "sad bad mad die sin dim fool evil fear pain cry poor shok shoka gham bura buri chor mara dar mort malo mala sot mal fou moros baka aho ghabi jahil " +
+  // slang
+  "bae lit yolo noob simp thot incel chad karen boomer cringe bruh bro sus fam dude nerd geek dork creep weed dope meth coke crack hoe vape joint blunt maal item tapori bakwas lol omg wtf lmao brb idk " +
+  // famous people, characters and brands (single-name matches)
+  "kohli dhoni modi gandhi nehru obama trump biden putin einstein shakespeare messi madonna adele elvis bieber musk tyson osama hermione frodo simba shrek mario luigi sonic mickey minnie goofy pluto goku luffy sasuke batman superman hulk thanos thor joker groot barbie bheem motu patlu pokemon darth vader yoda judas brutus hades " +
+  "google amazon tesla pepsi samsung iphone gucci prada adidas oreo nutella netflix youtube tiktok facebook twitter whatsapp snapchat instagram uber nokia sony reebok puma lego disney"));
+const BL = new Map();
+function blocked(name) {
+  if (BL.has(name)) return BL.get(name);
+  let s = name;
+  SAFE_WORDS.forEach(a => { s = s.split(a).join("_"); });
+  const r = BL_EXACT.has(s) || BL_SUB.some(w => s.includes(w)) || BL_START.some(w => s.startsWith(w));
+  BL.set(name, r);
+  return r;
+}
+
+/* ---------- uniqueness estimate ---------- */
+const POP = new Set(("oliver noah george arthur muhammad leo harry oscar archie henry jack charlie theodore freddie alfie jacob william thomas james lucas ethan liam mason logan elijah benjamin alexander daniel michael matthew joseph samuel david andrew ryan adam dylan nathan luke jayden isaac owen caleb hunter aiden carter wyatt jackson levi gabriel anthony christopher joshua john robert edward max finn felix theo sebastian jonathan connor " +
+"olivia amelia isla ava mia ivy lily isabella sophia rosie grace freya ella emily poppy florence daisy charlotte evie phoebe sienna willow emma harper evelyn abigail sofia avery scarlett chloe zoe layla riley nora hannah lucy alice ruby sophie ellie millie eva aria luna violet hazel penelope victoria madison natalie leah maya anna sarah julia " +
+"aarav vivaan aditya vihaan arjun reyansh ayaan atharv krishna ishaan shaurya rohan rohit rahul amit ankit arnav kabir dev dhruv kian veer yash karan nikhil rishi rishabh sahil siddharth aryan ansh parth pranav raj ravi sanjay vikram vijay ajay anil sunil manish deepak mohit gaurav harsh jay kunal lakshya madhav naman neel om pratham raghav sai samarth shivansh tanmay tejas utkarsh varun vedant yuvraj advait aadi ayush darsh " +
+"aadhya saanvi anya aaradhya ananya pari anika myra diya sara aanya kiara navya riya ira kavya siya avni prisha ishita isha priya pooja neha sneha shreya tanvi aditi radhika sita gauri meera sanvi trisha vanya zara mahi mira nisha nikita anushka divya khushi kritika lakshmi mansi muskan nandini pallavi rashi ritu sakshi sanjana shruti simran sonam swati tara uma vidya amrita anjali anushree").split(" "));
+const POP_EXTRA = ("vihaan advik pranav advaith aaryan rudra samar shreyas tejas ved yuvan zain ayan reyan siddharth sidharth tarun tushar uday vedant varun yash harsh manish deepak abhishek akash anil sunil sachin virat nitin vikas vikram karan kunal nikhil rishi raj hari om shiva ganesh mahesh suresh ramesh rajesh ajay vijay sanjay karthik kartik keshav madhav govind gopal murugan skanda hanuman maruti vishnu rama ram surya ravi indra agni aditya bhaskar narayan " +
+"aishwarya alka anjali anita anushka aparna archana asha bhavna deepika disha gauri geeta gita jaya jyoti kajal kamini kavita khushi komal kriti lata lavanya madhuri mansi megha mira meera mukta nandini nisha nidhi pallavi payal pragya preeti rachna rani rekha ritu roshni ruchi sakshi sapna shanti sharmila shilpa shruti simran sonal sonia sunita swati tara trisha uma usha vandana vidya vineeta zara lakshmi kamala padma indira shri saraswati vani sharada bharati durga ambika bhavani shivani parvati girija radha radhika sita janaki ganga janhvi jahnavi tanvi shreya divya " +
+"ahmed ali omar umar hassan hussain ibrahim ismail yusuf mustafa karim rahim aziz ayesha fatima zainab maryam aisha khadija hakim latif malik rahman salam nur zeus apollo ares hermes poseidon athena artemis hera aphrodite thor odin loki freya baldur ra horus isis osiris anubis").split(" ");
+POP_EXTRA.forEach(n => POP.add(n));
+const POP_ARR = [...POP];
+const UQ = new Map();
+function lev(a, b) {
+  const m = a.length, n = b.length, d = [];
+  for (let i = 0; i <= m; i++) { d[i] = [i]; }
+  for (let j = 1; j <= n; j++) d[0][j] = j;
+  for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++)
+    d[i][j] = Math.min(d[i-1][j] + 1, d[i][j-1] + 1, d[i-1][j-1] + (a[i-1] === b[j-1] ? 0 : 1));
+  return d[m][n];
+}
+let KNOWN = null;
+function knownNames() {
+  if (KNOWN) return KNOWN;
+  KNOWN = { pop: new Set(), any: new Set() };
+  Object.entries(THEMES).forEach(([k, t]) => t.items.forEach(([w]) => {
+    const c = clean(w);
+    (["english", "hindu", "islamic", "sanskrit"].includes(k) ? KNOWN.pop : KNOWN.any).add(c);
+  }));
+  Object.entries(ALIASES).forEach(([k, a]) => { KNOWN.pop.add(k); a.forEach(x => KNOWN.pop.add(clean(x))); });
+  return KNOWN;
+}
+function uniq(name) {
+  if (UQ.has(name)) return UQ.get(name);
+  let near = null, d = 99, contains = false;
+  for (const p of POP_ARR) {
+    if (p.length >= 4 && p !== name && (name.startsWith(p) || name.endsWith(p))) contains = true;
+    if (Math.abs(p.length - name.length) > 2) continue;
+    const x = lev(name, p);
+    if (x < d) { d = x; near = p; }
+  }
+  let s = 88;
+  if (d === 0) s = 6;
+  else if (d === 1) s = 48;
+  else if (d === 2) s = name.length <= 5 ? 62 : 76;
+  if (contains && d > 0) s -= 8;
+  if (DICT.has(name)) s -= 15;
+  s += Math.min([...name].filter(c => "qxzjkwv".includes(c)).length * 3, 8);
+  // established names from the built-in lists (gods, English, Islamic, Sanskrit…) are real, existing names — never "very unique"
+  const KN = knownNames();
+  if (KN.pop.has(name)) s = Math.min(s, 22);
+  else if (KN.any.has(name)) s = Math.min(s, 55);
+  s = Math.max(5, Math.min(98, Math.round(s)));
+  const tier = s >= 80 ? 4 : s >= 60 ? 3 : s >= 35 ? 2 : 1;
+  const res = { score: s, tier, label: ["", "Common", "Fairly common", "Unique", "Very unique"][tier], near: d <= 2 ? near : null, d };
+  UQ.set(name, res);
+  return res;
+}
+
+/* ---------- name logic ---------- */
+const START = new Set("bl br ch cl cr dr fl fr gl gr kr pl pr sk sl sm sn sp st sw tr tw bh dh gh jh kh ph sh th".split(" "));
+const OKCC = new Set("bl br ch cl cr dr fl fr gl gr kr pl pr sk sl sm sn sp st sw tr tw bh dh gh jh kh ph sh th nd nt ng nk nc nj ns mb mp rk rn rt rd rm rs rl ld lt lm ls lk lv ny ly ry my ky".split(" "));
+function phon(name) {
+  let s = 0, cons = 0, vow = 0;
+  for (const c of name) {
+    if (isV(c)) { vow++; cons = 0; if (vow >= 3) s -= 4; }
+    else { cons++; vow = 0; if (cons >= 3) s -= 5; }
+  }
+  for (let i = 1; i < name.length; i++) if (name[i] === name[i-1] && name[i] !== "e" && name[i] !== "o") s -= 1;
+  for (let i = 1; i < name.length; i++) {
+    const p = name[i-1] + name[i];
+    if (!isV(p[0]) && !isV(p[1]) && p[0] !== p[1] && !OKCC.has(p)) s -= 2.5;
+  }
+  if (name.length > 1 && !isV(name[0]) && !isV(name[1]) && !START.has(name.slice(0, 2))) s -= 4;
+  const len = name.length;
+  s += 6 - Math.abs(len - 6) * 1.2;
+  if (isV(name[len-1]) || "nlrmsh".includes(name[len-1])) s += 2;
+  const vr = [...name].filter(isV).length / len;
+  s += 3 - Math.abs(vr - 0.42) * 10;
+  return s;
+}
+
+function genderOf(n) {
+  let f = 0, m = 0;
+  if (/a$/.test(n)) f += 2;
+  if (/(ie|ee|elle|ette|ine|lyn|ah)$/.test(n)) f += 2;
+  if (/(ni|vi|ki|mi|ti|si|di)$/.test(n)) f += 1;
+  if (/(li|ri|y)$/.test(n)) f += 0.5;
+  if (/[nrdktvxslzpbgcmh]$/.test(n) && !/(ah|lyn|yn)$/.test(n)) m += 2;
+  if (/[ou]$/.test(n)) m += 1.5;
+  if (/(an|av|ar|ir|ik|esh|it|aan|ul|us)$/.test(n)) m += 1;
+  return f - m >= 1.5 ? "f" : m - f >= 1.5 ? "m" : "u";
+}
+
+function syl(n) { return n.match(/[^aeiouy]*[aeiouy]+(?:[^aeiouy]+$)?/g) || [n]; }
+
+function nicknames(name) {
+  const s = syl(name), out = [];
+  const add = x => {
+    x = x.replace(/(.)\1\1+/g, "$1$1");
+    if (x.length >= 2 && x.length <= 5 && x !== name && !out.includes(x) && phon(x) > 2) out.push(x);
+  };
+  const first = s[0];
+  if (s.length >= 2) {
+    add(first);
+    const c = s[1] && !isV(s[1][0]) ? s[1][0] : "";
+    if (isV(first[first.length-1])) { add(first + c + "i"); add(first + c + "o"); }
+    else { add(first + "ie"); add(first + "y"); }
+    add(s[s.length-1]);
+    if (s.length >= 3) add(s.slice(-2).join(""));
+  } else {
+    add(name.slice(0, 3)); add(name.slice(0, 2) + "i"); add(name + "y");
+  }
+  return out.slice(0, 3);
+}
+
+function sharedSuffix(x, y) {
+  let i = 0;
+  while (i < x.length && i < y.length && x[x.length-1-i] === y[y.length-1-i]) i++;
+  return i;
+}
+function rhymes(name, target, strict) {
+  if (name === target) return false;
+  const k = sharedSuffix(name, target);
+  const need = Math.min(strict ? 3 : 2, target.length);
+  return k >= need && /[aeiouy]/.test(name.slice(name.length - k));
+}
+
+function flow(name, last) {
+  if (!last) return { bonus: 0, warn: "" };
+  const e = name[name.length-1], s = last[0];
+  let bonus = 0, warn = "";
+  if (e === s) { bonus -= 3; warn = "ends and starts with “" + e + "” — may run together"; }
+  else if (isV(e) !== isV(s)) bonus += 1;
+  else bonus -= 0.5;
+  if (name.length + last.length > 15) bonus -= 1;
+  return { bonus, warn };
+}
+
+function hash(str) { let h = 2166136261; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return (h >>> 0) / 4294967295; }
+let seed = String(Math.random());
+
+/* x, y = cleaned strings; lx, ly = colour labels */
+function gen(x, y, lx, ly) {
+  const map = new Map();
+  const add = (p1, p2, l1, l2) => {
+    const name = p1 + p2;
+    if (!p1 || !p2 || name.length < 3 || name.length > 14 || name === x || name === y || map.has(name)) return;
+    map.set(name, { name, parts: [[p1, l1], [p2, l2]] });
+  };
+  for (let i = 1; i <= x.length; i++) for (let j = 0; j < y.length; j++) add(x.slice(0, i), y.slice(j), lx, ly);
+  for (let i = 1; i <= y.length; i++) for (let j = 0; j < x.length; j++) add(y.slice(0, i), x.slice(j), ly, lx);
+  return [...map.values()];
+}
+
+function readCtx() {
+  const list = id => $(id).value.split(/[,\s]+/).map(clean).filter(Boolean);
+  const lastRaw = $("lastName").value.trim().replace(/[^A-Za-zÀ-ɏ' -]/g, "");
+  const midRaw = $("midName").value.trim().replace(/[^A-Za-zÀ-ɏ' -]/g, "");
+  const rs = RASHIS.find(r => r[0] === $("rashi").value) || null;
+  const ctx = {
+    rashiRec: rs, rashi: rs ? rs[3].split(" ") : [],
+    mode: document.body.classList.contains("explore") ? "explore" : "blend",
+    takeA: 0, posA: "start", takeB: 0, posB: "end", order: "ab",
+    recipeOn: false,
+    kind: $("exKind").value, showRashi: $("showRashi").checked, showMeaning: $("showMeaning").checked,
+    trait: $("trait").value, mword: $("mWord").value.trim(), mmode: "syn", mlang: $("mLang").value,
+    a: clean($("nameA").value), b: clean($("nameB").value),
+    lastRaw: capWords(lastRaw), last: clean(lastRaw), midRaw: capWords(midRaw), mid: clean(midRaw),
+    gender: (document.querySelector("#genderSeg .active") || {dataset:{g:"any"}}).dataset.g, unisex: true,
+    min: 0, max: +$("maxLen").value < 15 ? +$("maxLen").value : 99,
+    start: clean($("startsWith").value), end: clean($("endsWith").value),
+    has: [], hasMode: "all", not: [],
+    rhyme: clean($("rhyme").value), strict: false,
+    nice: $("nice").checked, nodict: $("nodict").checked, minUniq: $("uniqOnly").checked ? 60 : 0,
+    theme: $("theme").value, custom: [],
+    sort: $("sort").value
+  };
+  if (ctx.mode === "explore") { ctx.mid = ""; ctx.midRaw = ""; ctx.a = ""; ctx.b = ""; ctx.takeA = 0; ctx.takeB = 0; ctx.recipeOn = false; }
+  ctx.op1 = $("op1").dataset.v; ctx.op2 = $("op2").dataset.v; ctx.op3 = $("op3").dataset.v;
+  const mT = resolveMeaning(Object.assign({}, ctx, { mword: "" })), mS = resolveMeaning(Object.assign({}, ctx, { trait: "" }));
+  const thI = ctx.theme ? THEMES[ctx.theme].items.slice() : [];
+  if (GOD_THEMES.includes(ctx.theme)) THEMES[ctx.theme].items.forEach(([w, g]) => (ALIASES[clean(w)] || []).forEach(a => { if (!thI.some(i => clean(i[0]) === clean(a))) thI.push([a, g, "Another name of " + w]); }));
+  const comb = (x, y, op) => !x.length ? y : !y.length ? x : op === "and" ? x.filter(i => y.some(j => clean(j[0]) === clean(i[0]))) : x.concat(y.filter(j => !x.some(i => clean(i[0]) === clean(j[0]))));
+  const all = comb(comb(thI, mT.items, ctx.op1), mS.items, ctx.op2);
+  ctx.mean = { items: all, msg: mS.msg || mT.msg || ((ctx.theme || ctx.trait || ctx.mword) && !all.length ? "Nothing matches all of these selections — try OR instead of AND." : "") };
+  return ctx;
+}
+
+function decorate(r, ctx, a0, b0) {
+  r.phon = phon(r.name);
+  r.gender = r.g || genderOf(r.name);
+  r.nicks = nicknames(r.name);
+  const f = flow(r.name, ctx.mid || ctx.last);
+  r.warn = f.warn;
+  let s = r.phon + f.bonus + (r.name[0] === a0[0] ? 1 : 0) + (r.name.slice(-1) === b0.slice(-1) ? 1 : 0);
+  if (ctx.gender !== "any" && r.gender === ctx.gender) s += 2;
+  r.score = s;
+  r.rand = hash(r.name + seed);
+  return r;
+}
+
+function passes(r, ctx) {
+  const n = r.name;
+  if (!ctx.skipBlock && blocked(n)) return false;
+  if (n.length < ctx.min || n.length > ctx.max) return false;
+  if (ctx.nice && r.phon <= 4) return false;
+  if (ctx.gender !== "any" && !(r.gender === ctx.gender || (ctx.unisex && r.gender === "u"))) return false;
+  if (ctx.start && !n.startsWith(ctx.start)) return false;
+  if (ctx.end && !n.endsWith(ctx.end)) return false;
+  if (ctx.has.length && !(ctx.hasMode === "all" ? ctx.has.every(s => n.includes(s)) : ctx.has.some(s => n.includes(s)))) return false;
+  if (ctx.not.some(s => n.includes(s))) return false;
+  if (ctx.rhyme && !rhymes(n, ctx.rhyme, ctx.strict)) return false;
+  if (ctx.nodict && DICT.has(n)) return false;
+  if (ctx.rashi.length && !ctx.rashi.some(s => n.startsWith(s)) && !(ctx.op3 === "or" && ctx.mean.items.length && (r.via || r.kind === "curated"))) return false;
+  if (ctx.minUniq && uniq(n).score < ctx.minUniq) return false;
+  if (r.kind && ctx.kind !== "all" && r.kind !== ctx.kind) return false;
+  return true;
+}
+
+function sorter(sort) {
+  return {
+    score: (x, y) => y.score - x.score,
+    az: (x, y) => x.name.localeCompare(y.name),
+    short: (x, y) => x.name.length - y.name.length || y.score - x.score,
+    long: (x, y) => y.name.length - x.name.length || y.score - x.score,
+    uniq: (x, y) => uniq(y.name).score - uniq(x.name).score || x.name.length - y.name.length,
+    random: (x, y) => x.rand - y.rand
+  }[sort];
+}
+
+function themeItems(ctx) {
+  let items = ctx.mean.items.slice();
+  if (ctx.gender !== "any") items = items.filter(i => i[1] === ctx.gender || (ctx.unisex && i[1] === "u"));
+  return items;
+}
+
+function themeBlend(ctx, main) {
+  const items = themeItems(ctx);
+  if (!items.length) return [];
+  const bases = [[ctx.a, "a"], [ctx.b, "b"]];
+  main.slice(0, 2).forEach(r => bases.push([r.name, "m"]));
+  const seen = new Set(), out = [];
+  for (const [word, , mean] of items) {
+    const w = clean(word);
+    if (w.length < 2) continue;
+    for (const [base, lab] of bases) {
+      const cand = gen(base, w, lab, "t").map(r => decorate(r, ctx, base, w)).filter(r => passes(r, ctx)).sort((x, y) => y.score - x.score);
+      for (const r of cand) {
+        if (seen.has(r.name)) continue;
+        seen.add(r.name); r.via = { word: cap(w), mean }; out.push(r); break;
+      }
+    }
+  }
+  return out;
+}
+
+/* ---------- letter recipe, explore mode (no names needed) ---------- */
+function segs(s, k, pos) {
+  const out = [];
+  if (k > 0) {
+    if (k > s.length) return out;
+    if (pos === "start") out.push(s.slice(0, k));
+    else if (pos === "end") out.push(s.slice(-k));
+    else for (let i = 0; i + k <= s.length; i++) out.push(s.slice(i, i + k));
+  } else if (pos === "start") for (let i = 1; i <= s.length; i++) out.push(s.slice(0, i));
+  else if (pos === "end") for (let i = 1; i <= s.length; i++) out.push(s.slice(-i));
+  else for (let i = 0; i < s.length; i++) for (let j = i + 1; j <= s.length; j++) out.push(s.slice(i, j));
+  return out;
+}
+function genRecipe(ctx) {
+  const A = segs(ctx.a, ctx.takeA, ctx.posA), B = segs(ctx.b, ctx.takeB, ctx.posB);
+  const map = new Map();
+  const add = (p1, l1, p2, l2) => {
+    const name = p1 + p2;
+    if (name.length < 3 || name.length > 14 || name === ctx.a || name === ctx.b || map.has(name)) return;
+    map.set(name, { name, parts: [[p1, l1], [p2, l2]] });
+  };
+  for (const x of A) for (const y of B) {
+    if (ctx.order !== "ba") add(x, "a", y, "b");
+    if (ctx.order !== "ab") add(y, "b", x, "a");
+  }
+  return [...map.values()];
+}
+
+function mulberry(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const ONSETS = "b d g h j k l m n p r s t v y z sh ch kr dh bh th pr tr sw fl br gr".split(" ");
+const VOW = "a a a e i i o u aa ai ee ia".split(" ");
+const MIDC = ["", "n", "r", "l", "m", "sh", "v", "k", "t"];
+const END_F = "a i ya ika ani aya ira ela ina isha ee ita".split(" ");
+const END_M = "an av esh ik it ansh ay ir ar o dev raj eet in ul".split(" ");
+const END_U = "a i y en an o ay ir ia el".split(" ");
+const ENDINGS = "a i an ya esh av in ik ika aya ani isha ansh ay ir it o ee na ra la sh".split(" ");
+
+function invent(ctx, count) {
+  const rnd = mulberry(Math.floor(hash("inv" + seed + ctx.gender + ctx.rashi.join("") + ctx.start) * 4294967295));
+  const pick = arr => arr[Math.floor(rnd() * arr.length)];
+  const ends = ctx.gender === "f" ? END_F : ctx.gender === "m" ? END_M : END_U;
+  const tail = ctx.rhyme ? ctx.rhyme.slice(-Math.min(3, ctx.rhyme.length)) : "";
+  const out = new Map();
+  for (let i = 0; i < count; i++) {
+    let start = ctx.rashi.length ? pick(ctx.rashi) : ctx.start ? ctx.start : pick(ONSETS) + pick(VOW);
+    if (!/[aeiouy]/.test(start)) start += pick(VOW);
+    let body = start;
+    if (rnd() < 0.6) body += pick(MIDC) + pick(VOW);
+    if (ctx.has.length && rnd() < 0.6) body += pick(ctx.has);
+    const end = tail && rnd() < 0.5 ? tail : pick(ends);
+    if (isV(body.slice(-1)) && isV(end[0])) body += pick(["r", "n", "l", "m", "v", "k", "t", "s", "d"]);
+    const name = body + end;
+    if (name.length < 3 || name.length > 12 || out.has(name)) continue;
+    out.set(name, { name, parts: [[name, "m"]], kind: "invented" });
+  }
+  return [...out.values()];
+}
+
+function explorePool(ctx) {
+  const map = new Map();
+  const put = (name, parts, extra) => { if (name.length < 3 || name.length > 14 || map.has(name)) return; map.set(name, Object.assign({ name, parts }, extra)); };
+  let items = [];
+  items = items.concat(ctx.mean.items);
+  ctx.custom.forEach(w => items.push([w, "u", "your word"]));
+  if (!items.length && !(ctx.theme || ctx.trait || ctx.mword)) Object.values(THEMES).forEach(t => { items = items.concat(t.items); });
+  items.forEach(([w, g, mean]) => { const n = clean(w); put(n, [[n, "t"]], { g, kind: "curated", meaning: mean }); });
+  [ctx.a, ctx.b].filter(x => x && x.length >= 2).forEach(base => {
+    [base, base.slice(0, -1), base.slice(0, -2)].filter(s => s.length >= 2).forEach(st =>
+      ENDINGS.forEach(e => { const n = st + e; if (n !== base) put(n, [[st, "a"], [e, "m"]], { kind: "variant", meaning: "variation of " + cap(base) }); }));
+  });
+  invent(ctx, 1200).forEach(r => { if (!map.has(r.name)) map.set(r.name, r); });
+  return [...map.values()];
+}
+
+/* ---------- rendering ---------- */
+let favs = [], shown = 24, shownT = 24, lastCtx = null;
+try { favs = JSON.parse(localStorage.getItem("nm_favs") || "[]"); } catch (e) {}
+const saveFavs = () => { try { localStorage.setItem("nm_favs", JSON.stringify(favs)); } catch (e) {} };
+
+function partsHTML(r) {
+  let first = true;
+  return r.parts.map(([t, w]) => { let s = t; if (first) { s = cap(s); first = false; } return `<span class="p${w}">${s}</span>`; }).join("");
+}
+const gIcon = g => g === "m" ? "♂" : g === "f" ? "♀" : "⚥";
+const gTitle = g => g === "m" ? "sounds masculine" : g === "f" ? "sounds feminine" : "sounds unisex";
+
+const RMEMO = new Map();
+function rashiOf(name) {
+  if (RMEMO.has(name)) return RMEMO.get(name);
+  let best = 0, hits = [];
+  RASHIS.forEach(r => r[3].split(" ").forEach(s => {
+    if (!name.startsWith(s)) return;
+    if (s.length > best) { best = s.length; hits = [r]; }
+    else if (s.length === best && !hits.includes(r)) hits.push(r);
+  }));
+  RMEMO.set(name, hits);
+  return hits;
+}
+function rashiHTML(name) {
+  const hits = rashiOf(name);
+  return hits.length
+    ? `<div class="rashi" title="From the name's first sound, using the common Vedic chart">🔮 Rashi: ${hits.map(r => r[1] + " – " + r[2]).join(" or ")}</div>`
+    : `<div class="rashi none" title="The first sound isn't in the standard rashi chart">🔮 Rashi: no standard match</div>`;
+}
+const SC = new Map(), scenePick = {};
+function sceneFor(name, ctx) {
+  const key = name + "|" + ctx.midRaw + "|" + ctx.lastRaw;
+  let list = SC.get(key);
+  if (!list) { list = scenes(name, ctx); SC.set(key, list); }
+  const idx = (Math.floor(hash(name + seed + "pv") * list.length) + (scenePick[name] || 0)) % list.length;
+  return list[idx];
+}
+
+let LOOK = null;
+function lookMeaning(w) {
+  if (!LOOK) {
+    LOOK = new Map();
+    Object.values(THEMES).forEach(t => t.items.forEach(([x, , m]) => { const k = clean(x); if (!LOOK.has(k)) LOOK.set(k, m); }));
+    Object.values(CMAP).forEach(c => LKEYS.forEach(l => (c.w[l] || []).forEach(x => { const k = clean(x); if (k.length >= 3 && !LOOK.has(k)) LOOK.set(k, c.id + " (" + LANGS[l] + ")"); })));
+  }
+  return LOOK.get(clean(w)) || "";
+}
+function alsoKnown(name) {
+  const a = ALIASES[clean(name)];
+  return a ? " · also known as " + a.slice(0, 3).join(", ") : "";
+}
+function meaningOf(r, ctx) {
+  if (r.kind === "invented") return "New invented";
+  if (r.via) return `<b>${esc(r.via.word)}</b> — ${esc(r.via.mean)}${GOD_THEMES.includes(ctx.theme) ? esc(alsoKnown(r.via.word)) : ""}`;
+  if (r.kind === "curated" && r.meaning) return esc(r.meaning) + (GOD_THEMES.includes(ctx.theme) ? esc(alsoKnown(r.name)) : "");
+  const own = lookMeaning(r.name);
+  if (own) return esc(own);
+  if (r.kind === "variant" && r.meaning) return esc(r.meaning);
+  const hasA = r.parts.some(p => p[1] === "a"), hasB = r.parts.some(p => p[1] === "b");
+  if (hasA && hasB) return "";
+  return "New invented";
+}
+
+function chip(r, ctx, extraClass) {
+  const on = favs.includes(r.name) ? "on" : "";
+  const full = (ctx.last || ctx.mid) ? `<div class="full">${fullName(r.name, ctx)} · ${fullName(r.name, ctx).split(" ").map(w => w[0].toUpperCase() + ".").join("")}</div>` : "";
+  const nick = r.nicks.length ? `<div class="nick">Nickname: ${r.nicks.map(cap).join(", ")}</div>` : "";
+  const u = uniq(r.name);
+  const uq = u.near && u.d <= 1 ? `<div class="meta">sounds like ${cap(u.near)}</div>` : "";
+  const mTxt = meaningOf(r, ctx), via = mTxt && (ctx.showMeaning || mTxt === "New invented") ? `<div class="via">${mTxt === "New invented" ? "✨ " : "📖 "}${mTxt}</div>` : "";
+  const warn = r.warn ? `<div class="warn">⚠ ${r.warn}</div>` : "";
+  const showPv = view === "fav" || favs.includes(r.name);
+  const sc = showPv ? sceneFor(r.name, ctx) : null;
+  const xTitle = view === "fav" ? "Remove from shortlist" : "Dismiss this name";
+  const pv = showPv ? `
+    <div class="cr">
+      <div class="thumb" data-pv="${r.name}" title="Tap for all previews">${sc.svg}</div>
+      <div class="pvcap"><span>${sc.title}</span><button data-cycle="${r.name}" title="Show another preview">↻</button></div>
+      <button type="button" class="vidb" data-vid="${r.name}">🎬 Make &amp; share video</button>
+    </div>` : "";
+  return `<div class="chip ${showPv ? "" : "nopv"} ${extraClass || ""}" data-n="${r.name}">
+    <button class="x" data-x="${r.name}" title="${xTitle}" aria-label="${xTitle}">✕</button>
+    <div class="cl">
+      <div class="nmrow"><div class="nm" title="Tap to copy">${partsHTML(r)}</div><button class="star ${on}" data-f="${r.name}" title="Add to shortlist" aria-label="Add ${r.name} to shortlist"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.7 4.5 6.4 4.5c2.2 0 3.7 1.2 5.6 3.2 1.9-2 3.4-3.2 5.6-3.2 3.7 0 5.5 3.9 4 7.3C19.5 16.4 12 21 12 21z"/></svg></button></div>
+      ${full}${nick}${ctx.showRashi && !ctx.rashi.length ? rashiHTML(r.name) : ""}${uq}${via}<div class="meta">${r.name.length} letters · <span title="${gTitle(r.gender)}">${gIcon(r.gender)}</span></div>${warn}
+    </div>${pv}
+    <button class="shr" data-share="${r.name}" title="Share this name" aria-label="Share ${r.name}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3L9.2 11.4"/><path d="M22 3l-6.6 18-4.2-7.6L3.6 9.2 22 3z"/></svg></button>
+  </div>`;
+}
+
+function favRec(name, ctx) {
+  return { name, parts: [[name, "m"]], nicks: nicknames(name), gender: genderOf(name), warn: flow(name, ctx.mid || ctx.last).warn };
+}
+
+/* dismissed names + views */
+let view = "all", dismissStack = [];
+const dismissed = new Set();
+try { JSON.parse(localStorage.getItem("nm_dis") || "[]").forEach(n => dismissed.add(n)); } catch (e) {}
+const saveDis = () => { try { localStorage.setItem("nm_dis", JSON.stringify([...dismissed])); } catch (e) {} };
+function removeCard(name) {
+  if (view === "fav") { favs = favs.filter(x => x !== name); saveFavs(); }
+  else { dismissed.add(name); dismissStack.push(name); saveDis(); }
+  render();
+}
+
+async function shareFavs(ctx) {
+  const text = "My baby name shortlist \ud83d\udc9b\n" + favs.map((n, i) => (i + 1) + ". " + fullName(n, ctx)).join("\n") + "\nhttps://babynames.website";
+  const log = result => { try { window.nmTrack && window.nmTrack("shortlist_share", { count: favs.length, result }); } catch (_) {} };
+  try { if (navigator.share) { await navigator.share({ title: "My baby name shortlist", text }); log("shared"); return; } }
+  catch (err) { if (err && err.name === "AbortError") { log("cancelled"); return; } }
+  copy(text); log("copied");
+}
+function renderFavView(ctx) {
+  const how = $("favSort").value;
+  const items = favs.map(n => favRec(n, ctx));
+  if (how === "short") items.sort((x, y) => x.name.length - y.name.length);
+  if (how === "long") items.sort((x, y) => y.name.length - x.name.length);
+  if (how === "uniq") items.sort((x, y) => uniq(y.name).score - uniq(x.name).score);
+  if (how === "az") items.sort((x, y) => x.name.localeCompare(y.name));
+  let html = `<h2>♥ Your shortlist <small>(${items.length}) — swipe a card away or tap ✕ to narrow it down</small></h2>`;
+  if (!items.length) html += '<div class="empty">Nothing here yet. In “All ideas”, tap ♥ on the names you like — shortlisted names show on a T-shirt, certificate, name tag and more.</div>';
+  else {
+    if (items.length === 1) html += '<div class="dbar">🎉 Only one left — that’s your final pick!</div>';
+    html += '<div class="grid">' + items.map(r => chip(r, ctx)).join("") + "</div>" +
+      '<div class="row"><button id="shareFavs">Share list</button><button id="copyFavs">Copy list</button><button id="clearFavs">Clear all</button></div>';
+  }
+  $("out").innerHTML = html;
+  const sf = $("shareFavs"); if (sf) sf.onclick = () => shareFavs(ctx);
+  const cf = $("copyFavs"); if (cf) cf.onclick = () => copy(favs.map(n => fullName(n, ctx)).join(", "));
+  const cl = $("clearFavs"); if (cl) cl.onclick = () => { favs = []; saveFavs(); render(); };
+}
+
+let allOpen = false;
+function render() {
+  $("maxLenVal").textContent = +$("maxLen").value < 15 ? $("maxLen").value : "any";
+  $("favCount").textContent = favs.length;
+  const nMean = ["theme", "trait", "mWord", "rashi"].filter(id => $(id).value.trim()).length + ($("mLang").value !== "all" ? 1 : 0);
+  const nFilt = ["startsWith", "endsWith", "rhyme"].filter(id => $(id).value.trim()).length + ($("nodict").checked ? 1 : 0) + ($("nice").checked ? 0 : 1);
+  $("meanCnt").textContent = nMean ? nMean + " selected" : ""; $("filtCnt").textContent = nFilt ? nFilt + " on" : "";
+  const ctx = readCtx(); lastCtx = ctx;
+  $("mStatus").textContent = ctx.mean.msg;
+  $("rashiInfo").textContent = ctx.rashiRec
+    ? ctx.rashiRec[2] + ": names usually begin with " + ctx.rashi.map(cap).join(", ") + ". Letters follow the common Vedic chart — confirm with your pandit or astrologer."
+    : "";
+  if (view === "fav") { renderFavView(ctx); return; }
+  const out = $("out");
+  let html = "";
+  const blendMode = ctx.mode === "blend";
+  if (blendMode && (ctx.a.length < 2 || ctx.b.length < 2)) {
+    html += '<div class="empty">Enter two names (at least 2 letters each) to see blends — or switch to “Find Names” if you don’t want to combine names.</div>';
+  } else {
+    const pool = !blendMode ? explorePool(ctx) : ctx.recipeOn ? genRecipe(ctx) : gen(ctx.a, ctx.b, "a", "b");
+    const all = pool.map(r => decorate(r, ctx, ctx.a, ctx.b));
+    const main = all.filter(r => passes(r, ctx) && !dismissed.has(r.name));
+    ctx.skipBlock = true;
+    const hidden = all.filter(r => passes(r, ctx) && blocked(r.name)).length;
+    ctx.skipBlock = false;
+    const byScore = main.slice().sort((x, y) => y.score - x.score);
+    const list = main.slice().sort(sorter(ctx.sort));
+    html += '<div class="tip">♥ Tap ♥ to shortlist a name — shortlisted names show how they look on a T-shirt, certificate, name tag and more.</div>';
+    if (byScore.length) html += '<h2>✨ Top picks</h2><div class="best">' + byScore.slice(0, 6).sort((x, y) => x.name.length - y.name.length || y.score - x.score).map(r => chip(r, ctx)).join("") + "</div>";
+    html += `<details class="allbox" id="allBox"${allOpen ? " open" : ""}><summary>${blendMode ? (ctx.recipeOn ? "From your letter recipe" : "All combinations") : "Name ideas"} <small>(${list.length})${hidden ? " · " + hidden + " hidden by the safety screen" : ""}<span class="xh"> — tap to expand</span></small></summary>`;
+    if (dismissed.size) html += `<div class="dbar">${dismissed.size} dismissed · <button id="undoDis">↩ Undo last</button> <button id="restoreDis">Restore all</button></div>`;
+    if (!list.length) html += '<div class="empty">Nothing matches. Try loosening a filter (or turn off “Easy to pronounce”).</div>';
+    else {
+      html += '<div class="grid small">' + list.slice(0, shown).map(r => chip(r, ctx)).join("") + "</div>";
+      if (list.length > shown) html += `<div class="row" style="justify-content:center"><button id="more">Show more (${list.length - shown} left)</button></div>`;
+    }
+    html += "</details>";
+    const tItems = blendMode ? themeItems(ctx) : [];
+    if (tItems.length) {
+      const tl = themeBlend(ctx, byScore).filter(r => !dismissed.has(r.name)).sort(sorter(ctx.sort));
+      const label = [ctx.theme ? THEMES[ctx.theme].label : null, ctx.mean.items.length ? "meaning words" : null, ctx.custom.length ? "your words" : null].filter(Boolean).join(" + ");
+      html += `<h2>🌿 Blended with ${label} <small>(${tl.length})</small></h2>`;
+      if (!tl.length) html += '<div class="empty">No theme blends match the current filters.</div>';
+      else {
+        html += '<div class="grid small">' + tl.slice(0, shownT).map(r => chip(r, ctx)).join("") + "</div>";
+        if (tl.length > shownT) html += `<div class="row" style="justify-content:center"><button id="moreT">Show more (${tl.length - shownT} left)</button></div>`;
+      }
+    }
+  }
+  if (blendMode && ctx.theme) {
+    const t = THEMES[ctx.theme];
+    const items = ctx.gender === "any" ? t.items : t.items.filter(i => i[1] === ctx.gender || (ctx.unisex && i[1] === "u"));
+    html += `<h2>Browse: ${t.label} <small>— tap one to use it as the second name</small></h2><div class="browse">` +
+      items.map(i => `<button data-use="${i[0]}">${i[0]} <small>${gIcon(i[1])} ${i[2]}</small></button>`).join("") + "</div>";
+  }
+  if (blendMode && ctx.mean.items.length) {
+    html += '<h2>Words found <small>— tap one to use it as the second name</small></h2><div class="browse">' +
+      ctx.mean.items.map(i => `<button data-use="${i[0]}">${cap(i[0])} <small>${i[2]}</small></button>`).join("") + "</div>";
+  }
+  out.innerHTML = html;
+  const ab = $("allBox"); if (ab) ab.addEventListener("toggle", () => { allOpen = ab.open; });
+  const more = $("more"); if (more) more.onclick = () => { shown += 36; render(); };
+  const moreT = $("moreT"); if (moreT) moreT.onclick = () => { shownT += 36; render(); };
+  const ud = $("undoDis"); if (ud) ud.onclick = () => { const n = dismissStack.pop(); if (n) dismissed.delete(n); else if (dismissed.size) dismissed.delete([...dismissed].pop()); saveDis(); render(); };
+  const rd = $("restoreDis"); if (rd) rd.onclick = () => { dismissed.clear(); dismissStack = []; saveDis(); render(); };
+}
+
+function copy(text) {
+  (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).catch(() => {
+    const t = document.createElement("textarea"); t.value = text; document.body.appendChild(t); t.select();
+    try { document.execCommand("copy"); } catch (e) {} t.remove();
+  });
+  const el = $("toast"); el.textContent = "Copied: " + text; el.classList.add("show");
+  setTimeout(() => el.classList.remove("show"), 1400);
+}
+
+/* ---- share a name card as a picture (preview scene + all details) ---- */
+function wrapText(cx, text, maxW) {
+  const lines = []; let cur = "";
+  text.split(/\s+/).forEach(w => { const t = cur ? cur + " " + w : w; if (cx.measureText(t).width > maxW && cur) { lines.push(cur); cur = w; } else cur = t; });
+  if (cur) lines.push(cur); return lines;
+}
+function buildShareImage(card) {
+  return new Promise((resolve, reject) => {
+    const FONT = 'system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif';
+    const COL = { pa: "#e0567a", pb: "#3b82c4", pm: "#8b5cf6", pt: "#1f9d6b" };
+    const W = 1080, PAD = 48, IN = W - PAD * 2, SH = Math.round(IN * 0.6);
+    const txt = sel => { const e = card.querySelector(sel); return e ? e.textContent.replace(/\s+/g, " ").trim() : ""; };
+    const parts = [...card.querySelectorAll(".nm span")].map(sp => ({ t: sp.textContent, c: COL[[...sp.classList].find(c => COL[c])] || "#1f1f2e" }));
+    const rows = [];
+    const add = (t, size, color, weight, gap) => { if (t) rows.push({ t, size, color, weight: weight || 400, gap: gap || 14 }); };
+    add(txt(".full"), 38, "#1f1f2e", 600, 20);
+    add(txt(".nick"), 34, "#6b6b7b");
+    add(txt(".rashi"), 34, "#8b5cf6");
+    card.querySelectorAll(".meta").forEach(m => add(m.textContent.replace(/\s+/g, " ").trim(), 32, "#6b6b7b"));
+    add(txt(".via"), 36, "#1f1f2e", 500, 18);
+    add(txt(".warn"), 32, "#d9730d");
+    const img = new Image();
+    img.onload = () => {
+      const m = document.createElement("canvas").getContext("2d");
+      let h = 16 + 36 + SH + 56;
+      let nameSize = 96; m.font = "800 " + nameSize + "px " + FONT;
+      const nameW = () => parts.reduce((a, p) => a + m.measureText(p.t).width, 0);
+      while (nameW() > IN && nameSize > 40) { nameSize -= 4; m.font = "800 " + nameSize + "px " + FONT; }
+      h += nameSize + 18;
+      rows.forEach(r => { m.font = r.weight + " " + r.size + "px " + FONT; r.lines = wrapText(m, r.t, IN); h += r.lines.length * Math.round(r.size * 1.35) + r.gap; });
+      h += 36 + 84;
+      const cv = document.createElement("canvas"); cv.width = W; cv.height = h;
+      const c = cv.getContext("2d");
+      c.fillStyle = "#ffffff"; c.fillRect(0, 0, W, h);
+      const g = c.createLinearGradient(0, 0, W, 0); g.addColorStop(0, COL.pa); g.addColorStop(.5, COL.pm); g.addColorStop(1, COL.pb);
+      c.fillStyle = g; c.fillRect(0, 0, W, 16);
+      const rr = (x, y, w, hh, r) => { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + hh, r); c.arcTo(x + w, y + hh, x, y + hh, r); c.arcTo(x, y + hh, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); };
+      const sy = 16 + 36;
+      c.save(); rr(PAD, sy, IN, SH, 28); c.clip(); c.drawImage(img, PAD, sy, IN, SH); c.restore();
+      rr(PAD, sy, IN, SH, 28); c.lineWidth = 2; c.strokeStyle = "#e3dff0"; c.stroke();
+      let y = sy + SH + 56 + nameSize * 0.82, x = PAD;
+      c.textBaseline = "alphabetic"; c.font = "800 " + nameSize + "px " + FONT;
+      parts.forEach(p => { c.fillStyle = p.c; c.fillText(p.t, x, y); x += c.measureText(p.t).width; });
+      y += 18 + nameSize * 0.18;
+      rows.forEach(r => {
+        c.font = r.weight + " " + r.size + "px " + FONT; c.fillStyle = r.color;
+        const lh = Math.round(r.size * 1.35);
+        r.lines.forEach(l => { y += lh * 0.8; c.fillText(l, PAD, y); y += lh * 0.2; });
+        y += r.gap;
+      });
+      y += 36;
+      c.fillStyle = "#e3dff0"; c.fillRect(PAD, y, IN, 2);
+      c.font = "600 32px " + FONT; c.fillStyle = "#6b6b7b"; c.textAlign = "center";
+      c.fillText("💛 Found on babynames.website", W / 2, y + 58);
+      cv.toBlob(b => b ? resolve(b) : reject(new Error("no blob")), "image/png");
+    };
+    img.onerror = () => reject(new Error("scene failed"));
+    let src = "";
+    try { src = sceneFor(card.dataset.n, lastCtx).svg; } catch (_) {}
+    if (!src) return reject(new Error("no scene"));
+    if (!/xmlns=/.test(src)) src = src.replace("<svg ", '<svg xmlns="http://www.w3.org/2000/svg" ');
+    src = src.replace("<svg ", '<svg width="800" height="480" ');
+    img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(src);
+  });
+}
+let vidBarT = 0, vidName = "";
+function offerVideo(n) {
+  const b = $("vidBar"); if (!b || !window.jny) return; vidName = n; $("vidMsg").textContent = "♥ " + cap(n) + " saved";
+  b.classList.add("show"); clearTimeout(vidBarT); vidBarT = setTimeout(() => b.classList.remove("show"), 9000);
+  try { window.nmTrack && window.nmTrack("video_offer", { name: n }); } catch (_) {}
+}
+async function shareName(btn) {
+  const card = btn.closest(".chip"), name = cap(btn.dataset.share);
+  const fEl = card && card.querySelector(".full"), vEl = card && card.querySelector(".via"), rEl = card && card.querySelector(".rashi:not(.none)");
+  const full = fEl ? fEl.textContent.split(" · ")[0] : name;
+  const mean = vEl ? vEl.textContent.replace(/^[✨📖\s]+/u, "").trim() : "";
+  const text = "Baby name idea: " + full + (mean && mean !== "New invented" ? " — " + mean : "") + " 💛\nhttps://babynames.website";
+  const meta = card ? [...card.querySelectorAll(".meta")].map(m => m.textContent).join(" ") : "";
+  const info = {
+    shared_name: name.slice(0, 40), meaning: (mean || "none").slice(0, 100), letters: name.length,
+    gender: /♀/.test(meta) ? "girl" : /♂/.test(meta) ? "boy" : "unisex",
+    rashi: rEl ? rEl.textContent.replace(/^[^:]*:\s*/, "").slice(0, 60) : "none",
+    mode: document.body.classList.contains("explore") ? "get" : "make",
+    has_family_name: card && card.querySelector(".full") ? 1 : 0,
+    in_shortlist: favs.includes(btn.dataset.share) ? 1 : 0
+  };
+  const log = (method, result) => { try { window.nmTrack && window.nmTrack("name_share", Object.assign({ method, result }, info)); } catch (_) {} };
+  let blob = null;
+  try { blob = await buildShareImage(card); } catch (_) {}
+  const file = blob ? new File([blob], name.toLowerCase() + "-baby-name.png", { type: "image/png" }) : null;
+  let how = "";
+  try {
+    if (file && navigator.canShare && navigator.canShare({ files: [file] })) { how = "image"; await navigator.share({ files: [file], title: "Baby name idea: " + name, text }); log(how, "shared"); return; }
+    if (navigator.share && !file) { how = "text"; await navigator.share({ title: "Baby name idea: " + name, text }); log(how, "shared"); return; }
+  } catch (err) { if (err && err.name === "AbortError") { log(how, "cancelled"); return; } }
+  /* no file sharing here (e.g. most desktop browsers): save the picture and copy the text */
+  if (file) {
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = file.name;
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    copy(text); showToast("Picture saved · text copied"); log("download", "saved");
+  } else { copy(text); log("copy", "copied"); }
+}
+
+/* ---------- name preview scenes (dummy graphics) ---------- */
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fit = (t, w, base) => Math.max(10, Math.min(base, Math.floor(w / (t.length * 0.6))));
+function fullName(name, ctx) { return [cap(name), ctx.midRaw, ctx.lastRaw].filter(Boolean).join(" "); }
+function starPts(cx, cy, R, r) {
+  const p = [];
+  for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, d = i % 2 ? r : R; p.push((cx + d * Math.cos(a)).toFixed(1) + "," + (cy + d * Math.sin(a)).toFixed(1)); }
+  return p.join(" ");
+}
+const svgWrap = (body, label) => `<svg viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${esc(label)}">${body}</svg>`;
+const TX = (x, y, txt, size, fill, extra) => `<text x="${x}" y="${y}" text-anchor="middle" font-size="${size}" fill="${fill}" ${extra || ""}>${esc(txt)}</text>`;
+const SANS = 'font-family="system-ui, -apple-system, Segoe UI, sans-serif"';
+const SERIF = 'font-family="Georgia, Times New Roman, serif"';
+const HAND = "font-family=\"'Segoe Print','Comic Sans MS',cursive\"";
+
+function scenes(name, ctx) {
+  const first = cap(name), full = fullName(name, ctx), L = [];
+
+  L.push({ title: "🏆 Awards night", say: `And the award goes to… ${full}!`, svg: svgWrap(`
+    <rect width="400" height="240" fill="#0f1130"/>
+    <polygon points="200,0 110,240 290,240" fill="#fff" opacity=".07"/>
+    <polygon points="70,0 -30,240 160,240" fill="#fff" opacity=".05"/>
+    <polygon points="330,0 240,240 430,240" fill="#fff" opacity=".05"/>
+    <rect width="30" height="240" fill="#7f1d1d"/><rect x="370" width="30" height="240" fill="#7f1d1d"/>
+    ${TX(200, 50, "AND THE AWARD GOES TO…", 14, "#f5c451", SANS + ' letter-spacing="3"')}
+    ${TX(200, 104, full, fit(full, 320, 40), "#ffffff", SERIF + ' font-weight="700"')}
+    <polygon points="${starPts(200, 128, 9, 4)}" fill="#fff7d6"/>
+    <g fill="#f5c451"><path d="M183 142h34v10q0 16-17 18q-17-2-17-18z"/><rect x="197" y="169" width="6" height="14"/><rect x="184" y="183" width="32" height="7" rx="2"/></g>
+    <path d="M183 148q-14 0-12 12q2 8 14 8M217 148q14 0 12 12q-2 8-14 8" fill="none" stroke="#f5c451" stroke-width="3"/>
+    ${TX(200, 224, "THE GOLDEN STAR AWARDS", 10, "#9ca3af", SANS + ' letter-spacing="3"')}`, "Awards night announcement") });
+
+  L.push({ title: "📜 Certificate", say: `This is to certify that ${full} has officially earned a place in our hearts.`, svg: svgWrap(`
+    <rect width="400" height="240" fill="#fdf6e3"/>
+    <rect x="10" y="10" width="380" height="220" fill="none" stroke="#b7791f" stroke-width="3"/>
+    <rect x="18" y="18" width="364" height="204" fill="none" stroke="#d4a64a"/>
+    ${TX(200, 52, "CERTIFICATE", 22, "#7c4a03", SERIF + ' letter-spacing="5" font-weight="700"')}
+    ${TX(200, 70, "OF ACHIEVEMENT", 10, "#92400e", SANS + ' letter-spacing="3"')}
+    ${TX(200, 102, "This is to certify that", 13, "#44403c", SERIF + ' font-style="italic"')}
+    ${TX(200, 142, full, fit(full, 320, 34), "#1e3a8a", SERIF + ' font-style="italic" font-weight="700"')}
+    <line x1="70" y1="152" x2="330" y2="152" stroke="#b7791f"/>
+    ${TX(200, 176, "has officially earned a place in our hearts", 12, "#44403c", SERIF)}
+    <path d="M62 204q10-14 20 0t20 0t20 0" fill="none" stroke="#44403c"/>
+    <line x1="60" y1="210" x2="150" y2="210" stroke="#44403c"/>
+    ${TX(105, 222, "Signed", 9, "#78716c", SANS)}
+    <circle cx="335" cy="198" r="20" fill="#b91c1c"/><circle cx="335" cy="198" r="15" fill="none" stroke="#fecaca" stroke-dasharray="2 2"/>
+    <polygon points="${starPts(335, 198, 9, 4)}" fill="#fde68a"/>`, "Certificate") });
+
+  const cols = ["#f59e0b", "#ec4899", "#22d3ee", "#a3e635", "#f87171"];
+  const conf = Array.from({ length: 26 }, (_, i) => { const x = (i * 47) % 380 + 10, y = (i * 29) % 110 + 6; return `<rect x="${x}" y="${y}" width="7" height="12" fill="${cols[i % 5]}" transform="rotate(${i * 37} ${x + 3} ${y + 6})"/>`; }).join("");
+  L.push({ title: "🥇 Winner moment", say: `And the winner is… ${full}!`, svg: svgWrap(`
+    <defs><linearGradient id="wg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#312e81"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient></defs>
+    <rect width="400" height="240" fill="url(#wg)"/>${conf}
+    ${TX(200, 52, "AND THE WINNER IS…", 14, "#fcd34d", SANS + ' letter-spacing="3"')}
+    ${TX(200, 94, full, fit(full, 340, 36), "#ffffff", SERIF + ' font-weight="700"')}
+    <polygon points="${starPts(200, 128, 15, 6)}" fill="#fde047"/>
+    <rect x="95" y="178" width="70" height="42" fill="#6366f1"/><rect x="165" y="150" width="70" height="70" fill="#f59e0b"/><rect x="235" y="190" width="70" height="30" fill="#8b5cf6"/>
+    ${TX(130, 206, "2", 20, "#fff", SANS + ' font-weight="800"')}${TX(200, 192, "1", 34, "#fff", SANS + ' font-weight="800"')}${TX(270, 212, "3", 18, "#fff", SANS + ' font-weight="800"')}`, "Winner podium") });
+
+  const bc = ["#ef4444", "#f59e0b", "#22c55e", "#3b82f6", "#a855f7"];
+  const bunt = Array.from({ length: 10 }, (_, i) => { const x = 20 + i * 40, y = 20 + 20 * (1 - ((x - 200) / 200) ** 2); return `<polygon points="${x - 14},${y} ${x + 14},${y} ${x},${y + 30}" fill="${bc[i % 5]}"/>`; }).join("");
+  L.push({ title: "🎂 Birthday banner", say: `Happy birthday, ${first}!`, svg: svgWrap(`
+    <rect width="400" height="240" fill="#fef3c7"/>
+    <path d="M0 20 Q200 60 400 20" fill="none" stroke="#92400e" stroke-width="2"/>${bunt}
+    ${TX(200, 122, "HAPPY BIRTHDAY", 22, "#be185d", SANS + ' font-weight="800" letter-spacing="2"')}
+    ${TX(200, 176, first + "!", fit(first + "!", 270, 48), "#1d4ed8", SERIF + ' font-weight="700"')}
+    <ellipse cx="48" cy="170" rx="20" ry="25" fill="#ef4444"/><line x1="48" y1="195" x2="58" y2="234" stroke="#6b7280"/>
+    <ellipse cx="82" cy="190" rx="16" ry="20" fill="#22c55e"/><line x1="82" y1="210" x2="70" y2="236" stroke="#6b7280"/>
+    <ellipse cx="352" cy="165" rx="20" ry="25" fill="#3b82f6"/><line x1="352" y1="190" x2="342" y2="234" stroke="#6b7280"/>
+    <ellipse cx="318" cy="188" rx="16" ry="20" fill="#a855f7"/><line x1="318" y1="208" x2="330" y2="236" stroke="#6b7280"/>`, "Birthday banner") });
+
+  L.push({ title: "👋 Name tag", say: `Hello! My name is ${first}.`, svg: svgWrap(`
+    <rect width="400" height="240" fill="#e5e7eb"/>
+    <rect x="80" y="30" width="240" height="180" rx="14" fill="#ffffff"/>
+    <path d="M94 30h212a14 14 0 0 1 14 14v48H80V44a14 14 0 0 1 14-14z" fill="#dc2626"/>
+    ${TX(200, 64, "HELLO", 24, "#ffffff", SANS + ' font-weight="800" letter-spacing="4"')}
+    ${TX(200, 84, "my name is", 12, "#ffffff", SANS)}
+    ${TX(200, 156, full, fit(full, 210, 34), "#111827", HAND)}
+    <line x1="110" y1="170" x2="290" y2="170" stroke="#d1d5db"/>`, "Name tag") });
+
+  L.push({ title: "🎬 Movie poster", say: `Coming this summer… the adventures of ${full}.`, svg: svgWrap(`
+    <defs><linearGradient id="pg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#111827"/><stop offset=".6" stop-color="#7c2d12"/><stop offset="1" stop-color="#f59e0b"/></linearGradient></defs>
+    <rect width="400" height="240" fill="url(#pg)"/>
+    <circle cx="200" cy="200" r="40" fill="#fde68a" opacity=".85"/>
+    <polygon points="0,240 0,190 70,160 130,200 200,150 270,205 330,170 400,200 400,240" fill="#1f1308"/>
+    ${TX(200, 38, "A NEW STORY BEGINS", 11, "#fcd34d", SANS + ' letter-spacing="4"')}
+    ${TX(200, 78, "THE ADVENTURES OF", 13, "#ffffff", SANS + ' letter-spacing="3"')}
+    ${TX(200, 124, full.toUpperCase(), fit(full, 340, 40), "#ffffff", SERIF + ' font-weight="700"')}
+    ${TX(200, 226, "COMING THIS SUMMER", 11, "#fcd34d", SANS + ' letter-spacing="4"')}`, "Movie poster") });
+
+  L.push({ title: "⚽ Jersey", say: `Number seven… ${first}!`, svg: svgWrap(`
+    <rect width="400" height="240" fill="#ecfdf5"/>
+    <path d="M140 40L108 62L82 104L112 122L130 100V206H270V100L288 122L318 104L292 62L260 40Q200 72 140 40Z" fill="#2563eb"/>
+    <path d="M140 40Q200 72 260 40" fill="none" stroke="#ffffff" stroke-width="5"/>
+    ${TX(200, 96, first.toUpperCase(), fit(first, 110, 24), "#ffffff", SANS + ' font-weight="800" letter-spacing="2"')}
+    ${TX(200, 176, "7", 72, "#ffffff", SANS + ' font-weight="900"')}`, "Sports jersey") });
+
+  const sub = [ctx.midRaw, ctx.lastRaw].filter(Boolean).join(" ") || "Student";
+  const bar = Array.from({ length: 30 }, (_, i) => `<rect x="${112 + i * 5.2}" y="178" width="${i % 3 ? 2 : 3.4}" height="26" fill="#0f172a"/>`).join("");
+  L.push({ title: "🪪 School ID", say: `Roll call. ${full}.`, svg: svgWrap(`
+    <rect width="400" height="240" fill="#e0f2fe"/>
+    <rect x="90" y="20" width="220" height="200" rx="12" fill="#ffffff" stroke="#bae6fd"/>
+    <rect x="90" y="20" width="220" height="36" rx="12" fill="#0ea5e9"/>
+    ${TX(200, 44, "STUDENT ID", 14, "#ffffff", SANS + ' font-weight="700" letter-spacing="3"')}
+    <rect x="110" y="70" width="70" height="85" rx="6" fill="#e2e8f0"/>
+    <circle cx="145" cy="102" r="14" fill="#94a3b8"/><path d="M118 152q27-34 54 0z" fill="#94a3b8"/>
+    <text x="192" y="104" font-size="${fit(first, 110, 22)}" font-weight="700" fill="#0f172a" ${SANS}>${esc(first)}</text>
+    <text x="192" y="124" font-size="${fit(sub, 110, 12)}" fill="#475569" ${SANS}>${esc(sub)}</text>
+    ${bar}`, "School ID card") });
+  return L;
+}
+
+let curName = "", SAY = [];
+function openPreview(name) {
+  curName = name;
+  const ctx = readCtx(), list = scenes(name, ctx);
+  SAY = list.map(s => s.say);
+  $("mName").textContent = cap(name);
+  $("mSub").textContent = (ctx.last || ctx.mid) ? fullName(name, ctx) : "Add a last name above to see full-name previews";
+  $("mGrid").innerHTML = list.map((s, i) => `<div class="scene">${s.svg}<div class="cap"><span>${s.title}</span><button data-say="${i}">🔊 Hear it</button></div></div>`).join("");
+  $("modal").hidden = false; $("modal").scrollTop = 0; document.body.style.overflow = "hidden";
+}
+function closePreview() {
+  $("modal").hidden = true; document.body.style.overflow = "";
+  try { speechSynthesis.cancel(); } catch (e) {}
+}
+function showToast(t) { const el = $("toast"); el.textContent = t; el.classList.add("show"); setTimeout(() => el.classList.remove("show"), 1600); }
+function speak(text) {
+  if (!("speechSynthesis" in window)) { showToast("Voice isn't supported in this browser"); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text); u.lang = $("voice").value; u.rate = 0.9;
+  speechSynthesis.speak(u);
+}
+$("mClose").onclick = closePreview;
+$("mCopy").onclick = () => copy(fullName(curName, readCtx()));
+$("modal").addEventListener("click", e => { if (e.target === $("modal")) closePreview(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("modal").hidden) closePreview(); });
+
+function update() { shown = 24; shownT = 24; render(); }
+
+let suppressClick = false, drag = null;
+document.addEventListener("click", e => {
+  if (suppressClick) return;
+  const xb = e.target.closest("[data-x]");
+  if (xb) { removeCard(xb.dataset.x); return; }
+  const cyc = e.target.closest("[data-cycle]");
+  if (cyc) { scenePick[cyc.dataset.cycle] = (scenePick[cyc.dataset.cycle] || 0) + 1; render(); return; }
+  const vb = e.target.closest("[data-vid]");
+  if (vb) { window.jny && window.jny.video(vb.dataset.vid, () => {}); return; }
+  if (e.target.closest("#vidGo")) { $("vidBar").classList.remove("show"); window.jny && window.jny.video(vidName, () => {}); return; }
+  if (e.target.closest("#vidX")) { $("vidBar").classList.remove("show"); return; }
+  const shr = e.target.closest("[data-share]");
+  if (shr) { shareName(shr); return; }
+  const star = e.target.closest("[data-f]");
+  if (star) { const n = star.dataset.f, added = !favs.includes(n); favs = added ? [...favs, n] : favs.filter(x => x !== n); saveFavs(); render(); if (added) offerVideo(n); return; }
+  const use = e.target.closest("[data-use]");
+  if (use) { $("nameB").value = use.dataset.use; if (!$("nameA").value) $("nameA").focus(); update(); return; }
+  const pv = e.target.closest("[data-pv]");
+  if (pv) { openPreview(pv.dataset.pv); return; }
+  const say = e.target.closest("[data-say]");
+  if (say) { speak(SAY[+say.dataset.say]); return; }
+  const nm = e.target.closest(".chip .nm");
+  if (nm) copy(cap(nm.closest(".chip").dataset.n));
+});
+
+/* swipe a card sideways to dismiss it (or remove it from the shortlist) */
+document.addEventListener("pointerdown", e => {
+  const c = e.target.closest(".chip");
+  if (!c || e.target.closest("button")) return;
+  drag = { c, x: e.clientX, y: e.clientY, dx: 0, moved: false, id: e.pointerId };
+});
+document.addEventListener("pointermove", e => {
+  if (!drag || e.pointerId !== drag.id) return;
+  const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+  if (!drag.moved && Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) { drag.moved = true; try { drag.c.setPointerCapture(e.pointerId); } catch (_) {} }
+  if (drag.moved) {
+    drag.dx = dx;
+    drag.c.style.transition = "none";
+    drag.c.style.transform = `translateX(${dx}px) rotate(${dx / 40}deg)`;
+    drag.c.style.opacity = String(1 - Math.min(0.7, Math.abs(dx) / 300));
+  }
+});
+function endDrag() {
+  if (!drag) return;
+  const d = drag; drag = null;
+  if (!d.moved) return;
+  suppressClick = true; setTimeout(() => { suppressClick = false; }, 0);
+  if (Math.abs(d.dx) > 90) {
+    d.c.style.transition = "transform .18s, opacity .18s";
+    d.c.style.transform = `translateX(${d.dx > 0 ? 600 : -600}px)`; d.c.style.opacity = "0";
+    setTimeout(() => removeCard(d.c.dataset.n), 170);
+  } else {
+    d.c.style.transition = "transform .15s, opacity .15s"; d.c.style.transform = ""; d.c.style.opacity = "";
+  }
+}
+document.addEventListener("pointerup", endDrag);
+document.addEventListener("pointercancel", endDrag);
+
+document.querySelectorAll("#viewSeg button").forEach(b => b.onclick = () => {
+  view = b.dataset.v;
+  document.querySelectorAll("#viewSeg button").forEach(x => x.classList.toggle("active", x === b));
+  document.body.classList.toggle("favview", view === "fav");
+  render();
+});
+
+document.querySelectorAll("#genderSeg button").forEach(b => b.onclick = () => {
+  const was = b.classList.contains("active");
+  document.querySelectorAll("#genderSeg button").forEach(x => x.classList.remove("active"));
+  if (!was) b.classList.add("active");
+  update();
+});
+document.querySelectorAll("input, select").forEach(el => {
+  if (el.closest("#wiz")) return;
+  el.addEventListener("input", update);
+  if (el.type !== "text") el.addEventListener("change", update); /* text boxes already update on "input"; a second redraw on blur swallowed the first tap on a card */
+});
+$("reset").onclick = () => {
+  ["startsWith","endsWith","rhyme","mWord","trait","rashi"].forEach(id => $(id).value = "");
+  $("maxLen").value = "15"; $("exKind").value = "all";
+  $("mLang").value = "all";
+  $("op1").dataset.v = "or"; $("op1").textContent = "OR"; $("op2").dataset.v = "or"; $("op2").textContent = "OR"; $("op3").dataset.v = "and"; $("op3").textContent = "AND";
+  $("theme").value = ""; $("sort").value = "short"; $("uniqOnly").checked = false;
+  $("nice").checked = true; $("nodict").checked = false; $("showRashi").checked = true; $("showMeaning").checked = true;
+  document.querySelectorAll("#genderSeg button").forEach(x => x.classList.remove("active"));
+  update();
+};
+function setMode(m) {
+  document.body.classList.toggle("explore", m === "explore");
+  $("lead").textContent = m === "explore" ? "Pick boy or girl, then add a meaning, language or rashi — we’ll suggest names to match." : "Enter your name and your spouse’s name — we’ll blend them into baby name ideas.";
+  ["op1","op2","op3"].forEach(id => $(id).onclick = () => { const e = $(id), v = e.dataset.v === "or" ? "and" : "or"; e.dataset.v = v; e.textContent = v.toUpperCase(); update(); });
+document.querySelectorAll("#modeSeg button").forEach(b => b.classList.toggle("active", b.dataset.m === m));
+  update();
+}
+document.querySelectorAll("#modeSeg button").forEach(b => b.onclick = () => setMode(b.dataset.m));
+/* ---- anonymous usage events (Google Analytics). No typed names are ever sent. ---- */
+(function () {
+  const track = (ev, p) => { try { if (typeof gtag === "function") gtag("event", ev, p || {}); } catch (_) {} };
+  const seen = new Set();
+  window.nmTrack = track;
+  const once = (k, ev, p) => { if (seen.has(k)) return; seen.add(k); track(ev, p); };
+  const mode = () => document.body.classList.contains("explore") ? "suggest" : "make";
+  const gender = () => { const a = document.querySelector("#genderSeg button.active"); return a ? a.dataset.g : "any"; };
+  const val = id => { const e = document.getElementById(id); return e ? e.value : ""; };
+
+  /* debounced "searched" event: fires ~2s after the person stops changing inputs */
+  let dirty = false, timer = null;
+  const markDirty = () => {
+    dirty = true; clearTimeout(timer);
+    timer = setTimeout(() => {
+      if (!dirty) return; dirty = false;
+      const out = document.getElementById("out");
+      track("names_generated", {
+        mode: mode(), gender: gender(),
+        results: out ? out.querySelectorAll(".chip").length : 0,
+        no_results: out && out.querySelector(".empty") ? 1 : 0,
+        with_meaning: (val("theme") || val("trait") || val("mWord")) ? 1 : 0,
+        with_rashi: val("rashi") ? 1 : 0,
+        unique_only: document.getElementById("uniqOnly") && document.getElementById("uniqOnly").checked ? 1 : 0
+      });
+    }, 2000);
+  };
+
+  /* first real interaction */
+  ["click", "input", "keydown", "touchstart"].forEach(t =>
+    document.addEventListener(t, () => once("first", "first_interaction", { mode: mode() }), { capture: true, passive: true }));
+
+  /* inputs / selects: one event per control per visit, plus the debounced search event */
+  const SKIP = new Set(["nameA", "nameB", "midName", "lastName"]);
+  document.addEventListener("change", e => {
+    const el = e.target.closest && e.target.closest("input, select"); if (!el || !el.id) return;
+    markDirty();
+    if (SKIP.has(el.id)) { once("n:" + el.id, "names_entered", { field: el.id }); return; }
+    const isSel = el.tagName === "SELECT", p = { filter: el.id };
+    if (isSel && el.value) p.value = String(el.value).slice(0, 40);
+    once("f:" + el.id, "filter_used", p);
+  }, true);
+  document.addEventListener("input", e => {
+    const el = e.target.closest && e.target.closest("input, select"); if (el && el.id) markDirty();
+  }, true);
+
+  /* opening / closing the collapsible sections */
+  document.addEventListener("toggle", e => { const d = e.target; if (d && d.tagName === "DETAILS" && d.id) track("panel_toggle", { panel: d.id, open: d.open ? 1 : 0 }); }, true);
+
+  /* clicks (capture phase so we see state before the page's own handler changes it) */
+  document.addEventListener("click", e => {
+    const t = e.target; if (!t.closest) return;
+    let m;
+    if ((m = t.closest("#modeSeg button"))) { track("mode_switch", { mode: m.dataset.m === "explore" ? "suggest" : "make" }); markDirty(); return; }
+    if ((m = t.closest("#genderSeg button"))) { track("gender_select", { gender: m.classList.contains("active") ? "any" : m.dataset.g }); markDirty(); return; }
+    if ((m = t.closest("#viewSeg button"))) { track("view_switch", { view: m.dataset.v }); return; }
+    if ((m = t.closest("[data-f]"))) { track(favs.includes(m.dataset.f) ? "shortlist_remove" : "shortlist_add", { mode: mode(), name_length: m.dataset.f.length }); return; }
+    if (t.closest("[data-x]")) { track("card_dismiss", { mode: mode() }); return; }
+    if (t.closest("[data-pv]")) { track("preview_open", { mode: mode() }); return; }
+    if (t.closest("[data-say]")) { track("name_pronounce"); return; }
+    if (t.closest(".chip .nm")) { track("name_copy", { source: "card" }); return; }
+    if (t.closest("#mCopy")) { track("name_copy", { source: "preview" }); return; }
+    if (t.closest("#shareFavs")) return;
+    if (t.closest("#copyFavs")) { track("shortlist_copy", { count: favs.length }); return; }
+    if (t.closest("#clearFavs")) { track("shortlist_clear"); return; }
+    if (t.closest("#more, #moreT")) { track("show_more"); return; }
+    if (t.closest("[data-use]")) { track("browse_word_used"); markDirty(); return; }
+    if (t.closest("#reset")) { track("filters_reset"); markDirty(); return; }
+    if (t.closest(".opchip")) { track("and_or_toggle", { chip: t.closest(".opchip").id }); markDirty(); return; }
+  }, true);
+
+  /* time on page: counts only while the tab is visible, sent when the visitor leaves or switches away */
+  let visSince = document.hidden ? 0 : Date.now(), visMs = 0, sentMs = 0, engaged = false;
+  const flush = () => {
+    if (visSince) { visMs += Date.now() - visSince; visSince = 0; }
+    const add = Math.round((visMs - sentMs) / 1000);
+    if (add >= 1) { sentMs = visMs; try { gtag("event", "page_time", { seconds: add, transport_type: "beacon" }); } catch (_) {} }
+  };
+  document.addEventListener("visibilitychange", () => { if (document.hidden) flush(); else visSince = Date.now(); });
+  window.addEventListener("pagehide", flush);
+  setInterval(() => {
+    const cur = visMs + (visSince ? Date.now() - visSince : 0);
+    if (!engaged && cur >= 15000) { engaged = true; track("engaged_15s"); }
+  }, 3000);
+})();
+
+/* ---- guided naming: pop-up flow shown when the page opens ---- */
+/* ===== 3D story journey (pure CSS 3D + WebAudio + local "AI" scoring — no APIs) ===== */
+(function () {
+  const J = document.getElementById("jny"); if (!J) return;
+  const Q = s => J.querySelector(s);
+  const world = Q("#jWorld"), txt = Q("#jTxt"), act = Q("#jAct"), prog = Q("#jProg"), scaleEl = Q("#jScale"), cv = Q("#jConf");
+  const tr = (e, p) => { try { window.nmTrack && window.nmTrack(e, p); } catch (_) {} };
+  let timers = [], lullT = 0, ac = null, mute = false, raf = 0, scene = 0, done = null, running = false;
+  const vs = { tap: 0, stroke: 0, hold: 0 };
+  let tilt = { x: 0, y: 0, cx: 0, cy: 0 };
+  try { mute = sessionStorage.getItem("nm_jmute") === "1"; } catch (_) {}
+  Q("#jMute").textContent = mute ? "🔇" : "🔊";
+  const later = (fn, ms) => { const t = setTimeout(fn, ms); timers.push(t); return t; };
+  const clearAll = () => { timers.forEach(clearTimeout); timers = []; clearInterval(lullT); };
+  const say = (html) => { txt.innerHTML = html; txt.style.animation = "none"; void txt.offsetWidth; txt.style.animation = ""; };
+  const actions = (html) => { act.innerHTML = html; };
+  const step = n => { [...prog.children].forEach((d, i) => d.classList.toggle("on", i <= n)); };
+  const fit = () => scaleEl.style.setProperty("--s", Math.min(innerWidth / 740, innerHeight / 860, 1.3).toFixed(3));
+  const toast = m => { const t = document.getElementById("toast"); if (!t) return; t.textContent = m; t.classList.add("show"); setTimeout(() => t.classList.remove("show"), 2200); };
+
+  /* ---- sound ---- */
+  function audio() { if (!ac) { try { ac = new (window.AudioContext || window.webkitAudioContext)(); } catch (_) {} } if (ac && ac.state === "suspended") ac.resume(); return ac; }
+  function note(f, t0, dur, vol, type) {
+    if (mute) return; const a = audio(); if (!a) return;
+    const o = a.createOscillator(), g = a.createGain(), t = a.currentTime + (t0 || 0);
+    o.type = type || "sine"; o.frequency.value = f; g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol || .05, t + .02); g.gain.exponentialRampToValueAtTime(.0001, t + (dur || .9));
+    o.connect(g); g.connect(a.destination); o.start(t); o.stop(t + (dur || .9) + .05);
+  }
+  const PENTA = [392, 440, 523.25, 587.33, 659.25, 783.99, 880];
+  const lullaby = () => { clearInterval(lullT); lullT = setInterval(() => note(PENTA[Math.random() * PENTA.length | 0], 0, 1.4, .035, "triangle"), 1100); };
+  const chime = () => [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => note(f, i * .12, 1.2, .06, "triangle"));
+  const cheer = () => [392, 523.25, 659.25, 783.99, 1046.5, 1318.5].forEach((f, i) => note(f, i * .1, 1.6, .06, "triangle"));
+
+  /* ---- pointer / gyro parallax ---- */
+  J.addEventListener("pointermove", e => { tilt.x = (e.clientX / innerWidth - .5); tilt.y = (e.clientY / innerHeight - .5); });
+  window.addEventListener("deviceorientation", e => { if (!running || e.gamma == null) return; tilt.x = Math.max(-.5, Math.min(.5, e.gamma / 60)); tilt.y = Math.max(-.5, Math.min(.5, (e.beta - 50) / 90)); });
+  function loop() {
+    tilt.cx += (tilt.x - tilt.cx) * .06; tilt.cy += (tilt.y - tilt.cy) * .06;
+    world.style.setProperty("--ry", (tilt.cx * -18).toFixed(2) + "deg"); world.style.setProperty("--rx", (tilt.cy * 9).toFixed(2) + "deg");
+    raf = requestAnimationFrame(loop);
+  }
+
+  /* ---- art ---- */
+  const BABY = `<svg class="bsv" viewBox="0 0 200 250"><defs><linearGradient id="jsw" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fffaf3"/><stop offset="1" stop-color="#ffd3e2"/></linearGradient></defs>
+<path d="M36 250C26 168 52 126 100 126s74 42 64 124z" fill="url(#jsw)" stroke="#f1aec6" stroke-width="3"/>
+<path d="M50 166Q100 204 152 158" stroke="#ffb0ca" stroke-width="11" fill="none" opacity=".75" stroke-linecap="round"/><path d="M58 198Q100 230 144 190" stroke="#ffd36b" stroke-width="9" fill="none" opacity=".7" stroke-linecap="round"/>
+<ellipse cx="136" cy="170" rx="14" ry="11" fill="#ffd9bf"/>
+<g class="head"><circle cx="45" cy="86" r="11" fill="#ffcfae"/><circle cx="155" cy="86" r="11" fill="#ffcfae"/><circle cx="100" cy="82" r="57" fill="#ffdcc4"/>
+<path d="M82 30q18-24 38 0q-19-8-38 0z" fill="#6b4331"/><path d="M96 28q6-24 22-12" stroke="#6b4331" stroke-width="6" fill="none" stroke-linecap="round"/>
+<g class="eyes-closed" stroke="#5a2d4a" stroke-width="5" fill="none" stroke-linecap="round"><path d="M68 86q11 10 22 0"/><path d="M110 86q11 10 22 0"/></g>
+<g class="eyes-happy" stroke="#5a2d4a" stroke-width="5" fill="none" stroke-linecap="round"><path d="M68 90q11-14 22 0"/><path d="M110 90q11-14 22 0"/></g>
+<circle cx="64" cy="106" r="11" fill="#ff9fbd" opacity=".6"/><circle cx="136" cy="106" r="11" fill="#ff9fbd" opacity=".6"/><circle cx="100" cy="99" r="3.5" fill="#f1b092"/>
+<path class="m-calm" d="M91 110q9 7 18 0" stroke="#b5475f" stroke-width="4" fill="none" stroke-linecap="round"/><path class="m-happy" d="M85 105q15 24 30 0z" fill="#c2415f"/></g>
+<text class="zz" x="150" y="40" font-size="26" fill="#fff">z</text><text class="zz" x="168" y="22" font-size="20" fill="#fff">z</text></svg>`;
+  const CRADLE_BACK = `<svg viewBox="0 0 380 250" width="380" height="250" style="position:absolute;left:-190px;top:-125px"><path d="M10 80Q190 -30 370 80L350 170Q190 240 30 170Z" fill="#fff" stroke="#f1c8d6" stroke-width="5"/><path d="M40 90Q190 10 340 90" fill="none" stroke="#ffd0e0" stroke-width="10" stroke-dasharray="4 14" stroke-linecap="round"/></svg>`;
+  const CRADLE_FRONT = `<svg viewBox="0 0 380 150" width="380" height="150" style="position:absolute;left:-190px;top:-20px"><path d="M14 20Q190 80 366 20L346 100Q190 150 34 100Z" fill="#ffe7f0" stroke="#f1c8d6" stroke-width="5"/><path d="M60 50Q190 90 320 50" fill="none" stroke="#fff" stroke-width="8" stroke-dasharray="3 12" stroke-linecap="round"/><rect x="60" y="112" width="12" height="38" rx="5" fill="#d9a77e"/><rect x="308" y="112" width="12" height="38" rx="5" fill="#d9a77e"/></svg>`;
+  const LAP = `<svg viewBox="0 0 520 170" width="520" height="170" style="position:absolute;left:-260px;top:-60px"><path d="M0 170Q40 40 260 36Q480 40 520 170Z" fill="#ffe29a" stroke="#f1c46a" stroke-width="4"/><path d="M60 170Q100 80 260 76Q420 80 460 170" fill="none" stroke="#fff" stroke-width="8" opacity=".7" stroke-dasharray="3 14" stroke-linecap="round"/></svg>`;
+  const ARMS = `<svg viewBox="0 0 420 130" width="420" height="130" style="position:absolute;left:-210px;top:-60px"><path d="M-6 130C-4 60 40 30 130 42C170 48 196 66 190 84C150 70 110 80 96 130Z" fill="#9b7bff"/><path d="M426 130C424 60 380 30 290 42C250 48 224 66 230 84C270 70 310 80 324 130Z" fill="#9b7bff"/><ellipse cx="176" cy="68" rx="32" ry="17" fill="#ffd0b2" transform="rotate(16 176 68)"/><ellipse cx="244" cy="68" rx="32" ry="17" fill="#ffd0b2" transform="rotate(-16 244 68)"/></svg>`;
+  const pos = (x, y, z) => `style="--x:${x}px;--y:${y}px;--z:${z}px"`;
+  const room = (warm) => `
+    <div class="f back"></div><div class="f left"></div><div class="f right"></div><div class="f floor"></div><div class="f ceil"></div>
+    <div class="f rug"></div>
+    <div class="o">${'<div class="f win"></div>'}</div>
+    <div class="o" ${pos(-250, -30, -338)}><div class="f" style="left:-150px;top:0;width:300px;height:14px;border-radius:6px;background:#fff;box-shadow:0 6px 0 #e5cfae"></div><div class="in" style="top:-34px;font-size:48px">🧸 🦄 📚</div></div>
+    <div class="o" ${pos(250, -60, -330)}><div class="in" style="font-size:90px">${warm ? "🖼️" : "🌳"}</div></div>
+    <div class="o" ${pos(0, -250, -120)}><div class="stick"></div><div class="orb"><span style="transform:rotateY(0deg) translateZ(95px)">⭐</span><span style="transform:rotateY(90deg) translateZ(95px)">🌙</span><span style="transform:rotateY(180deg) translateZ(95px)">🧸</span><span style="transform:rotateY(270deg) translateZ(95px)">☁️</span></div></div>
+    <div class="o bal" style="--d:0s;--x:-330px;--y:-40px;--z:-60px"><div class="in" style="font-size:70px">🎈</div></div>
+    <div class="o bal" style="--d:-2s;--x:340px;--y:-90px;--z:-20px"><div class="in" style="font-size:80px">🎈</div></div>`;
+  const stars = () => { let s = ""; for (let i = 0; i < 14; i++) s += `<i style="left:${(i * 37) % 190 + 6}px;top:${(i * 53) % 150 + 8}px;animation-delay:${-i * .3}s"></i>`; return s; };
+
+  /* ---- baby interactions ---- */
+  function bubble(parent, html, cls) { const b = document.createElement("div"); b.className = cls; b.innerHTML = html; b.style.left = (Math.random() * 90 - 45) + "px"; b.style.top = (-90 - Math.random() * 40) + "px"; parent.appendChild(b); setTimeout(() => b.remove(), 1900); }
+  function wireBaby(baby, onCount) {
+    let down = false, sx = 0, sy = 0, holdT = 0, held = false, strokeAcc = 0;
+    const mood = c => { baby.classList.remove("happy", "sleepy", "beat"); if (c) baby.classList.add(c); };
+    baby.addEventListener("pointerdown", e => {
+      down = true; held = false; sx = e.clientX; sy = e.clientY; strokeAcc = 0; audio();
+      holdT = setTimeout(() => { if (!down) return; held = true; mood("beat"); try { navigator.vibrate && navigator.vibrate([40, 80, 40]); } catch (_) {} note(130, 0, .4, .09); note(130, .3, .4, .07); bubble(baby, "💗", "bl"); vs.hold += 2; onCount(); }, 550);
+    });
+    baby.addEventListener("pointermove", e => {
+      if (!down || held) return; const d = Math.hypot(e.clientX - sx, e.clientY - sy); sx = e.clientX; sy = e.clientY; strokeAcc += d;
+      if (strokeAcc > 90) { strokeAcc = 0; mood("sleepy"); bubble(baby, "😴", "bl"); note(PENTA[Math.random() * 3 | 0], 0, 1.4, .05, "triangle"); vs.stroke++; onCount(); clearTimeout(baby._t); baby._t = setTimeout(() => mood(""), 2200); }
+    });
+    const up = () => {
+      if (!down) return; down = false; clearTimeout(holdT);
+      if (held) { mood(""); return; }
+      if (strokeAcc < 12 && !baby.classList.contains("sleepy")) {
+        mood("happy"); bubble(baby, ["hehe 💕", "coo!", "ba-ba!", "giggle ✨"][Math.random() * 4 | 0], "say"); bubble(baby, "💖", "bl"); chime(); vs.tap++; onCount();
+        clearTimeout(baby._t); baby._t = setTimeout(() => mood(""), 1700);
+      }
+    };
+    baby.addEventListener("pointerup", up); baby.addEventListener("pointerleave", up); baby.addEventListener("pointercancel", up);
+  }
+  function vibe() {
+    const tot = vs.tap + vs.stroke + vs.hold || 1;
+    const arr = [["Playful", "⭐", vs.tap], ["Calm", "🌙", vs.stroke], ["Cuddly", "🧸", vs.hold]].sort((a, b) => b[2] - a[2]);
+    const top = arr[0], pct = Math.max(52, Math.min(96, Math.round(100 * top[2] / tot)));
+    return { type: top[0].toLowerCase(), label: top[0], emoji: top[1], pct, w: { playful: vs.tap / tot, calm: vs.stroke / tot, cuddly: vs.hold / tot } };
+  }
+  window.nmVibeBonus = function (name) {
+    const v = window.nmVibe; if (!v) return 0; const low = String(name).toLowerCase(), len = low.length;
+    const vr = (low.match(/[aeiouy]/g) || []).length / len, soft = (low.match(/[lmnrsvyh]/g) || []).length / len;
+    let me = ""; try { me = lookMeaning(name) || ""; } catch (_) {}
+    return v.w.playful * ((len <= 5 ? 1.5 : 0) + (vr >= .45 ? .5 : 0)) + v.w.calm * ((/[aeiouy]$/.test(low) ? 1 : 0) + soft * 2) + v.w.cuddly * (me ? 1.8 : 0);
+  };
+
+  /* ---- scenes ---- */
+  function setScene(n, warm) { scene = n; step(n); J.classList.toggle("warm", !!warm); clearAll(); }
+  function sceneArrive() {
+    setScene(0, false); lullaby(); world.classList.remove("live");
+    world.style.setProperty("--dz", "-260px");
+    world.innerHTML = room(false) + `
+      <div class="o cr" ${pos(0, 70, -250)}>${CRADLE_BACK}</div>
+      <div class="o baby" id="jBaby" ${pos(0, 90, -230)}>${BABY}</div>
+      <div class="o cr" ${pos(0, 80, -205)}>${CRADLE_FRONT}</div>`;
+    world.querySelector(".win").innerHTML = "<b>🌙</b>" + stars();
+    requestAnimationFrame(() => requestAnimationFrame(() => world.style.setProperty("--dz", "80px")));
+    say("Shhh… a tiny miracle has arrived 🌙");
+    actions("");
+    later(() => { say("Congratulations, new Mom &amp; Dad! 🎉<small>Say hello to your little one.</small>"); actions('<button type="button" class="jb" data-j="hold">Pick up the baby 🤲</button>'); chime(); confetti(40); }, 2600);
+  }
+  function sceneLap() {
+    setScene(1, false); tr("jny_hold", {});
+    const baby = world.querySelector("#jBaby");
+    world.style.setProperty("--dz", "150px");
+    world.querySelectorAll(".cr").forEach(e => { e.style.transition = "opacity .8s"; e.style.opacity = 0; });
+    baby.style.setProperty("--x", "0px"); baby.style.setProperty("--y", "20px"); baby.style.setProperty("--z", "170px");
+    const lap = document.createElement("div"); lap.className = "o lapo"; lap.setAttribute("style", "--x:0px;--y:175px;--z:165px;opacity:0;transition:opacity 1s"); lap.innerHTML = LAP; world.insertBefore(lap, baby);
+    const arms = document.createElement("div"); arms.className = "o lapo"; arms.setAttribute("style", "--x:0px;--y:140px;--z:215px;opacity:0;transition:opacity 1s .4s"); arms.innerHTML = ARMS; world.appendChild(arms);
+    later(() => { lap.style.opacity = 1; arms.style.opacity = 1; }, 300);
+    say("There you go… so tiny, so warm 💕<small>Tap to make them giggle · stroke to soothe · press &amp; hold to cuddle</small>");
+    actions('<span class="jvibe" id="jMeter">💗 <i><b style="width:0%"></b></i> 0/5</span>');
+    let n = 0, shown = false;
+    const showBtn = () => {
+      if (shown) return; shown = true;
+      say("Reading your baby’s vibe… <span class=\"jthink\"><i></i><i></i><i></i></span>"); actions("");
+      later(() => {
+        const v = vibe(); window.nmVibe = v; tr("jny_vibe", { vibe: v.type, pct: v.pct });
+        say("Aww, they’re " + (v.type === "playful" ? "a bundle of giggles" : v.type === "calm" ? "so calm and dreamy" : "such a cuddle-bug") + " " + v.emoji + "<small>We’ll lean towards " + (v.type === "playful" ? "short, bouncy names" : v.type === "calm" ? "soft, melodic names" : "warm names with lovely meanings") + ".</small>");
+        actions('<span class="jvibe">Baby’s vibe: ' + v.label + ' ' + v.emoji + ' <i><b style="width:' + v.pct + '%"></b></i> ' + v.pct + '%</span><button type="button" class="jb" data-j="names">✨ Name your baby now →</button>');
+        chime();
+      }, 1700);
+    };
+    wireBaby(baby, () => {
+      n = vs.tap + vs.stroke + vs.hold; const m = Q("#jMeter"); if (m) { m.innerHTML = '💗 <i><b style="width:' + Math.min(100, n * 20) + '%"></b></i> ' + Math.min(5, n) + "/5"; }
+      if (n >= 5) showBtn();
+    });
+    later(() => { if (!shown) actions(act.innerHTML + '<button type="button" class="jb ghost" data-j="names">✨ Name your baby now →</button>'); }, 14000);
+  }
+
+  /* ---- family & voting ("AI" = local taste profiles) ---- */
+  const CAST = [
+    { e: "👵", who: "Grandma", x: -285, y: 40, z: 60, f: f => (f.me ? 4 : 0) + (f.endV ? 2 : 0) + (f.len >= 4 && f.len <= 6 ? 2 : 0) + f.h, why: f => f.me ? "“" + esc(f.me.split(/[,;(]/)[0].trim()) + "” — such a blessing!" : "So graceful. It will bring blessings." },
+    { e: "👴", who: "Grandpa", x: -215, y: -95, z: -40, f: f => (f.len >= 4 && f.len <= 6 ? 3 : 0) + (1 - f.vr) * 4 + f.ph * .3 + f.h, why: () => "Strong and dignified — a name to grow into." },
+    { e: "👩‍🦰", who: "Aunty", x: -110, y: -165, z: -120, f: f => f.vr * 8 + (f.endV ? 2 : 0) + f.h, why: () => "So melodic — like a lullaby." },
+    { e: "👨‍🦱", who: "Uncle", x: 110, y: -165, z: -120, f: f => (9 - f.len) * 1.2 + f.h, why: () => "Short and punchy — a champion’s name!" },
+    { e: "🧒", who: "Cousin", x: 215, y: -95, z: -40, f: f => f.ud * 2 + (f.near ? 0 : 2) + f.h, why: () => "Super unique — nobody in class will share it." },
+    { e: "🧑", who: "Best friend", x: 285, y: 40, z: 60, f: f => f.ph * .6 + f.nk * 1.5 + f.h, why: f => f.nkTxt ? "Easy to say — and the nicknames: " + esc(f.nkTxt) : "Easy to say, easy to shout across the park!" }
+  ];
+  function feat(n) {
+    const low = n.toLowerCase(); let me = "", u = { d: 3, near: "" }, ph = 5, nk = [];
+    try { me = lookMeaning(n) || ""; } catch (_) {} try { u = uniq(n) || u; } catch (_) {} try { ph = phon(n); } catch (_) {} try { nk = nicknames(n) || []; } catch (_) {}
+    return { n, len: low.length, vr: (low.match(/[aeiouy]/g) || []).length / low.length, endV: /[aeiouy]$/.test(low), me, ud: u.d || 0, near: u.near && u.d <= 1 ? u.near : "", ph, nk: nk.length, nkTxt: nk.slice(0, 2).map(cap).join(", "), h: (hash(n + "jny") % 100) / 100 };
+  }
+  function familyWorld() {
+    setScene(2, true); clearInterval(lullT); world.classList.remove("live");
+    world.style.setProperty("--dz", "-60px");
+    world.innerHTML = room(true) + `
+      <div class="o lapo" style="--x:0px;--y:215px;--z:200px">${LAP}</div>
+      <div class="o baby" id="jBaby" style="--x:0px;--y:90px;--z:180px;pointer-events:none">${BABY}</div>
+      <div class="o lapo" style="--x:0px;--y:175px;--z:215px">${ARMS}</div>` +
+      CAST.map((c, i) => `<div class="o person away" id="jp${i}" style="--x:${c.x}px;--y:${c.y}px;--z:${c.z}px;--d:${-i * .3}s"><div class="in"><span class="em">${c.e}</span><span class="tg">${c.who}</span></div></div>`).join("");
+    world.querySelector(".win").innerHTML = "<b>☀️</b>";
+    const baby = world.querySelector("#jBaby"); baby.classList.add("happy");
+  }
+  function sceneFamily() {
+    const cands = favs.slice(0, 12); if (!cands.length) return finish();
+    familyWorld();
+    say("The whole family has gathered 🏡<small>Everyone has an opinion about your shortlist…</small>"); actions('<div class="jvotes" id="jVotes"></div>');
+    CAST.forEach((c, i) => later(() => { const p = world.querySelector("#jp" + i); p.classList.remove("away"); note(PENTA[i % PENTA.length], 0, .5, .05, "triangle"); }, 500 + i * 380));
+    const votes = new Map(), total = new Map(); cands.forEach(n => { votes.set(n, 0); total.set(n, 0); });
+    const feats = cands.map(feat); const box = Q("#jVotes");
+    let t = 500 + CAST.length * 380 + 500;
+    CAST.forEach((c, i) => {
+      later(() => {
+        world.querySelectorAll(".person").forEach(p => p.classList.remove("talk")); world.querySelector("#jp" + i).classList.add("talk");
+        const row = document.createElement("div"); row.className = "jv"; row.innerHTML = '<span class="e">' + c.e + '</span><div><small>' + c.who + ' is thinking…</small><span class="jthink" style="--c:#9b7bff"><i style="background:#9b7bff"></i><i style="background:#9b7bff"></i><i style="background:#9b7bff"></i></span></div>';
+        box.appendChild(row); box.scrollTop = box.scrollHeight;
+        later(() => {
+          const sc = feats.map(f => ({ f, s: c.f(f) + (window.nmVibeBonus ? window.nmVibeBonus(f.n) * 1.2 : 0) })).sort((a, b) => b.s - a.s);
+          sc.forEach(x => total.set(x.f.n, total.get(x.f.n) + x.s)); const w = sc[0].f;
+          votes.set(w.n, votes.get(w.n) + 1);
+          row.innerHTML = '<span class="e">' + c.e + '</span><div><b>' + esc(cap(w.n)) + '</b><small>' + c.why(w) + '</small></div>'; box.scrollTop = box.scrollHeight;
+          tr("jny_vote", { who: c.who, pick: w.n }); note(PENTA[(i + 2) % PENTA.length], 0, .6, .05, "triangle");
+        }, 750);
+      }, t); t += 1500;
+    });
+    later(() => {
+      world.querySelectorAll(".person").forEach(p => p.classList.remove("talk"));
+      const rank = cands.slice().sort((a, b) => votes.get(b) - votes.get(a) || total.get(b) - total.get(a));
+      let pick = rank[0];
+      const w = votes.get(pick), unanimous = cands.length === 1 || w === CAST.length;
+      say(unanimous ? "Everyone agrees — " + esc(cap(pick)) + "! 💞" : "The family leans towards " + esc(cap(pick)) + " 💞<small>" + w + " of " + CAST.length + " votes — or tap another name to choose it yourself.</small>");
+      const draw = () => actions('<div class="jcands">' + rank.slice(0, 6).map(n => '<button type="button" data-pick="' + esc(n) + '" class="' + (n === pick ? "on" : "") + '">' + esc(cap(n)) + (votes.get(n) ? '<small>' + votes.get(n) + '🗳</small>' : "") + "</button>").join("") + '</div><button type="button" class="jb" data-j="name">Name the baby 🎉</button>');
+      draw(); J._pick = pick; J._draw = draw; J._setPick = n => { pick = n; J._pick = n; draw(); };
+      chime();
+    }, t + 400);
+  }
+  function sceneCeremony(name) {
+    setScene(3, true); tr("jny_name", { name, vibe: window.nmVibe ? window.nmVibe.type : "none" });
+    const fam = ($("lastName").value || "").trim(); const full = cap(name) + (fam ? " " + cap(fam) : "");
+    let me = ""; try { me = lookMeaning(name) || ""; } catch (_) {}
+    favs = [name, ...favs.filter(x => x !== name)]; try { saveFavs(); } catch (_) {}
+    world.style.setProperty("--dz", "40px");
+    const flags = Array.from({ length: 11 }, (_, i) => `<div class="flag" style="left:${-370 + i * 74}px;top:${-300 + Math.abs(5 - i) * 6}px;--c:${["#ff7aa2", "#ffc44d", "#5fd8a4", "#6cb2f2", "#9b7bff"][i % 5]};--d:${-i * .2}s"></div>`).join("");
+    world.querySelector("#jBaby").style.setProperty("--z", "220px");
+    world.querySelectorAll(".person").forEach(p => { p.classList.remove("talk"); });
+    const o = document.createElement("div"); o.className = "o"; o.setAttribute("style", "--x:0px;--y:0px;--z:-340px"); o.innerHTML = flags; world.appendChild(o);
+    const card = document.createElement("div"); card.className = "o"; card.setAttribute("style", "--x:0px;--y:-190px;--z:140px");
+    card.innerHTML = '<div class="ncard" id="jCard"><div class="fr">✨</div><div class="bk"><small>Welcome to the world</small><b>' + [...cap(name)].map((ch, i) => '<span style="--i:' + i + '">' + esc(ch) + "</span>").join("") + "</b>" + (fam ? "<em>" + esc(full) + "</em>" : "") + "</div></div>";
+    world.appendChild(card);
+    [-300, 310, -230].forEach((x, i) => { const b = document.createElement("div"); b.className = "o bal"; b.setAttribute("style", `--x:${x}px;--y:${-120 - i * 40}px;--z:${-40 + i * 60}px;--d:${-i}s`); b.innerHTML = '<div class="in" style="font-size:' + (80 + i * 8) + 'px">' + ["🎈", "🎈", "🎀"][i] + "</div>"; world.appendChild(b); });
+    say("And the name is…<small>drumroll 🥁</small>"); actions("");
+    [0, .35, .7].forEach(t => note(110, t, .3, .1, "triangle"));
+    later(() => { Q("#jCard").classList.add("flip"); cheer(); confetti(160); world.querySelectorAll(".person").forEach(p => p.classList.add("talk")); }, 1500);
+    later(() => { say("Welcome, " + esc(full) + "! 💖" + (me ? "<small>“" + esc(me) + "”</small>" : "")); actions('<button type="button" class="jb" data-j="video">🎥 Make &amp; share video</button><button type="button" class="jb ghost" data-j="hear">🔊 Hear it</button><button type="button" class="jb ghost" data-j="finish">🏠 Back to homepage</button>'); J._name = full; J._n = name; }, 3600);
+  }
+  function confetti(n) {
+    const c = cv, g = c.getContext("2d"); c.width = innerWidth; c.height = innerHeight;
+    const cols = ["#ff7aa2", "#9b7bff", "#6cb2f2", "#ffd36b", "#5fd8a4", "#fff"];
+    const ps = Array.from({ length: n }, () => ({ x: innerWidth / 2, y: innerHeight * .38, vx: (Math.random() - .5) * 16, vy: -Math.random() * 15 - 3, r: Math.random() * 6 + 3, c: cols[Math.random() * cols.length | 0], a: Math.random() * 6, va: (Math.random() - .5) * .4, life: 140 + Math.random() * 60 }));
+    let k = 0;
+    (function tick() { g.clearRect(0, 0, c.width, c.height); ps.forEach(p => { p.x += p.vx; p.y += p.vy; p.vy += .35; p.vx *= .99; p.a += p.va; p.life--; g.save(); g.translate(p.x, p.y); g.rotate(p.a); g.fillStyle = p.c; g.globalAlpha = Math.max(0, p.life / 60); g.fillRect(-p.r, -p.r / 2, p.r * 2, p.r); g.restore(); }); if (++k < 220 && running) requestAnimationFrame(tick); else g.clearRect(0, 0, c.width, c.height); })();
+  }
+
+  /* ---- video maker: draws the ceremony on a canvas and records it (no servers) ---- */
+  const VW = 540, VH = 960;
+  function babyImg(happy) {
+    return new Promise(res => {
+      const doc = new DOMParser().parseFromString(BABY.replace("<svg ", '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="250" '), "image/svg+xml");
+      (happy ? [".eyes-closed", ".m-calm", ".zz"] : [".eyes-happy", ".m-happy", ".zz"]).forEach(s => doc.querySelectorAll(s).forEach(n => n.remove()));
+      const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null);
+      im.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(new XMLSerializer().serializeToString(doc.documentElement));
+    });
+  }
+  const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+  const mix = (a, b, k) => { const x = hex(a), y = hex(b); return "rgb(" + x.map((v, i) => Math.round(v + (y[i] - v) * k)).join(",") + ")"; };
+  const ease = k => k < 0 ? 0 : k > 1 ? 1 : 1 - Math.pow(1 - k, 3);
+  async function createRenderer(name, fam, me) {
+    const [sleep, happy] = await Promise.all([babyImg(false), babyImg(true)]);
+    const full = cap(name) + (fam ? " " + cap(fam) : "");
+    const conf = []; let burst1 = false, burst2 = false;
+    const burst = (n, x, y) => { const cols = ["#ff7aa2", "#9b7bff", "#6cb2f2", "#ffd36b", "#5fd8a4", "#ffffff"]; for (let i = 0; i < n; i++) conf.push({ x, y, vx: (Math.random() - .5) * 16, vy: -Math.random() * 16 - 3, r: Math.random() * 7 + 3, c: cols[i % cols.length], a: Math.random() * 6, va: (Math.random() - .5) * .4, l: 130 + Math.random() * 60 }); };
+    const font = (px, w) => (w || 600) + " " + px + 'px "Fredoka", system-ui, -apple-system, "Segoe UI", sans-serif';
+    function txt(g, s, x, y, px, col, al, w) { g.save(); g.globalAlpha = Math.max(0, Math.min(1, al)); g.font = font(px, w); g.fillStyle = col; g.textAlign = "center"; g.textBaseline = "middle"; g.shadowColor = "rgba(40,10,70,.35)"; g.shadowBlur = 10; g.fillText(s, x, y); g.restore(); }
+    function draw(g, t) {
+      const k = ease((t - 4.3) / 1.2);
+      const gr = g.createLinearGradient(0, 0, 0, VH); gr.addColorStop(0, mix("#2b1c52", "#ffb6c9", k)); gr.addColorStop(.55, mix("#6a3f8e", "#ffd9a8", k)); gr.addColorStop(1, mix("#ff9f8e", "#fff1c9", k));
+      g.fillStyle = gr; g.fillRect(0, 0, VW, VH);
+      if (k < 1) { g.save(); g.globalAlpha = 1 - k; for (let i = 0; i < 40; i++) { const x = (i * 97) % VW, y = (i * 61) % 520, tw = .4 + .6 * Math.abs(Math.sin(t * 2 + i)); g.fillStyle = "rgba(255,255,255," + tw + ")"; g.beginPath(); g.arc(x, y, 1.5 + (i % 3), 0, 7); g.fill(); } g.font = "90px serif"; g.textAlign = "center"; g.fillText("🌙", 430, 150); g.restore(); }
+      if (k > 0) { g.save(); g.globalAlpha = k; for (let i = 0; i < 9; i++) { g.fillStyle = ["#ff7aa2", "#ffc44d", "#5fd8a4", "#6cb2f2", "#9b7bff"][i % 5]; const x = i * 68 - 10, sw = Math.sin(t * 2 + i) * 4; g.beginPath(); g.moveTo(x, 0); g.lineTo(x + 60, 0); g.lineTo(x + 30 + sw, 52); g.fill(); } g.restore(); }
+      /* balloons */
+      if (k > 0) { g.save(); g.globalAlpha = k; [[70, 0], [470, 1.3], [120, 2.1], [420, .6]].forEach(([x, d], i) => { const y = 1000 - (((t - 4.4) * 90 + d * 200) % 1100); g.font = (70 + i * 6) + "px serif"; g.textAlign = "center"; g.fillText(i % 3 === 2 ? "🎀" : "🎈", x + Math.sin(t + d) * 14, y); }); g.restore(); }
+      /* baby on lap */
+      const bob = Math.sin(t * 2) * 6, wig = t > 2.2 ? Math.sin(t * 9) * (t < 4 ? .07 : .035) : 0, sc = 1 + (t > 4.6 ? .06 * Math.sin(t * 4) : 0);
+      g.save(); g.fillStyle = "#ffe29a"; g.beginPath(); g.ellipse(270, 930, 330, 190, 0, Math.PI, 0); g.fill(); g.strokeStyle = "#f1c46a"; g.lineWidth = 5; g.stroke(); g.restore();
+      const im = t > 2.2 ? happy : sleep;
+      if (im) { g.save(); g.translate(270, 865 + bob); g.rotate(wig); g.scale(1.3 * sc, 1.3 * sc); g.drawImage(im, -100, -250, 200, 250); g.restore(); }
+      g.save(); g.fillStyle = "#9b7bff"; g.beginPath(); g.moveTo(-10, 960); g.bezierCurveTo(10, 840, 120, 800, 215, 830); g.bezierCurveTo(190, 870, 150, 900, 140, 960); g.fill(); g.beginPath(); g.moveTo(550, 960); g.bezierCurveTo(530, 840, 420, 800, 325, 830); g.bezierCurveTo(350, 870, 390, 900, 400, 960); g.fill(); g.restore();
+      /* story text */
+      txt(g, "A little miracle has arrived 🌙", 270, 190, 34, "#fff", Math.min((t - .3) * 2, 1) * (1 - ease((t - 2.1) / .4)));
+      txt(g, "Congrats, new Mom & Dad! 🎉", 270, 190, 32, "#fff", ease((t - 2.2) / .5) * (1 - ease((t - 3.4) / .4)));
+      txt(g, "We found the perfect name…", 270, 190, 34, "#fff", ease((t - 3.4) / .4) * (1 - ease((t - 4.5) / .3)));
+      if (t > 3.5 && t < 4.6) txt(g, "🥁", 270, 290, 90, "#fff", 1);
+      /* flip card */
+      if (t > 4.6) {
+        const p = Math.min(1, (t - 4.6) / .9), fx = Math.abs(Math.cos(p * Math.PI));
+        g.save(); g.translate(270, 280); g.scale(Math.max(.02, fx), 1);
+        const w = 440, h = 230; g.fillStyle = p < .5 ? "#a98bff" : "#fffdf8"; g.strokeStyle = "#ffc44d"; g.lineWidth = p < .5 ? 0 : 8; g.beginPath(); g.roundRect(-w / 2, -h / 2, w, h, 28); g.fill(); if (p >= .5) g.stroke();
+        g.restore();
+        if (p < .5) txt(g, "✨", 270, 280, 80, "#fff", 1);
+        else {
+          txt(g, "WELCOME TO THE WORLD", 270, 206, 18, "#b08bd0", ease((p - .5) * 3), 500);
+          let px = 84; g.font = font(px, 700); const nm = cap(name); while (g.measureText(nm).width > 390 && px > 28) { px -= 4; g.font = font(px, 700); }
+          const wd = g.measureText(nm).width; let x = 270 - wd / 2;
+          [...nm].forEach((ch, i) => { const cw = g.measureText(ch).width, d = Math.min(1, Math.max(0, (t - 5.5 - i * .12) / .5)), e = ease(d); g.save(); g.globalAlpha = e; g.font = font(px, 700); g.fillStyle = "#6a3f8e"; g.textBaseline = "middle"; g.fillText(ch, x, 280 - (1 - e) * 90 + (d > 0 && d < 1 ? 0 : 0)); g.restore(); x += cw; });
+          if (fam) txt(g, cap(fam), 270, 352, 28, "#8a7a9a", ease((t - 6) / .5), 500);
+        }
+      }
+      if (t > 4.6 && !burst1) { burst1 = true; burst(150, 270, 280); }
+      if (t > 6.6 && !burst2) { burst2 = true; burst(90, 270, 280); }
+      txt(g, "Welcome, " + full + "! 💖", 270, 450, full.length > 14 ? 34 : 42, "#fff", ease((t - 6.2) / .5));
+      if (me) txt(g, "“" + me.split(/[,;(]/)[0].trim() + "”", 270, 500, 24, "#fff", ease((t - 6.8) / .5) * .95, 400);
+      txt(g, "Made with Name Mixer · babynames.website", 270, 925, 20, "#fff", ease((t - 6.5) / .6) * .9, 500);
+      conf.forEach(p => { p.x += p.vx; p.y += p.vy; p.vy += .4; p.vx *= .99; p.a += p.va; p.l--; g.save(); g.translate(p.x, p.y); g.rotate(p.a); g.fillStyle = p.c; g.globalAlpha = Math.max(0, p.l / 50); g.fillRect(-p.r, -p.r / 2, p.r * 2, p.r); g.restore(); });
+      for (let i = conf.length - 1; i >= 0; i--) if (conf[i].l <= 0) conf.splice(i, 1);
+    }
+    return { draw, full };
+  }
+  async function makeVideo(name, fam, me, onProg) {
+    const r = await createRenderer(name, fam, me);
+    const c = document.createElement("canvas"); c.width = VW; c.height = VH;
+    c.style.cssText = "position:fixed;right:0;bottom:0;width:2px;height:2px;opacity:.02;pointer-events:none;z-index:-1";
+    document.body.appendChild(c); const g = c.getContext("2d");
+    if (!g.roundRect) g.roundRect = function (x, y, w, h, r) { r = Math.min(r, w / 2, h / 2); this.moveTo(x + r, y); this.arcTo(x + w, y, x + w, y + h, r); this.arcTo(x + w, y + h, x, y + h, r); this.arcTo(x, y + h, x, y, r); this.arcTo(x, y, x + w, y, r); this.closePath(); };
+    if (!c.captureStream) { c.remove(); throw new Error("no captureStream"); }
+    const a = audio(); let stream = c.captureStream(30), dest = null;
+    if (a && a.createMediaStreamDestination) { dest = a.createMediaStreamDestination(); dest.stream.getAudioTracks().forEach(t => stream.addTrack(t)); }
+    const types = ["video/mp4;codecs=avc1.42E01E,mp4a.40.2", "video/mp4", "video/webm;codecs=vp9,opus", "video/webm;codecs=vp8,opus", "video/webm"];
+    const mime = window.MediaRecorder ? (types.find(t => MediaRecorder.isTypeSupported(t)) || "") : null;
+    if (mime === null) throw new Error("no recorder");
+    const rec = new MediaRecorder(stream, mime ? { mimeType: mime, videoBitsPerSecond: 2500000 } : {}), chunks = [];
+    rec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+    const fin = new Promise(res => { rec.onstop = () => res(new Blob(chunks, { type: rec.mimeType || mime || "video/webm" })); });
+    if (dest) {
+      const t0 = a.currentTime + .15, vn = (f, t, d, v, ty) => { const o = a.createOscillator(), gn = a.createGain(), tt = t0 + t; o.type = ty || "triangle"; o.frequency.value = f; gn.gain.setValueAtTime(0, tt); gn.gain.linearRampToValueAtTime(v, tt + .02); gn.gain.exponentialRampToValueAtTime(.0001, tt + d); o.connect(gn); gn.connect(dest); o.start(tt); o.stop(tt + d + .05); };
+      [392, 523.25, 659.25, 587.33, 523.25, 659.25, 783.99].forEach((f, i) => vn(f, i * .55, 1.3, .09));
+      [3.6, 3.9, 4.2].forEach(t => vn(110, t, .3, .2, "sine")); [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach((f, i) => vn(f, 4.6 + i * .1, 1.8, .09)); [783.99, 659.25, 783.99, 1046.5].forEach((f, i) => vn(f, 6.4 + i * .5, 1, .07));
+    }
+    const DUR = 9.2; try { rec.start(250); } catch (e) { c.remove(); throw e; } const st = performance.now();
+    await new Promise(res => { (function tick() { const t = (performance.now() - st) / 1000; draw_(t); if (onProg) onProg(Math.min(1, t / DUR)); if (t < DUR) requestAnimationFrame(tick); else res(); })(); });
+    function draw_(t) { r.draw(g, t); }
+    rec.stop(); const blob = await fin; c.remove();
+    if (!blob || blob.size < 2000) throw new Error("empty video");
+    return blob;
+  }
+  let vidUrl = null;
+  async function runVideo(name) {
+    const fam = ($("lastName").value || "").trim(); let me = ""; try { me = lookMeaning(name) || ""; } catch (_) {}
+    const P = document.createElement("div"); P.className = "jvid"; P.innerHTML = '<div class="jvc"><h3>🎬 Making your video…</h3><div class="jpb"><b id="jPb"></b></div><p>Keep this screen open for a few seconds.</p></div>'; J.appendChild(P);
+    tr("jny_video_start", { name });
+    try {
+      const blob = await makeVideo(name, fam, me, p => { const b = P.querySelector("#jPb"); if (b) b.style.width = Math.round(p * 100) + "%"; });
+      if (vidUrl) URL.revokeObjectURL(vidUrl); vidUrl = URL.createObjectURL(blob);
+      const ext = /mp4/.test(blob.type) ? "mp4" : "webm", fn = cap(name) + "-welcome." + ext;
+      P.querySelector(".jvc").innerHTML = '<h3>🎉 ' + esc(cap(name) + (fam ? " " + cap(fam) : "")) + '’s welcome video</h3><video id="jVid" src="' + vidUrl + '" autoplay loop muted playsinline controls preload="auto"></video><div class="jvmsg" id="jVMsg"></div><div class="jvb"><button type="button" class="jb" data-v="share">📤 Share video</button><button type="button" class="jb ghost" data-v="save">⬇ Save</button><button type="button" class="jb ghost" data-v="explore">🏠 Back to homepage</button><button type="button" class="jb ghost" data-v="close">Close</button></div>';
+      const vEl = P.querySelector("#jVid");
+      if (vEl) {
+        vEl.addEventListener("error", () => { const m = P.querySelector("#jVMsg"); if (m) m.textContent = "Your browser can’t preview this video here — tap Save to download it, then play it from your files."; });
+        const pl = vEl.play(); if (pl && pl.catch) pl.catch(() => {});
+      }
+      P._blob = blob; P._fn = fn; tr("jny_video_ready", { name, type: blob.type, kb: Math.round(blob.size / 1024) });
+    } catch (err) {
+      P.querySelector(".jvc").innerHTML = '<h3>Sorry 😔</h3><p>Your browser couldn’t record the video here (' + esc(String(err && err.message || err).slice(0, 50)) + '). Try the latest Chrome, Edge or Safari, or use Share on the name card instead.</p><div class="jvb"><button type="button" class="jb ghost" data-v="close">Close</button></div>'; tr("jny_video_fail", { msg: String(err && err.message || err).slice(0, 60) });
+    }
+    P.addEventListener("click", e => {
+      const v = e.target.closest("[data-v]"); if (!v) return; const k = v.dataset.v;
+      if (k === "close") { P.remove(); return; }
+      if (k === "explore") { P.remove(); finish("done"); return; }
+      if (k === "save" && P._blob) { const a = document.createElement("a"); a.href = vidUrl; a.download = P._fn; document.body.appendChild(a); a.click(); a.remove(); tr("jny_video_save", { name }); return; }
+      if (k === "share" && P._blob) {
+        const file = new File([P._blob], P._fn, { type: P._blob.type }), data = { files: [file], title: "Meet " + cap(name), text: "Meet " + cap(name) + (fam ? " " + cap(fam) : "") + "! 💖 Made with babynames.website" };
+        tr("jny_video_share", { name });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) navigator.share(data).catch(() => {});
+        else { const a = document.createElement("a"); a.href = vidUrl; a.download = P._fn; document.body.appendChild(a); a.click(); a.remove(); toast("Video saved — attach it in WhatsApp, Instagram or anywhere 💌"); }
+      }
+    });
+  }
+  function scenePick() {
+    setScene(1, false); clearInterval(lullT);
+    say("Whose name should star in your video? 🎬<small>Type a name, or pick from your shortlist.</small>");
+    const chips = favs.slice(0, 8).map(n => '<button type="button" data-pickv="' + esc(n) + '">' + esc(cap(n)) + "</button>").join("");
+    actions('<div class="jcands" style="width:100%">' + chips + '</div><input class="jin" id="jVidName" type="text" placeholder="e.g. Aarav" autocomplete="off" autocapitalize="words" maxlength="20"><button type="button" class="jb" data-j="vgo">Make my video 🎬</button>');
+    later(() => { const i = Q("#jVidName"); if (i && !favs.length) try { i.focus(); } catch (_) {} }, 300);
+  }
+  function direct(name) {
+    const n = clean(name); if (n.length < 2) { toast("Type a name first 🙂"); return; }
+    familyWorld(); world.querySelectorAll(".person").forEach(p => p.classList.remove("away")); sceneCeremony(n);
+  }
+
+  /* ---- open / close ---- */
+  function openJ(cb, sc, arg) {
+    done = cb; running = true; J.hidden = false; document.documentElement.style.overflow = "hidden"; fit(); cancelAnimationFrame(raf); loop(); audio();
+    tr("jny_open", { scene: sc });
+    if (sc === "video") { direct(arg); runVideo(clean(arg)); } else if (sc === "family") sceneFamily(); else sceneArrive();
+  }
+  function sceneArriveSilent() { world.innerHTML = room(true) + '<div class="o baby" id="jBaby" style="--x:0px;--y:90px;--z:180px"></div>'; world.querySelector("#jBaby").innerHTML = BABY; }
+  function finish(how) {
+    if (!running) return; running = false; clearAll(); cancelAnimationFrame(raf); J.hidden = true; document.documentElement.style.overflow = "";
+    try { speechSynthesis.cancel(); } catch (_) {}
+    tr(how === "skip" ? "jny_skip" : "jny_done", { scene }); const cb = done; done = null; if (cb) cb(how);
+  }
+  J.addEventListener("click", e => {
+    const t = e.target, b = t.closest("[data-j]"), pk = t.closest("[data-pick]");
+    if (t.closest("#jSkip")) return finish("skip");
+    if (t.closest("#jMute")) { mute = !mute; Q("#jMute").textContent = mute ? "🔇" : "🔊"; try { sessionStorage.setItem("nm_jmute", mute ? "1" : "0"); } catch (_) {} if (mute) clearInterval(lullT); else if (scene < 2) lullaby(); return; }
+    const pv = t.closest("[data-pickv]"); if (pv) { const i = Q("#jVidName"); if (i) i.value = pv.dataset.pickv; return direct(pv.dataset.pickv); }
+    if (pk) { J._setPick && J._setPick(pk.dataset.pick); tr("jny_pick_override", { name: pk.dataset.pick }); return; }
+    if (!b) return; const k = b.dataset.j;
+    if (k === "hold") return sceneLap();
+    if (k === "names") return finish("names");
+    if (k === "explore") return finish("explore");
+    if (k === "pickname") return scenePick();
+    if (k === "vgo") return direct((Q("#jVidName") || {}).value || "");
+    if (k === "video") return runVideo(J._n);
+    if (k === "name") return sceneCeremony(J._pick);
+    if (k === "hear") { try { speak(J._n); } catch (_) {} return; }
+    if (k === "share") {
+      const text = "Meet " + J._name + "! 💖 We named our little one with Name Mixer — babynames.website";
+      if (navigator.share) navigator.share({ title: "Meet " + J._name, text, url: "https://babynames.website/" }).catch(() => {});
+      else if (navigator.clipboard) navigator.clipboard.writeText(text + " https://babynames.website/").then(() => toast("Copied — paste it anywhere 💌")).catch(() => {});
+      tr("jny_share", { name: J._n }); return;
+    }
+    if (k === "finish") return finish("done");
+  });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && running) finish("skip"); });
+  window.addEventListener("resize", fit);
+  window.jny = { intro: cb => openJ(cb, "intro"), ceremony: cb => openJ(cb, "family"), video: (n, cb) => openJ(cb, "video", n) };
+})();
+
+(function () {
+  const wiz = document.getElementById("wiz"); if (!wiz) return;
+  const q = sel => wiz.querySelector(sel), qa = sel => [...wiz.querySelectorAll(sel)];
+  const tr = (ev, p) => { try { window.nmTrack && window.nmTrack(ev, p); } catch (_) {} };
+  const dad = q(".w-dad"), mom = q(".w-mom"), fam = q(".w-fam"), peek = q("#wPeek");
+  let step = 1, gender = "", lens = new Set(), wShown = 24, peekTimer = null;
+  const valid = () => clean(dad.value).length >= 2 && clean(mom.value).length >= 2;
+
+  function apply() {
+    $("nameA").value = dad.value.trim(); $("nameB").value = mom.value.trim(); $("lastName").value = fam.value.trim();
+    document.querySelectorAll("#genderSeg button").forEach(x => x.classList.toggle("active", x.dataset.g === gender));
+    if (document.body.classList.contains("explore")) setMode("blend");
+  }
+  function names(filter) {
+    apply();
+    const ctx = readCtx();
+    if (ctx.a.length < 2 || ctx.b.length < 2) return { ctx, list: [] };
+    let list = gen(ctx.a, ctx.b, "a", "b").map(r => decorate(r, ctx, ctx.a, ctx.b)).filter(r => passes(r, ctx) && !dismissed.has(r.name));
+    if (filter && filter.size) list = list.filter(r => filter.has(r.name.length));
+    const vb = n => (window.nmVibeBonus ? window.nmVibeBonus(n) : 0);
+    list.sort((x, y) => (y.score + vb(y.name)) - (x.score + vb(x.name)));
+    return { ctx, list };
+  }
+
+  /* ---- confetti + floating baby things ---- */
+  ["🍼", "🧸", "⭐", "🎈", "👶", "🌙", "🎀", "🦄"].forEach((e, i) => {
+    const el = document.createElement("span"); el.className = "wfl"; el.textContent = e;
+    el.style.left = (6 + (i * 13) % 88) + "%"; el.style.top = (8 + (i * 29) % 80) + "%"; el.style.animationDelay = (-i * 1.1) + "s"; el.style.fontSize = (1.3 + (i % 3) * .45) + "rem";
+    wiz.insertBefore(el, wiz.firstChild);
+  });
+  function confetti() {
+    const cols = ["#ff7aa2", "#9b7bff", "#6cb2f2", "#ffd36b", "#5fd8a4"], made = [];
+    for (let i = 0; i < 30; i++) {
+      const c = document.createElement("i"); c.className = "wconf"; c.style.left = Math.random() * 100 + "%"; c.style.background = cols[i % cols.length];
+      c.style.animationDuration = (3 + Math.random() * 3) + "s"; c.style.animationDelay = (Math.random() * 1.6) + "s"; wiz.appendChild(c); made.push(c);
+    }
+    setTimeout(() => made.forEach(c => c.remove()), 8000);
+  }
+
+  /* ---- steps ---- */
+  function show(n) {
+    step = n;
+    qa(".wstep").forEach(x => x.classList.toggle("on", +x.dataset.s === n));
+    qa(".wdot").forEach((d, i) => d.classList.toggle("on", i < n));
+    q("#wCard").classList.toggle("res", n === 4);
+    if (n === 2) setTimeout(() => { try { (dad.value ? mom : dad).focus({ preventScroll: true }); } catch (_) {} }, 120);
+    tr("wiz_step", { step: n });
+  }
+  function paintPeek() {
+    if (!valid()) { peek.innerHTML = '<span class="wph">Names will appear here ✨</span>'; q('[data-s="2"] [data-next]').disabled = true; return; }
+    const { list } = names(null), ok = list.length > 0;
+    q('[data-s="2"] [data-next]').disabled = !ok;
+    peek.innerHTML = ok ? list.slice(0, 6).map((r, i) => `<span class="wpk" style="--i:${i}">${partsHTML(r)}</span>`).join("")
+      : '<span class="wph">Hmm, those names don’t blend well — try another spelling.</span>';
+  }
+  function paintLens() {
+    const { list } = names(null), cnt = {};
+    list.forEach(r => { cnt[r.name.length] = (cnt[r.name.length] || 0) + 1; });
+    const keys = Object.keys(cnt).map(Number).filter(n => n >= 3 && n <= 12).sort((a, b) => a - b);
+    lens = new Set([...lens].filter(n => cnt[n]));
+    q("#wLens").innerHTML = '<button type="button" class="wl ' + (lens.size ? "" : "on") + '" data-len="any"><b>Any</b><small>' + list.length + ' names</small></button>' +
+      keys.map(n => '<button type="button" class="wl ' + (lens.has(n) ? "on" : "") + '" data-len="' + n + '"><b>' + n + '</b><small>' + cnt[n] + ' names</small></button>').join("");
+  }
+  function paintResults() {
+    const { ctx, list } = names(lens), box = q("#wList"), top = box.scrollTop;
+    const lab = lens.size ? " with " + [...lens].sort((a, b) => a - b).join(" or ") + " letters" : "";
+    q("#wResHead").textContent = "✨ " + list.length + " names" + lab;
+    box.innerHTML = list.length ? '<div class="grid">' + list.slice(0, wShown).map(r => chip(r, ctx)).join("") + "</div>" +
+      (list.length > wShown ? '<div class="row" style="justify-content:center;margin-top:10px"><button type="button" id="wMore">Show more (' + (list.length - wShown) + ' left)</button></div>' : "")
+      : '<div class="empty">No names match. Go back and pick different letters.</div>';
+    box.scrollTop = top;
+    const n = favs.length; q("#wHome").textContent = n ? "Go to my shortlist (" + n + ") →" : "Skip to home page →";
+  }
+  window.wizRefresh = () => { if (!wiz.hidden && step === 4) paintResults(); };
+
+  function open(auto, from) {
+    wiz.hidden = false; document.documentElement.style.overflow = "hidden";
+    if (from === 2) { if (!dad.value) dad.value = $("nameA").value; if (!mom.value) mom.value = $("nameB").value; if (!fam.value) fam.value = $("lastName").value; show(2); paintPeek(); }
+    else { show(1); confetti(); }
+    tr("wiz_open", { auto: auto ? 1 : 0 });
+  }
+  function close(how) {
+    if (wiz.hidden) return;
+    wiz.hidden = true; document.documentElement.style.overflow = "";
+    tr(how === "done" ? "wiz_done" : "wiz_skip", { at_step: step, shortlisted: favs.length });
+    const land = how => {
+      if (how === "explore") { open(false, 2); return; }
+      const target = favs.length ? "fav" : "all";
+      const b = document.querySelector('#viewSeg button[data-v="' + target + '"]'); if (b) b.click();
+      window.scrollTo(0, 0);
+    };
+    if (how === "done") {
+      apply(); update();
+      land();
+    }
+    window.scrollTo(0, 0);
+  }
+
+  wiz.addEventListener("click", e => {
+    const t = e.target;
+    if (t.closest("[data-skip]")) return close("skip");
+    if (t.closest("[data-example]")) { dad.value = "Rohan"; mom.value = "Anika"; paintPeek(); return; }
+    const g = t.closest("#wGender button"); if (g) { gender = gender === g.dataset.g ? "" : g.dataset.g; qa("#wGender button").forEach(x => x.classList.toggle("on", x.dataset.g === gender)); if (valid()) paintPeek(); return; }
+    const L = t.closest("[data-len]"); if (L) { const v = L.dataset.len; if (v === "any") lens.clear(); else { const n = +v; lens.has(n) ? lens.delete(n) : lens.add(n); } paintLens(); return; }
+    if (t.closest("#wMore")) { wShown += 36; paintResults(); return; }
+    if (t.closest("#wHome")) return close("done");
+    if (t.closest("[data-back]")) { show(step - 1); if (step === 3) paintLens(); return; }
+    if (t.closest("[data-next]")) {
+      if (step === 1) return show(2);
+      if (step === 2) { if (!valid()) return; tr("wiz_blend", { gender: gender || "either", has_family: fam.value.trim() ? 1 : 0 }); show(3); paintLens(); return; }
+      if (step === 3) { wShown = 24; show(4); paintResults(); tr("wiz_results", { lengths: lens.size ? [...lens].sort((a, b) => a - b).join(",") : "any", count: names(lens).list.length }); return; }
+    }
+  });
+  [dad, mom, fam].forEach(el => {
+    el.addEventListener("input", () => { clearTimeout(peekTimer); peekTimer = setTimeout(paintPeek, 180); });
+    el.addEventListener("keydown", e => { if (e.key === "Enter" && valid()) { e.preventDefault(); q('[data-s="2"] [data-next]').click(); } });
+  });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !wiz.hidden) close("skip"); });
+
+  /* re-draw the pop-up list whenever the page state changes (star, dismiss, change preview) */
+  const _render = render; render = function () { _render(); if (window.wizRefresh) window.wizRefresh(); };
+  const jo = document.getElementById("jnyOpen"); if (jo) jo.onclick = () => { if (!window.jny) return; window.jny.intro(how => { if (how === "names") open(false, 2); }); };
+  const wo = document.getElementById("wizOpen"); if (wo) wo.onclick = () => open(false, 2);
+
+  let seen = null; try { seen = sessionStorage.getItem("nm_wiz_seen"); } catch (_) {}
+  window.wizOpen = open;
+  if (!seen) { try { sessionStorage.setItem("nm_wiz_seen", "1"); } catch (_) {} if (window.jny) window.jny.intro(how => { if (how === "names") open(true, 2); }); else open(true, 1); }
+})();
+
+$("nameA").value = "Rohan"; $("nameB").value = "Anika";
+render();
+</script>
+</body>
+</html>

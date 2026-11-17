@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Website Ideas To-Do</title>
+<style>
+  :root{--bg:#f6f7fb;--card:#fff;--text:#1f2430;--muted:#6b7280;--accent:#4f46e5;--line:#e5e7eb;--done:#9ca3af;--pick:#eef2ff}
+  @media (prefers-color-scheme:dark){:root{--bg:#12141a;--card:#1b1e27;--text:#e8eaf0;--muted:#9aa1b2;--accent:#818cf8;--line:#2a2e3a;--done:#6b7280;--pick:#232846}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.4}
+  .wrap{max-width:720px;margin:0 auto;padding:16px}
+  h1{font-size:1.4rem;margin:8px 0 4px}
+  .sub{color:var(--muted);font-size:.9rem;margin-bottom:12px}
+  .bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin:8px 0 4px}
+  .bar>div{height:100%;width:0;background:var(--accent);transition:width .25s}
+  .row{display:flex;gap:8px;margin:12px 0}
+  input[type=text]{flex:1;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--text);font-size:1rem;min-width:0}
+  button{padding:10px 14px;border:0;border-radius:10px;background:var(--accent);color:#fff;font-size:.95rem;cursor:pointer}
+  button:disabled{opacity:.45;cursor:default}
+  button.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+  .filters{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+  .filters button{padding:6px 12px;font-size:.85rem}
+  .filters button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .item{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+  .item.picked{background:var(--pick);border-color:var(--accent)}
+  .line{display:flex;align-items:flex-start;gap:10px}
+  .line input[type=checkbox]{margin-top:4px;width:18px;height:18px;accent-color:var(--accent);flex:none}
+  .line label{flex:1;cursor:pointer;word-break:break-word}
+  .num{color:var(--muted);font-size:.8rem;margin-right:4px}
+  .done>.line label{color:var(--done);text-decoration:line-through}
+  .subs{margin:6px 0 0 28px;padding-left:10px;border-left:2px solid var(--line)}
+  .subs .line{margin-top:4px;font-size:.92rem;align-items:center}
+  .ib{background:none;color:var(--muted);padding:0 6px;font-size:1.05rem;line-height:1.4}
+  .subs .ib{font-size:.9rem}
+  .pen{display:inline-block;transform:scaleX(-1)}
+  a.ib{text-decoration:none;display:inline-block}
+  .icard .sbtn{display:inline-block;margin:8px 0 0 8px;padding:6px 12px;font-size:.85rem;border:1px solid var(--line);border-radius:10px;color:var(--muted);text-decoration:none}
+  .chip{font-size:.7rem;color:var(--accent);border:1px solid var(--accent);border-radius:99px;padding:0 6px;margin-left:6px;white-space:nowrap}
+  .empty{text-align:center;color:var(--muted);padding:24px}
+  .grip{flex:none;width:26px;margin:-2px 0 0 -4px;text-align:center;color:var(--muted);cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none;font-size:1.1rem;line-height:1.4;letter-spacing:-2px}
+  .item.dragging{opacity:.9;box-shadow:0 8px 24px rgba(0,0,0,.25);border-color:var(--accent);position:relative;z-index:5}
+  body.dragging-now{cursor:grabbing;user-select:none;-webkit-user-select:none}
+  .toolrow{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:-4px 0 10px}
+  .hint{color:var(--muted);font-size:.8rem}
+  .toolrow button{padding:6px 12px;font-size:.85rem}
+  .mergebar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:var(--pick);border:1px solid var(--accent);border-radius:12px;padding:10px 12px;margin-bottom:10px}
+  .mergebar span{flex:1;font-size:.9rem;min-width:140px}
+  .mergebar button{padding:6px 12px;font-size:.85rem}
+  .edit{padding:6px 8px;font-size:1rem}
+  .edit-btns{display:flex;gap:6px;flex:none}
+  .edit-btns button{padding:6px 10px;font-size:.8rem}
+  .titem{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+  .titem .tname{flex:1;word-break:break-word}
+  .titem .tname small{display:block;color:var(--muted)}
+  .titem button{padding:6px 10px;font-size:.8rem}
+  .ideas-intro{color:var(--muted);font-size:.85rem;margin:0 0 10px}
+  .icard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px}
+  .icard .it{font-weight:600;margin-bottom:4px}
+  .icard p{margin:2px 0;font-size:.88rem;color:var(--muted)}
+  .icard p b{color:var(--text);font-weight:600}
+  .icard button{margin-top:8px;padding:6px 12px;font-size:.85rem}
+  .tools{margin:4px 0 8px;text-align:right}
+  .tools button{padding:6px 12px;font-size:.85rem}
+  footer{display:flex;justify-content:space-between;margin-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Website Ideas To-Do</h1>
+  <div class="sub" id="count"></div>
+  <div class="bar"><div id="fill"></div></div>
+
+  <div class="row" id="addrow">
+    <input type="text" id="new" placeholder="Add a new idea…">
+    <button id="add">Add</button>
+  </div>
+
+  <div class="filters" id="filters">
+    <button data-f="all" class="ghost on">All</button>
+    <button data-f="open" class="ghost">To do</button>
+    <button data-f="working" class="ghost" id="tabWorking">Working (0)</button>
+    <button data-f="done" class="ghost">Done</button>
+    <button data-f="ideas" class="ghost">Ideas</button>
+    <button data-f="later" class="ghost" id="tabLater">Later (0)</button>
+    <button data-f="trash" class="ghost" id="tabTrash">Deleted (0)</button>
+  </div>
+
+  <div class="toolrow" id="toolrow">
+    <div class="hint">Drag ⋮⋮ to reorder (All tab)</div>
+    <button class="ghost" id="mergeBtn">Merge ideas</button>
+  </div>
+  <div class="mergebar" id="mergebar" style="display:none">
+    <span id="mergeInfo"></span>
+    <button id="mergeGo" disabled>Merge</button>
+    <button class="ghost" id="mergeCancel">Cancel</button>
+  </div>
+
+  <div id="list"></div>
+
+  <footer>
+    <button class="ghost" id="reset">Reset to original</button>
+    <button class="ghost" id="clear">Clear completed</button>
+  </footer>
+</div>
+
+<script>
+const DEFAULT = [
+  {t:"Rental agreements", s:["Templates","Etsy"]},
+  {t:"Workplace spoken English", s:["Mails to use"]},
+  {t:"Documents helper", s:["All document regs","Passports, Aadhaar etc."]},
+  {t:"Daily job posting videos", s:["Interview questions from job postings"]},
+  {t:"Watchlist across all OTTs"},
+  {t:"Six thinking hats"},
+  {t:"First timers guide / buying guide", s:["Home, car etc."]},
+  {t:"Substitute teachers & others"},
+  {t:"Token cost calculator for LLMs"},
+  {t:"How things works"},
+  {t:"Job website for all skills"},
+  {t:"Resume manager", s:["Resume update by a prompt"]},
+  {t:"Signature scripts & videos for YouTube creators"},
+  {t:"Incident response notebooks"},
+  {t:"Digital safety games for all"},
+  {t:"Conversation guide for hard topics", s:["Icebreakers"]},
+  {t:"Digital wardrobe & outfit planner"},
+  {t:"Will & legal document locker"},
+  {t:"Document status checker", s:["All at 1 place"]},
+  {t:"Deals/offers poster/site"},
+  {t:"Matrimonial bio-data creator"},
+  {t:"Hobby ideas"},
+  {t:"Spreadsheet templates"},
+  {t:"Rangoli & decoration ideas"},
+  {t:"Festival wishes & custom greetings"},
+  {t:"Phone teleprompter"},
+  {t:"NDA generator for sharing ideas"},
+  {t:"Local language version of popular tools"},
+  {t:"Posts/Sale of old electronics items"},
+  {t:"Rental house swap"},
+  {t:"Personal tutor site"}
+];
+/* Ideas added after the first release: appended once to already-saved lists */
+const SEEDS = ["Personal tutor site"];
+const SKEY = "website-ideas-todo-v3-seeded";
+const KEY = "website-ideas-todo-v3";
+const TKEY = "website-ideas-todo-v3-deleted";
+const LKEY = "website-ideas-todo-v3-later";
+const $ = id => document.getElementById(id);
+
+/* Ideas where the paid value comes from a human, a physical presence, or legal accountability */
+const AKEY = "website-ideas-todo-v3-ideas-added";
+let ideasAdded = [];
+const IDEAS = [
+  {t:"On-the-ground checker for remote buyers", why:"Someone has to physically visit and inspect a flat, used car or electronics before purchase; an LLM has no body or presence.", pay:"Buyers, NRIs and out-of-town families pay per inspection."},
+  {t:"Paperwork runner for government offices", why:"Standing in the queue, submitting originals and chasing a clerk is physical, in-person work.", pay:"Busy professionals and elderly parents pay per errand (Aadhaar, passport, registrations)."},
+  {t:"Lawyer / CA sign-off on AI-drafted documents", why:"AI can draft the agreement or will, but only a licensed human can sign, stamp and take legal liability.", pay:"Landlords, tenants and families pay a flat fee per review."},
+  {t:"Human witness & notary on video call", why:"Wills, affidavits and attestations need a real, identifiable witness present at signing.", pay:"Individuals pay per signing session."},
+  {t:"Human matchmaker with real background checks", why:"Verifying families, jobs and reputations means phone calls, references and local contacts; an LLM can't vouch for anyone.", pay:"Families pay premium fees or success fees; matrimonial is already a paid market."},
+  {t:"Mock interviews with real hiring managers", why:"Insider, current knowledge of how a specific company actually hires, plus a human who will say no.", pay:"Job seekers pay per session or for a bundle."},
+  {t:"Ask-a-local-resident service", why:"Ground truth about a neighbourhood (water supply, noise, safety, landlords) comes from living there, not from text.", pay:"People moving cities pay per question or call."},
+  {t:"Live physical-skill coach with video feedback", why:"Correcting posture, knife skills, driving or rangoli technique needs an experienced human who has done it.", pay:"Learners pay per session or monthly."},
+  {t:"Peer circles led by people with lived experience", why:"Someone who has been through it (caregiving, job loss, migration) offers trust an AI can't claim.", pay:"Members pay a monthly subscription."},
+  {t:"Human-verified AI output audit", why:"Companies need a named expert to check AI output and be accountable when it is wrong.", pay:"Businesses pay per audit or on retainer.", ev:"Researched: 2026 commentary says human review of AI output is becoming a requirement in high-stakes fields, and regulated industries are reported to pay a premium for human-verified research. Market-size forecasts come from vendor blogs and vary, so rely on the demand signal, not the numbers."},
+  {t:"Proof-of-human marketplace", why:"Certifying that work was truly made or written by a person needs verification by people, and trust from the community.", pay:"Buyers pay a premium; creators pay for certification.", ev:"Researched: Proudly Human, the Authors Guild's Human Authored mark and Credtent already certify human-made work, so demand is real but the space is getting crowded. Experts say self-certification is not enough, so independent checking is the selling point. The $10 billion market figure is a speculative projection."},
+  {t:"Bill / rent negotiator with real leverage", why:"Success comes from relationships, reputation and the ability to walk away, not from a well-written message.", pay:"Customers pay a percentage of the savings."},
+  {t:"Home-visit tech help for senior citizens", why:"Setting up a phone, UPI, video calls or a smart TV in someone's home needs a patient person in the room.", pay:"Children living away and seniors pay per visit or a monthly plan.", start:"Offer a flat visit fee in one neighbourhood through local WhatsApp and resident groups.", ev:"Researched: remote tech support aimed at seniors already exists (for example Techieworks), so the in-person home visit is the gap. Published market-size figures for senior tech services differ hugely between reports, so treat them as a rough direction only."},
+  {t:"Property paperwork check pack", why:"Checking title, encumbrance and registrar records means a human visiting offices and a lawyer taking responsibility for the opinion.", pay:"Home and plot buyers pay a fixed fee per property; the cost is small next to the purchase.", start:"Partner with one local lawyer and sell a fixed-price pack for a single city."},
+  {t:"Income-tax filing with CA review", why:"AI can fill the forms, but a qualified person must sign off and answer department notices on your behalf.", pay:"Salaried people, freelancers and small sellers pay yearly; notice replies cost extra.", start:"Start at filing season with a simple price list and a CA partner."},
+  {t:"Vetted home-services for one apartment complex", why:"Trust comes from vetting real plumbers and electricians, handling complaints, and standing behind the work.", pay:"Residents pay per job, and the platform takes a commission or a monthly fee.", start:"Begin with one society, 5 to 10 vetted workers, and a booking page.", ev:"Researched: one investor argued in 2026 that marketplaces which need real people to be managed are a niche large AI companies are unlikely to build. That is one opinion, not market data."},
+  {t:"Certified refurbished electronics with warranty", why:"Physically testing a device and offering a warranty carries real accountability that a listing page doesn't.", pay:"Buyers pay a premium over plain used listings.", start:"Buy and test a few popular models, give each a checklist report and a 3-month warranty."},
+  {t:"Move-in / move-out condition reports", why:"A neutral person photographing and recording the state of a flat prevents deposit fights and is accepted by both sides.", pay:"Tenants and landlords pay a fixed fee per report.", start:"Make a checklist template, then offer it to brokers and landlords you already know."},
+  {t:"Farm or land visit reports for absentee owners", why:"Someone has to walk the property, check workers and stock, and send honest reports with photos and counts.", pay:"Owners living in cities or abroad pay per visit or monthly.", start:"Cover one district with a standard visit report form."},
+  {t:"Elder-care coordinator for parents living alone", why:"Arranging doctor visits, medicine, home help and emergencies needs a human on the spot and a relationship with the family.", pay:"Children living in other cities or countries pay a monthly retainer.", start:"Serve one city, with a few trusted helpers and a weekly report to the family.", ev:"Researched: established and funded players already sell this to families abroad (Nila Elder Care in London raised a $2.4m seed; Samarth Elder Care in India). One provider publishes that a care manager adds roughly Rs 8,000 to 15,000 a month on top of direct care costs, and medicines and hospital bills are billed separately."},
+  {t:"Compliance checklist with yearly human update", why:"Rules change and vary by trade and state; a named consultant has to stand behind what is current.", pay:"Small businesses (cafes, clinics, shops) pay a yearly subscription.", start:"Pick one trade, have a consultant write the checklist, and renew it every year."},
+  {t:"Resume and LinkedIn review by working recruiters", why:"Real recruiters know what gets shortlisted today and will give blunt feedback tied to actual hiring.", pay:"Job seekers pay per review; premium for a recruiter in the target company.", start:"Recruit a few recruiters and sell a 24-hour review at a fixed price."},
+  {t:"Certified translation of documents", why:"Embassies and offices accept translations only with a certified translator's stamp and signature.", pay:"Visa, study and marriage applicants pay per page.", start:"Work with 2 or 3 certified translators and publish a per-page price."},
+  {t:"Application pre-check for visas and forms", why:"A person who has seen real rejections can spot missing documents and mistakes before submission.", pay:"Applicants pay a fixed fee to avoid delay or rejection.", start:"Choose one country or form type and build a checklist from real cases."},
+  {t:"Verified local-task network for AI agents", why:"AI agents can plan and pay, but they can't be physically present for viewings, inspections, photos or hand-overs.", pay:"Businesses and agent builders pay per task, with the money held in escrow.", start:"Pick one city and one task type such as property viewings, vet 20 people, and take payment through escrow.", ev:"Researched: RentAHuman launched in February 2026 and reported hundreds of thousands of sign-ups against about 11,000 posted tasks, and a London start-up, MeatLayer, is building a similar escrow marketplace. Early reports say workers far outnumber paid tasks, so the opening is trust and one vertical, not a general marketplace."},
+  {t:"Independent human-verified research for regulated fields", why:"Law, finance and biotech teams need a named person who checks facts and sources and answers for them.", pay:"Firms pay per report or on retainer.", start:"Choose one niche, such as regulatory research for a single sector, and sell a fixed-scope verified report.", ev:"Researched: high-stakes and heavily regulated industries are reported to pay a premium for human-verified research, and the global market-research services industry is estimated at about $97 billion in 2026. The source is a business-advice article, so confirm with real buyers."},
+  {t:"Human-made certification for a niche community", why:"Proving that a person really made something needs an independent reviewer who checks the process, not just the result.", pay:"Creators, publishers and course sellers pay for the audit and badge.", start:"Pick one group, such as regional-language authors or course creators, and write a simple checklist and audit process.", ev:"Researched: current certifiers cover books, podcasts and journalism. I did not find one focused on regional-language creators, but my search was limited, so check before building."},
+  {t:"Mobile notary and attestation visits", why:"Notaries, witnesses and attestations need a licensed person who confirms identity and sees the signing.", pay:"Individuals and small firms pay per visit.", start:"Check your local licensing rules, then offer scheduled home and office visits for affidavits and agreements.", ev:"Researched: US online notary platforms charge about $25 to 40 per notarization, and mobile notary forecasts show strong growth, though about 40% of countries have no remote notarization law. The rules are local, so check yours first."},
+  {t:"Property ownership tracker for owners abroad", why:"Checking land records, tax receipts, encroachment and occupancy needs people who can visit the site and the local offices.", pay:"Owners abroad pay a yearly plan; resale and loan checks cost extra.", start:"Offer a yearly record check plus a photo visit for one city.", ev:"Researched: Assetly, Verified.RealEstate and Anarock already sell ownership checks and management to NRIs, so demand exists. You would stand out with one city and clear reporting. One firm frames it as protecting ownership, not collecting rent."},
+  {t:"Expert review pool for AI developers", why:"AI teams need people with real professional or language expertise to judge answers and explain why they are wrong.", pay:"AI companies and start-ups pay per task or per hour.", start:"Recruit 10 verified experts in one field or language and pitch small evaluation projects to start-ups.", ev:"Researched: 2026 articles describe human-in-the-loop reviewers as a growing, better-paid role in healthcare, finance and legal work. Forecast numbers vary by source, so test with a pilot client."},
+  {t:"Weekly AI-output check for small businesses", why:"Someone accountable has to read AI-written replies, posts and quotes before customers do, and fix the mistakes.", pay:"Small businesses pay a monthly fee.", start:"Offer a one-month trial reviewing a single business's AI-written customer messages each week.", ev:"Researched: 2026 commentary says humans carry the liability, not the AI, and that human review is becoming a requirement. I found no hard data on small-business spending, so treat this as unproven."}
+];
+
+let state = [], trash = [], later = [];
+let filter = "all", editing = null, merging = false, sel = new Set();
+
+function readKey(k, fallback){ try{ const r=localStorage.getItem(k); if(r) return JSON.parse(r);}catch(e){} return fallback; }
+function writeKey(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+function save(){ writeKey(KEY, state); }
+function saveTrash(){ writeKey(TKEY, trash); }
+function saveLater(){ writeKey(LKEY, later); }
+function build(){ return DEFAULT.map(d=>({t:d.t,done:false,s:(d.s||[]).map(x=>({t:x,done:false}))})); }
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function isMain(){ return filter==="all" || filter==="open" || filter==="working" || filter==="done"; }
+function srch(t){ return "https://www.google.com/search?q=" + encodeURIComponent(t); }
+/* Each idea has a status: todo, working or done (done is kept in sync for older saved data) */
+function setSt(it, st){ it.st = st; it.done = (st==="done"); }
+function norm(arr){ arr.forEach(it=>{ if(!it.st) it.st = it.done ? "done" : "todo"; it.done = (it.st==="done"); }); }
+
+function parkedList(arr, a1, l1, a2, l2, emptyMsg){
+  if(!arr.length) return `<div class="empty">${emptyMsg}</div>`;
+  return arr.map((it,i)=>`<div class="titem">
+      <div class="tname">${esc(it.t)}${it.s.length?`<small>${it.s.length} sub-item${it.s.length>1?"s":""}</small>`:""}</div>
+      <button class="ghost" data-act="${a1}" data-i="${i}">${l1}</button>
+      <button class="ghost" data-act="${a2}" data-i="${i}">${l2}</button>
+    </div>`).join("");
+}
+
+function render(){
+  const list = $("list");
+  const main = isMain();
+  norm(state); norm(later); norm(trash);
+
+  $("tabWorking").textContent = `Working (${state.filter(x=>x.st==="working").length})`;
+  $("tabLater").textContent = `Later (${later.length})`;
+  $("tabTrash").textContent = `Deleted (${trash.length})`;
+  document.querySelectorAll("#filters button").forEach(b=>b.classList.toggle("on", b.dataset.f===filter));
+  $("addrow").style.display = main ? "" : "none";
+  $("toolrow").style.display = (main && !merging) ? "" : "none";
+  $("mergebar").style.display = (main && merging) ? "" : "none";
+
+  if(main){
+    let html = "";
+    state.forEach((it,i)=>{
+      if(filter==="open" && it.st!=="todo") return;
+      if(filter==="working" && it.st!=="working") return;
+      if(filter==="done" && it.st!=="done") return;
+      const editMain = editing && editing.i===i && editing.j===null;
+      html += `<div class="item ${it.done?"done":""} ${merging&&sel.has(i)?"picked":""}" data-idx="${i}"><div class="line">`;
+      if(merging){
+        html += `<input type="checkbox" id="p${i}" data-sel="${i}" ${sel.has(i)?"checked":""}>
+          <label for="p${i}"><span class="num">${i+1}.</span>${esc(it.t)}</label>`;
+      } else if(editMain){
+        html += `<input type="text" class="edit" value="${esc(it.t)}">
+          <div class="edit-btns"><button data-act="saveedit">Save</button><button class="ghost" data-act="canceledit">Cancel</button></div>`;
+      } else {
+        html += `${filter==="all" ? `<span class="grip" title="Drag to reorder">⋮⋮</span>` : ``}
+          <input type="checkbox" id="m${i}" ${it.done?"checked":""} data-i="${i}" data-ind="${filter==="all"&&it.st==="working"?1:0}">
+          <label for="m${i}"><span class="num">${i+1}.</span>${esc(it.t)}${filter==="all"&&it.st==="working"?`<span class="chip">working</span>`:``}</label>
+          ${filter==="working" ? `<button class="ib" data-act="totodo" data-i="${i}" title="Move back to To do">↩</button>` : ``}
+          <a class="ib" href="${srch(it.t)}" target="_blank" rel="noopener" title="Search the internet">🔍</a>
+          <button class="ib" data-act="edit" data-i="${i}" title="Edit text"><span class="pen">✎</span></button>
+          <button class="ib" data-act="later" data-i="${i}" title="Save for later">🔖</button>
+          <button class="ib" data-act="del" data-i="${i}" title="Delete">×</button>`;
+      }
+      html += `</div>`;
+      if(it.s.length){
+        html += `<div class="subs">` + it.s.map((s,j)=>{
+          const editSub = editing && editing.i===i && editing.j===j;
+          if(editSub) return `<div class="line">
+            <input type="text" class="edit" value="${esc(s.t)}">
+            <div class="edit-btns"><button data-act="saveedit">Save</button><button class="ghost" data-act="canceledit">Cancel</button></div>
+          </div>`;
+          if(merging) return `<div class="line ${s.done?"done":""}"><label>${esc(s.t)}</label></div>`;
+          return `<div class="line ${s.done?"done":""}">
+            <input type="checkbox" id="s${i}_${j}" ${s.done?"checked":""} data-i="${i}" data-j="${j}">
+            <label for="s${i}_${j}">${esc(s.t)}</label>
+            <button class="ib" data-act="sedit" data-i="${i}" data-j="${j}" title="Edit text"><span class="pen">✎</span></button>
+            <button class="ib" data-act="sdel" data-i="${i}" data-j="${j}" title="Delete sub-task">×</button>
+          </div>`;
+        }).join("") + `</div>`;
+      }
+      html += `</div>`;
+    });
+    list.innerHTML = html || `<div class="empty">Nothing here.</div>`;
+  } else if(filter==="ideas"){
+    list.innerHTML = `<p class="ideas-intro">Paid ideas where the value comes from a human, a physical presence or legal accountability. AI can help behind the scenes, but it can't be the product.</p>`
+      + IDEAS.map((x,i)=>{
+        const added = ideasAdded.includes(x.t);
+        return `<div class="icard">
+          <div class="it">${esc(x.t)}</div>
+          <p><b>Why AI can't:</b> ${esc(x.why)}</p>
+          <p><b>Who pays:</b> ${esc(x.pay)}</p>
+          ${x.start ? `<p><b>First step:</b> ${esc(x.start)}</p>` : ``}
+          ${x.ev ? `<p><b>Evidence:</b> ${esc(x.ev)}</p>` : ``}
+          <button ${added?"disabled":""} data-act="addidea" data-i="${i}">${added?"✓ Added to my list":"+ Add to my list"}</button>
+          <a class="sbtn" href="${srch(x.t)}" target="_blank" rel="noopener">🔍 Search the web</a>
+        </div>`;
+      }).join("");
+  } else if(filter==="later"){
+    list.innerHTML = parkedList(later,"back","Move back","ldel","Delete","Nothing saved for later.");
+  } else {
+    list.innerHTML = (trash.length ? `<div class="tools"><button class="ghost" data-act="empty">Empty deleted</button></div>` : ``)
+      + parkedList(trash,"restore","Restore","purge","Delete forever","Nothing deleted.");
+  }
+
+  const done = state.filter(x=>x.done).length;
+  const working = state.filter(x=>x.st==="working").length;
+  $("count").textContent = `${done} of ${state.length} ideas done` + (working ? ` · ${working} working` : ``);
+  $("fill").style.width = (state.length? done/state.length*100:0)+"%";
+
+  if(merging){
+    const n = sel.size;
+    $("mergeInfo").textContent = n<2 ? `Pick 2 or more ideas to merge (${n} selected)` : `${n} selected — the first becomes the main idea, the others become its sub-items`;
+    $("mergeGo").disabled = n<2;
+  }
+  list.querySelectorAll('input[data-ind="1"]').forEach(c=>{ c.indeterminate = true; });
+  const ed = list.querySelector(".edit");
+  if(ed){ ed.focus(); try{ ed.setSelectionRange(ed.value.length, ed.value.length); }catch(e){} }
+}
+
+function saveEdit(){
+  if(!editing) return;
+  const ed = $("list").querySelector(".edit");
+  const v = ed ? ed.value.trim() : "";
+  if(v){
+    if(editing.j===null) state[editing.i].t = v;
+    else state[editing.i].s[editing.j].t = v;
+    save();
+  }
+  editing = null; render();
+}
+
+function doMerge(){
+  const idxs = [...sel].sort((a,b)=>a-b);
+  if(idxs.length<2) return;
+  const sts = idxs.map(k=>state[k].st || "todo");
+  const mst = sts.every(x=>x==="done") ? "done" : sts.every(x=>x==="todo") ? "todo" : "working";
+  const first = state[idxs[0]];
+  const subs = first.s.slice();
+  idxs.slice(1).forEach(k=>{
+    const it = state[k];
+    subs.push({t:it.t, done:it.done});
+    it.s.forEach(x=>subs.push({t:x.t, done:x.done}));
+  });
+  state[idxs[0]] = {t:first.t, st:mst, done:(mst==="done"), s:subs};
+  idxs.slice(1).reverse().forEach(k=>state.splice(k,1));
+  merging = false; sel.clear(); editing = null;
+  save(); render();
+}
+
+/* List clicks: edit, later, delete, restore, etc. */
+$("list").addEventListener("click", e=>{
+  const btn = e.target.closest("[data-act]");
+  if(!btn) return;
+  const act = btn.dataset.act, i = +btn.dataset.i, j = btn.dataset.j;
+  switch(act){
+    case "edit": editing = {i, j:null}; render(); return;
+    case "sedit": editing = {i, j:+j}; render(); return;
+    case "totodo": setSt(state[i], "todo"); save(); break;
+    case "sdel": {
+      if(!confirm("Delete this sub-task?")) return;
+      const it = state[i];
+      it.s.splice(+j, 1);
+      editing = null;
+      if(it.s.length && it.s.every(x=>x.done)) setSt(it, "done");
+      save(); break;
+    }
+    case "saveedit": saveEdit(); return;
+    case "canceledit": editing = null; render(); return;
+    case "later": later.unshift(state.splice(i,1)[0]); editing=null; save(); saveLater(); break;
+    case "del": trash.unshift(state.splice(i,1)[0]); editing=null; save(); saveTrash(); break;
+    case "back": state.push(later.splice(i,1)[0]); save(); saveLater(); break;
+    case "ldel": trash.unshift(later.splice(i,1)[0]); saveLater(); saveTrash(); break;
+    case "restore": state.push(trash.splice(i,1)[0]); save(); saveTrash(); break;
+    case "purge": if(!confirm("Delete this idea forever?")) return; trash.splice(i,1); saveTrash(); break;
+    case "empty": if(!confirm("Permanently delete everything in Deleted?")) return; trash=[]; saveTrash(); break;
+    case "addidea": {
+      const it = IDEAS[i];
+      if(!it || ideasAdded.includes(it.t)) return;
+      state.push({t:it.t, done:false, s:[]});
+      ideasAdded.push(it.t);
+      save(); writeKey(AKEY, ideasAdded); break;
+    }
+    default: return;
+  }
+  render();
+});
+
+$("list").addEventListener("keydown", e=>{
+  if(!e.target.classList.contains("edit")) return;
+  if(e.key==="Enter"){ e.preventDefault(); saveEdit(); }
+  else if(e.key==="Escape"){ editing=null; render(); }
+});
+
+/* Checkbox changes: merge selection and done toggles */
+$("list").addEventListener("change", e=>{
+  const t = e.target;
+  if(t.dataset.sel !== undefined){
+    const k = +t.dataset.sel;
+    if(t.checked) sel.add(k); else sel.delete(k);
+    render(); return;
+  }
+  const i = +t.dataset.i, j = t.dataset.j;
+  if(isNaN(i)) return;
+  const it = state[i];
+  if(j===undefined){
+    if(filter==="all"){
+      /* All tab: tick cycles To do, Working, Done, back to To do */
+      const next = {todo:"working", working:"done", done:"todo"}[it.st] || "working";
+      setSt(it, next);
+      if(next==="done") it.s.forEach(s=>s.done = true);
+      if(next==="todo") it.s.forEach(s=>s.done = false);
+    } else if(filter==="open"){
+      setSt(it, "working");
+    } else if(filter==="working"){
+      setSt(it, "done");
+      it.s.forEach(s=>s.done = true);
+    } else {
+      setSt(it, "working");
+    }
+  } else {
+    it.s[+j].done = t.checked;
+    if(it.s.every(s=>s.done)) setSt(it, "done");
+    else if(it.st==="done" || (it.st==="todo" && it.s.some(s=>s.done))) setSt(it, "working");
+  }
+  save(); render();
+});
+
+/* Drag to reorder (mouse + touch) */
+(function(){
+  const list = $("list");
+  let drag = null, raf = 0, lastY = 0;
+
+  list.addEventListener("pointerdown", e=>{
+    const grip = e.target.closest(".grip");
+    if(!grip) return;
+    const item = grip.closest(".item");
+    e.preventDefault();
+    drag = {item, id:e.pointerId};
+    item.classList.add("dragging");
+    document.body.classList.add("dragging-now");
+    grip.setPointerCapture(e.pointerId);
+    lastY = e.clientY;
+    autoScroll();
+  });
+
+  list.addEventListener("pointermove", e=>{
+    if(!drag || e.pointerId!==drag.id) return;
+    lastY = e.clientY;
+    const items = [...list.querySelectorAll(".item")].filter(x=>x!==drag.item);
+    for(const other of items){
+      const r = other.getBoundingClientRect();
+      if(lastY > r.top && lastY < r.bottom){
+        const before = lastY < r.top + r.height/2;
+        const ref = before ? other : other.nextSibling;
+        if(ref !== drag.item && drag.item.nextSibling !== ref) list.insertBefore(drag.item, ref);
+        break;
+      }
+    }
+  });
+
+  function autoScroll(){
+    if(!drag) return;
+    const edge = 70;
+    if(lastY < edge) window.scrollBy(0,-12);
+    else if(lastY > window.innerHeight-edge) window.scrollBy(0,12);
+    raf = requestAnimationFrame(autoScroll);
+  }
+
+  function finish(e){
+    if(!drag || e.pointerId!==drag.id) return;
+    cancelAnimationFrame(raf);
+    const order = [...list.querySelectorAll(".item")].map(x=>+x.dataset.idx);
+    state = order.map(i=>state[i]);
+    drag = null;
+    document.body.classList.remove("dragging-now");
+    save(); render();
+  }
+  list.addEventListener("pointerup", finish);
+  list.addEventListener("pointercancel", finish);
+})();
+
+/* Add idea */
+function addItem(){
+  const inp = $("new"), v = inp.value.trim();
+  if(!v) return;
+  state.push({t:v,done:false,s:[]}); inp.value=""; save(); render();
+}
+$("add").onclick = addItem;
+$("new").addEventListener("keydown", e=>{ if(e.key==="Enter") addItem(); });
+
+/* Tabs */
+$("filters").addEventListener("click", e=>{
+  const f = e.target.dataset.f;
+  if(!f) return;
+  filter = f; editing = null;
+  if(!isMain()){ merging = false; sel.clear(); }
+  render();
+});
+
+/* Merge mode */
+$("mergeBtn").onclick = ()=>{ merging = true; sel.clear(); editing = null; render(); };
+$("mergeCancel").onclick = ()=>{ merging = false; sel.clear(); render(); };
+$("mergeGo").onclick = doMerge;
+
+/* Footer */
+$("clear").onclick = ()=>{
+  trash = state.filter(x=>x.done).concat(trash);
+  state = state.filter(x=>!x.done);
+  sel.clear(); editing = null;
+  save(); saveTrash(); render();
+};
+$("reset").onclick = ()=>{
+  if(confirm("Reset the list to the original? This also empties Deleted.")){
+    state = build(); trash = []; sel.clear(); editing = null; merging = false;
+    save(); saveTrash(); render();
+  }
+};
+
+state = readKey(KEY, null) || build();
+trash = readKey(TKEY, []);
+later = readKey(LKEY, []);
+ideasAdded = readKey(AKEY, []);
+(function(){
+  const seen = readKey(SKEY, []);
+  let changed = false;
+  SEEDS.forEach(t=>{
+    if(seen.includes(t)) return;
+    const exists = [...state,...later,...trash].some(x=>x.t.trim().toLowerCase()===t.toLowerCase());
+    if(!exists){ state.push({t,done:false,s:[]}); changed = true; }
+    seen.push(t);
+  });
+  writeKey(SKEY, seen);
+  if(changed) save();
+})();
+render();
+</script>
+</body>
+</html>

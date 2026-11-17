@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VL13BDBLMS"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-VL13BDBLMS');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOS Emergency Card Maker – Free Printable Emergency Numbers with QR Codes</title>
+<meta name="description" content="Make your free SOS emergency card in seconds. Police, ambulance and fire numbers for your country as tap-to-call QR codes, plus your doctor, family and insurance details. Print on one A4 page or share.">
+<meta name="keywords" content="SOS card, emergency card, emergency numbers, printable emergency contacts, emergency QR code, police ambulance fire numbers, wallet emergency card, family emergency contact sheet, insurance policy card">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#1f5fd1">
+<link rel="canonical" href="https://sosdocuments.website/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23d62828'/%3E%3Ctext x='32' y='42' font-family='Arial Black,Arial' font-weight='900' font-size='26' text-anchor='middle' fill='white'%3ESOS%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SOS Emergency Card">
+<meta property="og:title" content="Make your SOS emergency card – free, printable, tap-to-call QR">
+<meta property="og:description" content="Emergency numbers for your country, your doctor, family and insurance on one printable card. Scan or tap to call.">
+<meta property="og:url" content="https://sosdocuments.website/">
+<meta property="og:image" content="https://sosdocuments.website/og-image.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Make your SOS emergency card – free & printable">
+<meta name="twitter:description" content="Police, ambulance, fire + your doctor, family and insurance as tap-to-call QR codes. Print or share.">
+<meta name="twitter:image" content="https://sosdocuments.website/og-image.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"SOS Emergency Card","url":"https://sosdocuments.website/","description":"Free tool to build a printable emergency card with police, ambulance and fire numbers for your country as tap-to-call QR codes, plus personal contacts, doctor and insurance details.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"inLanguage":"en","featureList":["Emergency numbers for 15 countries","Tap-to-call QR codes","Doctor, family and insurance slots","Print on one A4 page","Share as an image"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What is an SOS emergency card?","acceptedAnswer":{"@type":"Answer","text":"A one-page card with the emergency numbers you may need — police, ambulance, fire — plus your own contacts, doctor and insurance details, each with a QR code that dials the number when scanned."}},
+{"@type":"Question","name":"Is the SOS card free?","acceptedAnswer":{"@type":"Answer","text":"Yes. It is free, needs no sign-up, and your personal details stay in your own browser."}},
+{"@type":"Question","name":"How do I print it?","acceptedAnswer":{"@type":"Answer","text":"Tap Print. The card is laid out to fit one A4 page and also prints on US Letter, in colour."}},
+{"@type":"Question","name":"Which countries are supported?","acceptedAnswer":{"@type":"Answer","text":"India, USA, UK, Australia, Canada, Germany, France, UAE, Singapore, New Zealand, South Africa, Japan, Netherlands, Spain and Italy."}}]}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+:root {
+  --red:#D72B2B; --red-dk:#A81E1E; --gold:#F5A623;
+  --dark:#1A1A1A; --mid:#2E2E2E; --light:#F7F5F0; --rule:#E2DDD6;
+  --green:#27ae60;
+}
+* { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; color-adjust:exact !important; }
+
+body { font-family:'DM Sans',sans-serif; background:#5a5a5a; min-height:100vh; padding-bottom:100px; }
+
+/* ═════════ FORMAT VARIABLES (unitless numbers = px) ═════════
+   bd badge · tt title · ar area · st strip · lab label · num number · dsc desc
+   ico icon · hn/hl/hd hero number/label/desc · ft footer · qc/qh QR cell/hero   */
+body {
+  --pw:210mm; --ph:297mm; --cols:3; --rad:0;
+  --bd:54; --tt:24; --ar:11; --hp:14px 18px; --st:10;
+  --lab:12; --num:34; --dsc:7.5; --ico:18; --cp:10px 6px 8px;
+  --hn:48; --hl:10; --hd:8; --ft:7; --qc:64; --qh:90;
+}
+
+/* ═════════ TOP TOOLBAR ═════════ */
+#toolbar {
+  position:sticky; top:0; z-index:1000; background:#111; display:flex; flex-direction:column;
+  align-items:center; gap:26px; padding:12px 12px 16px; box-shadow:0 2px 14px rgba(0,0,0,.6);
+}
+.tb-sub { font-family:'DM Sans',sans-serif; font-size:12px; color:rgba(255,255,255,.6); letter-spacing:.5px; margin-top:-22px; }
+.tb-title { font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--gold); letter-spacing:3px; line-height:1; }
+#loc-bar { display:flex; align-items:center; gap:8px; width:100%; max-width:460px; justify-content:center; flex-wrap:nowrap; }
+#country-select {
+  font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700; background:#222; color:#fff;
+  border:2px solid var(--gold); border-radius:7px; padding:6px 6px; outline:none; cursor:pointer;
+  flex:0 0 130px; min-width:0;
+}
+.loc-input-group { display:flex; align-items:center; background:#fff; border:2px solid var(--gold); border-radius:7px; overflow:hidden; flex:1 1 200px; min-width:0; }
+.loc-input-group:focus-within { border-color:var(--red); }
+#pincode-input {
+  font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700; color:#1a1a1a; background:transparent;
+  border:none; outline:none; padding:6px 9px; width:100%; min-width:0; letter-spacing:1.5px;
+}
+#pincode-input::placeholder { letter-spacing:.3px; font-weight:500; }
+#loc-status { font-size:11px; color:rgba(255,255,255,.55); text-align:center; }
+#loc-status:empty { display:none; }
+#loc-status.ok  { color:#5dde8a; }
+#loc-status.err { color:#ff7070; }
+
+/* ═════════ WELCOME MESSAGE (screen only) ═════════ */
+#welcome {
+  position:fixed; inset:0; z-index:3000; display:flex; align-items:center; justify-content:center; padding:20px;
+  background:rgba(15,25,50,.45); animation:wFade .35s ease-out both;
+}
+#welcome .w-card {
+  position:relative; max-width:380px; width:100%; padding:30px 24px 22px; text-align:center;
+  background:rgba(255,255,255,.92); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.7); border-radius:20px; box-shadow:0 12px 40px rgba(0,0,0,.28);
+  color:#1b1b1b; font-size:16px; font-weight:600; line-height:1.55;
+}
+#welcome p { margin:0 0 18px; }
+.w-sub { font-size:17px; font-weight:600; color:#333; margin:0 0 10px !important; }
+.w-big { font-family:'Bebas Neue',sans-serif; font-weight:400 !important; font-size:44px; line-height:1.05; letter-spacing:2px; color:#1f3f8f; }
+#welcome-x { position:absolute; top:10px; right:10px; width:32px; height:32px; border:none; border-radius:50%; background:rgba(0,0,0,.1); color:#222; font-size:20px; line-height:1; cursor:pointer; }
+#welcome-x:hover { background:rgba(0,0,0,.22); }
+#welcome strong { color:#fff; background:#1f5fd1; padding:1px 9px; border-radius:20px; font-weight:700; }
+.w-go { background:#d62828; color:#fff; border:none; border-radius:10px; padding:11px 26px; font:700 15px 'DM Sans',sans-serif; letter-spacing:.5px; cursor:pointer; }
+@keyframes wFade { from{opacity:0} to{opacity:1} }
+
+/* ═════════ HOW-TO BANNER (screen only) ═════════ */
+#howto {
+  position:relative; max-width:980px; margin:14px auto 0; padding:14px 40px 14px 16px;
+  background:#222; border:1px solid #3a3a3a; border-radius:10px; color:#ddd;
+}
+#howto h2 { font-family:'Bebas Neue',sans-serif; font-size:17px; letter-spacing:2px; color:var(--gold); margin-bottom:10px; }
+.ht-steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px; }
+.ht-step { display:flex; gap:9px; font-size:12px; line-height:1.45; color:#bbb; }
+.ht-step b {
+  flex:none; width:22px; height:22px; border-radius:50%; background:var(--red); color:#fff;
+  display:flex; align-items:center; justify-content:center; font-size:12px;
+}
+.ht-step strong { color:#fff; display:block; font-size:12.5px; }
+.ht-step.final b { background:var(--green); }
+#howto-x { position:absolute; top:8px; right:10px; background:none; border:none; color:#999; font-size:18px; cursor:pointer; line-height:1; }
+#howto-x:hover { color:#fff; }
+
+/* ═════════ ON-SCREEN SIZE (phones & laptops): big, readable cards. Print keeps the compact A4 set. ═════════ */
+@media screen {
+  body:not(.measuring) {
+    --bd:54; --tt:24; --ar:12; --st:9.5; --lab:12; --num:36; --dsc:9.5; --ico:22; --cp:12px 4px 10px;
+    --hn:48; --hl:11; --hd:9; --ft:9; --qc:84; --qh:84; --hp:14px 14px;
+  }
+  body:not(.measuring) .page { width:var(--spw,100%); }
+  body:not(.measuring) .card-label { text-align:center; letter-spacing:.04em; }
+  body:not(.measuring) .grid { grid-template-columns:repeat(var(--scols,var(--cols)),minmax(0,1fr)); }
+  body:not(.measuring) .hero-text { flex:0 1 auto; max-width:60%; }
+  body:not(.measuring) .card-desc { max-width:100%; padding:0 2px; }
+}
+
+/* ═════════ PAGE ═════════ */
+.page-wrap { display:flex; justify-content:center; align-items:flex-start; padding:16px; }
+.page {
+  background:var(--light); box-shadow:0 8px 40px rgba(0,0,0,.4);
+  display:flex; flex-direction:column; overflow:hidden;
+  width:var(--pw); min-height:0; border-radius:var(--rad);
+}
+@media screen { .page { zoom:var(--sz,1); } }
+body.measuring .add-card-cell { display:none !important; }
+
+/* header — SOS centred, steps underneath */
+.header {
+  background:#D72B2B !important; color:#fff; display:flex; flex-direction:column; align-items:center; text-align:center;
+  gap:calc(var(--bd)*.1px); padding:calc(var(--bd)*.3px) calc(var(--bd)*.4px) calc(var(--bd)*.32px);
+  border-bottom:calc(var(--bd)*.08px) solid #A81E1E !important; flex-shrink:0;
+}
+.sos-row { display:flex; align-items:center; justify-content:center; gap:calc(var(--bd)*.35px); }
+.sos-siren { font-size:calc(var(--bd)*.6px); opacity:.85; }
+.header h1 { font-family:'Bebas Neue',sans-serif; font-weight:400; letter-spacing:calc(var(--tt)*.12px); line-height:1.1; color:#fff; font-size:calc(var(--tt)*1px); }
+.how-steps {
+  display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:6px 10px; margin-top:calc(var(--bd)*.12px);
+  background:rgba(0,0,0,.28) !important; border-radius:40px; padding:6px 16px; font-size:calc(var(--st)*1.25px);
+}
+.hs-lbl { font-family:'Bebas Neue',sans-serif; color:#F5A623 !important; letter-spacing:.14em; font-size:1.1em; }
+.hs { display:inline-flex; align-items:center; gap:6px; font-weight:700; color:#fff !important; }
+.hs b { background:#F5A623 !important; color:#1a1a1a !important; border-radius:50%; width:1.55em; height:1.55em; display:inline-flex; align-items:center; justify-content:center; font-size:.9em; }
+.hs-arrow { color:rgba(255,255,255,.6) !important; font-weight:700; }
+.sos-badge {
+  font-family:'Bebas Neue',sans-serif; line-height:1; color:#fff; background:#A81E1E !important;
+  font-size:calc(var(--bd)*1px); letter-spacing:calc(var(--bd)*.04px);
+  padding:calc(var(--bd)*.04px) calc(var(--bd)*.17px);
+  border:calc(var(--bd)*.03px) solid rgba(255,255,255,.35); border-radius:calc(var(--bd)*.07px); flex-shrink:0;
+}
+.h-area { display:flex; justify-content:center; align-items:baseline; flex-wrap:wrap; font-weight:700; color:rgba(255,255,255,.95) !important; font-size:calc(var(--ar)*1px); margin-top:calc(var(--ar)*.25px); }
+#h-pin:not(:empty)::before { content:'|'; margin:0 .6em; opacity:.6; }
+@media screen {
+  [contenteditable="true"]:hover { outline:1px dashed rgba(255,255,255,.55); outline-offset:2px; cursor:text; }
+  [contenteditable="true"]:focus { outline:1px solid #fff; outline-offset:2px; }
+}
+
+/* strip with how-to-use steps */
+.strip {
+  background:#1A1A1A !important; color:#F5A623 !important; font-family:'Bebas Neue',sans-serif;
+  letter-spacing:calc(var(--st)*.22px); text-align:center; flex-shrink:0;
+  font-size:calc(var(--st)*1px); padding:calc(var(--st)*.35px) calc(var(--st)*.8px); line-height:1.25;
+}
+.strip em { font-style:normal; color:#fff !important; }
+
+.page-content { display:flex; flex-direction:column; flex:1; min-width:0; }
+
+/* grid */
+.grid { display:grid; gap:1px; background:var(--rule); flex:1; grid-template-columns:repeat(var(--cols),1fr); }
+
+/* hero (national emergency) */
+.hero-card {
+  grid-column:1/-1; background:#1A1A1A !important; display:flex; align-items:center; justify-content:center; text-align:center; position:relative;
+  gap:calc(var(--hn)*.3px); padding:calc(var(--hn)*.2px) calc(var(--hn)*.35px);
+  border-top:calc(var(--hn)*.05px) solid #D72B2B !important; cursor:grab;
+}
+.hero-qr-wrap {
+  background:#fff !important; flex-shrink:0; line-height:0;
+  border:calc(var(--hn)*.04px) solid #F5A623 !important; border-radius:calc(var(--hn)*.1px);
+  padding:max(1px,calc(var(--hn)*.07px));
+}
+.hero-text { flex:none; color:#fff; min-width:0; }
+.hero-label { font-family:'Bebas Neue',sans-serif; color:#F5A623 !important; letter-spacing:calc(var(--hl)*.18px); line-height:1; font-size:calc(var(--hl)*1px); margin-bottom:calc(var(--hl)*.15px); }
+.hero-number { font-family:'Bebas Neue',sans-serif; color:#F5A623 !important; line-height:1; font-size:calc(var(--hn)*1px); letter-spacing:calc(var(--hn)*.12px); }
+.hero-desc { color:rgba(255,255,255,.55) !important; line-height:1.35; margin-top:calc(var(--hd)*.25px); font-size:calc(var(--hd)*1px); }
+
+/* regular card */
+.card {
+  background:var(--light); display:flex; flex-direction:column; align-items:center; text-align:center;
+  position:relative; padding:var(--cp); cursor:grab;
+}
+.call { color:inherit; text-decoration:none; cursor:pointer; -webkit-tap-highlight-color:rgba(215,43,43,.25); display:block; }
+.card .call, .hero-text .call { display:block; }
+.card-head { display:flex; flex-direction:column; align-items:center; }
+.card-icon { font-size:calc(var(--ico)*1px); line-height:1.1; margin-bottom:calc(var(--ico)*.1px); }
+.card-label { font-family:'Bebas Neue',sans-serif; color:var(--mid); line-height:1.1; font-size:calc(var(--lab)*1px); letter-spacing:calc(var(--lab)*.1px); }
+.card-number { font-family:'Bebas Neue',sans-serif; color:#D72B2B !important; line-height:1; font-size:calc(var(--num)*1px); letter-spacing:calc(var(--num)*.05px); margin:calc(var(--num)*.06px) 0 calc(var(--num)*.1px); }
+.card-number.long { font-size:calc(var(--num)*.64px); letter-spacing:0; }
+.card-desc { color:#888; line-height:1.35; font-size:calc(var(--dsc)*1px); max-width:calc(var(--dsc)*15px); margin-bottom:calc(var(--dsc)*.6px); }
+.qr-wrap {
+  background:#fff !important; border:max(.5px,calc(var(--qc)*.02px)) solid var(--rule); line-height:0;
+  border-radius:calc(var(--qc)*.06px); padding:max(1px,calc(var(--qc)*.04px)); display:inline-block;
+}
+.qr-wrap canvas, .qr-wrap img, .hero-qr-wrap canvas, .hero-qr-wrap img { display:block; }
+.qr-wrap canvas, .qr-wrap img { width:calc(var(--qc)*1px) !important; height:calc(var(--qc)*1px) !important; }
+.hero-qr-wrap canvas, .hero-qr-wrap img { width:calc(var(--qh)*1px) !important; height:calc(var(--qh)*1px) !important; }
+
+.card.priority { background:#fff6f6 !important; }
+.card.priority::before {
+  content:''; position:absolute; top:0; left:0; right:0; background:#D72B2B !important;
+  height:max(1.5px,calc(var(--num)*.09px));
+}
+
+/* footer */
+.footer {
+  background:#1A1A1A !important; color:rgba(255,255,255,.55) !important; text-align:center; flex-shrink:0;
+  line-height:1.5; font-size:calc(var(--ft)*1px); padding:calc(var(--ft)*.7px) calc(var(--ft)*1.5px);
+}
+.disclaimer { font-size:1.1em; opacity:.75; margin-top:.35em; line-height:1.35; font-style:normal; }
+.footer strong { color:rgba(255,255,255,.8) !important; }
+
+/* ═════════ CARD ACTIONS — bare pen + cross ═════════ */
+.card-actions {
+  position:absolute; top:3px; right:4px; display:flex; gap:7px; z-index:5;
+  opacity:0; transition:opacity .15s; zoom:var(--izoom,1);
+}
+.card:hover .card-actions, .hero-card:hover .card-actions, .card-actions:focus-within { opacity:1; }
+@media (hover:none) { .card-actions { opacity:.65; } }
+.ca-btn {
+  background:none; border:none; padding:3px; margin:-3px; cursor:pointer; color:#8a8a8a; line-height:0;
+}
+.ca-btn svg { width:12px; height:12px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.ca-btn:hover { color:#111; }
+.ca-btn.ca-del:hover { color:#D72B2B; }
+.hero-card .ca-btn { color:#aaa; }
+.hero-card .ca-btn:hover { color:#fff; }
+.hero-card .ca-btn.ca-del:hover { color:#ff7070; }
+
+/* drag */
+.drag-ghost { opacity:.35; outline:2px dashed var(--gold); outline-offset:-2px; }
+.drag-chosen { cursor:grabbing; }
+
+/* add tile — same footprint as a card, content stays readable at any zoom */
+.add-card-cell {
+  background:#f0f0ec; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; cursor:pointer; border:2px dashed #bbb; transition:.2s; overflow:hidden;
+  padding:calc(var(--cp)); min-height:calc((var(--qc) + var(--lab) + var(--num) + var(--ico))*1px + 16px);
+}
+.add-card-cell:hover { background:#e8f5e9; border-color:var(--green); }
+.add-card-cell > * { zoom:var(--izoom,1); }
+.ac-plus { width:26px; height:26px; border:2px solid #aaa; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#888; margin-bottom:4px; }
+.ac-plus svg { width:12px; height:12px; stroke:currentColor; fill:none; stroke-width:2.4; stroke-linecap:round; }
+.add-card-cell:hover .ac-plus { border-color:var(--green); color:var(--green); }
+.ac-title { font-size:12px; font-weight:700; color:#666; letter-spacing:.3px; }
+.ac-ex { font-size:10px; color:#999; line-height:1.5; margin-top:2px; max-width:150px; }
+
+/* ═════════ BOTTOM PRINT BAR ═════════ */
+#print-bar {
+  position:fixed; bottom:0; left:0; right:0; z-index:1000; background:#161616; border-top:3px solid var(--red);
+  display:flex; align-items:center; justify-content:center; gap:14px; padding:10px 14px; box-shadow:0 -4px 20px rgba(0,0,0,.5);
+}
+.pb-label {
+  font-family:'Bebas Neue',sans-serif; font-size:14px; color:var(--gold); letter-spacing:2px;
+  display:flex; align-items:center; flex-shrink:0;
+}
+.pb-print-btn {
+  background:var(--red); color:#fff; border:none; cursor:pointer; border-radius:10px; min-width:360px;
+  font-family:'Bebas Neue',sans-serif; font-size:26px; letter-spacing:3px; padding:0 40px; min-height:58px;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+}
+.pb-share-btn {
+  background:transparent; color:var(--gold); border:2.5px solid var(--gold); cursor:pointer; border-radius:10px; min-height:58px;
+  font-family:'Bebas Neue',sans-serif; font-size:26px; letter-spacing:3px; padding:0 28px;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+}
+.pb-share-btn:hover { background:rgba(245,166,35,.15); }
+.pb-share-btn svg { width:24px; height:24px; stroke:currentColor; fill:none; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+.pb-print-btn:hover { background:var(--red-dk); }
+.pb-print-btn svg { width:26px; height:26px; stroke:currentColor; fill:none; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+
+/* ═════════ ADD / EDIT MODAL ═════════ */
+#modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:3000; align-items:center; justify-content:center; padding:10px; }
+#modal-overlay.open { display:flex; }
+#modal-box { background:#fff; border-radius:14px; width:580px; max-width:100%; max-height:94vh; overflow-y:auto; box-shadow:0 18px 60px rgba(0,0,0,.45); }
+.modal-header { background:var(--dark); border-radius:14px 14px 0 0; padding:16px 24px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:2; }
+.modal-header h3 { font-family:'Bebas Neue',sans-serif; font-size:24px; color:var(--gold); letter-spacing:2px; font-weight:400; }
+.modal-close { background:rgba(255,255,255,.1); border:none; color:#fff; border-radius:6px; width:32px; height:32px; font-size:16px; cursor:pointer; }
+.modal-close:hover { background:rgba(255,255,255,.22); }
+.modal-body { padding:20px 24px 26px; display:flex; flex-direction:column; gap:18px; }
+.ex-group { margin-bottom:12px; }
+.ex-group:last-child { margin-bottom:0; }
+.ex-title { font-size:11px; font-weight:700; color:#888; text-transform:uppercase; letter-spacing:.6px; margin-bottom:7px; }
+.ex-pills { display:flex; flex-wrap:wrap; gap:7px; }
+.ex-pill {
+  background:#f6f6f4; border:1.5px solid #e4e4e0; border-radius:22px; padding:7px 13px;
+  font-size:13px; font-weight:600; color:#333; cursor:pointer; transition:.12s;
+  display:flex; align-items:center; gap:6px; font-family:'DM Sans',sans-serif;
+}
+.ex-pill:hover { background:#fff3e0; border-color:var(--gold); }
+.ex-pill .ex-num { color:var(--red); font-family:'Bebas Neue',sans-serif; font-size:17px; letter-spacing:1px; }
+.modal-divider { display:flex; align-items:center; gap:10px; color:#bbb; font-size:12px; font-weight:700; }
+.modal-divider::before, .modal-divider::after { content:''; flex:1; height:1px; background:#eee; }
+.mform { display:flex; flex-direction:column; gap:14px; }
+.mf-row { display:flex; gap:12px; align-items:flex-end; }
+.mf { display:flex; flex-direction:column; gap:6px; flex:1; }
+.mf label { font-size:11px; font-weight:700; color:#777; text-transform:uppercase; letter-spacing:.5px; }
+.mf input, .mf textarea {
+  font-family:'DM Sans',sans-serif; font-size:16px; border:2px solid #e6e6e6; border-radius:10px;
+  padding:11px 14px; outline:none; transition:.15s; color:#1a1a1a; background:#fafafa; width:100%;
+}
+.mf input:focus, .mf textarea:focus { border-color:var(--gold); background:#fff; }
+.mf-icon { width:68px !important; text-align:center; font-size:24px !important; padding:8px !important; }
+.mf-num input { font-family:'Bebas Neue',sans-serif; font-size:32px; color:var(--red); letter-spacing:4px; text-align:center; padding:8px 14px; }
+.mf textarea { resize:none; height:70px; font-size:14px; color:#555; }
+.toggle-btns { display:flex; border-radius:10px; overflow:hidden; border:2px solid #e6e6e6; }
+.toggle-btn { flex:1; border:none; padding:11px 6px; font-size:13px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; background:#fafafa; color:#999; transition:.12s; }
+.toggle-btn.active { background:var(--red); color:#fff; }
+.toggle-btn:not(.active):hover { background:#f0f0f0; }
+.mf-save { background:var(--red); color:#fff; border:none; border-radius:10px; font-family:'DM Sans',sans-serif; font-weight:700; font-size:17px; padding:15px; cursor:pointer; width:100%; }
+.mf-save:hover { background:var(--red-dk); }
+
+/* toast */
+#toast {
+  position:fixed; bottom:78px; left:50%; transform:translateX(-50%) translateY(40px); opacity:0;
+  background:#1a1a1a; color:#fff; font-size:13px; font-weight:700; padding:10px 20px; border-radius:30px;
+  box-shadow:0 4px 18px rgba(0,0,0,.4); transition:transform .3s, opacity .3s; z-index:4000;
+  pointer-events:none; white-space:nowrap; display:flex; align-items:center; gap:14px;
+}
+#toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+#toast.has-act { pointer-events:auto; }
+#toast button { background:none; border:none; color:var(--gold); font-weight:700; font-size:13px; cursor:pointer; text-decoration:underline; font-family:'DM Sans',sans-serif; }
+.spin { display:inline-block; animation:spin .7s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+#icon-sprite { position:absolute; width:0; height:0; overflow:hidden; }
+
+@media (max-width:640px) {
+  .pb-label { display:none; }
+  .pb-print-btn { width:auto; flex:1; min-width:0; }
+  .pb-share-btn { padding:0 18px; font-size:22px; min-height:56px; }
+  .pb-print-btn { padding:0 16px; min-height:56px; }
+  #howto { margin:10px 10px 0; }
+}
+
+/* ═════════ PRINT ═════════ */
+@media print {
+  #toolbar, #welcome, #howto, #print-bar, #modal-overlay, #toast, .card-actions, .add-card-cell { display:none !important; }
+  body { background:#fff !important; padding:0 !important; }
+  .page-wrap { padding:0 !important; }
+  .page {
+    box-shadow:none !important; zoom:var(--fit,1);
+    width:calc(var(--pw) / var(--fit,1)); min-height:0 !important; height:auto !important;
+  }
+  .grid { flex:none !important; align-content:start; }
+  html, body { height:auto !important; }
+  [contenteditable] { outline:none !important; }
+}
+
+/* ═════════ SOS HEADER — flat light yellow hero banner ═════════ */
+.header {
+  background:#fff1a8 !important; color:#6b5000;
+  margin:calc(var(--bd)*.22px) calc(var(--bd)*.22px) 0; border-radius:calc(var(--bd)*.34px);
+  border:calc(var(--bd)*.02px) solid #f0d85c !important; text-align:center;
+  padding:calc(var(--bd)*.46px) calc(var(--bd)*.4px) calc(var(--bd)*.44px);
+}
+.header h1 { color:#5c4300; letter-spacing:.5px; }
+.sos-siren { opacity:1; }
+.sos-badge { background:#d62828 !important; color:#fff !important; border:calc(var(--bd)*.05px) solid #fff !important; box-shadow:0 0 0 calc(var(--bd)*.07px) rgba(214,40,40,.3); text-shadow:none; }
+.h-area { color:#5c4300 !important; background:#ffe36e; border-radius:999px; padding:calc(var(--bd)*.1px) calc(var(--bd)*.35px); display:inline-block; margin-top:calc(var(--bd)*.18px); }
+.page-content { margin-top:calc(var(--bd)*.22px); }
+/* top input bar — flat blue */
+#toolbar { background:#1f5fd1 !important; }
+.tb-title { color:#fff !important; }
+.tb-sub, #loc-status { color:rgba(255,255,255,.85) !important; }
+#country-select { background:#174aa8 !important; border-color:#fff !important; }
+.loc-input-group { border-color:#fff !important; }
+.loc-input-group:focus-within { border-color:#ffe36e !important; }
+
+/* ═════════ MY PEOPLE & DETAILS ═════════ */
+.card.own { border-top:calc(var(--bd)*.06px) solid #1f5fd1; }
+.card.own .card-number { color:#1f5fd1 !important; }
+.qr-tag { font-weight:700; text-transform:none; letter-spacing:0; color:#1f5fd1; background:#e6eeff; border-radius:999px; padding:1px 8px; margin-left:4px; }
+.plain-tag { font-weight:500; text-transform:none; letter-spacing:0; color:#999; margin-left:4px; }
+#m-extra .mf { margin-bottom:10px; }
+#m-extra input { width:100%; }
+.card-note-big { font-weight:700; color:#1f5fd1; font-size:calc(var(--num)*.62px); line-height:1.25; word-break:break-word; padding:calc(var(--bd)*.1px) 0; }
+.slot-empty { background:#f4f7ff; border:2px dashed #9db8ee !important; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; overflow:hidden; padding:calc(var(--cp)); min-height:calc((var(--qc) + var(--lab) + var(--num) + var(--ico))*1px + 16px); }
+.slot-empty:hover { background:#e6eeff; }
+.slot-empty > * { zoom:var(--izoom,1); }
+.slot-empty .se-lab { font-size:13px; font-weight:800; color:#1f5fd1; margin-top:4px; }
+.slot-empty .se-hint { font-size:10.5px; color:#7a8aa8; margin-top:2px; line-height:1.4; max-width:150px; }
+.slot-empty .se-add { font-size:11px; font-weight:700; color:#1f5fd1; margin-top:6px; border:1.5px solid #1f5fd1; border-radius:999px; padding:2px 10px; }
+body.measuring .slot-empty { display:none !important; }
+@media print { .slot-empty { display:none !important; } }
+
+/* ═════════ MERGED HERO BANNER ═════════ */
+.header { position:relative; overflow:hidden; padding-bottom:calc(var(--bd)*.62px); }
+.header::before { content:''; position:absolute; width:calc(var(--bd)*2.2px); height:calc(var(--bd)*2.2px); border-radius:50%; background:#ffe36e; left:calc(var(--bd)*-1.1px); top:calc(var(--bd)*-1.2px); pointer-events:none; }
+.header::after { content:''; position:absolute; left:0; right:0; bottom:0; height:calc(var(--bd)*.2px);
+  background:repeating-linear-gradient(-45deg,#1f5fd1 0 calc(var(--bd)*.2px),#fff1a8 calc(var(--bd)*.2px) calc(var(--bd)*.4px)); pointer-events:none; }
+.header > * { position:relative; z-index:1; }
+.sos-badge { transform:rotate(-3deg); }
+#hero-tools { background:#1f5fd1; border-radius:14px; padding:12px 12px 10px; margin:calc(var(--bd)*.3px) auto calc(var(--bd)*.1px); width:100%; max-width:480px; display:flex; flex-direction:column; align-items:center; gap:10px; box-shadow:0 4px 0 #14439a; }
+.ht-kicker { font-family:'DM Sans',sans-serif; font-size:12.5px; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:#fff; }
+#hero-tools #loc-status { color:rgba(255,255,255,.9) !important; margin-top:-4px; }
+@media screen { .sos-badge { animation:sosPulse 2.2s ease-out infinite; } }
+@media (prefers-reduced-motion:reduce) { .sos-badge { animation:none !important; } }
+@keyframes sosPulse { 0%{box-shadow:0 0 0 0 rgba(214,40,40,.5)} 70%,100%{box-shadow:0 0 0 18px rgba(214,40,40,0)} }
+body.measuring #hero-tools { display:none !important; }
+@media print { #hero-tools { display:none !important; } .header { padding-bottom:calc(var(--bd)*.5px); } }
+
+/* ═════════ HERO v2 — extra character ═════════ */
+.hb-c { position:absolute; border-radius:50%; pointer-events:none; z-index:0 !important; }
+.hb-c1 { width:calc(var(--bd)*1.5px); height:calc(var(--bd)*1.5px); background:#ffe36e; right:calc(var(--bd)*-.7px); bottom:calc(var(--bd)*-.5px); }
+.hb-c2 { width:calc(var(--bd)*.5px); height:calc(var(--bd)*.5px); background:#ffd84d; right:calc(var(--bd)*1.1px); top:calc(var(--bd)*.5px); }
+.sos-row { position:relative; padding:calc(var(--bd)*.12px) 0; }
+.ring { position:absolute; left:50%; top:50%; width:calc(var(--bd)*2.3px); height:calc(var(--bd)*1.3px); margin:calc(var(--bd)*-.65px) 0 0 calc(var(--bd)*-1.15px); border:calc(var(--bd)*.035px) solid #d62828; border-radius:50%; opacity:.28; pointer-events:none; }
+.ring.r2 { width:calc(var(--bd)*3.3px); height:calc(var(--bd)*1.8px); margin:calc(var(--bd)*-.9px) 0 0 calc(var(--bd)*-1.65px); opacity:.14; }
+@media screen { .ring { animation:ringPing 2.6s ease-out infinite; } .ring.r2 { animation-delay:1.3s; } .h-area::before { animation:blink 1.6s ease-in-out infinite; } }
+@keyframes ringPing { 0%{transform:scale(.7);opacity:.5} 100%{transform:scale(1.15);opacity:0} }
+@keyframes blink { 50%{opacity:.25} }
+@media (prefers-reduced-motion:reduce) { .ring,.h-area::before { animation:none !important; } }
+.header h1 { font-size:calc(var(--hn)*.6px); text-transform:uppercase; letter-spacing:.1em; line-height:1; margin-top:calc(var(--bd)*.05px); }
+.area-row { display:flex; align-items:center; gap:calc(var(--bd)*.25px); width:80%; margin:calc(var(--bd)*.12px) auto 0; }
+.area-row i { flex:1; height:calc(var(--bd)*.03px); min-height:2px; background:#c9a400; opacity:.55; }
+.area-row .h-area { margin-top:0; }
+.h-area::before { content:''; display:inline-block; width:.55em; height:.55em; border-radius:50%; background:#1fa760; margin-right:.5em; vertical-align:middle; }
+#hero-tools { position:relative; margin-top:calc(var(--bd)*.42px); padding-top:20px; }
+.ht-kicker { position:absolute; top:-13px; left:50%; transform:translateX(-50%); white-space:nowrap; background:#ffe36e; color:#5c4300; border:3px solid #1f5fd1; border-radius:999px; padding:3px 14px; font-size:11.5px; }
+@media print { .ring,.hb-c2 { display:none !important; } }
+body.printing #hero-tools, body.printing #welcome, body.printing #howto, body.printing #toolbar, body.printing #print-bar, body.printing #toast, body.printing .card-actions, body.printing .add-card-cell, body.printing .slot-empty { display:none !important; }
+
+/* ═════════ WATERMARK BACKGROUND ═════════ */
+.page { background-color:#fbfaf6; background-image:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22240%22 height=%22240%22%3E%3Cg font-family=%22Arial Black,Arial,sans-serif%22 font-weight=%22900%22 font-size=%2234%22%3E%3Ctext x=%2214%22 y=%2270%22 transform=%22rotate%28-22 14 70%29%22 fill=%22%23d62828%22 fill-opacity=%22.16%22%3ESOS%3C/text%3E%3Ctext x=%22132%22 y=%22104%22 transform=%22rotate%28-22 132 104%29%22 fill=%22%231f5fd1%22 fill-opacity=%22.16%22%3ESOS%3C/text%3E%3Ctext x=%2240%22 y=%22206%22 transform=%22rotate%28-22 40 206%29%22 fill=%22%23f5b800%22 fill-opacity=%22.26%22%3ESOS%3C/text%3E%3Ctext x=%22150%22 y=%22226%22 transform=%22rotate%28-22 150 226%29%22 fill=%22%231fa760%22 fill-opacity=%22.18%22%3ESOS%3C/text%3E%3C/g%3E%3Ccircle cx=%22190%22 cy=%2236%22 r=%2210%22 fill=%22%231f5fd1%22 fill-opacity=%22.14%22/%3E%3Ccircle cx=%2296%22 cy=%22150%22 r=%228%22 fill=%22%23d62828%22 fill-opacity=%22.14%22/%3E%3Ccircle cx=%2210%22 cy=%22140%22 r=%226%22 fill=%22%231fa760%22 fill-opacity=%22.2%22/%3E%3Ccircle cx=%22214%22 cy=%22170%22 r=%227%22 fill=%22%23f5b800%22 fill-opacity=%22.3%22/%3E%3C/svg%3E"); background-size:200px 200px; }
+.grid { background:rgba(226,221,214,.55) !important; }
+.card { background:rgba(250,248,243,.80) !important; }
+.card.priority { background:rgba(255,244,244,.82) !important; }
+.slot-empty { background:rgba(244,247,255,.82) !important; }
+.footer { position:relative; }
+
+/* ═════════ COUNTRY STEP + CARD PREVIEW POPUP ═════════ */
+.w-lab { display:block; font:700 12px 'DM Sans',sans-serif; letter-spacing:1.4px; text-transform:uppercase; color:#555; margin:2px 0 6px; }
+#w-country { width:100%; font:700 17px 'DM Sans',sans-serif; padding:11px 10px; border:2px solid #1f5fd1; border-radius:10px; background:#fff; color:#1a1a1a; margin-bottom:16px; }
+#pv { position:fixed; inset:0; z-index:3100; display:none; align-items:center; justify-content:center; padding:14px; background:rgba(15,25,50,.55); }
+#pv.open { display:flex; animation:wFade .3s ease-out both; }
+.pv-box { position:relative; width:100%; max-width:440px; max-height:94vh; display:flex; flex-direction:column; background:rgba(255,255,255,.96); border-radius:18px; padding:14px 14px 12px; box-shadow:0 12px 40px rgba(0,0,0,.35); }
+.pv-title { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:2px; color:#1f3f8f; text-align:center; margin:0 28px 8px; }
+.pv-x { position:absolute; top:8px; right:8px; width:30px; height:30px; border:none; border-radius:50%; background:rgba(0,0,0,.1); font-size:19px; line-height:1; cursor:pointer; color:#222; }
+.pv-img { overflow:auto; border-radius:10px; border:1px solid #e3ddd0; background:#fbfaf6; min-height:120px; -webkit-overflow-scrolling:touch; }
+.pv-img img { display:block; width:100%; height:auto; }
+.pv-wait { padding:50px 10px; text-align:center; color:#888; font:600 14px 'DM Sans',sans-serif; }
+.pv-bar { display:flex; gap:8px; justify-content:center; margin-top:10px; }
+.pv-btn { height:36px; padding:0 18px; border-radius:9px; font:700 13px 'DM Sans',sans-serif; letter-spacing:.8px; text-transform:uppercase; cursor:pointer; border:2px solid transparent; }
+.pv-share { background:#1f5fd1; color:#fff; }
+.pv-print { background:#d62828; color:#fff; }
+.pv-edit { background:#fff; color:#555; border-color:#cfcfcf; }
+@media print { #pv, #welcome { display:none !important; } }
+body.printing #pv { display:none !important; }
+
+/* ═════════ v49: compact bar + SOS in top-left corner ═════════ */
+#print-bar { padding:6px 12px; gap:10px; border-top-width:2px; }
+.pb-print-btn, .pb-share-btn { min-width:0 !important; width:auto !important; flex:none !important; min-height:38px !important; height:38px; padding:0 22px !important; font-size:18px !important; letter-spacing:2px !important; gap:8px; border-radius:9px; }
+.pb-share-btn { border-width:2px; }
+.pb-print-btn svg, .pb-share-btn svg { width:18px !important; height:18px !important; }
+.pv-btn { display:inline-flex; align-items:center; gap:6px; }
+.pv-btn svg { width:15px; height:15px; stroke:currentColor; fill:none; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+.header { display:grid !important; grid-template-columns:auto 1fr; column-gap:calc(var(--bd)*.3px); align-items:center; text-align:left !important; padding:calc(var(--bd)*.2px) calc(var(--bd)*.3px) calc(var(--bd)*.5px) calc(var(--bd)*.2px) !important; justify-items:start; }
+.header .sos-row { grid-column:1; grid-row:1 / span 2; align-self:start; padding:0; }
+.header .ring { display:none !important; }
+.header .sos-badge { font-size:calc(var(--bd)*.78px); }
+.header h1 { grid-column:2; grid-row:1; align-self:end; font-size:calc(var(--hn)*.5px) !important; text-align:left; margin:0 !important; letter-spacing:.08em; }
+.header .area-row { grid-column:2; grid-row:2; align-self:start; width:auto; margin:calc(var(--bd)*.08px) 0 0; }
+.header .area-row i { display:none; }
+.header #hero-tools { grid-column:1 / -1; justify-self:center; }
+
+/* ═════════ custom-cards step ═════════ */
+#cc { position:fixed; inset:0; z-index:3050; display:none; align-items:center; justify-content:center; padding:14px; background:rgba(15,25,50,.55); }
+#cc.open { display:flex; animation:wFade .3s ease-out both; }
+#modal-overlay { z-index:3200 !important; }
+.cc-box { position:relative; width:100%; max-width:460px; max-height:94vh; display:flex; flex-direction:column; background:rgba(255,255,255,.97); border-radius:18px; padding:16px 14px 12px; box-shadow:0 12px 40px rgba(0,0,0,.35); }
+.cc-sub { text-align:center; margin:0 0 10px; color:#555; font:600 14px 'DM Sans',sans-serif; }
+.cc-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; overflow:auto; padding:2px; -webkit-overflow-scrolling:touch; }
+.cc-tile { background:#f4f7ff; border:2px dashed #9db8ee; border-radius:12px; padding:12px 8px; text-align:center; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:96px; }
+.cc-tile:hover { background:#e6eeff; }
+.cc-tile.done { border-style:solid; border-color:#1fa760; background:#f0fbf5; }
+.cc-lab { font:800 14px 'DM Sans',sans-serif; color:#1f5fd1; }
+.cc-hint { font:500 11.5px 'DM Sans',sans-serif; color:#7a8aa8; margin-top:2px; line-height:1.35; word-break:break-word; }
+.cc-add { margin-top:7px; font:700 11.5px 'DM Sans',sans-serif; color:#1f5fd1; border:1.5px solid #1f5fd1; border-radius:999px; padding:2px 11px; }
+.cc-ok { color:#17804a; border-color:#17804a; }
+.cc-new { background:#fff; }
+@media print { #cc { display:none !important; } }
+body.printing #cc { display:none !important; }
+/* v50: SOS back in the centre of the banner */
+.header { display:flex !important; flex-direction:column; align-items:center !important; text-align:center !important; padding:calc(var(--bd)*.24px) calc(var(--bd)*.3px) calc(var(--bd)*.5px) !important; }
+.header .sos-row { align-self:center; }
+.header .sos-badge { font-size:calc(var(--bd)*.85px); }
+.header h1 { text-align:center; align-self:center; font-size:calc(var(--hn)*.5px) !important; margin:calc(var(--bd)*.04px) 0 0 !important; }
+.header .area-row { align-self:center; margin:calc(var(--bd)*.08px) auto 0; }
+.header #hero-tools { align-self:center; }
+
+/* ═════════ v51: bigger popups on laptops / desktops ═════════ */
+@media (min-width:900px) {
+  #welcome .w-card { max-width:540px; padding:40px 36px 30px; }
+  .w-sub { font-size:21px !important; }
+  .w-big { font-size:64px !important; }
+  .w-lab { font-size:14px; }
+  #w-country { font-size:20px; padding:14px 12px; }
+  .w-go { font-size:18px; padding:14px 34px; }
+  .cc-box { max-width:780px; padding:24px 22px 18px; }
+  .cc-box .pv-title, .pv-box .pv-title { font-size:32px; }
+  .cc-sub { font-size:17px; }
+  .cc-grid { grid-template-columns:repeat(3,1fr); gap:12px; }
+  .cc-tile { min-height:124px; padding:16px 10px; }
+  .cc-lab { font-size:18px; } .cc-hint { font-size:14px; } .cc-add { font-size:14px; padding:3px 14px; }
+  .pv-box { max-width:620px; padding:20px 20px 16px; }
+  .pv-btn { height:44px; padding:0 26px; font-size:15px; }
+  .pv-btn svg { width:18px; height:18px; }
+  .pv-x { width:36px; height:36px; font-size:22px; }
+  #modal-box { width:640px; }
+}
+</style>
+</head>
+<body>
+<noscript><div style="padding:20px;font-family:Arial,sans-serif;max-width:640px;margin:auto"><h1>SOS Emergency Card</h1><p>Make a free, printable emergency card with police, ambulance and fire numbers for your country as tap-to-call QR codes, plus your doctor, family and insurance details. This tool needs JavaScript — please enable it.</p></div></noscript>
+
+<!-- WELCOME -->
+<div id="welcome" onclick="if(event.target===this)closeWelcome()">
+  <div class="w-card">
+    <button id="welcome-x" onclick="closeWelcome()" title="Close" aria-label="Close">×</button>
+    <p class="w-sub">It’s great that you are thinking of safety.</p>
+    <p class="w-big">Let’s make your<br>SOS card now</p>
+    <label class="w-lab" for="w-country">Choose your country</label>
+    <select id="w-country"></select>
+    <button class="w-go" onclick="startCard()">Show my card</button>
+  </div>
+</div>
+
+<!-- CUSTOM CARDS STEP -->
+<div id="cc" onclick="if(event.target===this)closeCc()">
+  <div class="cc-box">
+    <button class="pv-x" onclick="closeCc()" title="Close" aria-label="Close">×</button>
+    <div class="pv-title">Add custom cards?</div>
+    <p class="cc-sub">Tap a blank card to fill it in — or skip.</p>
+    <div class="cc-grid" id="cc-grid"></div>
+    <div class="pv-bar">
+      <button class="pv-btn pv-edit" onclick="showCardPreview()">Skip</button>
+      <button class="pv-btn pv-print" onclick="showCardPreview()">Show my card</button>
+    </div>
+  </div>
+</div>
+
+<!-- CARD PREVIEW POPUP -->
+<div id="pv" onclick="if(event.target===this)closePv()">
+  <div class="pv-box">
+    <button class="pv-x" onclick="closePv()" title="Close" aria-label="Close">×</button>
+    <div class="pv-title">Your SOS card</div>
+    <div class="pv-img" id="pv-img"><div class="pv-wait">Preparing your card…</div></div>
+    <div class="pv-bar">
+      <button class="pv-btn pv-share" onclick="shareCard()"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>Share</button>
+      <button class="pv-btn pv-print" onclick="closePv();doPrint()"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Print</button>
+      <button class="pv-btn pv-edit" onclick="closePv()">Edit</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOP TOOLBAR -->
+
+
+
+
+
+<!-- CARD PAGE -->
+<div class="page-wrap">
+<div class="page" id="sos-page">
+
+  <div class="header">
+    <span class="hb-c hb-c1"></span><span class="hb-c hb-c2"></span>
+    <div class="sos-row"><span class="ring r1"></span><span class="ring r2"></span><div class="sos-badge">SOS</div></div>
+    <h1 id="h-title" contenteditable="true" spellcheck="false">Emergency Point of Contact</h1>
+    <div class="area-row"><i></i><div class="h-area"><span id="h-place" contenteditable="true" spellcheck="false">India</span><span id="h-pin" contenteditable="true" spellcheck="false"></span></div><i></i></div>
+    <div id="hero-tools">
+      <div class="ht-kicker">Make your own emergency card</div>
+      <div id="loc-bar">
+    <select id="country-select" onchange="onCountryChange()" title="Country">
+      <option value="IN">India</option>
+      <option value="US">USA</option>
+      <option value="GB">UK</option>
+      <option value="AU">Australia</option>
+      <option value="CA">Canada</option>
+      <option value="DE">Germany</option>
+      <option value="FR">France</option>
+      <option value="AE">UAE</option>
+      <option value="SG">Singapore</option>
+      <option value="NZ">New Zealand</option>
+      <option value="ZA">South Africa</option>
+      <option value="JP">Japan</option>
+      <option value="NL">Netherlands</option>
+      <option value="ES">Spain</option>
+      <option value="IT">Italy</option>
+    </select>
+    <div class="loc-input-group">
+      <input id="pincode-input" type="text" maxlength="10" placeholder="Postcode (optional)"
+        onkeydown="if(event.key==='Enter'){clearTimeout(_pinTimer);lookupPin();}" oninput="this.value=this.value.toUpperCase();schedulePin()" autocomplete="postal-code">
+    </div>
+  </div>
+      <div id="loc-status"></div>
+    </div>
+  </div>
+
+  <div class="page-content">
+    <div class="grid" id="main-grid"></div>
+    <div class="footer">
+      <strong><span id="f-loc">India</span></strong> &nbsp;|&nbsp; Print · Laminate · Keep in wallet, car &amp; home
+      <div class="disclaimer">Auto-populated data is from the internet.</div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- BOTTOM PRINT BAR -->
+<div id="print-bar">
+  <button class="pb-print-btn" onclick="doPrint()">
+    <svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>PRINT
+  </button>
+  <button class="pb-share-btn" onclick="shareCard()" title="Share your card">
+    <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>SHARE
+  </button>
+</div>
+
+<!-- ADD / EDIT MODAL -->
+<div id="modal-overlay">
+  <div id="modal-box">
+    <div class="modal-header">
+      <h3 id="modal-title">Add Card</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="mform">
+        <div class="mf"><label>Card title</label><input id="m-label" placeholder="e.g. Doctor, Mom, School, Bank, Neighbour" maxlength="40" autocomplete="off"></div>
+        <div class="mf mf-num"><label>Phone number <span class="qr-tag">→ becomes the QR code</span></label><input id="m-number" type="tel" placeholder="+91 98765 43210"></div>
+        <div id="m-extra"></div>
+        <div class="mf"><label>Details <span class="plain-tag">printed as text, not in QR</span></label>
+          <textarea id="m-desc" placeholder="Type anything useful…"></textarea></div>
+        <button class="mf-save" onclick="saveCard()">Save card</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<svg id="icon-sprite" aria-hidden="true">
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+</svg>
+
+<script>
+// ══════════════ COUNTRY DATA ══════════════
+const COUNTRY_DATA = {
+  IN:{ name:'India', flag:'🇮🇳', postcodeName:'PIN',
+    cards:[
+      {id:'112',  icon:'⚡', label:'National Emergency', number:'112',  desc:'Police · Ambulance · Fire — works without SIM balance', priority:true, full:true},
+      {id:'100',  icon:'🚔', label:'Police',             number:'100',  desc:'State Police. FIR, crime, help.',                       priority:true},
+      {id:'108',  icon:'🚑', label:'Ambulance',          number:'108',  desc:'GVK EMRI Free Govt Ambulance. 24×7.',                   priority:true},
+      {id:'101',  icon:'🔥', label:'Fire Brigade',       number:'101',  desc:'Fire, gas leaks & rescue.',                            priority:true},
+      {id:'1091', icon:'👩', label:'Women Helpline',     number:'1091', desc:'Women in distress. 24×7.',                             priority:false},
+      {id:'1098', icon:'👶', label:'Child Helpline',     number:'1098', desc:'Children in danger. Free & 24×7.',                     priority:false},
+      {id:'1077', icon:'🌊', label:'Disaster Mgmt',      number:'1077', desc:'Floods, earthquakes, landslides.',                     priority:false},
+      {id:'1906', icon:'⚠', label:'Gas Leakage',        number:'1906', desc:'LPG / cylinder emergency.',                            priority:false},
+      {id:'1066', icon:'☠', label:'Poison Control',     number:'1066', desc:'Anti-poison & overdose helpline.',                     priority:false},
+      {id:'103',  icon:'🚦', label:'Traffic Police',     number:'103',  desc:'Road accidents, hit & run.',                          priority:false},
+      {id:'1912', icon:'💡', label:'Electricity',        number:'1912', desc:'Power failure, fallen wires. 24×7.',                  priority:false},
+      {id:'1916', icon:'💧', label:'Water Board',        number:'1916', desc:'Pipe burst, sewage emergency.',                       priority:false},
+      {id:'1033', icon:'🛣', label:'Highway Help',       number:'1033', desc:'National highway accident relief.',                   priority:false},
+    ]
+  },
+  US:{ name:'United States', flag:'🇺🇸', postcodeName:'ZIP',
+    cards:[
+      {id:'911',   icon:'⚡', label:'Emergency 911',     number:'911',  desc:'Police · Fire · Ambulance — all emergencies', priority:true, full:true},
+      {id:'988',   icon:'🧠', label:'Mental Health',     number:'988',  desc:'Suicide & crisis lifeline. 24×7.',            priority:true},
+      {id:'311',   icon:'🏛', label:'Non-Emergency',     number:'311',  desc:'City services, non-emergency police.',        priority:false},
+      {id:'211',   icon:'🤝', label:'Community Help',    number:'211',  desc:'Social services, food, shelter.',             priority:false},
+      {id:'18002221222', icon:'☠', label:'Poison Control', number:'1-800-222-1222', desc:'Poison Control Center.',         priority:false},
+      {id:'811',   icon:'⚠', label:'Dig Safe',          number:'811',  desc:'Call before you dig — utilities.',           priority:false},
+    ]
+  },
+  GB:{ name:'United Kingdom', flag:'🇬🇧', postcodeName:'Postcode',
+    cards:[
+      {id:'999',  icon:'⚡', label:'Emergency 999',      number:'999',  desc:'Police · Fire · Ambulance · Coastguard',    priority:true, full:true},
+      {id:'112uk',icon:'📞', label:'EU Emergency',       number:'112',  desc:'Works from mobile even without signal.',     priority:true},
+      {id:'101uk',icon:'🚔', label:'Police (non-emer)',  number:'101',  desc:'Non-urgent police matters.',                priority:false},
+      {id:'111',  icon:'🏥', label:'NHS 111',            number:'111',  desc:'Medical advice — not life-threatening.',    priority:true},
+      {id:'0800111999', icon:'🔥', label:'Gas Emergency',number:'0800 111 999', desc:'National Gas emergency line.',      priority:false},
+      {id:'105',  icon:'💡', label:'Power Cut',          number:'105',  desc:'Electricity power cut helpline.',           priority:false},
+      {id:'116123',icon:'🧠', label:'Samaritans',        number:'116 123',desc:'Emotional support. Free 24×7.',          priority:false},
+    ]
+  },
+  AU:{ name:'Australia', flag:'🇦🇺', postcodeName:'Postcode',
+    cards:[
+      {id:'000',   icon:'⚡', label:'Emergency 000',     number:'000',  desc:'Police · Fire · Ambulance',               priority:true, full:true},
+      {id:'112au', icon:'📞', label:'Mobile Emergency',  number:'112',  desc:'Works when no signal — roams any network.',priority:true},
+      {id:'131444',icon:'🚔', label:'Police Info',       number:'131 444',desc:'Non-emergency police assistance.',      priority:false},
+      {id:'131126',icon:'☠', label:'Poison Info',       number:'131 126',desc:'Poisons Information Centre.',           priority:false},
+      {id:'132500',icon:'🌊', label:'SES (Floods)',      number:'132 500',desc:'State Emergency Service.',             priority:false},
+      {id:'131114',icon:'🧠', label:'Lifeline',          number:'13 11 14',desc:'Mental health crisis support.',       priority:false},
+    ]
+  },
+  CA:{ name:'Canada', flag:'🇨🇦', postcodeName:'Postal Code',
+    cards:[
+      {id:'911ca', icon:'⚡', label:'Emergency 911',     number:'911',  desc:'Police · Fire · Ambulance',               priority:true, full:true},
+      {id:'988ca', icon:'🧠', label:'Crisis Helpline',   number:'988',  desc:'Suicide & crisis lifeline.',              priority:true},
+      {id:'211ca', icon:'🤝', label:'Community Services',number:'211',  desc:'Local social & health services.',         priority:false},
+      {id:'311ca', icon:'🏛', label:'Non-Emergency',     number:'311',  desc:'City services & non-emergency.',          priority:false},
+    ]
+  },
+  DE:{ name:'Germany', flag:'🇩🇪', postcodeName:'PLZ',
+    cards:[
+      {id:'112de', icon:'⚡', label:'Notruf 112',        number:'112',  desc:'Feuerwehr · Rettung — All emergencies',   priority:true, full:true},
+      {id:'110de', icon:'🚔', label:'Polizei 110',       number:'110',  desc:'Police emergency.',                       priority:true},
+      {id:'116117',icon:'🏥', label:'Ärztl. Notdienst',  number:'116 117',desc:'Out-of-hours medical service.',        priority:false},
+      {id:'0800111de',icon:'🧠',label:'Telefonseelsorge',number:'0800 111 0 111',desc:'Crisis counselling. Free.',    priority:false},
+    ]
+  },
+  FR:{ name:'France', flag:'🇫🇷', postcodeName:'Code postal',
+    cards:[
+      {id:'112fr', icon:'⚡', label:'Urgences 112',      number:'112',  desc:'All emergencies — EU standard',           priority:true, full:true},
+      {id:'15fr',  icon:'🚑', label:'SAMU 15',           number:'15',   desc:'Medical emergency ambulance.',            priority:true},
+      {id:'17fr',  icon:'🚔', label:'Police 17',         number:'17',   desc:'Police emergency.',                       priority:true},
+      {id:'18fr',  icon:'🔥', label:'Pompiers 18',       number:'18',   desc:'Fire brigade.',                           priority:false},
+      {id:'3114fr',icon:'🧠', label:'Prév. Suicide',     number:'3114', desc:'Suicide prevention helpline.',            priority:false},
+    ]
+  },
+  AE:{ name:'UAE', flag:'🇦🇪', postcodeName:'Area Code',
+    cards:[
+      {id:'999ae', icon:'⚡', label:'Police Emergency',  number:'999',  desc:'Dubai & Abu Dhabi Police',                priority:true, full:true},
+      {id:'998ae', icon:'🚑', label:'Ambulance',         number:'998',  desc:'National Ambulance.',                     priority:true},
+      {id:'997ae', icon:'🔥', label:'Civil Defence',     number:'997',  desc:'Fire & civil defence.',                   priority:false},
+      {id:'991ae', icon:'💡', label:'DEWA Emergency',    number:'991',  desc:'Electricity & water emergency.',          priority:false},
+    ]
+  },
+  SG:{ name:'Singapore', flag:'🇸🇬', postcodeName:'Postal Code',
+    cards:[
+      {id:'995sg', icon:'⚡', label:'SCDF 995',          number:'995',  desc:'Fire & Ambulance Emergency',              priority:true, full:true},
+      {id:'999sg', icon:'🚔', label:'Police 999',        number:'999',  desc:'Singapore Police Force.',                 priority:true},
+      {id:'1800sg', icon:'🧠', label:'IMH Crisis',       number:'1800 274 4732', desc:'Mental health crisis support.', priority:false},
+    ]
+  },
+  NZ:{ name:'New Zealand', flag:'🇳🇿', postcodeName:'Postcode',
+    cards:[
+      {id:'111nz', icon:'⚡', label:'Emergency 111',     number:'111',  desc:'Police · Fire · Ambulance',               priority:true, full:true},
+      {id:'105nz', icon:'🚔', label:'Police (non-emer)', number:'105',  desc:'Non-emergency police.',                   priority:false},
+      {id:'1737nz',icon:'🧠', label:'Need to Talk',      number:'1737', desc:'Mental health. Free 24×7.',              priority:false},
+    ]
+  },
+  ZA:{ name:'South Africa', flag:'🇿🇦', postcodeName:'Postal Code',
+    cards:[
+      {id:'10177za',icon:'⚡', label:'Emergency 10177',  number:'10177',desc:'Ambulance & fire emergency',              priority:true, full:true},
+      {id:'10111za',icon:'🚔', label:'Police 10111',     number:'10111',desc:'South African Police Service.',           priority:true},
+      {id:'112za',  icon:'📞', label:'Mobile Emergency', number:'112',  desc:'Works from any mobile.',                  priority:false},
+      {id:'0800za', icon:'🧠', label:'SADAG Helpline',   number:'0800 456 789',desc:'Mental health support.',          priority:false},
+    ]
+  },
+  JP:{ name:'Japan', flag:'🇯🇵', postcodeName:'〒 Postal',
+    cards:[
+      {id:'119jp', icon:'⚡', label:'Fire / Amb 119',    number:'119',  desc:'Fire & ambulance emergency',              priority:true, full:true},
+      {id:'110jp', icon:'🚔', label:'Police 110',        number:'110',  desc:'Emergency police.',                       priority:true},
+      {id:'118jp', icon:'⚓', label:'Coast Guard 118',   number:'118',  desc:'Sea emergency.',                          priority:false},
+    ]
+  },
+  NL:{ name:'Netherlands', flag:'🇳🇱', postcodeName:'Postcode',
+    cards:[
+      {id:'112nl', icon:'⚡', label:'Alarmnummer 112',   number:'112',  desc:'Police · Fire · Ambulance',               priority:true, full:true},
+      {id:'900nl', icon:'🚔', label:'Politie (non-urg)', number:'0900 8844',desc:'Non-emergency police.',               priority:false},
+      {id:'1630nl',icon:'🧠', label:'GGZ Crisis',        number:'0900 1630',desc:'Mental health crisis.',               priority:false},
+    ]
+  },
+  ES:{ name:'Spain', flag:'🇪🇸', postcodeName:'CP',
+    cards:[
+      {id:'112es', icon:'⚡', label:'Emergencias 112',   number:'112',  desc:'Policía · Bomberos · Ambulancia',         priority:true, full:true},
+      {id:'091es', icon:'🚔', label:'Policía Nacional',  number:'091',  desc:'National police.',                        priority:true},
+      {id:'061es', icon:'🚑', label:'Ambulancia 061',    number:'061',  desc:'Medical emergency.',                      priority:true},
+      {id:'080es', icon:'🔥', label:'Bomberos 080',      number:'080',  desc:'Fire brigade.',                           priority:false},
+      {id:'024es', icon:'🧠', label:'Salud Mental',      number:'024',  desc:'Mental health crisis.',                   priority:false},
+    ]
+  },
+  IT:{ name:'Italy', flag:'🇮🇹', postcodeName:'CAP',
+    cards:[
+      {id:'112it', icon:'⚡', label:'Emergenza 112',     number:'112',  desc:'Polizia · Vigili · Ambulanza',            priority:true, full:true},
+      {id:'113it', icon:'🚔', label:'Polizia di Stato',  number:'113',  desc:'National police.',                        priority:true},
+      {id:'115it', icon:'🔥', label:'Vigili del Fuoco',  number:'115',  desc:'Fire brigade.',                           priority:false},
+      {id:'118it', icon:'🚑', label:'Ambulanza 118',     number:'118',  desc:'Medical emergency.',                      priority:true},
+    ]
+  },
+};
+
+
+const MM = 3.7795275591;
+
+// ══════════════ STATE ══════════════
+let currentCountry = 'IN';
+let editingId = null, _nextId = 900;
+const PRESETS = [
+  {id:'p1',label:'Me',hint:'My number, blood group',slot:1,fields:['Blood group','Home address','Allergies / medical note']},
+  {id:'p2',label:'Family contact',hint:'Mom, Dad, spouse…',slot:1,fields:['Name','Relation']},
+  {id:'p3',label:'Doctor',hint:'Family doctor / clinic',slot:1,fields:['Doctor name','Clinic / hospital','Timings']},
+  {id:'p4',label:'Friend',hint:'Someone nearby you trust',slot:1,fields:['Name','Lives at / near']},
+  {id:'p5',label:'Office colleague',hint:'Workplace contact / HR',slot:1,fields:['Name','Company','Role / department']},
+  {id:'p6',label:'Insurance',hint:'Insurer helpline + policy no.',slot:1,fields:['Insurer','Policy number','Valid till']},
+  {id:'p7',label:'Custom card',hint:'Neighbour, school, bank — anything',slot:1,fields:[]},
+].map(p=>({...p,number:'',desc:'',own:true}));
+const defaultCards = cd => cd.cards.filter(c=>c.full).map(c=>({...c,full:false,priority:true,label:/emergenc|notruf|urgences|alarm|scdf|fire \/ amb/i.test(c.label)?c.label:'National Emergency'}))
+  .concat(cd.cards.filter(c=>!c.full).slice(0,3).map(c=>({...c})));
+let OWN = PRESETS;
+try { const sv = JSON.parse(localStorage.getItem('sos_own_v2')||'null'); if (Array.isArray(sv)&&sv.length) OWN = sv.map(c=>{const pr=PRESETS.find(x=>x.id===c.id); return pr?{...c,fields:pr.fields,hint:pr.hint}:c;}), PRESETS.forEach(pr=>{ if(!OWN.some(c=>c.id===pr.id)) OWN.push({...pr}); }); } catch(e){}
+let CARDS = defaultCards(COUNTRY_DATA.IN).concat(OWN);
+const saveOwn = () => { try{ localStorage.setItem('sos_own_v2', JSON.stringify(CARDS.filter(c=>c.own))); }catch(e){} };
+const isEmpty = c => !c.number && !c.desc;
+const esc = s => String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+const ico = id => `<svg viewBox="0 0 24 24"><use href="#i-${id}"/></svg>`;
+
+// ══════════════ COUNTRY ══════════════
+let _userTouched = false;
+function onCountryChange(silent) {
+  if (silent !== true) _userTouched = true;
+  const cc = document.getElementById('country-select').value;
+  currentCountry = cc;
+  { const w = document.getElementById('w-country'); if (w && w.value !== cc) w.value = cc; }
+  const cd = COUNTRY_DATA[cc];
+  CARDS = defaultCards(cd).concat(CARDS.filter(c=>c.own));
+  renderGrid();
+  const ph = {IN:'560067',US:'90210',GB:'SW1A 1AA',AU:'2000',CA:'M5H 2N2',DE:'10115',FR:'75001',
+              AE:'',SG:'018956',NZ:'6011',ZA:'0002',JP:'100-0001',NL:'1011 AB',ES:'28001',IT:'00184'};
+  const pin = document.getElementById('pincode-input');
+  pin.placeholder = ph[cc] || 'Postcode'; pin.value = ''; _lastPin = ''; _pinSeq++; clearTimeout(_pinTimer);
+  setStatus('','');
+  document.getElementById('h-place').textContent = cd.name; document.getElementById('h-pin').textContent = '';
+  document.getElementById('f-loc').textContent  = cd.name;
+  if (silent !== true) showToast(cd.name);
+}
+function setStatus(t,c){ const s=document.getElementById('loc-status'); s.textContent=t; s.className=c; }
+
+// ══════════════ POSTCODE LOOKUP (Nominatim / OpenStreetMap) ══════════════
+let _pinTimer = null, _lastPin = '', _pinSeq = 0;
+function schedulePin() {
+  _userTouched = true;
+  clearTimeout(_pinTimer);
+  const v = document.getElementById('pincode-input').value.trim();
+  if (!v) { _lastPin = ''; resetPlace(); return; }
+  if (v.length < 3 || v === _lastPin) return;
+  setStatus('Looking up…','');
+  _pinTimer = setTimeout(lookupPin, 800);
+}
+function resetPlace() {
+  const cd = COUNTRY_DATA[currentCountry];
+  document.getElementById('h-place').textContent = cd.name;
+  document.getElementById('h-pin').textContent = '';
+  document.getElementById('f-loc').textContent = cd.name;
+  setStatus('','');
+}
+async function lookupPin() {
+  const raw = document.getElementById('pincode-input').value.trim();
+  const cd = COUNTRY_DATA[currentCountry];
+  if (!raw) { resetPlace(); return; }
+  _lastPin = raw; const seq = ++_pinSeq;
+  setStatus('Looking up…','');
+  const url = `https://nominatim.openstreetmap.org/search?postalcode=${encodeURIComponent(raw)}&countrycodes=${currentCountry.toLowerCase()}&format=json&addressdetails=1&limit=1`;
+  try {
+    const res = await fetch(url,{headers:{'Accept':'application/json','Accept-Language':'en'},signal:AbortSignal.timeout(8000)});
+    if (!res.ok) throw new Error('http_'+res.status);
+    const data = await res.json();
+    if (seq !== _pinSeq) return;
+    if (!data || !data.length) throw new Error('not_found');
+    const a = data[0].address || {};
+    const city = a.city||a.town||a.village||a.county||a.state_district||'';
+    const cityState = [city, a.state||a.region||''].filter(Boolean).join(', ');
+    document.getElementById('h-place').textContent = cityState+', '+cd.name; document.getElementById('h-pin').textContent = (cd.postcodeName||'Postcode')+' '+raw;
+    document.getElementById('f-loc').textContent  = cityState+' · '+cd.name+' · '+raw;
+    setStatus('✓ '+cityState,'ok');
+    showToast(''+cityState+', '+cd.name);
+  } catch(e) {
+    if (seq !== _pinSeq) return;
+    document.getElementById('h-place').textContent = cd.name; document.getElementById('h-pin').textContent = (cd.postcodeName||'Postcode')+' '+raw;
+    document.getElementById('f-loc').textContent  = cd.name+' · '+raw;
+    setStatus(e.name==='TimeoutError'?'Timed out — postcode added without city':e.message==='not_found'?'Not found — postcode added without city':'Network error — postcode added without city','err');
+    showToast('Postcode '+raw+' added');
+  }
+}
+
+// ══════════════ RENDER ══════════════
+function renderGrid() {
+  const grid = document.getElementById('main-grid');
+  grid.innerHTML = '';
+  CARDS.forEach(c => grid.appendChild(c.own && isEmpty(c) ? mkSlot(c) : mkCard(c)));
+  const tile = document.createElement('div');
+  tile.className = 'add-card-cell';
+  tile.onclick = () => openModal();
+  tile.innerHTML = `<div class="ac-plus">${ico('plus')}</div><div class="ac-title">Add card</div>
+    <div class="ac-ex">Type any name — Mom, Dad, School, Bank, Neighbour…</div>`;
+  grid.appendChild(tile);
+  genAllQR();
+  if (typeof applyZoom === 'function') applyZoom();
+  if (document.getElementById('cc')?.classList.contains('open')) renderCc();
+}
+function mkSlot(c) {
+  const d = document.createElement('div'); d.className = 'card slot-empty'; d.id = 'card-'+c.id;
+  d.onclick = () => openModal(c.id);
+  d.innerHTML = `<div class="se-lab">${esc(c.label)}</div><div class="se-hint">${esc(c.hint||'')}</div><div class="se-add">+ Add</div>`;
+  return d;
+}
+const actions = id => `<div class="card-actions">
+  <button class="ca-btn" onclick="openModal('${id}',event)" title="Edit">${ico('pen')}</button>
+  <button class="ca-btn ca-del" onclick="delCard('${id}',event)" title="Remove">${ico('x')}</button></div>`;
+
+const tel = c => 'tel:'+(c.number||'').replace(/[\s\-().]/g,'');
+function mkHero(c) {
+  const d = document.createElement('div');
+  d.className = 'hero-card'; d.id = 'card-'+c.id;
+  d.innerHTML = `${actions(c.id)}
+    <a class="call" href="${tel(c)}" title="Tap to call ${esc(c.number)}"><div class="hero-qr-wrap" id="qr-${c.id}"></div></a>
+    <div class="hero-text">
+      <div class="hero-label">${esc(c.label)}</div>
+      <a class="call" href="${tel(c)}" title="Tap to call"><div class="hero-number">${esc(c.number)}</div></a>
+      <div class="hero-desc">${esc(c.desc)}</div>
+    </div>`;
+  return d;
+}
+function mkCard(c) {
+  const long = (c.number||'').replace(/[\s\-]/g,'').length > 5;
+  const d = document.createElement('div');
+  d.className = 'card'+(c.priority?' priority':'')+(c.own?' own':''); d.id = 'card-'+c.id;
+  d.innerHTML = `${actions(c.id)}
+    <div class="card-head"><span class="card-label">${esc(c.label)}</span></div>
+    ${c.number?`<a class="call" href="${tel(c)}" title="Tap to call"><div class="card-number${long?' long':''}">${esc(c.number)}</div></a>
+    <div class="card-desc">${esc(c.desc)}</div>
+    <a class="call" href="${tel(c)}" title="Tap to call ${esc(c.number)}"><div class="qr-wrap" id="qr-${c.id}"></div></a>`
+    :`<div class="card-note-big">${esc(c.desc)}</div>`}`;
+  return d;
+}
+
+// ══════════════ QR (rendered 4× so it stays crisp when printed) ══════════════
+function genQR(c) {
+  const el = document.getElementById('qr-'+c.id); if (!el) return;
+  el.innerHTML = '';
+  const num = (c.number||'').replace(/[\s\-().]/g,''); if (!num || !window.QRCode) return;
+  const cs = getComputedStyle(document.body);
+  const px = 120;
+  new QRCode(el,{text:'tel:'+num,width:px*4,height:px*4,colorDark:'#1A1A1A',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
+}
+function genAllQR(){ CARDS.forEach(genQR); }
+
+// ══════════════ DELETE (with undo) ══════════════
+function delCard(id, e) {
+  if (e) e.stopPropagation();
+  const i = CARDS.findIndex(c=>c.id===id); if (i<0) return;
+  const c = CARDS[i], before = {...c}, reset = c.own && c.slot;
+  if (reset) { c.number=''; c.desc=''; } else CARDS.splice(i,1);
+  saveOwn(); renderGrid();
+  showToast('Removed '+c.label,'Undo',()=>{ if (reset) Object.assign(c,before); else CARDS.splice(i,0,c); saveOwn(); renderGrid(); });
+}
+
+// ══════════════ DRAG TO REORDER ══════════════
+function initSortable() {
+  if (!window.Sortable) return;
+  const grid = document.getElementById('main-grid');
+  Sortable.create(grid,{
+    animation:150, delay:180, delayOnTouchOnly:true, touchStartThreshold:6,
+    draggable:'.card', filter:'.add-card-cell,.card-actions', preventOnFilter:false,
+    ghostClass:'drag-ghost', chosenClass:'drag-chosen',
+    onMove:ev => !ev.related.classList.contains('add-card-cell'),
+    onEnd:() => {
+      const tile = grid.querySelector('.add-card-cell'); if (tile) grid.appendChild(tile);
+      const order = [...grid.children].filter(n=>n.id&&n.id.startsWith('card-')).map(n=>n.id.slice(5));
+      CARDS = order.map(id=>CARDS.find(c=>c.id===id)).filter(Boolean); saveOwn();
+    }
+  });
+}
+
+// ══════════════ ADD / EDIT MODAL ══════════════
+function openModal(id, e) {
+  if (e) e.stopPropagation();
+  editingId = id || null;
+  const c = id ? CARDS.find(x=>x.id===id) : null;
+  document.getElementById('modal-title').textContent = c ? (isEmpty(c)&&c.own ? 'Add '+c.label : 'Edit card') : 'Add card';
+  document.getElementById('m-label').value  = c ? c.label : '';
+  document.getElementById('m-number').value = c ? c.number||'' : '';
+  const flds = (c && c.fields) || [];
+  document.getElementById('m-extra').innerHTML = flds.map((k,n)=>`<div class="mf"><label>${esc(k)}</label><input data-k="${esc(k)}" id="m-x${n}" value="${esc((c.f||{})[k]||'')}" autocomplete="off"></div>`).join('');
+  document.getElementById('m-desc').value = c ? (c.fields ? (c.note||'') : (c.desc||'')) : '';
+  document.getElementById('m-desc').placeholder = flds.length ? 'Anything else (optional)' : 'Type anything useful — address, timings, policy no…';
+  document.getElementById('modal-overlay').classList.add('open');
+  setTimeout(()=>document.getElementById(c&&c.label?(flds.length?'m-x0':'m-number'):'m-label').focus(), 80);
+}
+function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); editingId = null; }
+function saveCard() {
+  const label = document.getElementById('m-label').value.trim();
+  const num   = document.getElementById('m-number').value.trim();
+  const note  = document.getElementById('m-desc').value.trim();
+  const f = {}; document.querySelectorAll('#m-extra input').forEach(i=>{ const v=i.value.trim(); if (v) f[i.dataset.k]=v; });
+  const desc = Object.entries(f).map(([k,v])=>k+': '+v).concat(note?[note]:[]).join(' · ');
+  if (!label || !(num||desc)) { showToast('Add a title and a number or some details'); return; }
+  if (editingId) {
+    const i = CARDS.findIndex(x=>x.id===editingId);
+    if (i>-1) CARDS[i] = {...CARDS[i], label, number:num, desc, f, note};
+    showToast('Updated '+label);
+  } else {
+    CARDS.push({id:'x'+(_nextId++), label, number:num, desc, own:true});
+    showToast('Added '+label);
+  }
+  saveOwn(); closeModal(); renderGrid();
+}
+document.getElementById('modal-overlay').addEventListener('click', e=>{ if (e.target.id==='modal-overlay') closeModal(); });
+document.addEventListener('keydown', e=>{ if (e.key==='Escape') { closeModal(); closePv(); closeWelcome(); closeCc(); } });
+
+// ══════════════ ZOOM (screen only) + PRINT (A4) ══════════════
+function applyZoom() {
+  const root = document.documentElement, vw = root.clientWidth, vh = window.innerHeight;
+  const desk = vw >= 900;                                  // laptops / desktops: wider 4-column layout, scaled up to use the screen
+  const base = desk ? 1.15 : 1, minZ = desk ? .8 : .5, maxZ = desk ? 1.7 : 1;
+  if (desk) root.style.setProperty('--scols','4'); else root.style.removeProperty('--scols');
+  const set = z => {
+    root.style.setProperty('--sz', z.toFixed(3));
+    root.style.setProperty('--spw', Math.min((vw-(desk?48:32))/z, desk?1180:9999).toFixed(0)+'px');
+    root.style.setProperty('--izoom', (1/z).toFixed(3));
+  };
+  let z = base; set(z);
+  // scale so the whole card fits the screen (phones only shrink; desktops also grow to fill the screen)
+  const pg = document.getElementById('sos-page'), bar = document.getElementById('print-bar');
+  if (pg && !document.body.classList.contains('measuring')) {
+    const avail = vh - (bar ? bar.offsetHeight : 0) - 24;
+    for (let k=0; k<6; k++) {
+      const H = pg.getBoundingClientRect().height;
+      if (desk ? Math.abs(H-avail) <= 6 : (H <= avail+2 && k>0)) break;
+      const nz = Math.max(minZ, Math.min(maxZ, z*avail/H)); if (Math.abs(nz-z) < .004) break;
+      z = nz; set(z);
+    }
+  }
+}
+window.addEventListener('resize', applyZoom);
+
+function doPrint() {
+  try { window.gtag && gtag('event','print_click'); } catch(e){}
+  const root = document.documentElement, pg = document.getElementById('sos-page');
+  // if extra cards make the card taller than A4, shrink it to stay on one page
+  document.body.classList.add('measuring');
+  const prev = root.style.getPropertyValue('--sz');
+  root.style.setProperty('--sz','1'); pg.style.setProperty('--fit','1');
+  const natural = pg.scrollHeight, target = 272*MM; /* fits A4 and US Letter, never spills to a 2nd page */
+  const fit = natural > target+1 ? Math.max(.3, target/natural) : 1;
+  pg.style.setProperty('--fit', fit.toFixed(4));
+  root.style.setProperty('--sz', prev);
+  document.body.classList.remove('measuring');
+  let ps = document.getElementById('_ps');
+  if (!ps) { ps = document.createElement('style'); ps.id = '_ps'; document.head.appendChild(ps); }
+  ps.textContent = '@media print{@page{size:A4 portrait;margin:0}}';
+  document.body.classList.add('printing');          // hides inputs, welcome message & how-it-works in the printout
+  setTimeout(()=>window.print(), 120);
+  const endPrint = () => { document.body.classList.remove('printing'); window.removeEventListener('pointerdown',later); window.removeEventListener('afterprint',endPrint); };
+  const later = () => setTimeout(endPrint, 600);
+  window.addEventListener('afterprint', endPrint);
+  setTimeout(()=>window.addEventListener('pointerdown', later, {once:true}), 2500);   // fallback if afterprint never fires
+}
+
+// ══════════════ SHARE ══════════════
+// Draws the card (no inputs, no empty slots, no add tiles, no edit buttons) onto a canvas — no external library
+async function buildShareCanvas() {
+  try { await document.fonts.ready; await document.fonts.load("90px 'Bebas Neue'"); } catch(e){}
+  const W = 1080, COLS = 3, CW = W/COLS, M = 28, BEB = "'Bebas Neue',Impact,'Arial Narrow',sans-serif", SANS = "'DM Sans',Arial,sans-serif";
+  const list = CARDS.filter(c=>!(c.own && isEmpty(c)));
+  const m = document.createElement('canvas').getContext('2d');
+  const wrap = (ctx, text, maxW, maxLines) => {
+    const words = String(text||'').split(/\s+/).filter(Boolean), lines = []; let cur = '';
+    words.forEach(w=>{ const t = cur ? cur+' '+w : w; if (ctx.measureText(t).width > maxW && cur) { lines.push(cur); cur = w; } else cur = t; });
+    if (cur) lines.push(cur);
+    if (lines.length > maxLines) { lines.length = maxLines; lines[maxLines-1] = lines[maxLines-1].replace(/\s*\S*$/,'')+'…'; }
+    return lines;
+  };
+  // measure rows
+  m.font = `28px ${SANS}`;
+  const info = list.map(c => { const d = wrap(m, c.desc, CW-56, c.number?3:5); return {c, d, h: 36 + 46 + 112 + (d.length*36) + 14 + (c.number ? 230 : 0) + 20}; });
+  const rows = []; for (let i=0;i<info.length;i+=COLS) { const r = info.slice(i,i+COLS); rows.push({items:r, h:Math.max(...r.map(x=>x.h))}); }
+  m.font = `66px ${BEB}`; if ('letterSpacing' in m) m.letterSpacing = '5px';
+  const title = (document.getElementById('h-title').textContent.trim() || 'Emergency Point of Contact').toUpperCase();
+  const tl = wrap(m, title, W-2*M-80, 2);
+  const HH = 236 + (tl.length-1)*68 + 28 + 54 + 56, HEAD = HH + 2*M, FOOT = 120, gridH = rows.reduce((a,r)=>a+r.h,0);
+  const H = HEAD + gridH + FOOT;
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const ctx = cv.getContext('2d');
+  // background + watermark
+  ctx.fillStyle = '#fbfaf6'; ctx.fillRect(0,0,W,H);
+  const wm = [['#d62828',.16],['#1f5fd1',.16],['#f5b800',.28],['#1fa760',.18]];
+  ctx.textBaseline = 'alphabetic'; ctx.font = `900 64px Arial Black,Arial,sans-serif`;
+  for (let y=0, r=0; y<H+200; y+=230, r++) for (let x=(r%2?-60:60), k=0; x<W+200; x+=300, k++) {
+    const [col,al] = wm[(r+k)%4]; ctx.save(); ctx.translate(x,y); ctx.rotate(-22*Math.PI/180); ctx.globalAlpha = al; ctx.fillStyle = col; ctx.fillText('SOS',0,0); ctx.restore();
+  }
+  ctx.globalAlpha = 1;
+  const rr = (x,y,w,h,r) => { ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); };
+  // header
+  const hx = M, hy = M, hw = W-2*M, hh = HH;
+  ctx.save(); rr(hx,hy,hw,hh,38); ctx.fillStyle = '#fff1a8'; ctx.fill(); ctx.clip();
+  ctx.fillStyle = '#ffe36e'; ctx.beginPath(); ctx.arc(hx+10,hy+10,130,0,7); ctx.fill(); ctx.beginPath(); ctx.arc(hx+hw-20,hy+hh-10,100,0,7); ctx.fill();
+  ctx.fillStyle = '#1f5fd1'; for (let x=hx-40; x<hx+hw+40; x+=44) { ctx.beginPath(); ctx.moveTo(x,hy+hh); ctx.lineTo(x+22,hy+hh); ctx.lineTo(x+22+16,hy+hh-16); ctx.lineTo(x+16,hy+hh-16); ctx.closePath(); ctx.fill(); }
+  ctx.restore();
+  ctx.strokeStyle = '#f0d85c'; ctx.lineWidth = 3; rr(hx,hy,hw,hh,38); ctx.stroke();
+  ctx.save(); ctx.translate(W/2, hy+104); ctx.rotate(-3*Math.PI/180);
+  rr(-130,-64,260,128,12); ctx.fillStyle = '#d62828'; ctx.fill(); ctx.lineWidth = 8; ctx.strokeStyle = '#fff'; ctx.stroke();
+  ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = `120px ${BEB}`; ctx.fillText('SOS',0,6); ctx.restore();
+  ctx.fillStyle = '#5c4300'; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+  ctx.font = `66px ${BEB}`; if ('letterSpacing' in ctx) ctx.letterSpacing = '5px';
+  tl.forEach((t,i)=>ctx.fillText(t, W/2, hy+236+i*68));
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
+  const place = (document.getElementById('h-place').textContent+' '+document.getElementById('h-pin').textContent).trim();
+  ctx.font = `700 32px ${SANS}`; const pw = Math.min(hw-120, ctx.measureText(place).width+90), pt = hy+236+(tl.length-1)*68+28;
+  rr(W/2-pw/2, pt, pw, 54, 27); ctx.fillStyle = '#ffe36e'; ctx.fill();
+  ctx.fillStyle = '#1fa760'; ctx.beginPath(); ctx.arc(W/2-pw/2+28, pt+27, 8, 0, 7); ctx.fill();
+  ctx.fillStyle = '#5c4300'; ctx.textAlign = 'left'; ctx.fillText(place, W/2-pw/2+48, pt+38);
+  // cards
+  let y = HEAD;
+  rows.forEach(r=>{
+    r.items.forEach((it,ci)=>{
+      const c = it.c, x = ci*CW, cx = x+CW/2;
+      ctx.fillStyle = c.priority ? 'rgba(255,244,244,.82)' : 'rgba(250,248,243,.80)'; ctx.fillRect(x,y,CW,r.h);
+      ctx.fillStyle = c.own ? '#1f5fd1' : '#d72b2b'; if (c.own || c.priority) ctx.fillRect(x,y,CW,8);
+      ctx.strokeStyle = 'rgba(200,194,184,.9)'; ctx.lineWidth = 2; ctx.strokeRect(x,y,CW,r.h);
+      let yy = y+36; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+      ctx.fillStyle = '#2e2e2e'; ctx.font = `40px ${BEB}`; if ('letterSpacing' in ctx) ctx.letterSpacing = '3px';
+      ctx.fillText(c.label.toUpperCase().slice(0,24), cx, yy+34, CW-30); if ('letterSpacing' in ctx) ctx.letterSpacing = '0px'; yy += 46;
+      if (c.number) {
+        let fs = 112; ctx.font = `${fs}px ${BEB}`; while (ctx.measureText(c.number).width > CW-40 && fs > 36) { fs -= 4; ctx.font = `${fs}px ${BEB}`; }
+        ctx.fillStyle = c.own ? '#1f5fd1' : '#d72b2b'; ctx.fillText(c.number, cx, yy+fs*.82);
+      }
+      yy += 112; ctx.fillStyle = '#7a7a7a'; ctx.font = `28px ${SANS}`;
+      it.d.forEach((t,i)=>ctx.fillText(t, cx, yy+26+i*36, CW-40)); yy += it.d.length*36 + 14;
+      if (c.number) {
+        const src = document.querySelector('#qr-'+c.id+' canvas') || document.querySelector('#qr-'+c.id+' img');
+        const q = 200, qx = cx-q/2;
+        ctx.fillStyle = '#fff'; rr(qx-12,yy,q+24,q+24,14); ctx.fill(); ctx.strokeStyle = '#ddd'; ctx.lineWidth = 2; ctx.stroke();
+        if (src) ctx.drawImage(src, qx, yy+12, q, q);
+      }
+    });
+    y += r.h;
+  });
+  // footer
+  ctx.fillStyle = '#1a1a1a'; ctx.fillRect(0,y,W,FOOT);
+  ctx.textAlign = 'center'; ctx.fillStyle = '#fff'; ctx.font = `700 26px ${SANS}`;
+  ctx.fillText((document.getElementById('f-loc').textContent||'')+'  |  Print · Laminate · Keep in wallet, car & home', W/2, y+50);
+  ctx.fillStyle = '#aaa'; ctx.font = `24px ${SANS}`; ctx.fillText('Auto-populated data is from the internet.', W/2, y+90);
+  return cv;
+}
+async function shareCard() {
+  const url = location.href.split('#')[0];
+  const text = 'I made an emergency SOS card for my family — one tap to call police, ambulance and more. Make yours: '+url;
+  try { window.gtag && gtag('event','share_click'); } catch(e){}
+  try {
+    showToast('Preparing your card…');
+    const canvas = await buildShareCanvas();
+    const blob = await new Promise(r=>canvas.toBlob(r,'image/png'));
+    const file = new File([blob],'sos-card.png',{type:'image/png'});
+    if (navigator.canShare && navigator.canShare({files:[file]})) { await navigator.share({files:[file], title:'My SOS Emergency Card', text}); return; }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'sos-card.png';
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+    showToast('Card image saved — share it from your downloads');
+  } catch(e) {
+    if (e && e.name==='AbortError') return;
+    if (navigator.share) { try { await navigator.share({title:'SOS Emergency Card', text}); } catch(_){} return; }
+    try { await navigator.clipboard.writeText(text); showToast('Link copied — paste it anywhere'); }
+    catch(_) { window.prompt('Copy this link:', text); }
+  }
+}
+
+
+// ══════════════ WELCOME → COUNTRY → CARD POPUP ══════════════
+(function(){ const w = document.getElementById('w-country'); w.innerHTML = document.getElementById('country-select').innerHTML; w.value = currentCountry; })();
+function closeWelcome(){ document.getElementById('welcome').style.display = 'none'; window.scrollTo(0,0); }   // crossed → home page
+function closePv(){ document.getElementById('pv').classList.remove('open'); window.scrollTo(0,0); }              // crossed → home page
+function startCard() {
+  const cc = document.getElementById('w-country').value;
+  _userTouched = true;
+  document.getElementById('country-select').value = cc;
+  onCountryChange();
+  try { window.gtag && gtag('event','start_card',{country:cc}); } catch(e){}
+  document.getElementById('welcome').style.display = 'none';
+  renderCc(); document.getElementById('cc').classList.add('open');       // step 2: custom cards (or skip)
+}
+function closeCc(){ document.getElementById('cc').classList.remove('open'); window.scrollTo(0,0); }   // crossed → home page
+function renderCc() {
+  const g = document.getElementById('cc-grid'); if (!g) return; g.innerHTML = '';
+  CARDS.filter(c=>c.own).forEach(c=>{
+    const d = document.createElement('div'); d.className = 'cc-tile'+(isEmpty(c)?'':' done');
+    d.onclick = () => openModal(c.id);
+    d.innerHTML = isEmpty(c)
+      ? `<div class="cc-lab">${esc(c.label)}</div><div class="cc-hint">${esc(c.hint||'')}</div><div class="cc-add">+ Add</div>`
+      : `<div class="cc-lab">${esc(c.label)}</div><div class="cc-hint">${esc(c.number||c.desc)}</div><div class="cc-add cc-ok">Added · Edit</div>`;
+    g.appendChild(d);
+  });
+  const n = document.createElement('div'); n.className = 'cc-tile cc-new'; n.onclick = () => openModal();
+  n.innerHTML = '<div class="cc-lab">Another card</div><div class="cc-hint">Any name, any number</div><div class="cc-add">+ New</div>';
+  g.appendChild(n);
+}
+async function showCardPreview() {
+  closeCc();
+  const box = document.getElementById('pv-img'); box.innerHTML = '<div class="pv-wait">Preparing your card…</div>';
+  document.getElementById('pv').classList.add('open');
+  try {
+    const cv = await buildShareCanvas();
+    const img = new Image(); img.alt = 'Your SOS card'; img.src = cv.toDataURL('image/png');
+    box.innerHTML = ''; box.appendChild(img);
+  } catch(e) { box.innerHTML = '<div class="pv-wait">Could not preview — tap Edit to see your card.</div>'; }
+}
+
+// ══════════════ AUTO-DETECT LOCATION (by IP — no permission prompt) ══════════════
+async function ipLocate() {
+  const tries = [
+    async()=>{ const r=await fetch('https://ipwho.is/',{signal:AbortSignal.timeout(6000)}); const d=await r.json(); if(!d.success) throw 0; return {cc:d.country_code,city:d.city,region:d.region}; },
+    async()=>{ const r=await fetch('https://ipapi.co/json/',{signal:AbortSignal.timeout(6000)}); const d=await r.json(); if(!d.country_code) throw 0; return {cc:d.country_code,city:d.city,region:d.region}; }
+  ];
+  for (const t of tries) { try { return await t(); } catch(e){} }
+  return null;
+}
+async function autoDetect() {
+  const loc = await ipLocate();
+  if (!loc || _userTouched) return;                       // never override something the visitor already did
+  const cc = (loc.cc||'').toUpperCase();
+  if (!COUNTRY_DATA[cc]) return;                           // country we have no numbers for → keep default
+  if (cc !== currentCountry) { document.getElementById('country-select').value = cc; onCountryChange(true); }
+  const cd = COUNTRY_DATA[cc];
+  const place = [loc.city, loc.region].filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i).join(', ');
+  if (place) {
+    document.getElementById('h-place').textContent = place+', '+cd.name;
+    document.getElementById('f-loc').textContent = place+' · '+cd.name;
+    setStatus('📍 Detected: '+place+' — add your postcode for an exact location','ok');
+  }
+}
+
+// ══════════════ TOAST ══════════════
+let _tt;
+function showToast(msg, actLabel, act) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.toggle('has-act', !!actLabel);
+  if (actLabel) {
+    const b = document.createElement('button'); b.textContent = actLabel;
+    b.onclick = () => { act(); t.classList.remove('show'); };
+    t.appendChild(b);
+  }
+  t.classList.add('show');
+  clearTimeout(_tt); _tt = setTimeout(()=>t.classList.remove('show'), actLabel?5000:2400);
+}
+
+// editable header: Enter commits
+document.querySelectorAll('[contenteditable]').forEach(el=>el.addEventListener('keydown',e=>{ if(e.key==='Enter'){e.preventDefault();el.blur();} }));
+
+// ══════════════ BOOT ══════════════
+applyZoom(); renderGrid(); initSortable(); autoDetect();
+</script>
+</body>
+</html>
