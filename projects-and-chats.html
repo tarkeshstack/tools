@@ -3,13 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tarkesh — Projects &amp; Chats Hub</title>
+<title>Tarkesh — Projects Hub</title>
 <style>
-:root{--bg:#0b1020;--card:#131b36;--line:rgba(255,255,255,.09);--text:#e8ecf8;--muted:#97a0c0;--a1:#6366f1;--a2:#22d3ee;--a3:#f472b6}
-:root.light{--bg:#f5f7fc;--card:#fff;--line:rgba(15,23,42,.11);--text:#0f172a;--muted:#5b6585}
+:root{--bg:#ffffff;--card:#ffffff;--line:#e5e7eb;--text:#0f172a;--muted:#64748b;--a1:#4f46e5;--a2:#0891b2;--a3:#db2777}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Inter,"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased}
-body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(700px 400px at 90% -5%,rgba(99,102,241,.25),transparent 60%),radial-gradient(600px 380px at 0% 15%,rgba(34,211,238,.12),transparent 60%)}
 a{color:inherit;text-decoration:none}
 .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
 nav{position:sticky;top:0;z-index:10;backdrop-filter:blur(14px);background:color-mix(in srgb,var(--bg) 80%,transparent);border-bottom:1px solid var(--line)}
@@ -29,22 +27,23 @@ h1 span{background:linear-gradient(120deg,var(--a2),var(--a1),var(--a3));-webkit
 .tabs{display:flex;gap:6px;margin:34px 0 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
 .tab{padding:11px 18px;border:0;background:none;color:var(--muted);font:600 14.5px inherit;font-family:inherit;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
 .tab.on{color:var(--text);border-color:var(--a1)}
-.tab i{font-style:normal;font-size:11.5px;background:rgba(99,102,241,.18);color:#a5b4fc;padding:2px 8px;border-radius:99px;margin-left:6px}
+.tab i{font-style:normal;font-size:11.5px;background:#eef2ff;color:#4f46e5;padding:2px 8px;border-radius:99px;margin-left:6px}
 .tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;align-items:center}
 .chip{padding:7px 14px;border-radius:99px;border:1px solid var(--line);background:var(--card);color:var(--muted);font:500 13px inherit;font-family:inherit;cursor:pointer}
 .chip.on{background:var(--a1);border-color:var(--a1);color:#fff}
 .tools input{margin-left:auto;min-width:220px;padding:9px 14px;border-radius:11px;border:1px solid var(--line);background:var(--card);color:var(--text);font:14px inherit;font-family:inherit;outline:none}
 .tools input:focus{border-color:var(--a1)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:16px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden;transition:.2s}
+.card{box-shadow:0 1px 3px rgba(15,23,42,.06);background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden;transition:.2s}
 .card::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,var(--a1),var(--a2))}
-.card:hover{transform:translateY(-4px);border-color:var(--a1)}
+.card:hover{transform:translateY(-4px);border-color:var(--a1);box-shadow:0 10px 24px rgba(15,23,42,.1)}
+.thumb{width:100%;height:92px;border-radius:12px;display:grid;place-items:center;font-size:44px;margin-bottom:2px}
 .card h3{font-size:16.5px;letter-spacing:-.01em}
 .card p{color:var(--muted);font-size:13.8px;flex:1}
 .row{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.pill{font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;background:rgba(52,211,153,.14);color:#34d399}
-.pill.soon{background:rgba(251,191,36,.14);color:#fbbf24}
-.pill.b{background:rgba(99,102,241,.16);color:#a5b4fc}
+.pill{font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;background:#ecfdf5;color:#059669}
+.pill.soon{background:#fffbeb;color:#b45309}
+.pill.b{background:#eef2ff;color:#4f46e5}
 .mono{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--muted)}
 .foot{display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--line)}
 .foot a{flex:1;text-align:center;padding:8px;border-radius:9px;border:1px solid var(--line);font-size:13px;font-weight:600}
@@ -59,27 +58,25 @@ footer{margin:60px 0 30px;text-align:center;color:var(--muted);font-size:13px}
 </head>
 <body>
 <nav><div class="wrap"><a class="brand" href="#"><span class="logo">T</span> Tarkesh</a>
-<div style="display:flex;gap:8px"><button class="btn" id="th">◐</button><a class="btn p" href="https://github.com/tarkeshstack" target="_blank" rel="noopener">GitHub</a></div></div></nav>
+<div style="display:flex;gap:8px"><a class="btn p" href="https://github.com/tarkeshstack" target="_blank" rel="noopener">GitHub</a></div></div></nav>
 
 <header><div class="wrap">
-<h1>All my <span>projects, files &amp; chats</span> in one place</h1>
-<p class="sub">Live sites, every standalone app from the tools repo, and the Claude chats where each one was built.</p>
+<h1>All my <span>projects &amp; apps</span> in one place</h1>
+<p class="sub">My live sites and every standalone app, each one a click away.</p>
 <div class="stats">
 <div class="stat"><b id="n1">0</b><small>Live sites</small></div>
 <div class="stat"><b id="n2">0</b><small>Standalone apps</small></div>
-<div class="stat"><b id="n3">0</b><small>Chats</small></div>
 </div></div></header>
 
 <main class="wrap">
 <div class="tabs" id="tabs">
 <button class="tab on" data-t="sites">Live sites <i id="c1"></i></button>
 <button class="tab" data-t="apps">Apps <i id="c2"></i></button>
-<button class="tab" data-t="chats">Chats <i id="c3"></i></button>
 </div>
 <div class="tools"><div id="chips" style="display:flex;gap:8px;flex-wrap:wrap"></div><input id="q" type="search" placeholder="Search…" aria-label="Search"></div>
 <div class="grid" id="grid"></div>
 <p class="empty" id="empty">Nothing matches your search.</p>
-<p class="note">Chat links open in your Claude account. Apps marked “Not in tools repo yet” need their HTML file pushed first. The tools-repo files go live at tarkeshstack.github.io/tools/&lt;file&gt; once GitHub Pages is on for that repo.</p>
+<p class="note">Apps marked “Not in tools repo yet” need their HTML file pushed first. The tools-repo files go live at tarkeshstack.github.io/tools/&lt;file&gt; once GitHub Pages is on for that repo.</p>
 </main>
 <div id="viewer" hidden>
  <div class="vbar"><button class="btn" id="vback">← Back to hub</button><b id="vname"></b><a class="btn p" id="vtab" target="_blank" rel="noopener">Open in new tab ↗</a></div>
@@ -89,7 +86,10 @@ footer{margin:60px 0 30px;text-align:center;color:var(--muted);font-size:13px}
 
 <script>
 const GH="https://github.com/tarkeshstack/", PAGES="https://tarkeshstack.github.io/tools/";
-const CHAT="https://claude.ai/chat/";
+const ICON=[["python","🐍"],["ppt","📊"],["resume","📄"],["video","🎬"],["trip","✈️"],["travel","🧳"],["split","🛒"],["bundle","🎁"],["qr","📱"],["emergency","🚨"],["sos","🆘"],["speak","🎙️"],["english","🗣️"],["translat","🌐"],["hat","🎩"],["test","🧪"],["qa","🧪"],["measure","📏"],["convert","🔄"],["medic","💊"],["medical","🩺"],["constitution","⚖️"],["electric","⚡"],["meter","⚡"],["waypoint","📍"],["map","🗺️"],["directory","📚"],["relocation","🚚"],["chaar","👥"],["portfolio","🖼️"],["pin","🔐"],["password","🔑"],["birthday","🎂"],["maths","➗"],["stats","📈"],["pdf","📕"],["word","📝"],["letter","✉️"],["heart","💗"],["course","🎓"],["learn","🎓"],["college","🎒"],["read","📖"],["rental","🏠"],["jobswipe","💼"],["job","💼"],["backlog","🗂️"],["store","🛍️"],["marketplace","🛍️"],["todo","✅"],["name","🔤"],["farm","🐔"],["poultry","🐔"],["profile","👤"],["tarkesh","👤"],["hardware","🧰"],["website","🌍"],["movein","🏡"],["work","🧑‍💻"],["apple","🍎"],["wordly","🔤"],["calc","🧮"]];
+const CATI={Business:"💼",Career:"🚀",Learning:"🎓",Utility:"🛠️",Travel:"🧳",Community:"🤝",Communication:"💬",Platform:"🌐",Portfolio:"🖼️"};
+const TINT=["#eef2ff","#ecfeff","#fdf2f8","#fffbeb","#ecfdf5","#f5f3ff","#fff1f2","#f0f9ff"];
+function thumb(name,cat,i){const n=name.toLowerCase();const m=ICON.find(x=>n.includes(x[0]));return `<div class="thumb" style="background:${TINT[i%TINT.length]}">${m?m[1]:(CATI[cat]||"📦")}</div>`}
 
 /* ---- edit these lists to add things ---- */
 const SITES=[
@@ -159,12 +159,11 @@ const APPS=[
 
 /* Apps built in other chats whose HTML file isn't in the tools repo yet. Once a file is pushed there, move it into APPS. */
 const MORE=[
- ["Poultry Farm Manager","Record keeping, cost-per-egg calculator, vaccinations and farm visit reports.","Business","6bbd6ab2-70b1-4dfb-bab4-8050f99d32ed",""],
- ["Farm Visit Report","Web form replicating a poultry farm-visit paper report.","Business","6bbd6ab2-70b1-4dfb-bab4-8050f99d32ed","https://tarkeshstack.github.io/farmvisit/visit-report/"],
- ["Talk It Out (Workplace Coach)","Communication coaching for IT employees.","Communication","d609b8df-a04e-4698-a6ea-85f35eb6ec3f",""],
+ ["Poultry Farm Manager","Record keeping, cost-per-egg calculator, vaccinations and farm visit reports.","Business","",""],
+ ["Farm Visit Report","Web form replicating a poultry farm-visit paper report.","Business","","https://tarkeshstack.github.io/farmvisit/visit-report/"],
+ ["Talk It Out (Workplace Coach)","Communication coaching for IT employees.","Communication","",""],
  ["QA Agent","LLM testing agent for my single-file web apps.","Business","",""]
 ].map(a=>({name:a[0],desc:a[1],cat:a[2],chat:a[3],live:a[4],more:true}));
-const CHATS=[{"date": "2026-11-17", "id": "0b0a9fb1-fa52-4f87-bc18-b8c86afd8398", "title": "HTML resume with incremental updates", "cat": "Build", "file": "resume-editor.html"}, {"date": "2026-11-12", "id": "fbe78097-b51c-43bc-96ce-53840878eb3f", "title": "Kids reading game HTML", "cat": "Build", "file": "read-and-tap.html"}, {"date": "2026-11-11", "id": "725cfe30-ee41-4cbe-9e7b-c4e13996ba9a", "title": "Python script generator tool", "cat": "Build", "file": ""}, {"date": "2026-11-11", "id": "536063c9-ac75-41dd-bbd8-24b4b07aaeba", "title": "Image to PPT", "cat": "Build", "file": ""}, {"date": "2026-11-11", "id": "fd8a2b4f-0bc7-417f-b567-bd0751db40a9", "title": "Digital smell sharing", "cat": "Idea", "file": ""}, {"date": "2026-11-06", "id": "0ca7a21d-2d57-432c-996c-808d7ba6f5c8", "title": "Bollywood-style movie poster", "cat": "Design", "file": ""}, {"date": "2026-11-05", "id": "f3237fe7-156d-4e47-be24-c7ea66c43d14", "title": "Flight search comparison webpage", "cat": "Build", "file": ""}, {"date": "2026-11-05", "id": "d609b8df-a04e-4698-a6ea-85f35eb6ec3f", "title": "Communication coach web app", "cat": "Build", "file": "heart-to-heart.html"}, {"date": "2026-10-31", "id": "06647712-e84d-4946-b346-bc9ab8dbeac5", "title": "Etsy listing upload automation", "cat": "Business", "file": ""}, {"date": "2026-10-30", "id": "d40aacd8-f7fe-467e-ae37-b5d3f76d1f90", "title": "Automatic user story generation", "cat": "Build", "file": "backlog-builder.html"}, {"date": "2026-10-29", "id": "5dcb7b32-2006-426b-a771-0cfff4728b07", "title": "Website testing and Jira defect", "cat": "Build", "file": "test-studio.html"}, {"date": "2026-10-27", "id": "6bbd6ab2-70b1-4dfb-bab4-8050f99d32ed", "title": "Poultry farm business ideas page", "cat": "Build", "file": ""}, {"date": "2026-10-26", "id": "dbe0df72-6eca-4169-8169-ebef09c66ac9", "title": "Tinder-style job discovery app", "cat": "Build", "file": "jobswipe.html"}, {"date": "2026-10-26", "id": "a1c40149-51bf-47c6-a6ac-e227fe5387a1", "title": "Software component marketplace", "cat": "Idea", "file": "ui-hardware-store.html"}, {"date": "2026-10-26", "id": "bff8d9ab-4141-45c9-ac58-a8df9feae3b7", "title": "Corporate career guide web app", "cat": "Build", "file": "college-to-corporate.html"}, {"date": "2026-10-25", "id": "c5bebeba-e8ff-4eb0-9b68-7712ddc0303c", "title": "Digital product selling platforms", "cat": "Business", "file": "digital-product-marketplaces.html"}, {"date": "2026-10-25", "id": "24de6a7a-8d3e-491b-b413-953295e83638", "title": "Letter templates web app", "cat": "Build", "file": "letter-hub.html"}, {"date": "2026-10-24", "id": "a09dd64f-5599-49ad-9cb2-ddd268410f69", "title": "Rental agreement document generator", "cat": "Build", "file": "rental-agreement-generator.html"}, {"date": "2026-10-23", "id": "024a9ec0-ed5e-4717-8ef3-1a19655de6f6", "title": "Consolidated Google Analytics view", "cat": "Business", "file": ""}, {"date": "2026-10-21", "id": "ec9700fc-0d64-423a-b7e7-ba5255b9372e", "title": "Making money from popular apps", "cat": "Business", "file": ""}, {"date": "2026-10-21", "id": "8ac30460-85d4-4b42-ae7b-c06d085b0fb1", "title": "Instant money ideas", "cat": "Business", "file": ""}, {"date": "2026-10-20", "id": "b4e7a160-b544-401e-8772-aa3a670db5fc", "title": "Website ideas to-do list", "cat": "Idea", "file": ""}, {"date": "2026-10-20", "id": "8921f0d5-8371-4368-968d-c65d37673259", "title": "Tutor site", "cat": "Build", "file": "course-site.html"}, {"date": "2026-10-17", "id": "c0204f74-ad72-49eb-9873-3d8d212fc5f5", "title": "Time-saving app opportunities by user type", "cat": "Idea", "file": ""}, {"date": "2026-10-16", "id": "4f52e04a-c09e-48b5-be30-057146f3b43f", "title": "Getting started", "cat": "Other", "file": ""}, {"date": "2026-10-16", "id": "66ea4f90-9456-4caf-bf0a-40ba6a78d663", "title": "Baby name combiner", "cat": "Build", "file": ""}, {"date": "2026-10-14", "id": "ea638bf4-dba4-434e-bf41-03e8045d0222", "title": "Travel booking app with affiliates", "cat": "Idea", "file": ""}, {"date": "2026-10-12", "id": "3b7927ad-8a5e-4aad-a2f5-f2e995b34b7b", "title": "Windows language to Hindi", "cat": "Other", "file": ""}, {"date": "2026-10-12", "id": "1e573f8f-0e7e-49f6-b826-002b9df99f6d", "title": "Marketplace business ideas India", "cat": "Business", "file": ""}, {"date": "2026-10-11", "id": "8e186c4b-cf86-4eae-8107-052068b1d31f", "title": "Paid app ideas from Sensor Tower", "cat": "Idea", "file": ""}, {"date": "2026-10-10", "id": "a455bd70-8b4a-4aee-94d3-3ab7eb0feee8", "title": "Resume to video web app", "cat": "Build", "file": ""}];
 /* ------------------------------------- */
 
 const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -172,38 +171,32 @@ let tab="sites",cat="All",q="";
 const fileOf=Object.fromEntries(APPS.map(a=>[a.file,a]));
 
 function data(){
- if(tab==="sites")return SITES.map(s=>({cat:s.cat,hay:s.name+s.desc+s.repo,html:`
+ if(tab==="sites")return SITES.map(s=>({name:s.name,cat:s.cat,hay:s.name+s.desc+s.repo,html:`
   <div class="row"><span class="pill ${s.live?'':'soon'}">${s.live?'● Live':'Repo only'}</span><span class="pill b">${esc(s.cat)}</span></div>
   <h3>${esc(s.name)}</h3><div class="mono">⎇ tarkeshstack/${esc(s.repo)}</div><p>${esc(s.desc)}</p>
   <div class="foot">${s.live?`<a class="l" href="${esc(s.live)}" target="_blank" rel="noopener">Open site ↗</a>`:""}<a href="${GH+s.repo}" target="_blank" rel="noopener">Source</a></div>`}));
- if(tab==="apps")return APPS.concat(MORE).map(a=>a.more?({cat:a.cat,hay:a.name+a.desc,html:`
+ if(tab==="apps")return APPS.concat(MORE).map(a=>a.more?({name:a.name,cat:a.cat,hay:a.name+a.desc,html:`
   <div class="row"><span class="pill b">${esc(a.cat)}</span><span class="pill soon">${a.live?'● Live elsewhere':'Not in tools repo yet'}</span></div>
   <h3>${esc(a.name)}</h3><p>${esc(a.desc)}</p>
-  <div class="foot">${a.live?`<a class="l" href="${esc(a.live)}" target="_blank" rel="noopener">Open site ↗</a>`:""}${a.chat?`<a ${a.live?'':'class="l"'} href="${CHAT+a.chat}" target="_blank" rel="noopener">Open chat ↗</a>`:""}${!a.live&&!a.chat?'<a style="opacity:.6;pointer-events:none">File needs upload</a>':""}</div>`}):({cat:a.cat,hay:a.name+a.desc+a.file,html:`
+  <div class="foot">${a.live?`<a class="l" href="${esc(a.live)}" target="_blank" rel="noopener">Open site ↗</a>`:""}${!a.live?'<a style="opacity:.6;pointer-events:none">File needs upload</a>':""}</div>`}):({name:a.name,cat:a.cat,hay:a.name+a.desc+a.file,html:`
   <div class="row"><span class="pill b">${esc(a.cat)}</span><span class="pill">● Standalone app</span></div>
   <h3>${esc(a.name)}</h3><div class="mono">${esc(a.file)}</div><p>${esc(a.desc)}</p>
   <div class="foot"><a class="l" href="#" data-open="${esc(a.file)}" data-name="${esc(a.name)}">Open here</a><a href="${PAGES+a.file}" target="_blank" rel="noopener">New tab ↗</a><a href="${GH}tools/blob/main/${a.file}" target="_blank" rel="noopener">Source</a></div>`}));
- return CHATS.map(c=>({cat:c.cat,hay:c.title+c.file+c.cat,html:`
-  <div class="row"><span class="pill b">${esc(c.cat)}</span><span class="mono">${c.date}</span></div>
-  <h3>${esc(c.title)}</h3>${c.file?`<div class="mono">Latest file: ${esc(c.file)}</div>`:`<div class="mono">No file linked yet</div>`}
-  <div class="foot"><a class="l" href="${CHAT+c.id}" target="_blank" rel="noopener">Open chat ↗</a>${c.file?`<a href="${PAGES+c.file}" target="_blank" rel="noopener">Open file</a>`:""}</div>`}));
 }
 function render(){
  const all=data(),cats=["All",...new Set(all.map(x=>x.cat))];
  $("#chips").innerHTML=cats.map(c=>`<button class="chip ${c===cat?'on':''}" data-c="${esc(c)}">${esc(c)}</button>`).join("");
  document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{cat=b.dataset.c;render()});
  const l=all.filter(x=>(cat==="All"||x.cat===cat)&&(!q||x.hay.toLowerCase().includes(q)));
- $("#grid").innerHTML=l.map(x=>`<article class="card">${x.html}</article>`).join("");
+ $("#grid").innerHTML=l.map((x,i)=>`<article class="card">${thumb(x.name,x.cat,i)}${x.html}</article>`).join("");
  $("#empty").style.display=l.length?"none":"block";
 }
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("on"));b.classList.add("on");tab=b.dataset.t;cat="All";render()});
 $("#q").oninput=e=>{q=e.target.value.toLowerCase();render()};
-$("#n1").textContent=SITES.filter(s=>s.live).length;$("#n2").textContent=APPS.length+MORE.length;$("#n3").textContent=CHATS.length;
-$("#c1").textContent=SITES.length;$("#c2").textContent=APPS.length+MORE.length;$("#c3").textContent=CHATS.length;
+$("#n1").textContent=SITES.filter(s=>s.live).length;$("#n2").textContent=APPS.length+MORE.length;
+$("#c1").textContent=SITES.length;$("#c2").textContent=APPS.length+MORE.length;
 $("#yr").textContent=new Date().getFullYear();
-try{if(localStorage.th==="light")document.documentElement.classList.add("light")}catch(e){}
-$("#th").onclick=()=>{document.documentElement.classList.toggle("light");try{localStorage.th=document.documentElement.classList.contains("light")?"light":"dark"}catch(e){}};
 document.addEventListener("click",e=>{
  const a=e.target.closest("[data-open]");if(!a)return;e.preventDefault();
  const u=PAGES+a.dataset.open;$("#vframe").src=u;$("#vname").textContent=a.dataset.name;$("#vtab").href=u;$("#viewer").hidden=false;document.body.style.overflow="hidden";
