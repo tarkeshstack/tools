@@ -139,6 +139,11 @@ h1{letter-spacing:-.04em}
 .tab .tl{min-height:2.5em;display:flex;align-items:center;justify-content:center;line-height:1.2}@media(min-width:700px){.tab .tl{min-height:0}}
 .thumb .ico{width:84px;height:84px;border-radius:26px;background:linear-gradient(160deg,rgba(255,255,255,.95),rgba(255,255,255,.7));border:2px solid rgba(255,255,255,.9);box-shadow:0 18px 34px rgba(0,0,0,.28),0 2px 0 rgba(255,255,255,.9) inset,0 -6px 12px rgba(0,0,0,.06) inset}
 .emo{font-size:46px;line-height:1;filter:drop-shadow(0 6px 6px rgba(0,0,0,.25))}
+.thumb .ico{background:none!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;width:auto;height:auto;border-radius:0}
+.emo{font-size:84px;filter:drop-shadow(0 10px 12px rgba(0,0,0,.3))}
+.thumb{height:170px}
+.src{display:block;align-self:stretch;text-align:center;margin-top:10px;padding:12px 16px;font-size:14.5px;font-weight:700;color:#fff!important;background:linear-gradient(135deg,#4f46e5,#7c3aed);border-radius:14px;box-shadow:0 8px 18px rgba(79,70,229,.3);transition:.2s}
+.src:hover{text-decoration:none;transform:translateY(-2px);box-shadow:0 12px 24px rgba(79,70,229,.4)}
 </style>
 </head>
 <body>
@@ -176,7 +181,7 @@ const IC={"code": "<polyline points=\"16 18 22 12 16 6\"/><polyline points=\"8 6
 const EM={"python-script-builder": "🐍", "image-to-ppt": "📊", "resume-builder": "📄", "tripfinder": "✈️", "splitcart": "🛒", "emergency-qr": "📲", "speak-easy": "🎙️", "india-travel-guide": "🕌", "six-thinking-hats": "🎩", "pocket-testbench": "🧪", "backlog-builder": "🗂️", "college-to-corporate": "🎓", "course-site": "👨‍🏫", "learnwithme-videos": "🎬", "digital-product-marketplaces": "🏪", "github-projects": "🐙", "heart-to-heart": "💞", "heart-to-heart-hinglish": "💬", "jobswipe": "💼", "letter-hub": "✉️", "read-and-tap": "📖", "rental-agreement-generator": "🏠", "resume-editor": "📝", "test-studio": "🔬", "ui-hardware-store": "🧰", "resume-to-video": "🎥", "wordly-translator": "🌐", "sos-emergency-card": "🚨", "maths-stats-tools": "🧮", "name-mixer": "👶", "pdf-to-word": "📕", "password-generator": "🔐", "birthday-invitation-maker": "🎂", "varit-store": "🛍️", "website-builder": "🧱", "website-ideas-todo": "✅", "word-pin-lock": "🔒", "portfolio": "🖼️", "portfolio-swipe": "📱", "tarkeshwar-profile": "🧑‍💼", "appley": "🍎", "measurely": "📏", "measuring-studies-suite": "📐", "measure-anywhere": "📏", "medicine-finder": "💊", "medical-report-reader": "🩺", "constitution-qa": "⚖️", "electricity-tracker": "💡", "waypoint": "🧭", "bundleit-occasion-shopper": "🎁", "ai-apps-directory": "🤖", "relocation-reference": "🚚", "chaar-log": "👥"};const SEM={"Web Store (Appzy Digital)": "🏬", "Heart to Heart — Read · Write · Speak": "💞", "College to Corporate": "🎓", "MoveIn": "🏡", "Name Mixer": "👶", "Farm Visit Report": "🐔", "Rental Agreement Generator": "🏠", "SOS Emergency Card": "🚨", "Poultry Farm Manager": "🐔", "Talk It Out (Workplace Coach)": "🗣️", "QA Agent": "🕵️"};
 const svg=(k,c)=>`<svg class="${c}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${IC[k]||IC.box}</svg>`;
 function thumb(x,i){const g=GR[x.cat]||["#6366f1","#22d3ee"];const k=x.file?FICON[x.file.replace(".html","")]:(SICON[x.name]||"globe");
- return `<div class="thumb" style="--g1:${g[0]};--g2:${g[1]}">${svg(k,"wm")}<em>${esc(x.cat)}</em>${x.isnew?'<b class="new">NEW</b>':''}<div class="ico"><span class="emo">${x.file?(EM[x.file.replace(".html","")]||"📦"):(SEM[x.name]||"🌐")}</span></div><span class="go">${x.type==="concept"?"View details":x.type==="web"?"Visit site":"Open app"} →</span></div>`}
+ return `<div class="thumb" style="--g1:${g[0]};--g2:${g[1]}">${svg(k,"wm")}<em>${esc(x.cat)}</em>${x.isnew?'<b class="new">NEW</b>':''}<div class="ico"><span class="emo">${x.file?(EM[x.file.replace(".html","")]||"📦"):(SEM[x.name]||"🌐")}</span></div><span class="go">${x.type==="concept"?"View details":x.type==="web"?"Visit site":"Open app"} </span></div>`}
 
 /* ---- edit these lists to add things ---- */
 const SITES=[
@@ -267,7 +272,7 @@ function data(){return LISTS[tab].map(x=>Object.assign({hay:x.name+" "+x.desc+" 
 function render(){
  const all=data();
  const l=all.filter(x=>(!q||x.hay.toLowerCase().includes(q)));
- $("#grid").innerHTML=l.map((x,i)=>`<article class="card" tabindex="0" role="link" data-i="${LISTS[tab].indexOf(LISTS[tab].find(y=>y.name===x.name))}" style="animation-delay:${Math.min(i,14)*35}ms">${thumb(x,i)}<div class="cbody"><h3>${esc(x.name)}</h3><p>${esc(x.desc)}</p>${x.src?`<a class="src" href="${esc(x.src)}" target="_blank" rel="noopener">Open ↗</a>`:""}</div></article>`).join("");
+ $("#grid").innerHTML=l.map((x,i)=>`<article class="card" tabindex="0" role="link" data-i="${LISTS[tab].indexOf(LISTS[tab].find(y=>y.name===x.name))}" style="animation-delay:${Math.min(i,14)*35}ms">${thumb(x,i)}<div class="cbody"><h3>${esc(x.name)}</h3><p>${esc(x.desc)}</p>${x.src?`<a class="src" href="${esc(x.src)}" target="_blank" rel="noopener">Open</a>`:""}</div></article>`).join("");
  $("#empty").style.display=l.length?"none":"block";
 }
 function act(x){
