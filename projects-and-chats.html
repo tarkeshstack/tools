@@ -61,7 +61,7 @@ nav{background:rgba(255,255,255,.75)!important;box-shadow:0 1px 0 rgba(15,23,42,
 .logo{box-shadow:0 6px 14px rgba(79,70,229,.35)}
 .badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:99px;background:#fff;border:1px solid var(--line);font-size:12.5px;font-weight:600;color:#4f46e5;box-shadow:0 2px 8px rgba(79,70,229,.1);margin-bottom:18px}
 .badge::before{content:"";width:7px;height:7px;border-radius:50%;background:#10b981;box-shadow:0 0 0 4px rgba(16,185,129,.18)}
-header{padding:64px 0 10px}
+header{padding:64px 0 0}
 h1{font-size:clamp(34px,6vw,58px)}
 .stat{display:flex;align-items:center;gap:14px;text-align:left;border-radius:18px;padding:14px 24px;box-shadow:0 8px 24px rgba(15,23,42,.06)}
 .stat .si{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:22px;background:linear-gradient(135deg,#eef2ff,#e0f2fe)}
@@ -126,6 +126,17 @@ h1{letter-spacing:-.04em}
 .card{cursor:pointer;outline:none}.card:focus-visible{box-shadow:0 0 0 3px #a5b4fc}
 .src{align-self:flex-start;margin-top:4px;font-size:12.5px;font-weight:600;color:#4f46e5;padding:4px 0}.src:hover{text-decoration:underline}
 .cbody{gap:6px}
+
+.tabs{display:grid!important;grid-template-columns:repeat(3,1fr);gap:8px;padding:8px;border-radius:22px;margin:30px 0 18px;width:100%;background:#fff;box-shadow:0 10px 30px rgba(79,70,229,.1)}
+.tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:16px 8px;border-radius:16px;font-size:16px;font-weight:700;color:#475069;background:#f4f5fc;transition:.2s;min-height:92px;text-align:center}
+.tab .ti{font-size:26px;line-height:1}
+.tab i{margin:0;font-size:13px;padding:2px 10px}
+.tab:hover{background:#eceefe;transform:translateY(-2px)}
+.tab.on{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;box-shadow:0 12px 24px rgba(79,70,229,.35)}
+.tools{margin-bottom:22px}.tools input{margin-left:0;width:100%;padding:14px 22px;font-size:16px}
+@media(min-width:700px){.tab{flex-direction:row;gap:12px;min-height:72px;font-size:18px}}
+@media(max-width:420px){.tab{font-size:14px;padding:14px 4px}.tab .ti{font-size:24px}}
+.tab .tl{min-height:2.5em;display:flex;align-items:center;justify-content:center;line-height:1.2}@media(min-width:700px){.tab .tl{min-height:0}}
 </style>
 </head>
 <body>
@@ -136,19 +147,15 @@ h1{letter-spacing:-.04em}
 <span class="badge">Always growing · updated regularly</span>
 <h1>All my <span>projects &amp; apps</span> in one place</h1>
 <p class="sub">My live sites and every standalone app, each one a click away.</p>
-<div class="stats">
-<div class="stat"><span class="si">🌐</span><div><b id="n1">0</b><small>Live on web</small></div></div>
-<div class="stat"><span class="si">🧩</span><div><b id="n2">0</b><small>Live on GitHub</small></div></div>
-<div class="stat"><span class="si">💡</span><div><b id="n3">0</b><small>Concepts</small></div></div>
-</div></div></header>
+</div></header>
 
 <main class="wrap">
 <div class="tabs" id="tabs">
-<button class="tab on" data-t="web">Live on web <i id="c1"></i></button>
-<button class="tab" data-t="gh">Live on GitHub <i id="c2"></i></button>
-<button class="tab" data-t="concept">Concept <i id="c3"></i></button>
+<button class="tab on" data-t="web"><span class="ti">🌐</span><span class="tl">Live on web</span><i id="c1"></i></button>
+<button class="tab" data-t="gh"><span class="ti">🚀</span><span class="tl">Live on GitHub</span><i id="c2"></i></button>
+<button class="tab" data-t="concept"><span class="ti">💡</span><span class="tl">Concept</span><i id="c3"></i></button>
 </div>
-<div class="tools"><div id="chips" style="display:flex;gap:8px;flex-wrap:wrap"></div><input id="q" type="search" placeholder="Search…" aria-label="Search"></div>
+<div class="tools"><input id="q" type="search" placeholder="Search…" aria-label="Search"></div>
 <div class="grid" id="grid"></div>
 <p class="empty" id="empty">Nothing matches your search.</p>
 <p class="note">Live on web = own domain. Live on GitHub = hosted on GitHub Pages. Concept = built, but no public link yet.</p>
@@ -255,10 +262,8 @@ const CONCEPTS=MORE.filter(m=>!m.live).map(m=>({type:"concept",name:m.name,cat:m
 const LISTS={web:WEB,gh:GHAPPS,concept:CONCEPTS};
 function data(){return LISTS[tab].map(x=>Object.assign({hay:x.name+" "+x.desc+" "+x.cat},x))}
 function render(){
- const all=data(),cats=["All",...new Set(all.map(x=>x.cat))];
- $("#chips").innerHTML=cats.map(c=>`<button class="chip ${c===cat?'on':''}" data-c="${esc(c)}">${esc(c)}</button>`).join("");
- document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{cat=b.dataset.c;render()});
- const l=all.filter(x=>(cat==="All"||x.cat===cat)&&(!q||x.hay.toLowerCase().includes(q)));
+ const all=data();
+ const l=all.filter(x=>(!q||x.hay.toLowerCase().includes(q)));
  $("#grid").innerHTML=l.map((x,i)=>`<article class="card" tabindex="0" role="link" data-i="${LISTS[tab].indexOf(LISTS[tab].find(y=>y.name===x.name))}" style="animation-delay:${Math.min(i,14)*35}ms">${thumb(x,i)}<div class="cbody"><h3>${esc(x.name)}</h3><p>${esc(x.desc)}</p>${x.src?`<a class="src" href="${esc(x.src)}" target="_blank" rel="noopener">Source ↗</a>`:""}</div></article>`).join("");
  $("#empty").style.display=l.length?"none":"block";
 }
@@ -270,7 +275,7 @@ function act(x){
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("on"));b.classList.add("on");tab=b.dataset.t;cat="All";render()});
 $("#q").oninput=e=>{q=e.target.value.toLowerCase();render()};
-$("#n1").textContent=$("#c1").textContent=WEB.length;$("#n2").textContent=$("#c2").textContent=GHAPPS.length;$("#n3").textContent=$("#c3").textContent=CONCEPTS.length;
+$("#c1").textContent=WEB.length;$("#c2").textContent=GHAPPS.length;$("#c3").textContent=CONCEPTS.length;
 $("#yr").textContent=new Date().getFullYear();
 document.addEventListener("click",e=>{
  if(e.target.closest("a"))return;
