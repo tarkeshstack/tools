@@ -54,6 +54,42 @@ h1 span{background:linear-gradient(120deg,var(--a2),var(--a1),var(--a3));-webkit
 #viewer{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column}#viewer[hidden]{display:none}.vbar{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--line)}.vbar b{font-size:15px;text-align:center;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#vframe{flex:1;border:0;width:100%;background:#fff}
 footer{margin:60px 0 30px;text-align:center;color:var(--muted);font-size:13px}
 @media(max-width:640px){.tools input{margin-left:0;width:100%}.grid{grid-template-columns:1fr}}
+
+body{background:#f7f8fc}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(620px 360px at 85% -4%,rgba(99,102,241,.16),transparent 65%),radial-gradient(560px 340px at 8% 6%,rgba(34,211,238,.15),transparent 65%),radial-gradient(500px 300px at 50% 100%,rgba(244,114,182,.10),transparent 65%)}
+nav{background:rgba(255,255,255,.75)!important;box-shadow:0 1px 0 rgba(15,23,42,.05)}
+.logo{box-shadow:0 6px 14px rgba(79,70,229,.35)}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:99px;background:#fff;border:1px solid var(--line);font-size:12.5px;font-weight:600;color:#4f46e5;box-shadow:0 2px 8px rgba(79,70,229,.1);margin-bottom:18px}
+.badge::before{content:"";width:7px;height:7px;border-radius:50%;background:#10b981;box-shadow:0 0 0 4px rgba(16,185,129,.18)}
+header{padding:64px 0 10px}
+h1{font-size:clamp(34px,6vw,58px)}
+.stat{display:flex;align-items:center;gap:14px;text-align:left;border-radius:18px;padding:14px 24px;box-shadow:0 8px 24px rgba(15,23,42,.06)}
+.stat .si{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:22px;background:linear-gradient(135deg,#eef2ff,#e0f2fe)}
+.stat b{font-size:28px;line-height:1.1}
+.tabs{border:0;background:#fff;border:1px solid var(--line);border-radius:14px;padding:5px;display:inline-flex;gap:4px;margin:38px 0 18px;box-shadow:0 2px 8px rgba(15,23,42,.04)}
+.tab{border-radius:10px;border:0!important;margin:0;padding:9px 18px}
+.tab.on{background:linear-gradient(135deg,#4f46e5,#6366f1);color:#fff;box-shadow:0 6px 14px rgba(79,70,229,.3)}
+.tab.on i{background:rgba(255,255,255,.22);color:#fff}
+.chip{transition:.15s;box-shadow:0 1px 2px rgba(15,23,42,.04)}
+.chip:hover{border-color:var(--a1);color:var(--a1)}
+.chip.on{background:linear-gradient(135deg,#4f46e5,#6366f1);box-shadow:0 6px 14px rgba(79,70,229,.28);color:#fff!important}
+.tools input{border-radius:99px;padding:10px 18px;box-shadow:0 2px 8px rgba(15,23,42,.05)}
+.grid{grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:22px}
+.card{padding:0;gap:0;border-radius:22px;border:1px solid rgba(15,23,42,.07);box-shadow:0 4px 14px rgba(15,23,42,.05);transition:transform .25s,box-shadow .25s}
+.card::before{display:none}
+.card:hover{transform:translateY(-6px);box-shadow:0 22px 40px rgba(79,70,229,.16);border-color:rgba(99,102,241,.35)}
+.thumb{position:relative;overflow:hidden;border-radius:0;height:132px;margin:0;font-size:58px;background-size:cover}
+.thumb::before,.thumb::after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.22)}
+.thumb::before{width:150px;height:150px;right:-40px;top:-60px}
+.thumb::after{width:90px;height:90px;left:-24px;bottom:-40px;background:rgba(255,255,255,.16)}
+.thumb span{position:relative;z-index:1;filter:drop-shadow(0 8px 12px rgba(0,0,0,.2));transition:transform .3s}
+.card:hover .thumb span{transform:scale(1.15) rotate(-5deg)}
+.thumb em{position:absolute;z-index:2;left:14px;top:12px;font-style:normal;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#fff;background:rgba(0,0,0,.22);backdrop-filter:blur(6px);padding:4px 10px;border-radius:99px}
+.cbody{padding:18px 20px 20px;display:flex;flex-direction:column;gap:9px;flex:1}
+.card h3{font-size:17.5px}
+.foot a{border-radius:11px;transition:.15s}
+.foot a.l{background:linear-gradient(135deg,#4f46e5,#6366f1);box-shadow:0 6px 12px rgba(79,70,229,.25)}
+.foot a:not(.l):hover{background:#f5f7ff;border-color:var(--a1)}
 </style>
 </head>
 <body>
@@ -61,11 +97,12 @@ footer{margin:60px 0 30px;text-align:center;color:var(--muted);font-size:13px}
 <div style="display:flex;gap:8px"><a class="btn p" href="https://github.com/tarkeshstack" target="_blank" rel="noopener">GitHub</a></div></div></nav>
 
 <header><div class="wrap">
+<span class="badge">Always growing · updated regularly</span>
 <h1>All my <span>projects &amp; apps</span> in one place</h1>
 <p class="sub">My live sites and every standalone app, each one a click away.</p>
 <div class="stats">
-<div class="stat"><b id="n1">0</b><small>Live sites</small></div>
-<div class="stat"><b id="n2">0</b><small>Standalone apps</small></div>
+<div class="stat"><span class="si">🌐</span><div><b id="n1">0</b><small>Live sites</small></div></div>
+<div class="stat"><span class="si">🧩</span><div><b id="n2">0</b><small>Standalone apps</small></div></div>
 </div></div></header>
 
 <main class="wrap">
@@ -88,8 +125,8 @@ footer{margin:60px 0 30px;text-align:center;color:var(--muted);font-size:13px}
 const GH="https://github.com/tarkeshstack/", PAGES="https://tarkeshstack.github.io/tools/";
 const ICON=[["python","🐍"],["ppt","📊"],["resume","📄"],["video","🎬"],["trip","✈️"],["travel","🧳"],["split","🛒"],["bundle","🎁"],["qr","📱"],["emergency","🚨"],["sos","🆘"],["speak","🎙️"],["english","🗣️"],["translat","🌐"],["hat","🎩"],["test","🧪"],["qa","🧪"],["measure","📏"],["convert","🔄"],["medic","💊"],["medical","🩺"],["constitution","⚖️"],["electric","⚡"],["meter","⚡"],["waypoint","📍"],["map","🗺️"],["directory","📚"],["relocation","🚚"],["chaar","👥"],["portfolio","🖼️"],["pin","🔐"],["password","🔑"],["birthday","🎂"],["maths","➗"],["stats","📈"],["pdf","📕"],["word","📝"],["letter","✉️"],["heart","💗"],["course","🎓"],["learn","🎓"],["college","🎒"],["read","📖"],["rental","🏠"],["jobswipe","💼"],["job","💼"],["backlog","🗂️"],["store","🛍️"],["marketplace","🛍️"],["todo","✅"],["name","🔤"],["farm","🐔"],["poultry","🐔"],["profile","👤"],["tarkesh","👤"],["hardware","🧰"],["website","🌍"],["movein","🏡"],["work","🧑‍💻"],["apple","🍎"],["wordly","🔤"],["calc","🧮"]];
 const CATI={Business:"💼",Career:"🚀",Learning:"🎓",Utility:"🛠️",Travel:"🧳",Community:"🤝",Communication:"💬",Platform:"🌐",Portfolio:"🖼️"};
-const TINT=["#eef2ff","#ecfeff","#fdf2f8","#fffbeb","#ecfdf5","#f5f3ff","#fff1f2","#f0f9ff"];
-function thumb(name,cat,i){const n=name.toLowerCase();const m=ICON.find(x=>n.includes(x[0]));return `<div class="thumb" style="background:${TINT[i%TINT.length]}">${m?m[1]:(CATI[cat]||"📦")}</div>`}
+const GR={Business:["#6366f1","#8b5cf6"],Career:["#f59e0b","#f97316"],Learning:["#0ea5e9","#6366f1"],Utility:["#14b8a6","#0ea5e9"],Travel:["#06b6d4","#3b82f6"],Community:["#ec4899","#f43f5e"],Communication:["#d946ef","#8b5cf6"],Platform:["#3b82f6","#4f46e5"],Portfolio:["#64748b","#334155"],Documents:["#ef4444","#f97316"],Kids:["#22c55e","#84cc16"],Health:["#10b981","#06b6d4"],Shopping:["#f43f5e","#f59e0b"]};
+function thumb(name,cat,i){const n=name.toLowerCase();const m=ICON.find(x=>n.includes(x[0]));const g=GR[cat]||["#6366f1","#22d3ee"];return `<div class="thumb" style="background:linear-gradient(135deg,${g[0]},${g[1]})"><em>${esc(cat)}</em><span>${m?m[1]:(CATI[cat]||"📦")}</span></div>`}
 
 /* ---- edit these lists to add things ---- */
 const SITES=[
@@ -188,7 +225,7 @@ function render(){
  $("#chips").innerHTML=cats.map(c=>`<button class="chip ${c===cat?'on':''}" data-c="${esc(c)}">${esc(c)}</button>`).join("");
  document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{cat=b.dataset.c;render()});
  const l=all.filter(x=>(cat==="All"||x.cat===cat)&&(!q||x.hay.toLowerCase().includes(q)));
- $("#grid").innerHTML=l.map((x,i)=>`<article class="card">${thumb(x.name,x.cat,i)}${x.html}</article>`).join("");
+ $("#grid").innerHTML=l.map((x,i)=>`<article class="card">${thumb(x.name,x.cat,i)}<div class="cbody">${x.html}</div></article>`).join("");
  $("#empty").style.display=l.length?"none":"block";
 }
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
